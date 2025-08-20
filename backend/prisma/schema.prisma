@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String? @unique
+  password String?
+  name     String?
+  token    String? @unique
+
+  role         Role    @default(USER)
+  profilePhoto String?
+
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+
+  tests     Test[]
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  questions Question[]
+}
+
+model QuestionSeries {
+  id        String     @id @default(uuid())
+  name      String // e.g., "Reading A1 - 1"
+  questions Question[]
+  tests     Test[]
+}
+
+model Question {
+  id          String @id @default(uuid())
+  text        String
+  options     String // Store as JSON string: '["A","B","C","D"]'
+  correct     String
+  explanation String
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  series   QuestionSeries? @relation(fields: [seriesId], references: [id])
+  seriesId String?
+
+  answers TestAnswer[]
+}
+
+model Test {
+  id     String  @id @default(uuid())
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  series   QuestionSeries? @relation(fields: [seriesId], references: [id])
+  seriesId String?
+
+  score     Int
+  time      Int // Duration in seconds
+  correct   Int // Number of correct answers
+  mistakes  Int // Number of wrong answers
+  createdAt DateTime @default(now())
+
+  category String // <-- Added field for frontend grouping
+
+  answers TestAnswer[]
+}
+
+model TestAnswer {
+  id     String @id @default(uuid())
+  test   Test   @relation(fields: [testId], references: [id])
+  testId String
+
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+
+  selected String
+  correct  Boolean
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  text      String
+  exam      String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Game Models
+model WordHuntQuestion {
+  id           String   @id @default(uuid())
+  turkish      String // Turkish word
+  english      String // Correct English translation
+  wrongOption  String // Wrong option for multiple choice
+  alternatives String // JSON array of alternative wrong options
+  level        String   @default("A1") // A1, A2, B1, B2
+  createdAt    DateTime @default(now())
+}
+
+model WritingQuestion {
+  id        String   @id @default(uuid())
+  turkish   String // Turkish word to translate
+  english   String // Correct English translation
+  level     String   @default("A1") // A1, A2, B1, B2
+  createdAt DateTime @default(now())
+}
+
+model ParagraphQuestion {
+  id             String   @id @default(uuid())
+  title          String // Title of the paragraph
+  text           String // Paragraph text with ______ blanks
+  options        String // JSON array of all options (including extra one)
+  correctAnswers String // JSON array of correct answers in order
+  level          String   @default("A1") // A1, A2, B1, B2
+  createdAt      DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  USER
+}
