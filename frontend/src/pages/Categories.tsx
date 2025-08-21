@@ -198,8 +198,6 @@ const DynamicA1Card: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const categoryId = 1;
-  const seriesId = '218d51f9-668d-4c20-9af0-4d2397ae127f';
 
   // Use env variable or fallback to localhost:4000
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
@@ -208,12 +206,12 @@ const DynamicA1Card: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      // Get A1 Erasmus questions using the categories API
-      const res = await fetch(`${API_URL}/api/categories/questions/by-category-series?categoryId=${categoryId}&seriesId=${seriesId}`);
+      // Use the backend tests endpoint which filters by category name and series name
+      const res = await fetch(`${API_URL}/api/tests/a1-erasmus/questions`);
       if (!res.ok) throw new Error('Sunucuya bağlanılamadı.');
       const data = await res.json();
-      // Navigate to exam page and pass questions as state
-      navigate('/exam/dynamic', { state: { questions: data } });
+      const questions = data.questions || data;
+      navigate('/exam/dynamic', { state: { questions } });
     } catch (err: any) {
       setError(err.message || 'Bir hata oluştu.');
     } finally {
@@ -249,8 +247,6 @@ const DynamicA2Card: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const categoryId = 2;
-  const seriesId = '3422250f-6886-4b4c-9cbc-2f3ebc0c23b1';
 
   // Use env variable or fallback to localhost:4000
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
@@ -259,12 +255,11 @@ const DynamicA2Card: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      // Get A2 Erasmus questions using the categories API
-      const res = await fetch(`${API_URL}/api/categories/questions/by-category-series?categoryId=${categoryId}&seriesId=${seriesId}`);
+      const res = await fetch(`${API_URL}/api/tests/a2-erasmus/questions`);
       if (!res.ok) throw new Error('Sunucuya bağlanılamadı.');
       const data = await res.json();
-      // Navigate to exam page and pass questions as state
-      navigate('/exam/dynamic', { state: { questions: data } });
+      const questions = data.questions || data;
+      navigate('/exam/dynamic', { state: { questions } });
     } catch (err: any) {
       setError(err.message || 'Bir hata oluştu.');
     } finally {
@@ -302,8 +297,6 @@ const DynamicB1Card: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const categoryId = 3;
-  const seriesId = '31dc2061-b4a7-4dc6-9d4b-2521d461e8ee';
 
   // Use env variable or fallback to localhost:4000
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
@@ -312,12 +305,11 @@ const DynamicB1Card: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      // Get B1 Erasmus questions using the categories API
-      const res = await fetch(`${API_URL}/api/categories/questions/by-category-series?categoryId=${categoryId}&seriesId=${seriesId}`);
+      const res = await fetch(`${API_URL}/api/tests/b1-erasmus/questions`);
       if (!res.ok) throw new Error('Sunucuya bağlanılamadı.');
       const data = await res.json();
-      // Navigate to exam page and pass questions as state
-      navigate('/exam/dynamic', { state: { questions: data } });
+      const questions = data.questions || data;
+      navigate('/exam/dynamic', { state: { questions } });
     } catch (err: any) {
       setError(err.message || 'Bir hata oluştu.');
     } finally {
@@ -353,8 +345,6 @@ const DynamicB2Card: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const categoryId = 4;
-  const seriesId = 'a5ec1186-2948-4d72-a1b7-3751749644b9';
 
   // Use env variable or fallback to localhost:4000
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
@@ -363,12 +353,11 @@ const DynamicB2Card: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      // Get B2 Erasmus questions using the categories API
-      const res = await fetch(`${API_URL}/api/categories/questions/by-category-series?categoryId=${categoryId}&seriesId=${seriesId}`);
+      const res = await fetch(`${API_URL}/api/tests/b2-erasmus/questions`);
       if (!res.ok) throw new Error('Sunucuya bağlanılamadı.');
       const data = await res.json();
-      // Navigate to exam page and pass questions as state
-      navigate('/exam/dynamic', { state: { questions: data } });
+      const questions = data.questions || data;
+      navigate('/exam/dynamic', { state: { questions } });
     } catch (err: any) {
       setError(err.message || 'Bir hata oluştu.');
     } finally {
