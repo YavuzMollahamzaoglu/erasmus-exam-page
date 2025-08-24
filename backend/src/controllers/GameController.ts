@@ -50,14 +50,11 @@ class GameController {
     }
   }
 
-  // Paragraph Game endpoints
+  // Paragraph Game endpoints (level-agnostic)
   static async getParagraphQuestions(req: Request, res: Response) {
     try {
-      const { level } = req.query;
-      const where = level ? { level: level as string } : {};
-
+      // Level is intentionally ignored to make the game level-less
       const questions = await prisma.paragraphQuestion.findMany({
-        where,
         orderBy: { createdAt: "desc" },
       });
 
@@ -119,7 +116,7 @@ class GameController {
 
   static async createParagraphQuestion(req: Request, res: Response) {
     try {
-      const { title, text, options, correctAnswers, level } = req.body;
+      const { title, text, options, correctAnswers } = req.body; // level removed
 
       const question = await prisma.paragraphQuestion.create({
         data: {
@@ -127,7 +124,8 @@ class GameController {
           text,
           options: JSON.stringify(options),
           correctAnswers: JSON.stringify(correctAnswers),
-          level: level || "A1",
+          // Persist a default level only to satisfy schema; not used anywhere
+          level: "A1",
         },
       });
 

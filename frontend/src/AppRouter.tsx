@@ -16,6 +16,8 @@ import WritingGame from './pages/games/WritingGame';
 import SelectLevel from './pages/games/SelectLevel';
 import EssayGame from './pages/games/EssayGame';
 import EssayWriting from './pages/EssayWriting';
+import Words from './pages/Words';
+import FillInTheBlanksGame from './pages/games/FillInTheBlanksGame';
 
 
 
@@ -23,11 +25,36 @@ const AppRouter: React.FC = () => {
   const [token, setToken] = useState(() => localStorage.getItem('token') || '');
   const [userImage, setUserImage] = useState<string | undefined>(undefined);
 
+  // Hydrate user image on first load if token exists
+  useEffect(() => {
+    const jwt = localStorage.getItem('token');
+    if (!jwt) return;
+    (async () => {
+      try {
+        const res = await fetch('http://localhost:4000/api/auth/me', {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+        const data = await res.json();
+        if (data?.user?.profilePhoto) {
+          setUserImage(data.user.profilePhoto);
+        }
+      } catch {}
+    })();
+  }, []);
 
-  // On login, save token to localStorage
+  // On login, save token and fetch profile to get photo
   const handleLogin = (jwt: string) => {
     setToken(jwt);
     localStorage.setItem('token', jwt);
+    (async () => {
+      try {
+        const res = await fetch('http://localhost:4000/api/auth/me', {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+        const data = await res.json();
+        if (data?.user?.profilePhoto) setUserImage(data.user.profilePhoto);
+      } catch {}
+    })();
   };
 
   // On logout, clear token from localStorage
@@ -66,11 +93,12 @@ const AppRouter: React.FC = () => {
         <Route path="/kelime-avi-game" element={<WordHuntGame />} />
         <Route path="/yazi-yazma" element={<SelectLevel game="yazi-yazma" />} />
         <Route path="/yazi-yazma-game" element={<WritingGame />} />
-        <Route path="/bosluk-doldurma" element={<EssayGame />} />
+        <Route path="/bosluk-doldurma" element={<FillInTheBlanksGame />} />
         <Route path="/essay-writing" element={<EssayWriting />} />
         <Route path="/rankings" element={<Rankings token={token} />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/about" element={<About />} />
+        <Route path="/words" element={<Words />} />
         <Route path="/history" element={<History token={token} />} />
         <Route path="/exam/:testId" element={<Exam />} />
         <Route path="*" element={<Navigate to="/" replace />} />

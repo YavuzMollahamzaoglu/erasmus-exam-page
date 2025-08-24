@@ -18,8 +18,8 @@ const Exam: React.FC = () => {
   const { testId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState<Question[]>(location.state?.questions || []);
-  const [loading, setLoading] = useState(location.state?.questions ? false : true);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -32,6 +32,7 @@ const Exam: React.FC = () => {
   const [answers, setAnswers] = useState<(string | null)[]>([]);
   const [timerPaused, setTimerPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Helper function to format text: first letter uppercase, rest lowercase
   const formatText = (text: string) => {
@@ -45,13 +46,48 @@ const Exam: React.FC = () => {
   };
 
   useEffect(() => {
-    // Only fetch if not coming from state
-    if (!location.state?.questions) {
+    // Fetch if no state or empty state provided
+    if (!location.state?.questions || location.state.questions.length === 0) {
       setLoading(true);
-      fetch(`http://localhost:4000/api/tests/${testId}/questions`)
-        .then(res => res.json())
+      setError(null);
+      
+      // For dynamic tests, use the questions endpoint directly with filters
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+      let apiUrl: string;
+      
+      if (testId === 'dynamic' || testId?.startsWith('dynamic-')) {
+        apiUrl = `${API_URL}/api/questions`;
+        
+        // Add category filter based on testId
+        if (testId === 'dynamic-a1') {
+          apiUrl += '?category=A1';
+        } else if (testId === 'dynamic-a2' || testId === 'dynamic') {
+          apiUrl += '?category=A2';
+        } else if (testId === 'dynamic-b1') {
+          apiUrl += '?category=B1';
+        } else if (testId === 'dynamic-b2') {
+          apiUrl += '?category=B2';
+        }
+      } else {
+        apiUrl = `${API_URL}/api/tests/${testId}/questions`;
+      }
+      
+      console.log(`Fetching questions from: ${apiUrl}`);
+      
+      fetch(apiUrl)
+        .then(res => {
+          console.log('API Response status:', res.status);
+          if (!res.ok) {
+            throw new Error(`Request failed with status ${res.status}`);
+          }
+          return res.json();
+        })
         .then(data => {
-          const formattedQuestions = (data.questions || []).map((q: Question) => {
+          console.log('API Response data:', data);
+          const questionsData = data.questions || data || [];
+          console.log('Questions data length:', questionsData.length);
+          
+          const formattedQuestions = questionsData.map((q: Question) => {
             // Parse options if they're in string format
             let optionsArray: string[] = [];
             if (Array.isArray(q.options)) {
@@ -83,7 +119,13 @@ const Exam: React.FC = () => {
               correct: correctLetter
             };
           });
+          console.log(`Loaded ${formattedQuestions.length} questions`);
           setQuestions(formattedQuestions);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Failed to fetch questions:', error);
+          setError('Sunucuya ulaşılamıyor. Lütfen sunucuyu başlatıp tekrar deneyin.');
           setLoading(false);
         });
     } else {
@@ -121,8 +163,9 @@ const Exam: React.FC = () => {
         };
       });
       setQuestions(formattedQuestions);
+      setLoading(false);
     }
-  }, [testId, location.state]);
+  }, [location.state, testId]);
 
   // Initialize answers array when questions are loaded
   useEffect(() => {
@@ -161,8 +204,19 @@ const Exam: React.FC = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Box sx={{ minHeight: '100vh', bgcolor: '#b2ebf2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ p: 4, borderRadius: 4, background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ color: '#c62828', fontWeight: 600, mb: 2 }}>{error}</Typography>
+          <Button variant="contained" onClick={() => window.location.reload()}>Tekrar Dene</Button>
+        </Box>
+      </Box>
+    );
+  }
+
   if (!questions.length) {
-    return <Typography align="center" mt={8}>No questions found for this exam.</Typography>;
+    return <Typography align="center" mt={8}>Bu sınav için soru bulunamadı.</Typography>;
   }
 
   const q = questions[current];
@@ -222,7 +276,7 @@ const Exam: React.FC = () => {
   const saveToHistory = async () => {
     const token = localStorage.getItem('token');
     try {
-      await fetch('http://localhost:4000/api/history', {
+      const res = await fetch('http://localhost:4000/api/history', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -241,7 +295,24 @@ const Exam: React.FC = () => {
           }))
         })
       });
-    } catch (e) {}
+      if (!res.ok) {
+        let msg = 'History kaydı başarısız';
+        try {
+          const data = await res.json();
+          msg += `: ${data.error || data.message || res.statusText}`;
+          // eslint-disable-next-line no-console
+          console.error('History save error:', data);
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('History save error (no json):', res.status, res.statusText);
+        }
+        alert(msg);
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('History save network error:', e);
+      alert('History kaydı sırasında ağ hatası oluştu.');
+    }
   };
 
   const handleFinish = async () => {
@@ -300,6 +371,13 @@ const Exam: React.FC = () => {
       return;
     }
 
+    // Determine current level from route
+    let examLevel: 'A1' | 'A2' | 'B1' | 'B2' | undefined;
+    if (testId === 'dynamic-a1') examLevel = 'A1';
+    else if (testId === 'dynamic-a2' || testId === 'dynamic') examLevel = 'A2';
+    else if (testId === 'dynamic-b1') examLevel = 'B1';
+    else if (testId === 'dynamic-b2') examLevel = 'B2';
+
     // Send all relevant exam result data to backend
     const categoryId = q.categoryId;
     const seriesId = q.seriesId;
@@ -328,7 +406,8 @@ const Exam: React.FC = () => {
           return;
         }
         setShowSummary(false);
-        navigate('/rankings');
+        // Navigate to rankings filtered by the user's level
+        navigate(examLevel ? `/rankings?exam=${examLevel}` : '/rankings');
       })
       .catch(err => {
         console.error('Ranking save error:', err);

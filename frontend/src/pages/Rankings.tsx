@@ -12,18 +12,42 @@ const medalIcons = [
 ];
 
 const examOptions = ['A1', 'A2', 'B1', 'B2'];
+const typeOptions = ['Erasmus', 'Genel', 'Hazırlık'];
 
 const Rankings: React.FC<Props> = ({ token }) => {
   const [rankings, setRankings] = useState<any[]>([]);
   const [selectedExam, setSelectedExam] = useState<string>('A1');
+  const [selectedType, setSelectedType] = useState<string>('Erasmus');
   const [loading, setLoading] = useState<boolean>(false);
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
+  const [me, setMe] = useState<any>(null);
+
+  useEffect(() => {
+    if (!token) return;
+    (async () => {
+      try {
+        const res = await fetch('http://localhost:4000/api/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json();
+        setMe(data.user || null);
+      } catch { setMe(null); }
+    })();
+  }, [token]);
+
+  // Initialize selectedExam/type from URL query
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const exam = params.get('exam');
+    const type = params.get('type');
+    if (exam && examOptions.includes(exam)) setSelectedExam(exam);
+    if (type && typeOptions.includes(type)) setSelectedType(type);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:4000/api/rankings", {
+    const qs = `?exam=${selectedExam}&type=${encodeURIComponent(selectedType)}`;
+    fetch(`http://localhost:4000/api/rankings${qs}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
       .then((res) => res.json())
@@ -35,14 +59,14 @@ const Rankings: React.FC<Props> = ({ token }) => {
         setRankings([]);
         setLoading(false);
       });
-    // Fetch comments for selected exam
+    // Fetch comments for selected exam (type bağımsız bırakıldı)
     fetch(`http://localhost:4000/api/comments?exam=${selectedExam}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
       .then(res => res.json())
       .then(data => setComments(data.comments || []))
       .catch(() => setComments([]));
-  }, [token, selectedExam]);
+  }, [token, selectedExam, selectedType]);
 
   // Only show top 20
   const topRankings = rankings.slice(0, 20);
@@ -50,12 +74,12 @@ const Rankings: React.FC<Props> = ({ token }) => {
   return (
     <Box sx={{ 
       minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #b2ebf2 0%, #80deea 50%, #4dd0e1 100%)', 
+      background: '#b2dfdb', 
       px: 2, 
       display: 'flex', 
       justifyContent: 'center', 
       alignItems: 'flex-start', 
-      pt: { xs: 10, md: 12 }, 
+      pt: 0, 
       pb: { xs: 7, md: 8 } 
     }}>
       <Paper 
@@ -65,14 +89,12 @@ const Rankings: React.FC<Props> = ({ token }) => {
           width: '100%', 
           borderRadius: 4, 
           overflow: 'hidden', 
+          mt: '15px',
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-          transition: 'transform 0.3s ease',
-          '&:hover': {
-            transform: 'translateY(-5px)',
-          }
+          // Hover removed on main card
         }}
       >
         {/* Header */}
@@ -118,41 +140,35 @@ const Rankings: React.FC<Props> = ({ token }) => {
               En başarılı öğrencilerimizi keşfedin
             </Typography>
             
-            {/* Exam Selection */}
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  '&.Mui-focused': { color: 'rgba(255, 255, 255, 0.9)' }
-                }}
-              >
-                Seviye
-              </InputLabel>
-              <Select
-                value={selectedExam}
-                onChange={(e) => setSelectedExam(e.target.value)}
-                label="Seviye"
-                sx={{
-                  color: '#fff',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.5)',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.8)',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.9)',
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: 'rgba(255, 255, 255, 0.9)',
-                  },
-                }}
-              >
-                {examOptions.map(opt => (
-                  <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            {/* Filters */}
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+              <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+                <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.9)', '&.Mui-focused': { color: 'rgba(255, 255, 255, 0.9)' } }}>Seviye</InputLabel>
+                <Select
+                  value={selectedExam}
+                  onChange={(e) => setSelectedExam(e.target.value)}
+                  label="Seviye"
+                  sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' }, '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.8)' }, '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.9)' }, '& .MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.9)' } }}
+                >
+                  {examOptions.map(opt => (
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl variant="outlined" sx={{ minWidth: 160 }}>
+                <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.9)', '&.Mui-focused': { color: 'rgba(255, 255, 255, 0.9)' } }}>Kategori</InputLabel>
+                <Select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  label="Kategori"
+                  sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' }, '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.8)' }, '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.9)' }, '& .MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.9)' } }}
+                >
+                  {typeOptions.map(opt => (
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </Box>
         </Box>
 
@@ -217,13 +233,27 @@ const Rankings: React.FC<Props> = ({ token }) => {
                         <Typography color="#00b894" fontWeight={700}>{idx + 1}</Typography>
                       )}
                     </Box>
-                    <Typography 
-                      fontWeight={idx < 3 ? 700 : 500} 
-                      color={idx < 3 ? '#00b894' : '#2c3e50'}
-                      sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                    >
-                      {r.user?.name || 'İsimsiz'}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, overflow: 'hidden' }}>
+                      {r.user?.profilePhoto ? (
+                        <img
+                          src={`http://localhost:4000${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}`}
+                          alt="profile"
+                          style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flex: '0 0 auto', border: '1px solid rgba(0,0,0,0.08)' }}
+                        />
+                      ) : (
+                        <Box sx={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
+                          {(r.user?.name?.[0] || 'U').toUpperCase()}
+                        </Box>
+                      )}
+                      <Typography 
+                        fontWeight={idx < 3 ? 700 : 500} 
+                        color={idx < 3 ? '#00b894' : '#2c3e50'}
+                        sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                        title={r.user?.name || 'İsimsiz'}
+                      >
+                        {r.user?.name || 'İsimsiz'}
+                      </Typography>
+                    </Box>
                     <Typography fontWeight={700} color="#00b894" textAlign="center">
                       {r.score}
                     </Typography>
@@ -277,20 +307,28 @@ const Rankings: React.FC<Props> = ({ token }) => {
               backdropFilter: 'blur(5px)'
             }}>
               <Box sx={{ mr: 2 }}>
-                <Box sx={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: '1.2rem'
-                }}>
-                  {window.localStorage.getItem('userName')?.charAt(0).toUpperCase() || 'U'}
-                </Box>
+                {me?.profilePhoto ? (
+                  <img
+                    src={`http://localhost:4000${me.profilePhoto}?t=${Date.now()}`}
+                    alt="me"
+                    style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894' }}
+                  />
+                ) : (
+                  <Box sx={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    fontWeight: 700,
+                    fontSize: '1.2rem'
+                  }}>
+                    {(me?.name?.charAt(0).toUpperCase()) || 'U'}
+                  </Box>
+                )}
               </Box>
               <TextField
                 fullWidth
@@ -388,7 +426,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                   <Box sx={{ mr: 2 }}>
                     {c.user?.profilePhoto ? (
                       <img
-                        src={`/uploads/profile-photos/${c.user.profilePhoto}`}
+                        src={`http://localhost:4000${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}`}
                         alt="profile"
                         style={{ 
                           width: 40, 

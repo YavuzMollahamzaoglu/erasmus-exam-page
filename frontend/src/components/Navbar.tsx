@@ -13,7 +13,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 
 interface Props {
   onNavigate: (page: string) => void;
@@ -24,12 +23,13 @@ interface Props {
 
 
 const allPages = [
-  { label: 'Profile', value: 'profile', auth: true },
-  { label: 'Questions', value: 'questions', auth: false },
-  { label: 'Rankings', value: 'rankings', auth: false },
-  { label: 'History', value: 'history', auth: true },
-  { label: 'Categories', value: 'categories', auth: false },
-  { label: 'About Us', value: 'about', auth: false }
+  { label: 'Profil', value: 'profile', auth: true },
+  { label: 'Sorular', value: 'questions', auth: false },
+  { label: 'Sıralamalar', value: 'rankings', auth: false },
+  { label: 'Geçmiş', value: 'history', auth: true },
+  { label: 'Kategoriler', value: 'categories', auth: false },
+  { label: 'Kelimeler', value: 'words', auth: false },
+  { label: 'Hakkımızda', value: 'about', auth: false }
   // Login ve Register menüde gösterilmeyecek, sadece sağda buton olarak olacak
 ];
 
@@ -39,10 +39,29 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
 
-  // Pages to show depending on login state
-  const pages = token
-    ? allPages // logged in: show all
-    : allPages.filter((p) => !p.auth); // not logged in: only those with auth: false
+  // Pages to show depending on login state (custom order requested)
+  const pages = React.useMemo(() => {
+    if (token) {
+      // Giriş yapanlar
+      return [
+        { label: 'Profil', value: 'profile', auth: true },           // 1
+        { label: 'Testler', value: 'categories', auth: false },       // 2
+        { label: 'Klasik Sorular', value: 'questions', auth: false }, // 3 (yer değiştirildi)
+        { label: 'Kelimeler', value: 'words', auth: false },          // 4 (yer değiştirildi)
+        { label: 'Geçmiş', value: 'history', auth: true },            // 5
+        { label: 'Sıralamalar', value: 'rankings', auth: false },     // 6
+        { label: 'Hakkımızda', value: 'about', auth: false },         // 7
+      ];
+    }
+    // Giriş yapmayanlar
+    return [
+      { label: 'Testler', value: 'categories', auth: false },        // 1
+      { label: 'Klasik Sorular', value: 'questions', auth: false },  // 2
+      { label: 'Kelimeler', value: 'words', auth: false },           // 3
+      { label: 'Sıralamalar', value: 'rankings', auth: false },      // 4
+      { label: 'Hakkımızda', value: 'about', auth: false },          // 5
+    ];
+  }, [token]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => { 
     setAnchorElNav(event.currentTarget);
@@ -63,10 +82,11 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
   const currentPath = location.pathname.replace(/^\//, '');
   return (
     <AppBar position="static" elevation={0} sx={{
-      bgcolor: '#1A4D7A',
+      bgcolor: '#2D5BBA',
       color: '#fff',
       minHeight: 64,
       boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+      borderBottom: '1px solid rgba(255,255,255,0.08)',
       fontFamily: 'Poppins, sans-serif',
     }}>
       <Container maxWidth="xl">
@@ -101,51 +121,35 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
             </Menu>
           </Box>
 
-          {/* Desktop Logo and Title */}
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 0 }}>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: '#5CC9F5' }} />
+          {/* Brand Logo (click to home) */}
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 0, cursor: 'pointer', height: 40 }}
+            onClick={() => onNavigate('home')}
+          >
+            <img
+              src="/assets/ingilizcehazirlik-logo.svg"
+              alt="İngilizce Hazırlık"
+              height={40}
+              style={{ display: 'block', transform: 'translateY(-3px)' }}
+            />
             <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              onClick={() => onNavigate('home')}
+              component="span"
               sx={{
-                display: { xs: 'none', md: 'flex' },
+                ml: 0.5,
+                display: 'flex',
+                alignItems: 'center',
+                height: 40,
                 fontFamily: 'Poppins, sans-serif',
                 fontWeight: 700,
-                fontSize: { md: '1.3rem', lg: '1.5rem', xl: '1.8rem' },
-                letterSpacing: '.1rem',
-                color: 'inherit',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                lineHeight: 1.1,
-              }}
-            >
-              <span style={{ color: '#fff', fontWeight: 700 }}>İngilizce</span>{' '}
-              <span style={{ color: '#5CC9F5', fontWeight: 700 }}>Hazırlık</span>
-            </Typography>
-            
-            {/* Mobile Logo and Title */}
-            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: '#5CC9F5' }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              onClick={() => onNavigate('home')}
-              sx={{
-                display: { xs: 'flex', md: 'none' },
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 700,
-                fontSize: { xs: '1rem', sm: '1.2rem' },
+                fontSize: { xs: '1rem', sm: '1.15rem', md: '1.3rem', lg: '1.5rem' },
                 letterSpacing: '.05rem',
                 color: 'inherit',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                lineHeight: 1.1,
+                lineHeight: 1,
+                userSelect: 'none',
               }}
             >
-              <span style={{ color: '#fff', fontWeight: 700 }}>İngilizce</span>{' '}
-              <span style={{ color: '#5CC9F5', fontWeight: 700 }}>Hazırlık</span>
+              <span style={{ color: '#fff', fontWeight: 700 }}>İngilizce</span>
+              <span style={{ color: '#fff', fontWeight: 700, marginLeft: 6 }}>Hazırlık</span>
             </Typography>
           </Box>
 
@@ -180,12 +184,15 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                     borderRadius: 2,
                     minHeight: 36,
                     borderBottom: 'none',
-                    transition: 'color 0.2s, box-shadow 0.2s',
+                    transition: 'color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, text-decoration-color 0.2s ease',
                     boxShadow: 'none',
+                    textDecoration: isActive ? 'underline' : 'none',
+                    textUnderlineOffset: isActive ? 4 : undefined,
                     '&:hover': {
                       color: '#5CC9F5',
                       backgroundColor: 'rgba(255,255,255,0.04)',
-                      textDecoration: 'none',
+                      textDecoration: 'underline',
+                      textUnderlineOffset: 4,
                       boxShadow: '0 2px 8px 0 rgba(0,0,0,0.10)',
                     },
                   }}
@@ -203,10 +210,10 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
               alignItems: 'center', 
               justifyContent: 'flex-end' 
             }}>
-              <Tooltip title="Open settings">
+              <Tooltip title="Ayarlar">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
-                    alt="Profile"
+                    alt="Profil"
                     src={userImage ? `http://localhost:4000${userImage}?t=${Date.now()}` : "https://www.gravatar.com/avatar/?d=mp"}
                     sx={{ width: 36, height: 36, bgcolor: '#26c6da', boxShadow: 2 }}
                   />
@@ -223,10 +230,10 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={() => { handleCloseUserMenu(); onNavigate('profile'); }}>
-                  <Typography textAlign="center">My Profile</Typography>
+                  <Typography textAlign="center">Profilim</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => { handleCloseUserMenu(); onLogout(); }}>
-                  <Typography textAlign="center" color="error">Logout</Typography>
+                  <Typography textAlign="center" color="error">Çıkış Yap</Typography>
                 </MenuItem>
               </Menu>
             </Box>
@@ -242,39 +249,47 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                 color="inherit" 
                 sx={{ 
                   fontFamily: 'Poppins, sans-serif', 
-                  fontWeight: 500, 
+                  fontWeight: 600, 
                   fontSize: { xs: '0.85rem', sm: '0.95rem', lg: '1rem' }, 
-                  px: { xs: 1, sm: 1.5, lg: 2 }, 
+                  px: { xs: 1.5, sm: 2, lg: 2.5 }, 
                   py: 1, 
                   borderRadius: 2, 
+                  border: '1px solid rgba(255,255,255,0.7)',
+                  color: '#fff',
+                  backgroundColor: 'transparent',
+                  transition: 'all 0.2s ease',
                   '&:hover': { 
-                    color: '#5CC9F5', 
-                    backgroundColor: 'rgba(255,255,255,0.04)', 
-                    textDecoration: 'underline' 
+                    color: '#fff', 
+                    backgroundColor: 'rgba(255,255,255,0.10)', 
+                    borderColor: '#fff',
                   } 
                 }} 
                 onClick={() => onNavigate('login')}
               >
-                Login
+                Giriş Yap
               </Button>
               <Button 
                 color="inherit" 
                 sx={{ 
                   fontFamily: 'Poppins, sans-serif', 
-                  fontWeight: 500, 
+                  fontWeight: 600, 
                   fontSize: { xs: '0.85rem', sm: '0.95rem', lg: '1rem' }, 
-                  px: { xs: 1, sm: 1.5, lg: 2 }, 
+                  px: { xs: 1.5, sm: 2, lg: 2.5 }, 
                   py: 1, 
                   borderRadius: 2, 
+                  border: '1px solid rgba(255,255,255,0.7)',
+                  color: '#fff',
+                  backgroundColor: 'transparent',
+                  transition: 'all 0.2s ease',
                   '&:hover': { 
-                    color: '#5CC9F5', 
-                    backgroundColor: 'rgba(255,255,255,0.04)', 
-                    textDecoration: 'underline' 
+                    color: '#fff', 
+                    backgroundColor: 'rgba(255,255,255,0.10)', 
+                    borderColor: '#fff',
                   } 
                 }} 
                 onClick={() => onNavigate('register')}
               >
-                Register
+                Kayıt Ol
               </Button>
             </Box>
           )}

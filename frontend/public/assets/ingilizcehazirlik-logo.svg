@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 200 200">
+  <defs>
+    <style>
+      .primary { fill:#1E88E5; }
+      .stroke  { stroke:#1E88E5; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+      .white   { fill:#ffffff; }
+    </style>
+  </defs>
+
+  <!-- Graduation Cap -->
+  <polygon class="primary" points="32,70 100,45 168,70 100,95"/>
+  <rect class="primary" x="76" y="94" width="48" height="12" rx="3"/>
+  <line class="stroke" x1="148" y1="70" x2="148" y2="98"/>
+  <circle class="primary" cx="148" cy="103" r="5"/>
+
+  <!-- Open Book -->
+  <path class="primary" d="M22,120 C44,110 66,110 88,120 v44 c-22,-12 -44,-8 -66,0 z"/>
+  <path class="primary" d="M178,120 C156,110 134,110 112,120 v44 c22,-12 44,-8 66,0 z"/>
+  <path d="M100,120 v44" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none"/>
+</svg>

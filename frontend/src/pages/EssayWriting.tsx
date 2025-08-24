@@ -68,7 +68,7 @@ export default function EssayWriting() {
   const handleEssayChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     setEssayText(text);
-    setWordCount(text.trim().split(/\\s+/).filter(word => word.length > 0).length);
+    setWordCount(text.trim().split(/\s+/).filter(word => word.length > 0).length);
   };
 
   const evaluateEssay = async () => {
@@ -77,8 +77,8 @@ export default function EssayWriting() {
       return;
     }
 
-    if (essayText.trim().length < 50) {
-      setError('Essay en az 50 karakter olmalıdır.');
+    if (wordCount < 100) {
+      setError('Güzel bir değerlendirme için minimum 100 kelime olmalıdır.');
       return;
     }
 
@@ -154,31 +154,33 @@ export default function EssayWriting() {
   };
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      bgcolor: '#f5f5f5', 
-      py: 3 
+    <Box sx={{
+      minHeight: '100vh',
+      background: '#b2dfdb',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      px: 2,
+      pt: 0,
+      pb: { xs: 7, md: 8 },
     }}>
-      {/* Topic Selection Dialog */}
+      {/* Topic Selection Dialog - themed */}
       <Dialog 
         open={showTopicDialog} 
         maxWidth="md" 
         fullWidth
-        PaperProps={{
-          sx: { borderRadius: 3 }
-        }}
+        PaperProps={{ sx: { borderRadius: 3 } }}
       >
-        <DialogTitle sx={{ 
-          bgcolor: '#1976d2', 
-          color: 'white', 
+        <DialogTitle sx={{
+          background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+          color: '#fff',
           textAlign: 'center',
-          fontWeight: 700 
+          fontWeight: 700,
         }}>
-          <AutoAwesomeIcon sx={{ mr: 1 }} />
-          Essay Konusu Seçin
+          <AutoAwesomeIcon sx={{ mr: 1 }} /> Essay Konusu Seçin
         </DialogTitle>
         <DialogContent sx={{ pt: 3 }}>
-          <Typography variant="h6" sx={{ mb: 2, color: '#333' }}>
+          <Typography variant="h6" sx={{ mb: 2, color: '#333', mt: '10px' }}>
             Önerilen Konular:
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -224,246 +226,281 @@ export default function EssayWriting() {
             variant="contained"
             onClick={handleCustomTopic}
             disabled={!customTopic.trim()}
-            sx={{ mr: 1 }}
+            sx={{
+              background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+              color: '#fff',
+              fontWeight: 700,
+              borderRadius: 2,
+              px: 3,
+              textTransform: 'none',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)',
+              }
+            }}
           >
             Özel Konu Kullan
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ maxWidth: 1200, mx: 'auto', px: 3 }}>
-        {/* Header */}
-        <Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <IconButton 
-              onClick={() => navigate('/questions')}
-              sx={{ mr: 2 }}
-            >
+      {/* Main Card */}
+      <Paper
+        elevation={6}
+        sx={{
+          width: '100%',
+          maxWidth: 1000,
+          borderRadius: 4,
+          overflow: 'hidden',
+          mt: '15px',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        {/* Gradient Header merged with card */}
+        <Box sx={{
+          background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+          color: '#fff',
+          p: { xs: 3, md: 4 },
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(5px)',
+          }
+        }}>
+          <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center' }}>
+            <IconButton onClick={() => navigate('/questions')} sx={{ mr: 2, color: '#fff' }}>
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h4" sx={{ fontWeight: 700, color: '#1976d2' }}>
-              <AutoAwesomeIcon sx={{ mr: 1 }} />
-              AI Essay Değerlendirici
+            <Box sx={{ flex: 1 }} />
+            <Typography variant="h4" sx={{ fontWeight: 700 }}>
+              <AutoAwesomeIcon sx={{ mr: 1, verticalAlign: 'middle' }} /> AI Essay Değerlendirici
             </Typography>
+            <Box sx={{ flex: 1 }} />
           </Box>
-          
+        </Box>
+
+        {/* Content */}
+        <Box sx={{ p: { xs: 3, md: 4 } }}>
+          {/* Selected Topic */}
           {selectedTopic && (
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="h6" sx={{ mb: 1, color: '#333' }}>
-                Seçilen Konu:
-              </Typography>
-              <Paper sx={{ 
-                p: 2, 
-                bgcolor: '#e3f2fd', 
-                border: '1px solid #1976d2' 
-              }}>
-                <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                  "{selectedTopic}"
-                </Typography>
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" sx={{ mb: 1, color: '#00695c' }}>Seçilen Konu:</Typography>
+              <Paper sx={{ p: 2, background: 'rgba(0, 184, 148, 0.08)', border: '1px solid rgba(0, 184, 148, 0.25)', borderRadius: 2 }}>
+                <Typography variant="body1" sx={{ fontStyle: 'italic' }}>"{selectedTopic}"</Typography>
               </Paper>
               <Button
                 variant="outlined"
                 size="small"
                 onClick={() => setShowTopicDialog(true)}
-                sx={{ mt: 1 }}
+                sx={{
+                  mt: 1,
+                  borderColor: 'rgba(0, 184, 148, 0.5)',
+                  color: '#00796b',
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  '&:hover': { borderColor: '#00b894', background: 'rgba(0, 184, 148, 0.08)' }
+                }}
               >
                 Konu Değiştir
               </Button>
             </Box>
           )}
-        </Paper>
 
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: evaluation ? 'row' : 'column',
-          gap: 3,
-          '@media (max-width: 900px)': {
-            flexDirection: 'column'
-          }
-        }}>
-          {/* Essay Writing Area */}
-          <Box sx={{ 
-            flex: evaluation ? 1 : 'auto',
-            minWidth: 0
-          }}>
-            <Paper sx={{ p: 3, borderRadius: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  Essay Yazma Alanı
-                </Typography>
-                <Chip 
-                  label={`${wordCount} kelime`}
-                  color={wordCount >= 250 ? 'success' : wordCount >= 150 ? 'warning' : 'default'}
+          {/* Layout */}
+          <Box sx={{ display: 'flex', flexDirection: evaluation ? 'row' : 'column', gap: 3, '@media (max-width: 900px)': { flexDirection: 'column' } }}>
+            {/* Writing Area */}
+            <Box sx={{ flex: evaluation ? 1 : 'auto', minWidth: 0 }}>
+              <Paper sx={{ p: 3, borderRadius: 3, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0, 184, 148, 0.15)' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>Essay Yazma Alanı</Typography>
+                  <Chip 
+                    label={`${wordCount} kelime`}
+                    sx={{
+                      borderColor: 'rgba(0, 184, 148, 0.4)',
+                      color: '#00695c',
+                      fontWeight: 600
+                    }}
+                    variant="outlined"
+                  />
+                </Box>
+
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={20}
+                  value={essayText}
+                  onChange={handleEssayChange}
+                  placeholder="Essay'inizi buraya yazın... (En az 100 kelime, 250 önerilir)"
                   variant="outlined"
-                />
-              </Box>
-              
-              <TextField
-                fullWidth
-                multiline
-                rows={20}
-                value={essayText}
-                onChange={handleEssayChange}
-                placeholder="Essay'inizi buraya yazın... (Minimum 250 kelime önerilir)"
-                variant="outlined"
-                sx={{
-                  mb: 2,
-                  '& .MuiInputBase-input': {
-                    fontSize: '16px',
-                    lineHeight: 1.6
-                  }
-                }}
-              />
-
-              {error && (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                  {error}
-                </Alert>
-              )}
-
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <Button
-                  variant="contained"
-                  onClick={evaluateEssay}
-                  disabled={isEvaluating || !essayText.trim()}
-                  startIcon={isEvaluating ? null : <SendIcon />}
-                  sx={{ 
-                    bgcolor: '#1976d2',
-                    '&:hover': { bgcolor: '#1565c0' },
-                    fontWeight: 600
+                  sx={{
+                    mb: 1,
+                    '& .MuiInputBase-root': { background: 'rgba(255,255,255,0.95)' },
+                    '& .MuiInputBase-input': { fontSize: '16px', lineHeight: 1.6 }
                   }}
-                >
-                  {isEvaluating ? 'Değerlendiriliyor...' : 'Essay\'i Değerlendir'}
-                </Button>
-                
-                <Button
-                  variant="outlined"
-                  onClick={resetEssay}
-                  disabled={isEvaluating}
-                >
-                  Yeni Essay
-                </Button>
-              </Box>
+                />
 
-              {isEvaluating && (
-                <Box sx={{ mt: 2 }}>
-                  <LinearProgress />
-                  <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
-                    AI essay'inizi analiz ediyor...
-                  </Typography>
-                </Box>
-              )}
-            </Paper>
-          </Box>
-
-          {/* Evaluation Results */}
-          {evaluation && (
-            <Box sx={{ 
-              flex: 1,
-              minWidth: 0
-            }}>
-              <Paper sx={{ p: 3, borderRadius: 3 }}>
-                <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
-                  <AutoAwesomeIcon sx={{ mr: 1 }} />
-                  AI Değerlendirme Sonucu
+                <Typography variant="body2" sx={{ mb: 2, fontWeight: 600, color: wordCount < 100 ? '#e53935' : '#2e7d32' }}>
+                  Güzel bir değerlendirme için minimum 100 kelime olmalıdır. ({wordCount}/100)
                 </Typography>
 
-                {/* Overall Score */}
-                <Card sx={{ mb: 3, bgcolor: '#f8f9fa' }}>
-                  <CardContent sx={{ textAlign: 'center' }}>
-                    <Typography variant="h4" sx={{ 
-                      fontWeight: 700, 
-                      color: getScoreColor(evaluation.scores.overall, true),
-                      mb: 1 
-                    }}>
-                      {evaluation.scores.overall}/100
-                    </Typography>
-                    <Typography variant="h6" sx={{ color: '#666' }}>
-                      Genel Puan
-                    </Typography>
-                    <Chip 
-                      label={getScoreLabel(evaluation.scores.overall, true)}
-                      sx={{ 
-                        bgcolor: getScoreColor(evaluation.scores.overall, true),
-                        color: 'white',
-                        fontWeight: 600,
-                        mt: 1
-                      }}
-                    />
-                  </CardContent>
-                </Card>
+                {error && (
+                  <Alert severity="error" sx={{ mb: 2 }}>
+                    {error}
+                  </Alert>
+                )}
 
-                {/* Detailed Scores */}
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="h6" sx={{ mb: 2 }}>
-                    Detaylı Puanlama:
-                  </Typography>
-                  
-                  {[
-                    { key: 'task_response', label: 'Görev Yanıtı' },
-                    { key: 'coherence_cohesion', label: 'Tutarlılık & Bağlantı' },
-                    { key: 'lexical_resource', label: 'Kelime Bilgisi' },
-                    { key: 'grammar', label: 'Dilbilgisi' }
-                  ].map(({ key, label }) => {
-                    const score = evaluation.scores[key as keyof EssayScores];
-                    return (
-                      <Box key={key} sx={{ mb: 2 }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                          <Typography variant="body1">{label}</Typography>
-                          <Typography 
-                            variant="body1" 
-                            sx={{ 
-                              fontWeight: 600,
-                              color: getScoreColor(score)
-                            }}
-                          >
-                            {score}/9
-                          </Typography>
-                        </Box>
-                        <LinearProgress
-                          variant="determinate"
-                          value={(score / 9) * 100}
-                          sx={{
-                            height: 8,
-                            borderRadius: 4,
-                            bgcolor: '#e0e0e0',
-                            '& .MuiLinearProgress-bar': {
-                              bgcolor: getScoreColor(score),
-                              borderRadius: 4
-                            }
-                          }}
-                        />
-                      </Box>
-                    );
-                  })}
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                  <Button
+                    variant="contained"
+                    onClick={evaluateEssay}
+                    disabled={isEvaluating || wordCount < 100}
+                    startIcon={isEvaluating ? null : <SendIcon />}
+                    sx={{
+                      background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                      color: '#fff',
+                      fontWeight: 700,
+                      borderRadius: 2,
+                      px: 3,
+                      textTransform: 'none',
+                      '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' }
+                    }}
+                  >
+                    {isEvaluating ? 'Değerlendiriliyor...' : "Essay'i Değerlendir"}
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    onClick={resetEssay}
+                    disabled={isEvaluating}
+                    sx={{
+                      borderColor: 'rgba(0, 184, 148, 0.5)',
+                      color: '#00796b',
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      '&:hover': { borderColor: '#00b894', background: 'rgba(0, 184, 148, 0.08)' }
+                    }}
+                  >
+                    Yeni Essay
+                  </Button>
                 </Box>
 
-                {/* Feedback */}
-                <Box>
-                  <Typography variant="h6" sx={{ mb: 2 }}>
-                    AI Geri Bildirim:
-                  </Typography>
-                  <Paper sx={{ 
-                    p: 2, 
-                    bgcolor: '#f8f9fa',
-                    border: '1px solid #e0e0e0'
-                  }}>
-                    <Typography 
-                      variant="body1" 
-                      sx={{ 
-                        lineHeight: 1.7,
-                        whiteSpace: 'pre-line'
-                      }}
-                    >
-                      {evaluation.feedback}
+                {isEvaluating && (
+                  <Box sx={{ mt: 2 }}>
+                    <LinearProgress sx={{
+                      height: 8,
+                      borderRadius: 4,
+                      bgcolor: 'rgba(0, 184, 148, 0.1)',
+                      '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #00b894 0%, #00cec9 100%)' }
+                    }} />
+                    <Typography variant="body2" sx={{ mt: 1, textAlign: 'center', color: '#00695c' }}>
+                      AI essay'inizi analiz ediyor...
                     </Typography>
-                  </Paper>
-                </Box>
+                  </Box>
+                )}
               </Paper>
             </Box>
-          )}
+
+            {/* Evaluation Results */}
+            {evaluation && (
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Paper sx={{ p: 3, borderRadius: 3, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0, 184, 148, 0.15)' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, color: '#2c3e50' }}>
+                    <AutoAwesomeIcon sx={{ mr: 1 }} /> AI Değerlendirme Sonucu
+                  </Typography>
+
+                  {/* Overall Score */}
+                  <Card sx={{ mb: 3, background: 'rgba(0, 184, 148, 0.06)', border: '1px solid rgba(0, 184, 148, 0.15)' }}>
+                    <CardContent sx={{ textAlign: 'center' }}>
+                      <Typography variant="h4" sx={{ fontWeight: 700, color: getScoreColor(evaluation.scores.overall, true), mb: 1 }}>
+                        {evaluation.scores.overall}/100
+                      </Typography>
+                      <Typography variant="h6" sx={{ color: '#666' }}>Genel Puan</Typography>
+                      <Chip 
+                        label={getScoreLabel(evaluation.scores.overall, true)}
+                        sx={{ bgcolor: getScoreColor(evaluation.scores.overall, true), color: 'white', fontWeight: 600, mt: 1 }}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  {/* Detailed Scores */}
+                  <Box sx={{ mb: 3 }}>
+                    <Typography variant="h6" sx={{ mb: 2 }}>
+                      Detaylı Puanlama:
+                    </Typography>
+                    
+                    {[
+                      { key: 'task_response', label: 'Görev Yanıtı' },
+                      { key: 'coherence_cohesion', label: 'Tutarlılık & Bağlantı' },
+                      { key: 'lexical_resource', label: 'Kelime Bilgisi' },
+                      { key: 'grammar', label: 'Dilbilgisi' }
+                    ].map(({ key, label }) => {
+                      const score = evaluation.scores[key as keyof EssayScores];
+                      return (
+                        <Box key={key} sx={{ mb: 2 }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                            <Typography variant="body1">{label}</Typography>
+                            <Typography 
+                              variant="body1" 
+                              sx={{ 
+                                fontWeight: 600,
+                                color: getScoreColor(score)
+                              }}
+                            >
+                              {score}/9
+                            </Typography>
+                          </Box>
+                          <LinearProgress
+                            variant="determinate"
+                            value={(score / 9) * 100}
+                            sx={{
+                              height: 8,
+                              borderRadius: 4,
+                              bgcolor: '#e0e0e0',
+                              '& .MuiLinearProgress-bar': {
+                                bgcolor: getScoreColor(score),
+                                borderRadius: 4
+                              }
+                            }}
+                          />
+                        </Box>
+                      );
+                    })}
+                  </Box>
+
+                  {/* Feedback */}
+                  <Box>
+                    <Typography variant="h6" sx={{ mb: 2 }}>
+                      AI Geri Bildirim:
+                    </Typography>
+                    <Paper sx={{ 
+                      p: 2, 
+                      bgcolor: '#f8f9fa',
+                      border: '1px solid #e0e0e0'
+                    }}>
+                      <Typography 
+                        variant="body1" 
+                        sx={{ 
+                          lineHeight: 1.7,
+                          whiteSpace: 'pre-line'
+                        }}
+                      >
+                        {evaluation.feedback}
+                      </Typography>
+                    </Paper>
+                  </Box>
+                </Paper>
+              </Box>
+            )}
+          </Box>
         </Box>
-      </Box>
+      </Paper>
     </Box>
   );
 }

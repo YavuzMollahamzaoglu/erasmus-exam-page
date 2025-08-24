@@ -37,7 +37,7 @@ function EssayGame() {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:3001/api/games/paragraph/questions');
+        const response = await fetch('http://localhost:4000/api/games/fill-in-the-blanks/questions');
         if (!response.ok) {
           throw new Error('Failed to fetch questions');
         }

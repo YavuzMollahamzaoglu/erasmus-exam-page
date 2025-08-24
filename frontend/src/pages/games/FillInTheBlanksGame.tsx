@@ -307,7 +307,7 @@ const FillInTheBlanksGame: React.FC = () => {
       justifyContent: 'flex-start',
       fontFamily: 'Inter, Roboto, Open Sans, Arial, sans-serif',
       px: 2,
-      pt: { xs: 8, sm: 12 }
+      pt: 0
     }}>
       <Box sx={{ 
         width: '100%', 
@@ -321,7 +321,8 @@ const FillInTheBlanksGame: React.FC = () => {
         position: "relative", 
         mx: 'auto', 
         overflow: 'hidden', 
-        border: "1px solid rgba(255,255,255,0.2)" 
+        border: "1px solid rgba(255,255,255,0.2)",
+        mt: '15px'
       }}>
         {/* Header with back button and timer */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -352,6 +353,18 @@ const FillInTheBlanksGame: React.FC = () => {
           </Typography>
         </Box>
 
+        {/* Title above progress bar */}
+        <Typography variant="h5" sx={{ 
+          fontWeight: 700, 
+          textAlign: "center", 
+          color: "#2c3e50",
+          fontSize: { xs: 20, sm: 24 },
+          mb: 2,
+          textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+        }}>
+          BOŞLUK DOLDURMA OYUNU
+        </Typography>
+
         {/* Progress Bar */}
         <LinearProgress
           variant="determinate"
@@ -371,18 +384,6 @@ const FillInTheBlanksGame: React.FC = () => {
             },
           }}
         />
-
-        {/* Title */}
-        <Typography variant="h5" sx={{ 
-          fontWeight: 700, 
-          textAlign: "center", 
-          color: "#2c3e50",
-          fontSize: { xs: 20, sm: 24 },
-          mb: 2,
-          textShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          BOŞLUK DOLDURMA OYUNU
-        </Typography>
 
         {/* Question Counter */}
         <Typography variant="h6" sx={{ 
@@ -519,101 +520,77 @@ const FillInTheBlanksGame: React.FC = () => {
           </button>
           <button
             style={{
-              background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
+              background: currentIndex === questions.length - 1 ? 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' : 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
               color: '#fff',
               fontWeight: 700,
               fontSize: 16,
               border: 'none',
               borderRadius: 12,
               padding: '12px 24px',
-              cursor: 'pointer',
+              cursor: (currentIndex === questions.length - 1 && (userAnswers.some(a => a === null) || isSubmitted)) ? 'not-allowed' : 'pointer',
               minWidth: 100,
-              boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
               transition: 'all 0.3s ease',
+              opacity: (currentIndex === questions.length - 1 && (userAnswers.some(a => a === null) || isSubmitted)) ? 0.7 : 1,
             }}
             onMouseEnter={(e) => {
               const target = e.target as HTMLButtonElement;
               target.style.transform = 'translateY(-2px)';
-              target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
+              target.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.2)';
             }}
             onMouseLeave={(e) => {
               const target = e.target as HTMLButtonElement;
               target.style.transform = 'translateY(0)';
-              target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
+              target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
             }}
-            onClick={nextQuestion}
+            onClick={() => {
+              if (currentIndex < questions.length - 1) {
+                nextQuestion();
+              } else {
+                // Last question: swap behavior -> Kontrol Et here
+                if (!userAnswers.some(a => a === null) && !isSubmitted) {
+                  handleSubmit();
+                }
+              }
+            }}
+            disabled={currentIndex === questions.length - 1 && (userAnswers.some(a => a === null) || isSubmitted)}
           >
-            {currentIndex < questions.length - 1 ? 'Sonraki →' : 'Bitir'}
+            {currentIndex < questions.length - 1 ? 'Sonraki →' : 'Kontrol Et'}
           </button>
         </Box>
 
-        {/* Action buttons */}
+        {/* Action buttons (Bitir moved here) */}
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 4 }}>
-          {!isSubmitted && (
+          {currentIndex === questions.length - 1 && isSubmitted && (
             <button
               style={{
-                background: userAnswers.some(answer => answer === null) ? 'linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)' : 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                color: userAnswers.some(answer => answer === null) ? '#666' : '#fff',
+                background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
+                color: '#fff',
                 fontWeight: 700,
                 fontSize: 18,
                 border: 'none',
                 borderRadius: 12,
                 padding: '12px 32px',
-                cursor: userAnswers.some(answer => answer === null) ? 'not-allowed' : 'pointer',
-                opacity: userAnswers.some(answer => answer === null) ? 0.7 : 1,
+                cursor: 'pointer',
                 minWidth: 120,
-                boxShadow: userAnswers.some(answer => answer === null) ? 'none' : '0 4px 12px rgba(0, 184, 148, 0.3)',
+                boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
                 transition: 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {
-                if (!userAnswers.some(answer => answer === null)) {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.transform = 'translateY(-2px)';
-                  target.style.boxShadow = '0 6px 16px rgba(0, 184, 148, 0.4)';
-                }
+                const target = e.target as HTMLButtonElement;
+                target.style.transform = 'translateY(-2px)';
+                target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
               }}
               onMouseLeave={(e) => {
-                if (!userAnswers.some(answer => answer === null)) {
-                  const target = e.target as HTMLButtonElement;
-                  target.style.transform = 'translateY(0)';
-                  target.style.boxShadow = '0 4px 12px rgba(0, 184, 148, 0.3)';
-                }
+                const target = e.target as HTMLButtonElement;
+                target.style.transform = 'translateY(0)';
+                target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
               }}
-              onClick={handleSubmit}
-              disabled={userAnswers.some(answer => answer === null)}
+              onClick={() => navigate('/questions')}
             >
-              Kontrol Et
+              Bitir
             </button>
           )}
-
-          <button
-            style={{
-              background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 18,
-              border: 'none',
-              borderRadius: 12,
-              padding: '12px 32px',
-              cursor: 'pointer',
-              minWidth: 120,
-              boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              const target = e.target as HTMLButtonElement;
-              target.style.transform = 'translateY(-2px)';
-              target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              const target = e.target as HTMLButtonElement;
-              target.style.transform = 'translateY(0)';
-              target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
-            }}
-            onClick={() => navigate('/questions')}
-          >
-            Ana Sayfa
-          </button>
         </Box>
       </Box>
     </Box>

@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Paper, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 
 interface Props {
-  onShowLogin: () => void;
+  onShowLogin?: () => void;
 }
 
-const Register: React.FC<Props> = ({ onShowLogin }) => {
+const Register: React.FC<Props> = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     setMessage('');
     try {
-      const res = await fetch('http://localhost:4000/api/auth/register', {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name }),
@@ -36,55 +36,39 @@ const Register: React.FC<Props> = ({ onShowLogin }) => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Paper elevation={6} sx={{ p: 5, borderRadius: 4, minWidth: 340, bgcolor: '#fff', color: '#1a237e', boxShadow: 6 }}>
-        <Typography variant="h4" fontWeight={700} mb={3} align="center">Register</Typography>
-        <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-            style={{ padding: 12, borderRadius: 6, border: '1px solid #38bdf8', fontSize: 16 }}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-            style={{ padding: 12, borderRadius: 6, border: '1px solid #38bdf8', fontSize: 16 }}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-            style={{ padding: 12, borderRadius: 6, border: '1px solid #38bdf8', fontSize: 16 }}
-          />
-          <button type="submit" style={{ padding: 12, background: '#38bdf8', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 16, marginTop: 8 }}>Register</button>
-        </form>
-        {message && <Typography color="error" align="center" mt={2}>{message}</Typography>}
-        {showSuccess && (
-          <Box sx={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', bgcolor: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-            <Paper sx={{ p: 4, borderRadius: 3, minWidth: 280, textAlign: 'center' }}>
-              <Typography variant="h5" mb={2}>Registration Successful!</Typography>
-              <Typography mb={3}>You can now log in.</Typography>
-              <button
-                style={{ padding: 10, background: '#38bdf8', color: '#fff', border: 'none', borderRadius: 4, width: '100%', cursor: 'pointer', fontWeight: 700, fontSize: 16 }}
-                onClick={() => {
-                  setShowSuccess(false);
-                  navigate('/login');
-                }}
-              >
-                Go to Login
-              </button>
-            </Paper>
+    <Box sx={{ minHeight: '100vh', background: '#b2dfdb', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', px: 2, pt: { xs: 4, md: 6 }, pb: { xs: 7, md: 8 } }}>
+      <Paper elevation={6} sx={{ p: 0, borderRadius: 4, width: '100%', maxWidth: 520, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
+        <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit', borderBottomLeftRadius: 0, borderBottomRightRadius: 0, textAlign: 'center', position: 'relative', overflow: 'hidden', '&::before': { content: '""', position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(4px)' } }}>
+          <Box sx={{ position: 'relative' }}>
+            <Typography variant="h4" fontWeight={800} mb={1}>Kayıt Ol</Typography>
+            <Typography variant="subtitle1" sx={{ opacity: 0.95 }}>Hesap oluştur ve hemen başla</Typography>
           </Box>
-        )}
+        </Box>
+
+        <Box sx={{ p: { xs: 3, md: 4 } }}>
+          <form onSubmit={handleRegister}>
+            <TextField fullWidth label="Ad Soyad" value={name} onChange={(e) => setName(e.target.value)} margin="normal" />
+            <TextField fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" />
+            <TextField fullWidth label="Parola" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" />
+            {message && <Typography color="error" variant="body2" mt={1}>{message}</Typography>}
+            <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+              <Button type="submit" variant="contained" sx={{ flex: 1, background: 'linear-gradient(90deg, #00b894 0%, #00cec9 100%)', color: '#fff', fontWeight: 700, textTransform: 'none', py: 1.1, '&:hover': { background: 'linear-gradient(90deg, #00cec9 0%, #00b894 100%)' } }}>Kayıt Ol</Button>
+              <Button type="button" variant="outlined" onClick={() => navigate('/login')} sx={{ flex: 1, borderColor: '#00b894', color: '#00695c', fontWeight: 700, textTransform: 'none', py: 1.05, '&:hover': { borderColor: '#00cec9', backgroundColor: 'rgba(0,206,201,0.08)' } }}>Giriş Yap</Button>
+            </Box>
+          </form>
+        </Box>
       </Paper>
+
+      <Dialog open={showSuccess} onClose={() => setShowSuccess(false)}>
+        <DialogTitle>Kayıt Başarılı</DialogTitle>
+        <DialogContent>
+          <Typography>Giriş yaparak devam edebilirsin.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowSuccess(false)} sx={{ color: '#00695c' }}>Kapat</Button>
+          <Button onClick={() => { setShowSuccess(false); navigate('/login'); }} variant="contained" sx={{ background: 'linear-gradient(90deg, #00b894 0%, #00cec9 100%)' }}>Girişe Git</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

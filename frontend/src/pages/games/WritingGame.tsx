@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -9,6 +8,10 @@ interface WordData {
 }
 
 export default function WritingGame() {
+  // Read level from URL (default a1)
+  const levelParam = new URLSearchParams(window.location.search).get('level') || 'a1';
+  const apiLevel = levelParam.toUpperCase();
+
   const [index, setIndex] = useState(0);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
@@ -27,7 +30,7 @@ export default function WritingGame() {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:4000/api/games/writing/questions');
+        const response = await fetch(`http://localhost:4000/api/games/writing/questions?level=${apiLevel}`);
         if (!response.ok) {
           throw new Error('Failed to fetch questions');
         }
@@ -48,7 +51,7 @@ export default function WritingGame() {
     };
 
     fetchQuestions();
-  }, []);
+  }, [apiLevel]);
 
   // Restart game state
   const handleRestart = () => {

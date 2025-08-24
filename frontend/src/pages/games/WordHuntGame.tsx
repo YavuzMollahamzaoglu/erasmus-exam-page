@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Typography, IconButton, LinearProgress, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -22,6 +21,10 @@ const gradients = [
 ];
 
 export default function WordHuntGame() {
+  // Read level from URL (default a1)
+  const levelParam = new URLSearchParams(window.location.search).get('level') || 'a1';
+  const apiLevel = levelParam.toUpperCase();
+
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
@@ -40,7 +43,7 @@ export default function WordHuntGame() {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:4000/api/games/word-hunt/questions');
+        const response = await fetch(`http://localhost:4000/api/games/word-hunt/questions?level=${apiLevel}`);
         if (!response.ok) {
           throw new Error('Failed to fetch questions');
         }
@@ -58,7 +61,7 @@ export default function WordHuntGame() {
     };
 
     fetchQuestions();
-  }, []);
+  }, [apiLevel]);
   
   // Initialize options for current question
   useEffect(() => {

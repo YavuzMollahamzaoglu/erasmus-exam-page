@@ -15,4 +15,14 @@ router.post("/writing/questions", GameController.createWritingQuestion);
 router.get("/paragraph/questions", GameController.getParagraphQuestions);
 router.post("/paragraph/questions", GameController.createParagraphQuestion);
 
+// Alias for Fill-in-the-Blanks (same as paragraph questions)
+router.get(
+  "/fill-in-the-blanks/questions",
+  GameController.getParagraphQuestions
+);
+router.post(
+  "/fill-in-the-blanks/questions",
+  GameController.createParagraphQuestion
+);
+
 export default router;

@@ -11,6 +11,7 @@ import tokenRoutes from "./token.routes";
 import adminRoutes from "./admin.routes";
 import essayRoutes from "./essay.routes";
 import gamesRoutes from "./games.routes";
+import wordsRoutes from "./words.routes";
 
 const router = Router();
 
@@ -26,12 +27,6 @@ router.use("/token", tokenRoutes);
 router.use("/admin", adminRoutes);
 router.use("/essays", essayRoutes);
 router.use("/games", gamesRoutes);
+router.use("/words", wordsRoutes);
 
-router.use("/questions", questionsRoutes);
-router.use("/series", seriesRoutes);
-router.use("/categories", categoriesRoutes);
-router.use("/tests", testsRoutes);
-router.use("/history", historyRoutes);
-router.use("/rankings", rankingsRoutes);
-router.use("/token", tokenRoutes);
 export default router;
