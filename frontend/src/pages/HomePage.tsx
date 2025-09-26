@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Paper, Typography, TextField, InputAdornment, List, ListItemButton, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Paper, Typography, TextField, InputAdornment, List, ListItemButton, Button, Chip } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface Props {
@@ -14,6 +14,7 @@ const searchItems: Array<{ label: string; url: string; keywords?: string[] }> = 
   { label: 'Kelime Avı Oyunu', url: '/kelime-avi', keywords: ['word hunt', 'kelime avi', 'game', 'oyun', 'seri soru', 'seri soru çözümü'] },
   { label: 'Yazı Yazma Oyunu', url: '/yazi-yazma', keywords: ['writing', 'typing', 'yazi yazma', 'oyun'] },
   { label: 'Boşluk Doldurma Oyunu', url: '/bosluk-doldurma', keywords: ['fill in the blanks', 'bosluk doldurma', 'paragraph'] },
+  { label: 'Okuma Oyunu', url: '/okuma', keywords: ['reading', 'okuma', 'passage', 'paragraph'] },
   { label: 'Essay Writing', url: '/essay-writing', keywords: ['essay', 'yapay zeka', 'degerlendirme'] },
   { label: 'Sıralamalar', url: '/rankings', keywords: ['leaderboard', 'puan', 'siralama'] },
   { label: 'Geçmiş', url: '/history', keywords: ['history', 'gecmis', 'sonuclar'] },
@@ -31,11 +32,11 @@ const frostedPaper = {
   width: '100%',
   borderRadius: 4,
   overflow: 'hidden',
-  mt: '15px',
+  mt: { xs: 1, md: '15px' },
   background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
   backdropFilter: 'blur(10px)',
   border: '1px solid rgba(255, 255, 255, 0.2)',
-  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+  boxShadow: { xs: '0 8px 18px rgba(0,0,0,0.08)', md: '0 20px 40px rgba(0,0,0,0.1)' },
 } as const;
 
 const cardSx = {
@@ -43,27 +44,103 @@ const cardSx = {
   background: 'rgba(255, 255, 255, 0.9)',
   border: '1px solid rgba(0, 184, 148, 0.2)',
   borderRadius: 3,
-  boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
-  p: 2.5,
+  boxShadow: { xs: '0 3px 10px rgba(0,0,0,0.06)', md: '0 6px 20px rgba(0,0,0,0.08)' },
+  p: { xs: 2, md: 2.5 },
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 30px rgba(0,0,0,0.12)' },
+  '&:hover': { transform: { md: 'translateY(-3px)' }, boxShadow: { md: '0 12px 30px rgba(0,0,0,0.12)' } },
 } as const;
 
 const HomePage: React.FC<Props> = ({ token }) => {
   const [search, setSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [lastVisited, setLastVisited] = useState<string | null>(null);
 
-  const filtered = searchItems.filter(item => {
-    const q = search.toLowerCase().trim();
-    if (!q) return false;
-    return (
-      item.label.toLowerCase().includes(q) ||
-      (item.keywords?.some(k => k.toLowerCase().includes(q)) ?? false)
-    );
-  }).slice(0, 10);
+  useEffect(() => {
+    try {
+      const p = localStorage.getItem('lastVisitedPath');
+      if (p) setLastVisited(p);
+    } catch {}
+  }, []);
+
+  const labelForPath = (p: string) => {
+    const map: Record<string, string> = {
+      '/bosluk-doldurma': 'Boşluk Doldurma',
+      '/yazi-yazma': 'Yazı Yazma',
+      '/essay-writing': 'Essay',
+      '/kelime-avi': 'Kelime Avı',
+      '/questions': 'Testler',
+      '/words': 'Kelimeler'
+    };
+    return map[p] || 'İçerik';
+  };
+
+  const normalizeTR = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/ı/g, 'i')
+      .replace(/İ/g, 'i')
+      .replace(/ğ/g, 'g')
+      .replace(/Ğ/g, 'g')
+      .replace(/ş/g, 's')
+      .replace(/Ş/g, 's')
+      .replace(/ç/g, 'c')
+      .replace(/Ç/g, 'c')
+      .replace(/ö/g, 'o')
+      .replace(/Ö/g, 'o')
+      .replace(/ü/g, 'u')
+      .replace(/Ü/g, 'u');
+
+  const filtered = searchItems
+    .map((item, idx) => {
+      const qRaw = search.trim();
+      if (!qRaw) return null;
+      const q = normalizeTR(qRaw);
+      const labelN = normalizeTR(item.label);
+      const kwN = (item.keywords || []).map(normalizeTR);
+
+      // Filter: must match label or any keyword
+      const labelPos = labelN.indexOf(q);
+      const kwPos = kwN.map((k) => k.indexOf(q));
+      const isStrict = q.length <= 1; // single letter -> only startsWith
+      const matches = isStrict
+        ? (labelN.startsWith(q) || kwN.some((k) => k.startsWith(q)))
+        : (labelPos >= 0 || kwPos.some((p) => p >= 0));
+  if (!matches) return null;
+
+      // Score: startsWith highest, then early contains, then keywords
+      let score = 0;
+      if (labelN.startsWith(q)) score += 1000;
+      if (!isStrict && labelPos >= 0) score += 800 - Math.min(labelPos, 700);
+      // keyword startsWith and contains (take best)
+      let bestKw = -1;
+      for (const p of kwPos) {
+        if (p === 0) bestKw = 0; // startsWith
+        else if (p > 0) bestKw = bestKw === -1 ? p : Math.min(bestKw, p);
+      }
+      if (bestKw === 0) score += 400;
+      else if (!isStrict && bestKw > 0) score += 300 - Math.min(bestKw, 250);
+      // tiny boost for exact label match
+      if (labelN === q) score += 50;
+
+      return { item, score, idx };
+    })
+  .filter((x): x is { item: typeof searchItems[number]; score: number; idx: number } => x !== null)
+    .sort((a, b) => (b.score - a.score) || a.item.label.localeCompare(b.item.label))
+    .slice(0, 10)
+    .map((x) => x.item);
 
   return (
-    <Box sx={{ minHeight: '100vh', background: '#b2dfdb', px: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', pb: { xs: 7, md: 8 }, pt: 0 }}>
+    <Box sx={{ 
+      minHeight: '100vh', 
+      background: '#b2dfdb', 
+      px: { xs: 1.5, sm: 2 }, 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      pt: 0, 
+      pb: { xs: 12, md: 16 }, 
+      overflowX: 'hidden' 
+    }}>
       <Paper elevation={6} sx={frostedPaper}>
         {/* Gradient header */}
         <Box sx={{
@@ -87,8 +164,8 @@ const HomePage: React.FC<Props> = ({ token }) => {
           }
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography variant="h3" fontWeight={700} mb={2} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: { xs: '2rem', md: '2.5rem' } }}>Hazırlığını Başlat</Typography>
-            <Typography variant="h6" sx={{ opacity: 0.95 }}>İngilizce sınavlarına güçlü bir başlangıç yap</Typography>
+            <Typography variant="h3" fontWeight={700} mb={2} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: 'clamp(1.6rem, 3vw, 2.5rem)' }}>Hazırlığını Başlat</Typography>
+            <Typography variant="h6" sx={{ opacity: 0.95, fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)' }}>İngilizce sınavlarına güçlü bir başlangıç yap</Typography>
           </Box>
         </Box>
 
@@ -133,65 +210,145 @@ const HomePage: React.FC<Props> = ({ token }) => {
             </Box>
           </Box>
 
-          {/* Sınav Türleri */}
-          <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Sınav Türleri</Typography>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 2.5, mb: 3 }}>
-            <Box sx={cardSx as any}>
-              <Typography fontSize={28} mb={1}>🎓</Typography>
-              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Erasmus Hazırlık</Typography>
-              <Typography fontSize={14} color="#455a64">Çeşitli üniversitelerin Erasmus sınavları örnek alınarak hazırlanmış test ve sorular.</Typography>
-            </Box>
-            <Box sx={cardSx as any}>
-              <Typography fontSize={28} mb={1}>✅</Typography>
-              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Genel İngilizce</Typography>
-              <Typography fontSize={14} color="#455a64">Seviye belirleme ve genel sınavlara yönelik, farklı kaynaklardan derlenmiş testler.</Typography>
-            </Box>
-            <Box sx={cardSx as any}>
-              <Typography fontSize={28} mb={1}>🏛️</Typography>
-              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Üniversite Hazırlık</Typography>
-              <Typography fontSize={14} color="#455a64">Üniversite hazırlık geçme sınavlarına uygun, daha zorlu içerikler.</Typography>
-            </Box>
-          </Box>
+          {/* Resume card (if any) */}
+          {lastVisited && (
+            <Paper elevation={0} sx={{ mb: 3, p: 2, borderRadius: 2, background: 'rgba(0, 184, 148, 0.08)', border: '1px solid rgba(0, 184, 148, 0.25)' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap' }}>
+                <Typography sx={{ color: '#00695c', fontWeight: 700 }}>Kaldığın yerden devam et: {labelForPath(lastVisited)}</Typography>
+                <Button onClick={() => (window.location.href = lastVisited)} sx={{ textTransform: 'none', fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', px: 2.5, py: 0.75, borderRadius: 2 }}>Devam Et</Button>
+              </Box>
+            </Paper>
+          )}
 
-          {/* Bilgi şeridi */}
-          <Box sx={{ background: '#e3eafc', borderRadius: 2, p: 2.25, mb: 4, textAlign: 'center', fontSize: 18, color: '#19376D', fontWeight: 600 }}>
-            Kategorilerimiz: Okuma, Yazma, Dinleme, Kelime, Essay ve daha fazlası ile seviyene uygun içerikler.
-          </Box>
+          {/* Öğrenme Akışı (önerilen kullanım) */}
+          <Paper elevation={0} sx={{ mb: 4, p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: '#fff' }}>
+            <Typography variant="h6" fontWeight={800} mb={1} sx={{ color: '#00695c' }}>Nasıl çalışmalı?</Typography>
+            <Typography fontSize={14} color="#455a64" mb={1.5}>
+              Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap.
+            </Typography>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 1.5 }}>
+              <Box>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>1) Kelimeleri Öğren</Typography>
+                <Typography fontSize={13} color="#607d8b">Kelimeler sayfası, Kelime Avı ve Kelime Eşleştirme oyunları ile seviyene uygun kelime çalış.</Typography>
+              </Box>
+              <Box>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>2) Klasik Sorularla Pekiştir</Typography>
+                <Typography fontSize={13} color="#607d8b">Testler bölümünde dilbilgisi (grammar) ve kelime (vocabulary) odaklı sorularla pratik yap.</Typography>
+              </Box>
+              <Box>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>3) Gerçek Sınav Tarzı</Typography>
+                <Typography fontSize={13} color="#607d8b">Üniversite ve kitaplardan derlenmiş, gerçek sınavlara yakın soruları A1, A2, B1 ve B2 seviyelerinde çözerek seviyeni ölç.</Typography>
+              </Box>
+              <Box>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>4) Okuma (Reading)</Typography>
+                <Typography fontSize={13} color="#607d8b">Uzun paragraf + 4–5 çoktan seçmeli soruyla okuduğunu anlama becerini geliştir.</Typography>
+              </Box>
+            </Box>
+          </Paper>
 
           {/* Oyunlarımız */}
           <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Oyunlarımız</Typography>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 2.5, mb: 3 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: { xs: 2, md: 2.5 }, mb: 3 }}>
             <Box sx={cardSx as any}>
               <Typography fontSize={28} mb={1}>🔢</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Seri Soru Çözümü</Typography>
               <Typography fontSize={14} color="#455a64">A1–B2 seviyelerinde kelime odaklı ardışık soru çözümü.</Typography>
+              <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Zorluk: Orta" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
+                <Chip label="~8 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
+              </Box>
             </Box>
             <Box sx={cardSx as any}>
               <Typography fontSize={28} mb={1}>⌨️</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Yazı Yazma</Typography>
               <Typography fontSize={14} color="#455a64">Türkçe kelimenin İngilizcesini yaz, anında geri bildirim al.</Typography>
+              <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Zorluk: Kolay" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
+                <Chip label="~5 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
+              </Box>
+            </Box>
+            <Box sx={cardSx as any}>
+              <Typography fontSize={28} mb={1}>🧩</Typography>
+              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Kelime Eşleştirme</Typography>
+              <Typography fontSize={14} color="#455a64">15 kelimeyle hızlı eşleştirme; iki satır havuz ve 3x5 hedef ızgarası.</Typography>
+              <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Kelime odaklı" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
+                <Chip label="Zaman takibi" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
+              </Box>
+            </Box>
+            <Box sx={cardSx as any}>
+              <Typography fontSize={28} mb={1}>📖</Typography>
+              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Okuma Oyunu</Typography>
+              <Typography fontSize={14} color="#455a64">Uzun paragraf + 4–5 soru ile okuduğunu anlama; doğru/yanlış geri bildirim ve açıklamalar.</Typography>
+              <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Reading" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
+                <Chip label="Seviye: A1–B2" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
+              </Box>
+            </Box>
+            <Box sx={cardSx as any}>
+              <Typography fontSize={28} mb={1}>🧠</Typography>
+              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Boşluk Doldurma</Typography>
+              <Typography fontSize={14} color="#455a64">Paragrafta boşlukları doğru seçenekle doldur; bağlam içinde kelime/gramer pekiştir.</Typography>
+              <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Bağlamlı alıştırma" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
+                <Chip label="A1–B2" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
+              </Box>
             </Box>
             <Box sx={cardSx as any}>
               <Typography fontSize={28} mb={1}>📝</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Essay</Typography>
               <Typography fontSize={14} color="#455a64">Yapay zekâ ile değerlendirilen essay yazma deneyimi.</Typography>
+              <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Zorluk: Orta" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
+                <Chip label="~10 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
+              </Box>
             </Box>
           </Box>
 
+          {/* Kısa istatistikler */}
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: { xs: 1.5, md: 2 }, mb: 2 }}>
+            {[{label: 'Test/Quiz', value: '40+'}, {label: 'Soru', value: '500+'}, {label: 'Oyun', value: '6'}, {label: 'Sınav Türü', value: '4'}].map((s) => (
+              <Paper key={s.label} sx={{ p: 2, textAlign: 'center', borderRadius: 3, border: '1px solid #e3eafc' }}>
+                <Typography fontSize={22} fontWeight={800} color="#19376D">{s.value}</Typography>
+                <Typography fontSize={13} color="#607d8b">{s.label}</Typography>
+              </Paper>
+            ))}
+          </Box>
+
+          {/* Guest benefits as cards like Oyunlarımız */}
+          {!token && (
+            <>
+              <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Üye Olunca Neler Kazanırsın?</Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: { xs: 2, md: 2.5 }, mb: 3 }}>
+                {[ 
+                  { icon: '🏆', title: 'Sıralamalar', desc: 'Puanın ve rozetlerinle listelerde yer al.' },
+                  { icon: '🕒', title: 'Çözüm Geçmişi', desc: 'Geçmiş sonuçlarını ve gelişimini takip et.' },
+                  { icon: '💬', title: 'Yorumlar', desc: 'Sorulara yorum yap, tartışmalara katıl.' },
+                ].map((f) => (
+                  <Box key={f.title} sx={cardSx as any}>
+                    <Typography fontSize={28} mb={1}>{f.icon}</Typography>
+                    <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>{f.title}</Typography>
+                    <Typography fontSize={14} color="#455a64">{f.desc}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </>
+          )}
+
           {/* Call to action for guests */}
           {!token && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: 2, md: 3 } }}>
               <Button
                 onClick={() => (window.location.href = '/register')}
                 sx={{
                   background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
                   color: '#fff',
                   fontWeight: 700,
-                  fontSize: 18,
+      fontSize: { xs: 16, md: 18 },
                   borderRadius: 2,
-                  px: 5,
-                  py: 1.5,
-                  boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
+      px: { xs: 3.5, md: 5 },
+      py: { xs: 1.25, md: 1.5 },
+      boxShadow: { xs: '0 4px 14px rgba(0,0,0,0.08)', md: '0 6px 20px rgba(0,0,0,0.08)' },
                   textTransform: 'none',
                   '&:hover': { filter: 'brightness(0.95)' }
                 }}

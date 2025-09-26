@@ -47,10 +47,10 @@ model QuestionSeries {
 
 model Question {
   id          String @id @default(uuid())
-  text        String
-  options     String // Store as JSON string: '["A","B","C","D"]'
+  text        String @db.Text
+  options     String @db.Text // Store as JSON string: '["A","B","C","D"]'
   correct     String
-  explanation String
+  explanation String @db.Text
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
@@ -76,6 +76,8 @@ model Test {
   createdAt DateTime @default(now())
 
   category String // <-- Added field for frontend grouping
+  // Only tests explicitly marked as ranked should appear in Rankings
+  isRanked Boolean @default(false)
 
   answers TestAnswer[]
 }
@@ -124,9 +126,9 @@ model WritingQuestion {
 model ParagraphQuestion {
   id             String   @id @default(uuid())
   title          String // Title of the paragraph
-  text           String // Paragraph text with ______ blanks
-  options        String // JSON array of all options (including extra one)
-  correctAnswers String // JSON array of correct answers in order
+  text           String   @db.Text // Paragraph text with ______ blanks
+  options        String   @db.Text // JSON array of all options (including extra one)
+  correctAnswers String   @db.Text // JSON array of correct answers in order
   level          String   @default("A1") // A1, A2, B1, B2
   createdAt      DateTime @default(now())
 }
@@ -143,7 +145,7 @@ model Word {
   updatedAt  DateTime  @updatedAt
 
   // New relation for multiple examples
-  examples   WordExample[]
+  examples WordExample[]
 }
 
 model WordExample {
@@ -152,6 +154,66 @@ model WordExample {
   wordId    String
   sentence  String
   createdAt DateTime @default(now())
+}
+
+// Word Matching game (sets + items). This is additive and does not touch existing tables.
+model WordMatchSet {
+  id        String   @id @default(uuid())
+  title     String
+  level     String   @default("A1") // A1, A2, B1, B2
+  createdAt DateTime @default(now())
+
+  items WordMatchItem[]
+}
+
+model WordMatchItem {
+  id        String       @id @default(uuid())
+  set       WordMatchSet @relation(fields: [setId], references: [id], onDelete: Cascade)
+  setId     String
+  english   String
+  turkish   String
+  createdAt DateTime     @default(now())
+}
+
+// Reading game: long passage with 4-5 MCQs
+model ReadingPassage {
+  id        String   @id @default(uuid())
+  title     String
+  text      String   @db.Text
+  level     String   @default("A1") // A1, A2, B1, B2
+  createdAt DateTime @default(now())
+
+  questions ReadingQuestion[]
+}
+
+model ReadingQuestion {
+  id           String         @id @default(uuid())
+  passage      ReadingPassage @relation(fields: [passageId], references: [id], onDelete: Cascade)
+  passageId    String
+  question     String
+  options      String         @db.Text // JSON array of options
+  correctIndex Int
+  explanation  String?        @db.Text
+  createdAt    DateTime       @default(now())
+}
+
+// Persisted previews for topics/grammar/difficulty/gains
+model ExamPreview {
+  id           String   @id @default(uuid())
+  categoryId   Int?
+  seriesId     String?
+  total        Int      @default(0)
+  alternatives String   @db.Text // JSON array of alternative wrong options
+  grammar      Json?
+  difficulty   Json?
+  gains        Json?
+  source       String   @default("heuristic") // ai | heuristic | client
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([categoryId, seriesId])
+  @@index([categoryId])
+  @@index([seriesId])
 }
 
 enum Role {

@@ -12,6 +12,7 @@ import adminRoutes from "./admin.routes";
 import essayRoutes from "./essay.routes";
 import gamesRoutes from "./games.routes";
 import wordsRoutes from "./words.routes";
+import topicsRoutes from "./topics.routes";
 
 const router = Router();
 
@@ -28,5 +29,7 @@ router.use("/admin", adminRoutes);
 router.use("/essays", essayRoutes);
 router.use("/games", gamesRoutes);
 router.use("/words", wordsRoutes);
+console.log("[routes] Mounting /topics routes");
+router.use("/topics", topicsRoutes);
 
 export default router;

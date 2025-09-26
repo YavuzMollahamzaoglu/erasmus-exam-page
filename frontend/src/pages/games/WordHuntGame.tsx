@@ -37,6 +37,10 @@ export default function WordHuntGame() {
   const [time, setTime] = useState(0);
   const [currentOptions, setCurrentOptions] = useState<string[]>([]);
   const [wrongAttempts, setWrongAttempts] = useState(0);
+  // Persist per-question correct state so it remains highlighted when navigating back
+  const [savedCorrect, setSavedCorrect] = useState<Record<number, { selected: string }>>({});
+  // Only hide nav during short correct animation
+  const [celebrating, setCelebrating] = useState(false);
   
   // Fetch questions from API
   useEffect(() => {
@@ -63,13 +67,24 @@ export default function WordHuntGame() {
     fetchQuestions();
   }, [apiLevel]);
   
-  // Initialize options for current question
+  // Initialize options for current question and restore saved correct state if exists
   useEffect(() => {
     if (words[index]) {
       setCurrentOptions([...words[index].en]);
       setWrongAttempts(0);
+      const saved = savedCorrect[index];
+      if (saved) {
+        // When revisiting, keep highlight via savedCorrect but don't enter 'correct' state
+        setSelected(saved.selected);
+        setStatus("idle");
+        setCelebrating(false);
+      } else {
+        setSelected(null);
+        setStatus("idle");
+        setCelebrating(false);
+      }
     }
-  }, [index, words]);
+  }, [index, words, savedCorrect]);
   
   // Restart game state
   const handleRestart = () => {
@@ -82,6 +97,7 @@ export default function WordHuntGame() {
     setTime(0);
     setCurrentOptions([...words[0].en]);
     setWrongAttempts(0);
+  setSavedCorrect({});
   };
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -95,15 +111,31 @@ export default function WordHuntGame() {
     };
   }, [showResult]);
 
+  // Prevent closing result with ESC key
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (showResult && (e.key === 'Escape' || e.key === 'Esc')) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, { capture: true });
+    return () => window.removeEventListener('keydown', onKeyDown, { capture: true } as any);
+  }, [showResult]);
+
   const handleSelect = (option: string) => {
     if (status !== "idle") return;
     setSelected(option);
     if (option === words[index].correct) {
       setStatus("correct");
       setScore((s) => s + 1);
+  // Save correct selection for this index so it stays highlighted when navigating back
+  setSavedCorrect((prev) => ({ ...prev, [index]: { selected: option } }));
+      setCelebrating(true);
       setTimeout(() => {
         setStatus("idle");
         setSelected(null);
+        setCelebrating(false);
         if (index < words.length - 1) {
           setIndex((i) => i + 1);
         } else {
@@ -172,7 +204,7 @@ export default function WordHuntGame() {
   // Loading state
   if (loading) {
     return (
-      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", px: 2 }}>
+      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
         <CircularProgress size={60} sx={{ color: "#00b894", mb: 2 }} />
         <Typography variant="h6" color="#00b894">Sorular yükleniyor...</Typography>
       </Box>
@@ -182,9 +214,9 @@ export default function WordHuntGame() {
   // Error state
   if (error) {
     return (
-      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", px: 2 }}>
-        <Box sx={{ p: 4, maxWidth: 600, width: "100%", textAlign: "center", borderRadius: 4, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}>
-          <Typography variant="h6" color="error" mb={2}>{error}</Typography>
+      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
+        <Box sx={{ width: 400, maxWidth: "95vw", background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, color: "#2c3e50", textAlign: "center", border: "1px solid rgba(255,255,255,0.2)" }}>
+          <Typography variant="h6" color="error" mb={3}>{error}</Typography>
           <Typography 
             onClick={() => window.location.href = '/questions'}
             sx={{ 
@@ -210,9 +242,9 @@ export default function WordHuntGame() {
   // No questions available
   if (words.length === 0) {
     return (
-      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", px: 2 }}>
-        <Box sx={{ p: 4, maxWidth: 600, width: "100%", textAlign: "center", borderRadius: 4, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}>
-          <Typography variant="h6" color="#2c3e50" mb={2}>Henüz soru bulunmuyor</Typography>
+      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
+        <Box sx={{ width: 400, maxWidth: "95vw", background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, color: "#2c3e50", textAlign: "center", border: "1px solid rgba(255,255,255,0.2)" }}>
+          <Typography variant="h6" color="#2c3e50" mb={3}>Henüz soru bulunmuyor</Typography>
           <Typography 
             onClick={() => window.location.href = '/questions'}
             sx={{ 
@@ -236,8 +268,9 @@ export default function WordHuntGame() {
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", px: 2, pt: { xs: 8, sm: 12 } }}>
-      <Box sx={{ width: '100%', maxWidth: 400, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, mb: 2, color: "#2c3e50", position: "relative", mx: 'auto', overflow: 'hidden', border: "1px solid rgba(255,255,255,0.2)" }}>
+  <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", px: 2, pt: 0, pb: { xs: 12, md: 16 }, position: 'relative' }}>
+
+      <Box sx={{ width: '100%', maxWidth: 400, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, mb: 2, mt: { xs: 1, md: '15px' }, color: "#2c3e50", position: "relative", mx: 'auto', overflow: 'hidden', border: "1px solid rgba(255,255,255,0.2)" }}>
         {/* Back button, fixed to top left, above content */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
           <IconButton sx={{ 
@@ -253,6 +286,7 @@ export default function WordHuntGame() {
             <ArrowBackIcon />
           </IconButton>
           <Box sx={{ flex: 1 }} />
+          {/* Timer identical to WritingGame */}
           <Typography sx={{ 
             fontWeight: 600, 
             fontSize: 16, 
@@ -368,13 +402,14 @@ export default function WordHuntGame() {
                 position: "relative",
                 transition: "all 0.4s cubic-bezier(.4,2,.3,1)",
                 mb: { xs: 2, sm: 0 },
-                border: selected === option && status === "correct" ? '4px solid #43ea7c' : selected === option && status === "wrong" ? '4px solid #e74c3c' : '4px solid transparent',
-                boxShadow: selected === option && status === "correct" ? '0 0 12px #43ea7c88' : selected === option && status === "wrong" ? '0 0 12px #e74c3c88' : '0 2px 8px #0001',
-                transform: selected === option && (status === "correct" || status === "wrong") ? 'scale(1.05)' : undefined,
+                border: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '4px solid #43ea7c' : selected === option && status === "wrong" ? '4px solid #e74c3c' : '4px solid transparent',
+                boxShadow: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '0 0 12px #43ea7c88' : selected === option && status === "wrong" ? '0 0 12px #e74c3c88' : '0 2px 8px #0001',
+                transform: (selected === option && (status === "correct" || status === "wrong")) || savedCorrect[index]?.selected === option ? 'scale(1.05)' : undefined,
               }}
-              onClick={() => status === "idle" ? handleSelect(option) : undefined}
+              onClick={() => (status === "idle" ? handleSelect(option) : undefined)}
               style={{ 
-                pointerEvents: status === "correct" ? 'none' : 'auto',
+                // If this card is already correct (from saved state), keep it non-clickable
+                pointerEvents: (status === "correct" || savedCorrect[index]) ? 'none' : 'auto',
                 opacity: status === "wrong" && selected === option ? 0.7 : 1
               }}
             >
@@ -382,8 +417,8 @@ export default function WordHuntGame() {
             </Box>
           ))}
         </Box>
-                {/* Navigation buttons - Hide during correct answer animation */}
-        {!showResult && status !== "correct" && (
+        {/* Navigation buttons - only hide during short celebration after a fresh correct */}
+        {!showResult && !celebrating && (
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3, gap: 2 }}>
             <button
               style={{
@@ -450,8 +485,8 @@ export default function WordHuntGame() {
             </button>
           </Box>
         )}
-        {/* Bitir button, hide during correct answer animation */}
-        {!showResult && status !== "correct" && (
+  {/* Bitir button, keep visible unless celebrating */}
+  {!showResult && !celebrating && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
             <button
               style={{
@@ -476,13 +511,8 @@ export default function WordHuntGame() {
       {/* Result popup bubble */}
       {showResult && (
         <Box 
-          sx={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', bgcolor: '#b2ebf2', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={(e) => {
-            // Close popup when clicking on background
-            if (e.target === e.currentTarget) {
-              setShowResult(false);
-            }
-          }}
+          sx={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', bgcolor: '#b2ebf2', backdropFilter: 'blur(8px)', zIndex: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          // Deliberately do NOT close on backdrop click; users must use the buttons
         >
           <Box sx={{ background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 6, boxShadow: "0 30px 60px rgba(0,0,0,0.2)", p: 4, minWidth: 320, maxWidth: '90vw', textAlign: 'center', position: 'relative', border: "1px solid rgba(255,255,255,0.3)" }}>
             <Typography variant="h5" fontWeight={700} color="#2c3e50" mb={2}>Oyun Sonucu</Typography>

@@ -3,6 +3,7 @@ import TestsController from "../controllers/TestsController";
 const router = Router();
 
 router.get("/:id", TestsController.getTest);
+router.get("/:id/questions", TestsController.getQuestionsBySeries);
 router.post("/:id/submit", TestsController.submit);
 router.get("/:id/result", TestsController.result);
 

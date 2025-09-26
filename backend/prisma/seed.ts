@@ -1,3 +1,4 @@
+// Extra examples seeding merged into main() below to avoid duplicate PrismaClient identifiers.
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -217,6 +218,75 @@ async function main() {
   console.log("✅ Paragraph questions created");
 
   console.log("🎉 Game seeding completed!");
+
+  // Ensure some extra word examples exist for demo words
+  const candidates = [
+    { english: 'apple', examples: ['She bought fresh apples from the market.', 'An apple a day keeps the doctor away.'] },
+    { english: 'teacher', examples: ['The teacher explained the lesson clearly.', 'She is a dedicated and patient teacher.'] },
+  ];
+  for (const c of candidates) {
+    const w = await prisma.word.findFirst({ where: { english: c.english } });
+    if (!w) continue;
+    for (const s of c.examples) {
+      const exists = await prisma.wordExample.findFirst({ where: { wordId: w.id, sentence: s } });
+      if (!exists) await prisma.wordExample.create({ data: { wordId: w.id, sentence: s } });
+    }
+  }
+  console.log('✅ Extra word examples ensured');
+
+  // Add A2 words with base example and 3 extra sentences
+  const a2Words = [
+    {
+      english: 'exercise',
+      turkish: 'egzersiz',
+      example: 'I do exercise every morning.',
+      level: 'A2',
+      extras: [
+        'Regular exercise is good for your health.',
+        'He exercises at the gym three times a week.',
+        'They decided to exercise together in the park.'
+      ],
+    },
+    {
+      english: 'prepare',
+      turkish: 'hazırlamak',
+      example: 'She prepared dinner for her family.',
+      level: 'A2',
+      extras: [
+        'Please prepare your notes before the meeting.',
+        'We need to prepare for the exam.',
+        'He prepared a short speech.'
+      ],
+    },
+  ] as const;
+
+  for (const w of a2Words) {
+    let word = await prisma.word.findFirst({ where: { english: w.english } });
+    if (!word) {
+      word = await prisma.word.create({
+        data: {
+          english: w.english,
+          turkish: w.turkish,
+          example: w.example,
+          level: w.level,
+        },
+      });
+    } else {
+      // ensure base example/level updated if missing
+      const needsUpdate = (!word.example && w.example) || word.level !== w.level || word.turkish !== w.turkish;
+      if (needsUpdate) {
+        word = await prisma.word.update({
+          where: { id: word.id },
+          data: { example: word.example || w.example, level: w.level, turkish: w.turkish },
+        });
+      }
+    }
+    for (const s of w.extras) {
+      const exists = await prisma.wordExample.findFirst({ where: { wordId: word.id, sentence: s } });
+      if (!exists) await prisma.wordExample.create({ data: { wordId: word.id, sentence: s } });
+    }
+  }
+  console.log('✅ A2 words and extra examples ensured');
 }
 
 main()

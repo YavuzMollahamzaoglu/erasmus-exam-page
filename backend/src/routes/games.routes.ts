@@ -25,4 +25,13 @@ router.post(
   GameController.createParagraphQuestion
 );
 
+// Word Matching Sets
+router.get("/word-matching/sets", GameController.listWordMatchingSets);
+router.get("/word-matching/sets/:id", GameController.getWordMatchingSetItems);
+
+// Reading Game routes
+router.get("/reading/passages", GameController.listReadingPassages);
+router.get("/reading/passages/:id", GameController.getReadingPassage);
+router.post("/reading/passages", GameController.createReadingPassage);
+
 export default router;

@@ -17,6 +17,10 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
   const [updateError, setUpdateError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Popup dialog for invalid image uploads
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
+  const [imageDialogMessage, setImageDialogMessage] = useState('');
+
   const fetchProfile = async () => {
     try {
       const res = await fetch('http://localhost:4000/api/auth/me', {
@@ -50,6 +54,22 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
       return;
     }
 
+    // Send only changed fields
+    const payload: any = { currentPassword: updateData.currentPassword };
+    if (updateData.name && updateData.name.trim() && updateData.name.trim() !== (profile?.name || '')) {
+      payload.name = updateData.name.trim();
+    }
+    if (updateData.email && updateData.email.trim() && updateData.email.trim() !== (profile?.email || '')) {
+      payload.email = updateData.email.trim();
+    }
+    if (updateData.newPassword && updateData.newPassword.trim()) {
+      payload.newPassword = updateData.newPassword.trim();
+    }
+    if (!payload.name && !payload.email && !payload.newPassword) {
+      setUpdateError('Değişiklik yok. Lütfen bir alanı güncelleyin.');
+      return;
+    }
+
     setUpdateLoading(true);
     setUpdateError('');
 
@@ -60,7 +80,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(updateData)
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
@@ -69,7 +89,15 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
         setUpdateDialog(false);
         fetchProfile(); // Refresh profile data
       } else {
-        setUpdateError(data.error || 'Güncelleme başarısız');
+        // Prefer explicit message
+        if (data?.error) {
+          setUpdateError(data.error);
+        } else if (Array.isArray(data?.errors) && data.errors.length) {
+          // express-validator shape
+          setUpdateError(data.errors.map((e: any) => e.msg).join('\n'));
+        } else {
+          setUpdateError('Güncelleme başarısız');
+        }
       }
     } catch (err) {
       setUpdateError('Network error');
@@ -88,23 +116,132 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
     if (!e.target.files || e.target.files.length === 0) return;
     setUploading(true);
     setError('');
-    const formData = new FormData();
-    formData.append('photo', e.target.files[0]);
+    const raw = e.target.files[0];
+    // Basic validation
+    if (!raw.type.startsWith('image/')) {
+      setError('Lütfen bir resim dosyası seçin.');
+      // Show guidance popup
+      setImageDialogMessage('Geçersiz dosya türü. Lütfen JPG veya PNG formatında bir profil fotoğrafı yükleyin.');
+      setImageDialogOpen(true);
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+    if (raw.size > 10 * 1024 * 1024) { // 10MB
+      setError('Resim boyutu çok büyük (maks. 10MB).');
+      setImageDialogMessage('Yüklemeye çalıştığınız görsel 10MB sınırını aşıyor. Lütfen dosya boyutunu küçültüp tekrar deneyin.');
+      setImageDialogOpen(true);
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    // Load dimensions for further validation
+    const readImageDims = (file: File): Promise<{ w: number; h: number }> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const w = img.naturalWidth || img.width;
+          const h = img.naturalHeight || img.height;
+          if (!w || !h) return reject(new Error('Görsel okunamadı'));
+          resolve({ w, h });
+        };
+        img.onerror = () => reject(new Error('Görsel yüklenemedi'));
+        img.src = URL.createObjectURL(file);
+      });
+    };
+
     try {
+      const { w, h } = await readImageDims(raw);
+      const shortSide = Math.min(w, h);
+      const longSide = Math.max(w, h);
+      const aspect = longSide / (shortSide || 1);
+
+      // Block too small or extreme aspect-ratio images and guide user
+      if (shortSide < 512) {
+        const msg = `Görsel çözünürlüğü çok düşük (${w}x${h}). En az 512x512 piksel veya daha büyük bir görsel yükleyin.`;
+        setError(msg);
+        setImageDialogMessage(msg + '\n\nİpucu: Kare (1:1) oranlı ve en az 512x512 piksel bir fotoğraf kullanın. Çok küçük görseller kalite kaybına neden olur.');
+        setImageDialogOpen(true);
+        setUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
+      }
+      if (aspect > 3) {
+        const msg = `Görsel en-boy oranı çok uç (${w}x${h}). Aşırı uzun veya panoramik görseller kabul edilmez.`;
+        setError(msg);
+        setImageDialogMessage(msg + '\n\nİpucu: Kare (1:1) oranına yakın bir fotoğraf tercih edin. Gerekirse kırpıp tekrar yükleyin.');
+        setImageDialogOpen(true);
+        setUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
+      }
+    } catch (dimErr: any) {
+      // If we cannot read dimensions, show guidance and stop
+      const msg = dimErr?.message || 'Görsel okunamadı, lütfen farklı bir dosya deneyin.';
+      setError(msg);
+      setImageDialogMessage(msg + '\n\nDesteklenen formatlar: JPG, PNG.');
+      setImageDialogOpen(true);
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    // Helper: crop center-square and resize to 512x512
+    const toSquareBlob = (file: File, target = 512): Promise<Blob> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const w = img.naturalWidth || img.width;
+            const h = img.naturalHeight || img.height;
+            if (!w || !h) throw new Error('Görsel okunamadı');
+            const side = Math.min(w, h);
+            const sx = (w - side) / 2;
+            const sy = (h - side) / 2;
+            const canvas = document.createElement('canvas');
+            canvas.width = target;
+            canvas.height = target;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) throw new Error('Canvas desteklenmiyor');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, sx, sy, side, side, 0, 0, target, target);
+            canvas.toBlob((blob) => {
+              if (!blob) return reject(new Error('Resim dönüştürülemedi'));
+              resolve(blob);
+            }, 'image/jpeg', 0.9);
+          } catch (er) {
+            reject(er);
+          }
+        };
+        img.onerror = () => reject(new Error('Görsel yüklenemedi'));
+        const url = URL.createObjectURL(file);
+        img.src = url;
+      });
+    };
+
+    try {
+      const squareBlob = await toSquareBlob(raw, 512);
+      const formData = new FormData();
+      const filename = (raw.name?.replace(/\.[^.]+$/, '') || 'avatar') + '-square.jpg';
+      formData.append('photo', squareBlob, filename);
+
       const res = await fetch('http://localhost:4000/api/auth/upload-profile-photo', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
       } as any);
-      const data = await res.json();
+      let data: any = null;
+      try { data = await res.json(); } catch {}
       if (res.ok) {
         // Wait for backend to save, then fetch updated profile
         setTimeout(fetchProfile, 500);
       } else {
-        setError(data.error || 'Upload failed');
+        setError((data && (data.error || data.message)) || 'Upload failed');
       }
-    } catch (err) {
-      setError('Upload failed');
+    } catch (er: any) {
+      setError(er?.message || 'Upload failed');
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -133,7 +270,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
       justifyContent: 'center', 
       alignItems: 'flex-start', 
       pt: { xs: 8, md: 10 },
-      pb: { xs: 6, md: 8 },
+      pb: { xs: 12, md: 16 },
       px: 2
     }}>
       <Paper
@@ -186,9 +323,31 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
               id="profile-photo-upload"
             />
             <label htmlFor="profile-photo-upload">
-              <Avatar
+        <Avatar
                 src={photoUrl}
-                sx={{ width: 96, height: 96, bgcolor: '#26c6da', cursor: 'pointer', mx: 'auto', boxShadow: 2, border: '3px solid #fff' }}
+                sx={{ 
+                  width: 96, 
+                  height: 96, 
+                  minWidth: 96,
+                  minHeight: 96,
+                  maxWidth: 96,
+                  maxHeight: 96,
+          borderRadius: '50%',
+          aspectRatio: '1 / 1',
+                  display: 'block',
+                  overflow: 'hidden',
+                  flexShrink: 0,
+                  flexGrow: 0,
+                  flexBasis: '96px',
+                  lineHeight: '96px',
+                  bgcolor: '#26c6da', 
+                  cursor: 'pointer', 
+                  mx: 'auto', 
+                  boxShadow: 2, 
+                  border: '3px solid #fff',
+                  // Keep inside image always covering and not stretching the avatar size
+                  '& .MuiAvatar-img': { objectFit: 'cover', width: '100%', height: '100%', borderRadius: '50%', display: 'block' }
+                }}
               />
               <Box
                 sx={{
@@ -217,7 +376,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
             {profile.email || '-'}
           </Typography>
           <Typography fontSize={16} color="#555" mb={3}>
-            Joined: {joinedDate}
+            Katılım Tarihi: {joinedDate}
           </Typography>
           <Button 
             variant="contained"
@@ -231,7 +390,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
               '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' }
             }}
           >
-            Update Profile
+            Profili Yenile
           </Button>
           <Box sx={{ mt: 2 }}>
             {uploading && <span style={{ marginLeft: 8 }}>Yükleniyor...</span>}
@@ -290,6 +449,30 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
                 disabled={updateLoading}
               >
                 {updateLoading ? 'Güncelleniyor...' : 'Güncelle'}
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* Image requirements / guidance dialog */}
+          <Dialog open={imageDialogOpen} onClose={() => setImageDialogOpen(false)} maxWidth="xs" fullWidth>
+            <DialogTitle>Uygun Olmayan Görsel</DialogTitle>
+            <DialogContent>
+              <Typography sx={{ whiteSpace: 'pre-wrap' }} gutterBottom>
+                {imageDialogMessage}
+              </Typography>
+              <Typography variant="subtitle2" sx={{ mt: 1, mb: 0.5 }}>
+                Önerilen Profil Fotoğrafı Özellikleri
+              </Typography>
+              <ul style={{ marginTop: 0 }}>
+                <li>Kare (1:1) oranı</li>
+                <li>En az 512x512 piksel</li>
+                <li>JPG veya PNG formatı</li>
+                <li>Maksimum boyut 10MB</li>
+              </ul>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setImageDialogOpen(false)} autoFocus>
+                Tamam
               </Button>
             </DialogActions>
           </Dialog>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
 
 interface WordData {
   tr: string;
@@ -17,12 +18,19 @@ export default function WritingGame() {
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [score, setScore] = useState(0);
   const [mistakes, setMistakes] = useState(0);
+  // Number of questions skipped or left unanswered
+  const [blanks, setBlanks] = useState(0);
   const [words, setWords] = useState<WordData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [time, setTime] = useState(0);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
+  // Persist per-question correct state so it remains highlighted when going back
+  const [savedCorrect, setSavedCorrect] = useState<Record<number, { correct: boolean }>>({});
+  // Hint system
+  const [hintsUsed, setHintsUsed] = useState<Record<number, string[]>>({});
+  const [currentHint, setCurrentHint] = useState<string>("");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch questions from API
@@ -60,10 +68,86 @@ export default function WritingGame() {
     setStatus("idle");
     setScore(0);
     setMistakes(0);
+  setBlanks(0);
     setShowResult(false);
     setTime(0);
     setShowCorrectAnswer(false);
+  setSavedCorrect({});
+    setHintsUsed({});
+    setCurrentHint("");
   };
+
+  // Hint functions
+  const getHint = () => {
+    if (!words[index]) return;
+    
+    const currentWord = words[index].en.toLowerCase().trim();
+    const usedHints = hintsUsed[index] || [];
+    
+    // Split by spaces to handle multiple words
+    const wordParts = currentWord.split(' ').filter(part => part.length > 0);
+    const wordCount = wordParts.length;
+    
+    // Generate hints based on word count
+    const availableHints = [];
+    
+    // Add one hint for each word (showing first letters)
+    for (let i = 0; i < wordCount; i++) {
+      if (wordCount === 1) {
+        availableHints.push({
+          type: `firstLetter_${i}`,
+          message: `İlk harf: ${wordParts[i][0].toUpperCase()}`
+        });
+      } else {
+        availableHints.push({
+          type: `firstLetter_${i}`,
+          message: `${i + 1}. kelimenin ilk harfi: ${wordParts[i][0].toUpperCase()}`
+        });
+      }
+    }
+    
+    // Find next unused hint
+    const nextHint = availableHints.find(hint => !usedHints.includes(hint.type));
+    
+    if (nextHint) {
+      const newUsedHints = [...usedHints, nextHint.type];
+      setHintsUsed(prev => ({ ...prev, [index]: newUsedHints }));
+      setCurrentHint(nextHint.message);
+      
+      // Clear hint after 3 seconds
+      setTimeout(() => setCurrentHint(""), 3000);
+    } else {
+      setCurrentHint("Tüm ipuçları kullanıldı!");
+      setTimeout(() => setCurrentHint(""), 2000);
+    }
+  };
+
+  const getHintCount = () => {
+    return (hintsUsed[index] || []).length;
+  };
+
+  // Calculate max hints based on current word
+  const getMaxHints = () => {
+    if (!words[index]) return 1;
+    const wordParts = words[index].en.toLowerCase().trim().split(' ').filter(part => part.length > 0);
+    return wordParts.length;
+  };
+
+  // Restore saved correct highlight on index/words changes
+  useEffect(() => {
+    if (!words.length) return;
+    
+    // Clear current hint when question changes
+    setCurrentHint("");
+    
+    if (savedCorrect[index]?.correct) {
+      setStatus("correct");
+      setInput(words[index].en);
+    } else {
+      setStatus("idle");
+      setInput("");
+    }
+  }, [index, words]);
 
   useEffect(() => {
     if (showResult) return;
@@ -75,16 +159,32 @@ export default function WritingGame() {
     };
   }, [showResult]);
 
+  // Prevent closing result with ESC
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (showResult && (e.key === 'Escape' || e.key === 'Esc')) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, { capture: true });
+    return () => window.removeEventListener('keydown', onKeyDown, { capture: true } as any);
+  }, [showResult]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    setStatus("idle");
+  // If this question was already answered correctly, keep it locked
+  if (savedCorrect[index]?.correct) return;
+  setInput(e.target.value);
+  setStatus("idle");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (savedCorrect[index]?.correct) return; // prevent re-submission on already-correct
     if (input.trim().toLowerCase() === words[index].en) {
       setStatus("correct");
       setScore((s) => s + 1);
+      setSavedCorrect((prev) => ({ ...prev, [index]: { correct: true } }));
       setTimeout(() => {
         setStatus("idle");
         setInput("");
@@ -109,6 +209,8 @@ export default function WritingGame() {
   const handleSkip = () => {
     setStatus("idle");
     setInput("");
+  // Count this question as blank (skipped)
+  setBlanks((b) => b + 1);
     if (index < words.length - 1) {
       setIndex((i) => i + 1);
     } else {
@@ -120,12 +222,25 @@ export default function WritingGame() {
   const handlePrev = () => {
     if (index > 0) {
       setIndex((i) => i - 1);
-      setStatus("idle");
-      setInput("");
+      // Restore saved state when navigating back
+      if (savedCorrect[index - 1]?.correct) {
+        setStatus("correct");
+        setInput(words[index - 1].en);
+      } else {
+        setStatus("idle");
+        setInput("");
+      }
     }
   };
 
   const handleFinish = () => {
+    // When finishing early, count remaining unseen questions as blank.
+    // Also count the current one as blank if nothing is entered and it wasn't answered correctly.
+    setBlanks((prev) => {
+      const currentIsBlank = (!savedCorrect[index]?.correct && input.trim() === "");
+      const remainingUnseen = words.length - (index + 1);
+      return prev + (currentIsBlank ? 1 : 0) + Math.max(0, remainingUnseen);
+    });
     setShowResult(true);
     if (timerRef.current) clearInterval(timerRef.current);
   };
@@ -138,12 +253,14 @@ export default function WritingGame() {
     setTime(0);
     setInput("");
     setStatus("idle");
+    setHintsUsed({});
+    setCurrentHint("");
   };
 
   // Loading state
   if (loading) {
     return (
-      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", px: 2 }}>
+      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
         <CircularProgress size={60} sx={{ color: "#00b894", mb: 2 }} />
         <Typography variant="h6" color="#00b894">Sorular yükleniyor...</Typography>
       </Box>
@@ -153,9 +270,9 @@ export default function WritingGame() {
   // Error state
   if (error) {
     return (
-      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", px: 2 }}>
-        <Box sx={{ p: 4, maxWidth: 600, width: "100%", textAlign: "center", borderRadius: 4, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}>
-          <Typography variant="h6" color="error" mb={2}>{error}</Typography>
+      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
+        <Box sx={{ width: 400, maxWidth: "95vw", background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, color: "#2c3e50", textAlign: "center", border: "1px solid rgba(255,255,255,0.2)" }}>
+          <Typography variant="h6" color="error" mb={3}>{error}</Typography>
           <Typography 
             onClick={() => window.location.href = '/questions'}
             sx={{ 
@@ -181,9 +298,9 @@ export default function WritingGame() {
   // No questions available
   if (words.length === 0) {
     return (
-      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", px: 2 }}>
-        <Box sx={{ p: 4, maxWidth: 600, width: "100%", textAlign: "center", borderRadius: 4, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}>
-          <Typography variant="h6" color="#2c3e50" mb={2}>Henüz soru bulunmuyor</Typography>
+      <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
+        <Box sx={{ width: 400, maxWidth: "95vw", background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, color: "#2c3e50", textAlign: "center", border: "1px solid rgba(255,255,255,0.2)" }}>
+          <Typography variant="h6" color="#2c3e50" mb={3}>Henüz soru bulunmuyor</Typography>
           <Typography 
             onClick={() => window.location.href = '/questions'}
             sx={{ 
@@ -207,8 +324,8 @@ export default function WritingGame() {
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: { xs: 8, sm: 12 } }}>
-      <Box sx={{ width: 400, maxWidth: "95vw", background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, mb: 2, color: "#2c3e50", position: "relative", border: "1px solid rgba(255,255,255,0.2)" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
+      <Box sx={{ width: 400, maxWidth: "95vw", background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, mb: 2, mt: { xs: 1, md: '15px' }, color: "#2c3e50", position: "relative", border: "1px solid rgba(255,255,255,0.2)" }}>
         {/* Top bar with back button, timer, and gap */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
           <IconButton sx={{ 
@@ -223,6 +340,46 @@ export default function WritingGame() {
           }} onClick={() => window.location.href = '/questions'}>
             <ArrowBackIcon />
           </IconButton>
+          
+          {/* Hint button */}
+          <IconButton 
+            onClick={getHint}
+            disabled={getHintCount() >= getMaxHints()}
+            sx={{ 
+              color: getHintCount() >= getMaxHints() ? "#ccc" : "#ff9800", 
+              bgcolor: getHintCount() >= getMaxHints() ? 'rgba(204, 204, 204, 0.1)' : 'rgba(255, 152, 0, 0.1)', 
+              border: getHintCount() >= getMaxHints() ? "2px solid rgba(204, 204, 204, 0.2)" : "2px solid rgba(255, 152, 0, 0.2)",
+              '&:hover': { 
+                bgcolor: getHintCount() >= getMaxHints() ? 'rgba(204, 204, 204, 0.1)' : 'rgba(255, 152, 0, 0.2)',
+                transform: getHintCount() >= getMaxHints() ? 'none' : 'scale(1.05)'
+              },
+              transition: 'all 0.3s ease',
+              position: 'relative'
+            }}
+          >
+            <LightbulbIcon />
+            {(getHintCount() > 0 || getMaxHints() > 1) && (
+              <Box sx={{
+                position: 'absolute',
+                top: -8,
+                right: -8,
+                minWidth: 20,
+                height: 20,
+                borderRadius: '10px',
+                bgcolor: getHintCount() >= getMaxHints() ? '#ccc' : '#ff9800',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 11,
+                fontWeight: 600,
+                px: 0.5
+              }}>
+                {getHintCount()}/{getMaxHints()}
+              </Box>
+            )}
+          </IconButton>
+          
           <Box sx={{ flex: 1 }} />
           <Typography sx={{ 
             fontWeight: 600, 
@@ -280,6 +437,23 @@ export default function WritingGame() {
           Türkçe Kelime: {words[index].tr}
         </Typography>
         
+        {/* Hint message */}
+        {currentHint && (
+          <Box sx={{
+            bgcolor: 'rgba(255, 152, 0, 0.1)',
+            border: '2px solid rgba(255, 152, 0, 0.3)',
+            borderRadius: 2,
+            p: 2,
+            mb: 2,
+            textAlign: 'center',
+            animation: 'fadeIn 0.3s ease-in'
+          }}>
+            <Typography sx={{ color: '#f57c00', fontWeight: 600, fontSize: 16 }}>
+              💡 {currentHint}
+            </Typography>
+          </Box>
+        )}
+        
         {/* Wrong answer feedback */}
         {status === "wrong" && (
           <Box sx={{ 
@@ -333,9 +507,9 @@ export default function WritingGame() {
                 input: { textAlign: "center", fontSize: 22, fontWeight: 600 },
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
-                    borderColor: status === "correct" ? "#43ea7c" : status === "wrong" ? "#e74c3c" : "#00b894",
-                    boxShadow: status === "correct" ? "0 0 8px #43ea7c88" : status === "wrong" ? "0 0 8px #e74c3c88" : undefined,
-                    borderWidth: status === "correct" || status === "wrong" ? 3 : 1,
+                    borderColor: (status === "correct" || savedCorrect[index]?.correct) ? "#43ea7c" : status === "wrong" ? "#e74c3c" : "#00b894",
+                    boxShadow: (status === "correct" || savedCorrect[index]?.correct) ? "0 0 8px #43ea7c88" : status === "wrong" ? "0 0 8px #e74c3c88" : undefined,
+                    borderWidth: (status === "correct" || savedCorrect[index]?.correct || status === "wrong") ? 3 : 1,
                     transition: "border-color 0.3s, box-shadow 0.3s, border-width 0.3s",
                   },
                 },
@@ -345,16 +519,16 @@ export default function WritingGame() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={!input.trim() || status !== "idle"}
+              disabled={!input.trim() || status !== "idle" || savedCorrect[index]?.correct}
               style={{
-                background: !input.trim() || status !== "idle" ? '#ccc' : 'linear-gradient(90deg,#00cec9,#00b894)',
+                background: (!input.trim() || status !== "idle" || savedCorrect[index]?.correct) ? '#ccc' : 'linear-gradient(90deg,#00cec9,#00b894)',
                 color: '#fff',
                 fontWeight: 700,
                 fontSize: 18,
                 border: 'none',
                 borderRadius: 8,
                 padding: '12px 32px',
-                cursor: !input.trim() || status !== "idle" ? 'not-allowed' : 'pointer',
+                cursor: (!input.trim() || status !== "idle" || savedCorrect[index]?.correct) ? 'not-allowed' : 'pointer',
                 boxShadow: '0 2px 8px rgba(0, 184, 148, 0.3)',
                 transition: 'background 0.3s',
                 minWidth: 120,
@@ -458,18 +632,14 @@ export default function WritingGame() {
       {/* Result popup bubble */}
       {showResult && (
         <Box 
-          sx={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', bgcolor: '#b2ebf2', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={(e) => {
-            // Close popup when clicking on background
-            if (e.target === e.currentTarget) {
-              setShowResult(false);
-            }
-          }}
+          sx={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', bgcolor: '#b2ebf2', backdropFilter: 'blur(8px)', zIndex: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          // Do not close on backdrop click; use buttons only
         >
           <Box sx={{ background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 6, boxShadow: "0 30px 60px rgba(0,0,0,0.2)", p: 4, minWidth: 320, maxWidth: '90vw', textAlign: 'center', position: 'relative', border: "1px solid rgba(255,255,255,0.3)" }}>
             <Typography variant="h5" fontWeight={700} color="#2c3e50" mb={2}>Oyun Sonucu</Typography>
             <Typography fontSize={20} fontWeight={600} color="#43ea7c" mb={1}>Doğru: {score}</Typography>
             <Typography fontSize={20} fontWeight={600} color="#e74c3c" mb={1}>Yanlış: {mistakes}</Typography>
+            <Typography fontSize={20} fontWeight={600} color="#ff9800" mb={1}>Boş: {blanks}</Typography>
             <Typography fontSize={18} fontWeight={500} color="#2c3e50" mb={2}>Süre: {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, '0')}</Typography>
             <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 2 }}>
               <button

@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Enforce perfect circular avatars across the app */
+.MuiAvatar-root {
+  border-radius: 50% !important;
+  overflow: hidden;
+}
+.MuiAvatar-root img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}

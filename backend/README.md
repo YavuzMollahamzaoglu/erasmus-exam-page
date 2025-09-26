@@ -1,13 +1,14 @@
-# summer-internship 2024-2025 
+# summer-internship 2024-2025
 
-First of all this project will be my 	graduation project from ALKU and i want to do something on my mind whole year. It is about Erasmus exam website with this I will provide questions for people that want to gain exercise about exam.
+First of all this project will be my graduation project from ALKU and i want to do something on my mind whole year. It is about Erasmus exam website with this I will provide questions for people that want to gain exercise about exam.
 
 Technologies I will use;
-1) React.js
-2) Prisma.js
-3) MySQL
-4) MUI
-5) Figma
+
+1. React.js
+2. Prisma.js
+3. MySQL
+4. MUI
+5. Figma
 
 Firstly i will improve myself with this technologies than i will start with design of my front-end than i will start combine my data structure with coding all login and questions will be combined with MySQL that is why i prefer Prisma.js for relational database implementing it to my application.
 For coding of frontend i will use Next.js for SEO using of it.
@@ -19,6 +20,7 @@ This is my first ideas for my intership finish project with time i will improve 
 Bu backend Express.js ve Prisma ORM kullanılarak geliştirilmiştir. Kullanıcılar, sınavlar, sıralamalar, yorumlar ve profil fotoğrafları gibi temel işlevleri sağlar.
 
 ## Özellikler
+
 - Kullanıcı kimlik doğrulama (JWT)
 - Sınav ve soru yönetimi
 - Sıralama tablosu ve puan kaydı
@@ -27,6 +29,7 @@ Bu backend Express.js ve Prisma ORM kullanılarak geliştirilmiştir. Kullanıc�
 - SQLite veritabanı (Prisma ORM ile)
 
 ## Başlatma
+
 1. Gerekli paketleri yükleyin:
    ```sh
    npm install
@@ -41,6 +44,7 @@ Bu backend Express.js ve Prisma ORM kullanılarak geliştirilmiştir. Kullanıc�
    ```
 
 ## API Endpointleri
+
 - `POST /api/auth/register` - Kayıt
 - `POST /api/auth/login` - Giriş
 - `GET /api/auth/me` - Profil bilgisi
@@ -53,6 +57,7 @@ Bu backend Express.js ve Prisma ORM kullanılarak geliştirilmiştir. Kullanıc�
 - `POST /api/comments` - Yorum ekle
 
 ## Ortam Değişkenleri
+
 - `.env` dosyasında veritabanı ve JWT ayarlarını yapabilirsiniz.
 
 ## Kendi Bilgisayarında Kurmak İçin
@@ -84,7 +89,49 @@ Bu backend Express.js ve Prisma ORM kullanılarak geliştirilmiştir. Kullanıc�
 Artık backend ve frontend localde çalışacaktır. API endpointlerini ve web arayüzünü test edebilirsiniz.
 
 ## Geliştirici
+
 - Yavuz Mollahamzaoğlu
 
 ---
+
 Daha fazla bilgi için kodu inceleyin veya sorularınızı iletin.
+
+## Games API (Özet)
+
+- Word Hunt: `GET /api/games/word-hunt/questions?level=A1|A2|B1|B2`
+- Writing: `GET /api/games/writing/questions?level=A1|A2|B1|B2`
+- Fill-in-the-Blanks: `GET /api/games/fill-in-the-blanks/questions`
+- Word Matching Sets:
+  - `GET /api/games/word-matching/sets?level=A1|A2|B1|B2`
+  - `GET /api/games/word-matching/sets/:id`
+
+### Reading (Okuma) Game
+
+- `GET /api/games/reading/passages?level=A1|A2|B1|B2` – Paragrafları listele
+- `GET /api/games/reading/passages/:id` – Paragraf + soruları getir
+- `POST /api/games/reading/passages` – Yeni paragraf ve 4-5 soru oluştur
+
+Örnek POST gövdesi:
+
+```json
+{
+  "title": "A Day at the Park",
+  "text": "John went to the park...",
+  "level": "A1",
+  "questions": [
+    {
+      "question": "Where did John go?",
+      "options": ["To the park", "To the mall", "To school", "Home"],
+      "correctIndex": 0
+    },
+    {
+      "question": "Who went with him?",
+      "options": ["His dog", "His brother", "His teacher", "Nobody"],
+      "correctIndex": 1,
+      "explanation": "Metinde kardeşiyle gittiği yazıyor."
+    }
+  ]
+}
+```
+
+MySQL ipucu: Doğrudan SQL ile ekleme yapacaksanız id alanları için `UUID()` kullanın veya oluşturmayı Prisma'ya bırakın.

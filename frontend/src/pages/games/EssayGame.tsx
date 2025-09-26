@@ -381,9 +381,9 @@ function EssayGame() {
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#b2dfdb", display: "flex", flexDirection: "column", alignItems: "center", px: 2, pt: { xs: 3, sm: 5 } }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "#b2dfdb", display: "flex", flexDirection: "column", alignItems: "center", px: 2, pt: 0 }}>
       
-      <Box sx={{ width: '100%', maxWidth: { xs: 700, md: 900 }, bgcolor: "#fff", borderRadius: 4, boxShadow: 6, p: { xs: 3, md: 4 }, mb: 2, position: "relative" }}>
+      <Box sx={{ width: '100%', maxWidth: { xs: 700, md: 900 }, bgcolor: "#fff", borderRadius: 4, boxShadow: 6, p: { xs: 3, md: 4 }, mb: 2, mt: { xs: 1, md: '15px' }, position: "relative" }}>
         
         {/* Timer at top right inside card */}
         <Box

@@ -80,7 +80,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
       justifyContent: 'center', 
       alignItems: 'flex-start', 
       pt: 0, 
-      pb: { xs: 7, md: 8 } 
+      pb: { xs: 12, md: 16 } 
     }}>
       <Paper 
         elevation={6} 
@@ -89,7 +89,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
           width: '100%', 
           borderRadius: 4, 
           overflow: 'hidden', 
-          mt: '15px',
+          mt: { xs: 1, md: '15px' },
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -118,17 +118,28 @@ const Rankings: React.FC<Props> = ({ token }) => {
           }
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography 
-              variant="h3" 
-              fontWeight={700} 
-              mb={2}
+            <Box
               sx={{
-                textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                fontSize: { xs: '2rem', md: '2.5rem' }
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
+                mb: 2,
               }}
             >
-              🏆 Sıralama Tablosu
-            </Typography>
+              <Box component="span" sx={{ fontSize: { xs: '1.4rem', md: '1.8rem' }, lineHeight: 1 }}>🏆</Box>
+              <Typography
+                variant="h4"
+                fontWeight={800}
+                sx={{
+                  textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                  fontSize: { xs: '1.6rem', md: '2.3rem' },
+                  whiteSpace: { xs: 'nowrap', md: 'normal' }
+                }}
+              >
+                Sıralama Tablosu
+              </Typography>
+            </Box>
             <Typography 
               variant="h6" 
               sx={{ 
@@ -141,7 +152,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
             </Typography>
             
             {/* Filters */}
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap', rowGap: 1 }}>
               <FormControl variant="outlined" sx={{ minWidth: 120 }}>
                 <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.9)', '&.Mui-focused': { color: 'rgba(255, 255, 255, 0.9)' } }}>Seviye</InputLabel>
                 <Select
@@ -473,7 +484,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
           
           {/* Login Prompt */}
           {!token && (
-            <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Box sx={{ textAlign: 'center', mt: { xs: 2, md: 4 } }}>
               <Button 
                 variant="contained" 
                 href="/login"
@@ -481,11 +492,11 @@ const Rankings: React.FC<Props> = ({ token }) => {
                   background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
                   color: '#fff',
                   fontWeight: 700,
-                  borderRadius: 3,
-                  px: 4,
-                  py: 1.5,
+                  borderRadius: { xs: 2, md: 3 },
+                  px: { xs: 2.5, md: 4 },
+                  py: { xs: 0.9, md: 1.5 },
                   textTransform: 'none',
-                  fontSize: '1.1rem',
+                  fontSize: { xs: '0.95rem', md: '1.1rem' },
                   '&:hover': {
                     background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)',
                     transform: 'translateY(-2px)',

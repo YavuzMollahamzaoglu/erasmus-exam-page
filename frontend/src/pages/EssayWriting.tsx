@@ -52,6 +52,24 @@ export default function EssayWriting() {
   const [error, setError] = useState<string>('');
   const [showTopicDialog, setShowTopicDialog] = useState<boolean>(true);
   const [wordCount, setWordCount] = useState<number>(0);
+  const [charCount, setCharCount] = useState<number>(0);
+  const [turkishCharCount, setTurkishCharCount] = useState<number>(0);
+  const [showLangDialog, setShowLangDialog] = useState<boolean>(false);
+
+  // Parse feedback into readable bullet points
+  const feedbackBullets = React.useMemo(() => {
+    const text = (evaluation?.feedback || '').trim();
+    if (!text) return [] as string[];
+    // Prefer double-newline paragraph splits; otherwise split by sentence boundaries.
+    const paragraphs = text.split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+    if (paragraphs.length > 1) return paragraphs;
+    const sentences = text
+      .replace(/\s+/g, ' ')
+      .split(/(?<=[.!?])\s+/)
+      .map(s => s.trim())
+      .filter(Boolean);
+    return sentences;
+  }, [evaluation?.feedback]);
 
   const handleTopicSelect = (topic: string) => {
     setSelectedTopic(topic);
@@ -69,6 +87,11 @@ export default function EssayWriting() {
     const text = e.target.value;
     setEssayText(text);
     setWordCount(text.trim().split(/\s+/).filter(word => word.length > 0).length);
+  setCharCount(text.trim().length);
+
+  // Count Turkish-specific characters (ı,ğ,ş,ç,ö,ü and uppercase variants)
+  const trMatches = text.match(/[ığüşöçİĞÜŞÖÇ]/g) || [];
+  setTurkishCharCount(trMatches.length);
   };
 
   const evaluateEssay = async () => {
@@ -77,8 +100,14 @@ export default function EssayWriting() {
       return;
     }
 
-    if (wordCount < 100) {
-      setError('Güzel bir değerlendirme için minimum 100 kelime olmalıdır.');
+    if (charCount < 100) {
+      setError("Essay’inizin değerlendirilebilmesi için minimum 100 karakter olmalıdır.");
+      return;
+    }
+
+    // Block evaluation if Turkish character count exceeds the limit
+    if (turkishCharCount > 10) {
+      setShowLangDialog(true);
       return;
     }
 
@@ -91,7 +120,7 @@ export default function EssayWriting() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ essayText })
+        body: JSON.stringify({ essayText, topic: selectedTopic })
       });
 
       const data = await response.json();
@@ -162,11 +191,12 @@ export default function EssayWriting() {
       alignItems: 'flex-start',
       px: 2,
       pt: 0,
-      pb: { xs: 7, md: 8 },
+      pb: { xs: 12, md: 16 },
     }}>
       {/* Topic Selection Dialog - themed */}
       <Dialog 
         open={showTopicDialog} 
+        onClose={() => setShowTopicDialog(false)}
         maxWidth="md" 
         fullWidth
         PaperProps={{ sx: { borderRadius: 3 } }}
@@ -251,7 +281,7 @@ export default function EssayWriting() {
           maxWidth: 1000,
           borderRadius: 4,
           overflow: 'hidden',
-          mt: '15px',
+          mt: { xs: 1, md: '15px' },
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -274,15 +304,50 @@ export default function EssayWriting() {
             backdropFilter: 'blur(5px)',
           }
         }}>
-          <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center' }}>
-            <IconButton onClick={() => navigate('/questions')} sx={{ mr: 2, color: '#fff' }}>
+          <Box
+            sx={{
+              position: 'relative',
+              zIndex: 1,
+              minHeight: { xs: 56, md: 'auto' },
+              display: { xs: 'block', md: 'flex' },
+              alignItems: { md: 'center' },
+            }}
+          >
+            {/* Back button: fixed left on mobile, inline on md+ */}
+            <IconButton
+              onClick={() => navigate('/questions')}
+              sx={{
+                color: '#fff',
+                position: { xs: 'absolute', md: 'static' },
+                left: { xs: 8, md: 'auto' },
+                top: { xs: '50%', md: 'auto' },
+                transform: { xs: 'translateY(-50%)', md: 'none' },
+              }}
+              aria-label="Geri dön"
+            >
               <ArrowBackIcon />
             </IconButton>
-            <Box sx={{ flex: 1 }} />
-            <Typography variant="h4" sx={{ fontWeight: 700 }}>
+
+            {/* Title: perfectly centered on mobile */}
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                textAlign: 'center',
+                position: { xs: 'absolute', md: 'static' },
+                left: { xs: '50%', md: 'auto' },
+                top: { xs: '50%', md: 'auto' },
+                transform: { xs: 'translate(-50%, -50%)', md: 'none' },
+                width: { xs: '80%', md: 'auto' },
+                fontSize: { xs: '1.35rem', md: '2rem' },
+                mx: { md: 'auto' },
+                whiteSpace: { xs: 'nowrap', md: 'normal' },
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
               <AutoAwesomeIcon sx={{ mr: 1, verticalAlign: 'middle' }} /> AI Essay Değerlendirici
             </Typography>
-            <Box sx={{ flex: 1 }} />
           </Box>
         </Box>
 
@@ -318,18 +383,46 @@ export default function EssayWriting() {
             {/* Writing Area */}
             <Box sx={{ flex: evaluation ? 1 : 'auto', minWidth: 0 }}>
               <Paper sx={{ p: 3, borderRadius: 3, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0, 184, 148, 0.15)' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600, color: '#2c3e50' }}>Essay Yazma Alanı</Typography>
-                  <Chip 
-                    label={`${wordCount} kelime`}
-                    sx={{
-                      borderColor: 'rgba(0, 184, 148, 0.4)',
-                      color: '#00695c',
-                      fontWeight: 600
-                    }}
-                    variant="outlined"
-                  />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    justifyContent: { xs: 'flex-start', sm: 'space-between' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                    mb: 1.5,
+                    gap: 1,
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: '#2c3e50', whiteSpace: { xs: 'nowrap', sm: 'normal' } }}
+                  >
+                    Essay Yazma Alanı
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mt: { xs: 0.5, sm: 0 } }}>
+                    <Chip 
+                      label={`${wordCount} kelime`}
+                      sx={{
+                        borderColor: 'rgba(0, 184, 148, 0.4)',
+                        color: '#00695c',
+                        fontWeight: 600
+                      }}
+                      variant="outlined"
+                    />
+                    <Chip 
+                      label={`${charCount} karakter`}
+                      sx={{
+                        borderColor: 'rgba(0, 184, 148, 0.4)',
+                        color: '#00695c',
+                        fontWeight: 600
+                      }}
+                      variant="outlined"
+                    />
+                  </Box>
                 </Box>
+                <Typography variant="caption" sx={{ display: 'block', mb: 1.5, color: '#607d8b' }}>
+                  Kelime sayısı yalnızca bilgilendirme amaçlıdır; herhangi bir sınırlama yoktur.
+                </Typography>
 
                 <TextField
                   fullWidth
@@ -337,7 +430,7 @@ export default function EssayWriting() {
                   rows={20}
                   value={essayText}
                   onChange={handleEssayChange}
-                  placeholder="Essay'inizi buraya yazın... (En az 100 kelime, 250 önerilir)"
+                  placeholder="Essay’inizi buraya yazınız..."
                   variant="outlined"
                   sx={{
                     mb: 1,
@@ -346,8 +439,11 @@ export default function EssayWriting() {
                   }}
                 />
 
-                <Typography variant="body2" sx={{ mb: 2, fontWeight: 600, color: wordCount < 100 ? '#e53935' : '#2e7d32' }}>
-                  Güzel bir değerlendirme için minimum 100 kelime olmalıdır. ({wordCount}/100)
+                <Typography variant="body2" sx={{ mb: 1, fontWeight: 600, color: charCount < 100 ? '#e53935' : '#2e7d32' }}>
+                  Essay’inizin değerlendirilebilmesi için minimum 100 karakter olmalıdır.
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2, color: '#00695c' }}>
+                  İpucu: Ortalama bilgilendirici bir essay için <strong>170–190 kelime</strong> aralığı idealdir (zorunlu değildir).
                 </Typography>
 
                 {error && (
@@ -356,11 +452,12 @@ export default function EssayWriting() {
                   </Alert>
                 )}
 
+
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                   <Button
                     variant="contained"
                     onClick={evaluateEssay}
-                    disabled={isEvaluating || wordCount < 100}
+                    disabled={isEvaluating || charCount < 100}
                     startIcon={isEvaluating ? null : <SendIcon />}
                     sx={{
                       background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
@@ -390,6 +487,21 @@ export default function EssayWriting() {
                     Yeni Essay
                   </Button>
                 </Box>
+
+                {/* Blocking popup if Turkish character count exceeds 10 */}
+                <Dialog open={showLangDialog} onClose={() => setShowLangDialog(false)} maxWidth="xs" fullWidth>
+                  <DialogTitle>Essay Dili Hakkında</DialogTitle>
+                  <DialogContent>
+                    <Typography>
+                      Metninizde <strong>{turkishCharCount}</strong> adet Türkçe karakter tespit edildi. Lütfen essay’i İngilizce yazın.
+                    </Typography>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setShowLangDialog(false)} autoFocus>
+                      Tamam
+                    </Button>
+                  </DialogActions>
+                </Dialog>
 
                 {isEvaluating && (
                   <Box sx={{ mt: 2 }}>
@@ -479,20 +591,20 @@ export default function EssayWriting() {
                     <Typography variant="h6" sx={{ mb: 2 }}>
                       AI Geri Bildirim:
                     </Typography>
-                    <Paper sx={{ 
-                      p: 2, 
-                      bgcolor: '#f8f9fa',
-                      border: '1px solid #e0e0e0'
-                    }}>
-                      <Typography 
-                        variant="body1" 
-                        sx={{ 
-                          lineHeight: 1.7,
-                          whiteSpace: 'pre-line'
-                        }}
-                      >
-                        {evaluation.feedback}
-                      </Typography>
+                    <Paper sx={{ p: 2, bgcolor: '#f8f9fa', border: '1px solid #e0e0e0' }}>
+                      {feedbackBullets.length <= 1 ? (
+                        <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+                          {evaluation.feedback}
+                        </Typography>
+                      ) : (
+                        <Box component="ul" sx={{ m: 0, pl: 3 }}>
+                          {feedbackBullets.map((b, idx) => (
+                            <Box component="li" key={idx} sx={{ mb: 1.2 }}>
+                              <Typography variant="body1" sx={{ lineHeight: 1.7 }}>{b}</Typography>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
                     </Paper>
                   </Box>
                 </Paper>

@@ -78,13 +78,30 @@ const WordsController = {
         select: { id: true, sentence: true },
       });
 
-      const sentences: string[] = [];
-      if (word.example && word.example.trim()) sentences.push(word.example.trim());
-      for (const ex of extras) {
-        if (ex.sentence && ex.sentence.trim()) sentences.push(ex.sentence.trim());
-      }
+      // Build unique, normalized sentence list (avoid duplicates)
+      const seen = new Set<string>();
+      const out: string[] = [];
+      const norm = (s: string) =>
+        s
+          .trim()
+          .replace(/\s+/g, " ")
+          .replace(/[.!?]+$/g, "")
+          .toLowerCase();
 
-      res.json({ wordId: id, sentences });
+      const pushUnique = (s?: string | null) => {
+        if (!s) return;
+        const trimmed = s.trim();
+        if (!trimmed) return;
+        const key = norm(trimmed);
+        if (seen.has(key)) return;
+        seen.add(key);
+        out.push(trimmed);
+      };
+
+  // Only include extra examples; avoid repeating the card's base example in the dialog
+  for (const ex of extras) pushUnique(ex.sentence);
+
+  res.json({ wordId: id, sentences: out });
     } catch (error) {
       console.error("getExamples error", error);
       res.status(500).json({ error: "Failed to fetch examples" });

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Exam from './pages/Exam';
@@ -18,22 +19,34 @@ import EssayGame from './pages/games/EssayGame';
 import EssayWriting from './pages/EssayWriting';
 import Words from './pages/Words';
 import FillInTheBlanksGame from './pages/games/FillInTheBlanksGame';
+import WordMatchingGame from './pages/WordMatchingGame';
+import ReadingGame from './pages/games/ReadingGame';
+import { installAuthFetchInterceptor } from './utils/installAuthFetchInterceptor';
 
 
 
 const AppRouter: React.FC = () => {
   const [token, setToken] = useState(() => localStorage.getItem('token') || '');
   const [userImage, setUserImage] = useState<string | undefined>(undefined);
+  // no dialog; we'll redirect to login with a popup message there
+
+  // Install global interceptor once
+  useEffect(() => {
+    installAuthFetchInterceptor(() => {
+      setToken('');
+      localStorage.removeItem('token');
+      // Redirect user to login with a query flag so Login shows a snackbar
+      window.location.href = '/login?session=expired';
+    });
+  }, []);
 
   // Hydrate user image on first load if token exists
   useEffect(() => {
     const jwt = localStorage.getItem('token');
     if (!jwt) return;
-    (async () => {
+  (async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/auth/me', {
-          headers: { Authorization: `Bearer ${jwt}` },
-        });
+    const res = await fetch('http://localhost:4000/api/auth/me');
         const data = await res.json();
         if (data?.user?.profilePhoto) {
           setUserImage(data.user.profilePhoto);
@@ -46,11 +59,9 @@ const AppRouter: React.FC = () => {
   const handleLogin = (jwt: string) => {
     setToken(jwt);
     localStorage.setItem('token', jwt);
-    (async () => {
+  (async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/auth/me', {
-          headers: { Authorization: `Bearer ${jwt}` },
-        });
+    const res = await fetch('http://localhost:4000/api/auth/me');
         const data = await res.json();
         if (data?.user?.profilePhoto) setUserImage(data.user.profilePhoto);
       } catch {}
@@ -82,7 +93,9 @@ const AppRouter: React.FC = () => {
 
   return (
     <Router>
-      <NavbarWithNavigate userImage={userImage} />
+  <NavbarWithNavigate userImage={userImage} />
+  {/* Fixed AppBar spacer to avoid content jump under navbar */}
+  <Box sx={{ height: { xs: 56, md: 64 } }} />
       <Routes>
         <Route path="/" element={<HomePage token={token} />} />
         <Route path="/login" element={<Login onLogin={handleLogin} onShowRegister={() => {}} />} />
@@ -95,11 +108,15 @@ const AppRouter: React.FC = () => {
         <Route path="/yazi-yazma-game" element={<WritingGame />} />
         <Route path="/bosluk-doldurma" element={<FillInTheBlanksGame />} />
         <Route path="/essay-writing" element={<EssayWriting />} />
+  <Route path="/kelime-eslestirme" element={<SelectLevel game="kelime-eslestirme" />} />
+        <Route path="/kelime-eslestirme-game" element={<WordMatchingGame />} />
+  <Route path="/okuma" element={<SelectLevel game="okuma" />} />
+  <Route path="/okuma-game" element={<ReadingGame />} />
         <Route path="/rankings" element={<Rankings token={token} />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/about" element={<About />} />
         <Route path="/words" element={<Words />} />
-        <Route path="/history" element={<History token={token} />} />
+  <Route path="/history" element={token ? <History token={token} /> : <Navigate to="/login" replace />} />
         <Route path="/exam/:testId" element={<Exam />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

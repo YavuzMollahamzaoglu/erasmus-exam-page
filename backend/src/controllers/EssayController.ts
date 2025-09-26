@@ -30,7 +30,7 @@ interface EssayEvaluation {
 const EssayController = {
   evaluateEssay: async (req: Request, res: Response) => {
     try {
-      const { essayText } = req.body;
+      const { essayText, topic } = req.body;
 
       if (!essayText || typeof essayText !== "string") {
         return res.status(400).json({
@@ -46,6 +46,7 @@ const EssayController = {
 
       // Prepare the prompt for Gemini
       const prompt = `Sen bir IELTS sınavı değerlendirme uzmanısın. Aşağıdaki essay'i IELTS yazım kriterlerine göre değerlendir.
+Essay konusu: ${topic || "(konu belirtilmedi)"}
 Her kategori için 1-10 arası puan ver:
 - Task Response (Görev Yanıtı)
 - Coherence and Cohesion (Tutarlılık ve Bağlantı)
@@ -68,102 +69,267 @@ Lütfen sadece aşağıdaki JSON formatında yanıtla:
   "feedback": "Detaylı Türkçe geri bildirim buraya"
 }`;
 
-      // Call Gemini API
-      const gemini = getGeminiClient();
-
-      if (!gemini) {
-        return res.status(500).json({
-          error:
-            "Gemini API key is not configured. Please add your API key to the .env file.",
-        });
-      }
-
-      const result = await gemini.generateContent(prompt);
-      const responseText = result.response.text();
-
-      if (!responseText) {
-        throw new Error("No response from Gemini");
-      }
-
-      console.log("Gemini raw response:", responseText);
-
-      // Clean the response to extract JSON
-      let cleanedResponse = responseText.trim();
-
-      // Remove markdown code blocks if present
-      cleanedResponse = cleanedResponse
-        .replace(/```json\n?/g, "")
-        .replace(/```\n?/g, "");
-
-      // Find JSON object in the response
-      const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        cleanedResponse = jsonMatch[0];
-      }
-
-      // Parse the JSON response
-      let evaluation: EssayEvaluation;
-      try {
-        evaluation = JSON.parse(cleanedResponse);
-      } catch (parseError) {
-        console.error("Failed to parse Gemini response:", cleanedResponse);
-        throw new Error("Invalid response format from AI");
-      }
-
-      // Validate the response structure
-      if (!evaluation.scores || !evaluation.feedback) {
-        throw new Error("Invalid evaluation structure");
-      }
-
-      // Ensure all scores are valid
-      const scores = evaluation.scores;
-      const scoreKeys = [
-        "task_response",
-        "coherence_cohesion",
-        "lexical_resource",
-        "grammar",
-      ];
-
-      for (const key of scoreKeys) {
-        const score = scores[key as keyof EssayScores];
-        if (typeof score !== "number" || score < 1 || score > 10) {
-          throw new Error(`Invalid score for ${key}: ${score}`);
-        }
-      }
-
-      // Validate overall score (0-100)
-      if (
-        typeof scores.overall !== "number" ||
-        scores.overall < 0 ||
-        scores.overall > 100
-      ) {
-        // Calculate overall score from sub-scores (convert 1-10 to 0-100 scale)
-        scores.overall = Math.round(
-          ((scores.task_response +
-            scores.coherence_cohesion +
-            scores.lexical_resource +
-            scores.grammar) /
-            4) *
-            10
+      // Helper: Heuristic fallback scoring (no AI)
+      const heuristicEvaluate = (text: string): EssayEvaluation => {
+        const words = text.trim().split(/\s+/).filter(Boolean);
+        const wordCount = words.length;
+        const sentences = text
+          .split(/[.!?]+/)
+          .map((s) => s.trim())
+          .filter(Boolean);
+        const sentenceCount = sentences.length || 1;
+        const avgSentence = wordCount / sentenceCount;
+        const uniqueWords = new Set(
+          words.map((w) => w.toLowerCase().replace(/[^a-z']/g, ""))
         );
-      }
+        const uniqueRatio = uniqueWords.size / Math.max(1, wordCount);
+        const longWords = words.filter(
+          (w) => w.replace(/[^a-z]/gi, "").length >= 7
+        ).length;
+        const longRatio = longWords / Math.max(1, wordCount);
+        const connectors = (
+          text.match(
+            /\b(however|moreover|therefore|because|although|furthermore|in addition|on the other hand)\b/gi
+          ) || []
+        ).length;
+        const turkishChars = (text.match(/[ığüşöçİĞÜŞÖÇ]/g) || []).length;
+        // Topic relevance: simple keyword overlap heuristic
+        let topicBoost = 0;
+        if (typeof topic === "string" && topic.trim()) {
+          const tks = topic
+            .toLowerCase()
+            .split(/[^a-z]+/)
+            .filter(
+              (x) =>
+                x &&
+                x.length > 2 &&
+                ![
+                  "the",
+                  "and",
+                  "for",
+                  "are",
+                  "you",
+                  "with",
+                  "that",
+                  "this",
+                  "have",
+                  "from",
+                  "was",
+                  "were",
+                  "your",
+                  "our",
+                  "their",
+                  "has",
+                  "had",
+                  "but",
+                  "not",
+                  "all",
+                  "any",
+                  "can",
+                  "who",
+                  "what",
+                  "when",
+                  "where",
+                  "why",
+                  "how",
+                  "into",
+                  "onto",
+                  "over",
+                  "under",
+                  "out",
+                  "off",
+                  "did",
+                  "does",
+                  "do",
+                  "been",
+                  "being",
+                  "than",
+                  "then",
+                  "also",
+                ].includes(x)
+            );
+          const essayTokens = new Set(
+            text
+              .toLowerCase()
+              .split(/[^a-z]+/)
+              .filter((x) => x)
+          );
+          const overlap = tks.filter((t) => essayTokens.has(t)).length;
+          topicBoost = Math.min(
+            3,
+            Math.floor(overlap / Math.max(1, Math.round(tks.length / 3)))
+          );
+        }
 
-      console.log("Essay evaluation completed successfully");
-      res.json(evaluation);
+        const clamp = (v: number, min: number, max: number) =>
+          Math.max(min, Math.min(max, v));
+        const to10 = (v: number) => clamp(Math.round(v), 1, 10);
+
+        // Task response: length and average sentence length
+        let trScore =
+          4 +
+          (wordCount >= 100 ? 1 : 0) +
+          (wordCount >= 150 ? 1 : 0) +
+          (wordCount >= 200 ? 1 : 0) +
+          (wordCount >= 250 ? 2 : 0);
+        trScore += avgSentence >= 12 ? 1 : 0;
+        trScore += topicBoost; // reward topic relevance in task response
+        trScore = to10(trScore);
+
+        // Coherence & cohesion: connectors and sentence structure
+        let ccScore =
+          4 +
+          Math.min(4, Math.floor(connectors / 2)) +
+          (sentenceCount >= 6 ? 1 : 0);
+        ccScore += avgSentence >= 10 && avgSentence <= 25 ? 1 : 0;
+        ccScore = to10(ccScore);
+
+        // Lexical resource: unique ratio and long word ratio
+        let lrScore =
+          4 + Math.round(uniqueRatio * 6) + (longRatio > 0.12 ? 1 : 0);
+        lrScore = to10(lrScore);
+
+        // Grammar: basic heuristic + penalty for Turkish chars
+        const startsCapital = sentences.filter((s) =>
+          /^[A-Z]/.test(s.trim())
+        ).length;
+        let grScore =
+          4 + (startsCapital >= Math.min(5, sentenceCount - 1) ? 2 : 1);
+        grScore += avgSentence <= 30 ? 1 : 0;
+        grScore -= turkishChars > 5 ? 2 : turkishChars > 0 ? 1 : 0;
+        grScore = to10(grScore);
+
+        const overall = clamp(
+          Math.round(((trScore + ccScore + lrScore + grScore) / 4) * 10),
+          0,
+          100
+        );
+
+        const feedback = [
+          `Metin uzunluğu: ${wordCount} kelime, ${sentenceCount} cümle. Ortalama cümle uzunluğu ${avgSentence.toFixed(
+            1
+          )} kelime.`,
+          topic
+            ? `Konu: "${topic}". Anahtar kavramlarla örtüşme ${
+                topicBoost > 0 ? "fena değil" : "zayıf"
+              }.`
+            : undefined,
+          connectors >= 2
+            ? `Bağlaç kullanımı yeterli (ör. however, moreover, because).`
+            : `Bağlaç kullanımını artırın (ör. however, moreover, because).`,
+          uniqueRatio > 0.5
+            ? `Kelime çeşitliliği iyi (benzersiz kelime oranı ${(
+                uniqueRatio * 100
+              ).toFixed(0)}%).`
+            : `Daha çeşitli kelimeler kullanın (benzersiz oran ${(
+                uniqueRatio * 100
+              ).toFixed(0)}%).`,
+          longRatio > 0.12
+            ? `Akademik kelime kullanımı fena değil (uzun kelime oranı ${(
+                longRatio * 100
+              ).toFixed(0)}%).`
+            : `Akademik kelime dağarcığınızı geliştirin (uzun kelime oranı ${(
+                longRatio * 100
+              ).toFixed(0)}%).`,
+          turkishChars > 0
+            ? `Yabancı dil karakterleriyle (ı,ğ,ş,ç,ö,ü) yazmaktan kaçının: ${turkishChars} karakter bulundu.`
+            : `Yabancı dil karakter kullanımı uygun.`,
+        ]
+          .filter(Boolean)
+          .join("\n\n");
+
+        return {
+          scores: {
+            task_response: trScore,
+            coherence_cohesion: ccScore,
+            lexical_resource: lrScore,
+            grammar: grScore,
+            overall,
+          },
+          feedback,
+        };
+      };
+
+      // Try Gemini first, then fallback gracefully
+      const gemini = getGeminiClient();
+      try {
+        if (!gemini) {
+          const heuristic = heuristicEvaluate(essayText);
+          return res.json(heuristic);
+        }
+
+        const result = await gemini.generateContent(prompt);
+        const responseText = result.response.text();
+        if (!responseText) throw new Error("No response from Gemini");
+
+        console.log("Gemini raw response:", responseText);
+        let cleanedResponse = responseText.trim();
+        cleanedResponse = cleanedResponse
+          .replace(/```json\n?/g, "")
+          .replace(/```\n?/g, "");
+        const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) cleanedResponse = jsonMatch[0];
+
+        let evaluation: EssayEvaluation = JSON.parse(cleanedResponse);
+        if (!evaluation.scores || !evaluation.feedback)
+          throw new Error("Invalid evaluation structure");
+
+        const scores = evaluation.scores;
+        const scoreKeys = [
+          "task_response",
+          "coherence_cohesion",
+          "lexical_resource",
+          "grammar",
+        ];
+        for (const key of scoreKeys) {
+          const score = (scores as any)[key];
+          if (typeof score !== "number" || score < 1 || score > 10) {
+            throw new Error(`Invalid score for ${key}: ${score}`);
+          }
+        }
+        if (
+          typeof scores.overall !== "number" ||
+          scores.overall < 0 ||
+          scores.overall > 100
+        ) {
+          scores.overall = Math.round(
+            ((scores.task_response +
+              scores.coherence_cohesion +
+              scores.lexical_resource +
+              scores.grammar) /
+              4) *
+              10
+          );
+        }
+
+        console.log("Essay evaluation completed successfully");
+        return res.json(evaluation);
+      } catch (aiErr) {
+        console.warn("Gemini failed, using heuristic fallback:", aiErr);
+        const heuristic = heuristicEvaluate(essayText);
+        return res.json(heuristic);
+      }
     } catch (error: any) {
       console.error("Essay evaluation error:", error);
-
-      if (error.message?.includes("API key")) {
-        return res.status(500).json({
-          error: "Gemini API configuration error",
-        });
+      // As a last resort, return a minimal heuristic to avoid breaking UX
+      try {
+        const text = String(req.body?.essayText || "");
+        const minimal: EssayEvaluation = {
+          scores: {
+            task_response: 5,
+            coherence_cohesion: 5,
+            lexical_resource: 5,
+            grammar: 5,
+            overall: 50,
+          },
+          feedback: text
+            ? "Otomatik değerlendirme sınırlı modda yapıldı. Daha uzun ve bağlantılı cümleler, çeşitli kelime kullanımı ve dilbilgisi doğruluğuna dikkat edin."
+            : "Metin bulunamadı.",
+        };
+        return res.json(minimal);
+      } catch {
+        return res.status(500).json({ error: "Failed to evaluate essay" });
       }
-
-      res.status(500).json({
-        error: "Failed to evaluate essay",
-        details:
-          process.env.NODE_ENV === "development" ? error.message : undefined,
-      });
     }
   },
 

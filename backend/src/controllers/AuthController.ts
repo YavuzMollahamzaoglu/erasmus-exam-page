@@ -70,8 +70,8 @@ const AuthController = {
   },
   register: async (req: Request, res: Response) => {
     const { email, password, name } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password required' });
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'Name, email and password required' });
     }
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -121,6 +121,57 @@ const AuthController = {
   logout: async (req: Request, res: Response) => {
     // For JWT, logout is handled client-side by deleting the token
     res.json({ message: 'Logged out (token deleted on client)' });
+  },
+
+  /**
+   * Update authenticated user's profile (name, email, optional password)
+   * Body: { name, email, newPassword?, currentPassword }
+   */
+  updateProfile: async (req: Request, res: Response) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+    const token = authHeader.split(' ')[1];
+    let payload: any;
+    try {
+      payload = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+    } catch (err) {
+      return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+    const userId = typeof payload === 'object' && 'userId' in payload ? (payload as any).userId : undefined;
+    if (!userId) return res.status(400).json({ error: 'Invalid token payload' });
+
+    const { name, email, newPassword, currentPassword } = req.body || {};
+    if (!currentPassword) {
+      return res.status(400).json({ error: 'Mevcut şifre gerekli' });
+    }
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const valid = await bcrypt.compare(currentPassword, user.password || '');
+    if (!valid) return res.status(401).json({ error: 'Mevcut şifre hatalı' });
+
+    // If email is being changed, check uniqueness
+    if (email && email !== user.email) {
+      const exists = await prisma.user.findUnique({ where: { email } });
+      if (exists) return res.status(409).json({ error: 'Bu email zaten kullanılıyor' });
+    }
+
+    const data: any = {};
+    if (typeof name === 'string' && name.trim()) data.name = name.trim();
+    if (typeof email === 'string' && email.trim()) data.email = email.trim();
+    if (typeof newPassword === 'string' && newPassword.trim()) {
+      const hashed = await bcrypt.hash(newPassword, 10);
+      data.password = hashed;
+    }
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ error: 'Güncellenecek bir alan yok' });
+    }
+
+    const updated = await prisma.user.update({ where: { id: userId }, data });
+    res.json({ message: 'Profil güncellendi', user: { id: updated.id, name: updated.name, email: updated.email, profilePhoto: updated.profilePhoto } });
   },
 
   forgotPassword: async (req: Request, res: Response) => {

@@ -57,36 +57,48 @@ const Exam: React.FC = () => {
       
       if (testId === 'dynamic' || testId?.startsWith('dynamic-')) {
         apiUrl = `${API_URL}/api/questions`;
-        
-        // Add category filter based on testId
+
+        // Add category filter based on testId and lock series to Erasmus Sınavı
+        // so Üniversite Hazırlık soruları dinamik Erasmus kartlarına karışmasın.
+        const params = new URLSearchParams();
         if (testId === 'dynamic-a1') {
-          apiUrl += '?category=A1';
+          params.set('category', 'A1');
         } else if (testId === 'dynamic-a2' || testId === 'dynamic') {
-          apiUrl += '?category=A2';
+          params.set('category', 'A2');
         } else if (testId === 'dynamic-b1') {
-          apiUrl += '?category=B1';
+          params.set('category', 'B1');
         } else if (testId === 'dynamic-b2') {
-          apiUrl += '?category=B2';
+          params.set('category', 'B2');
         }
+        // Restrict to Erasmus series explicitly
+        params.set('series', 'Erasmus Sınavı');
+        apiUrl += `?${params.toString()}`;
       } else {
         apiUrl = `${API_URL}/api/tests/${testId}/questions`;
       }
       
       console.log(`Fetching questions from: ${apiUrl}`);
       
-      fetch(apiUrl)
-        .then(res => {
+      const load = async () => {
+        try {
+          const res = await fetch(apiUrl);
           console.log('API Response status:', res.status);
-          if (!res.ok) {
-            throw new Error(`Request failed with status ${res.status}`);
+          if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
+          const data = await res.json();
+          let questionsData = data.questions || data || [];
+          // Fallback: if tests endpoint returned empty, try querying by seriesId directly
+          if ((!questionsData || questionsData.length === 0) && testId && !(testId === 'dynamic' || testId.startsWith('dynamic-'))) {
+            const API_URL2 = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+            const altUrl = `${API_URL2}/api/questions?seriesId=${encodeURIComponent(testId)}`;
+            console.log('Primary returned empty, trying fallback:', altUrl);
+            const res2 = await fetch(altUrl);
+            if (res2.ok) {
+              const d2 = await res2.json();
+              questionsData = d2.questions || d2 || [];
+            }
           }
-          return res.json();
-        })
-        .then(data => {
-          console.log('API Response data:', data);
-          const questionsData = data.questions || data || [];
           console.log('Questions data length:', questionsData.length);
-          
+
           const formattedQuestions = questionsData.map((q: Question) => {
             // Parse options if they're in string format
             let optionsArray: string[] = [];
@@ -122,12 +134,13 @@ const Exam: React.FC = () => {
           console.log(`Loaded ${formattedQuestions.length} questions`);
           setQuestions(formattedQuestions);
           setLoading(false);
-        })
-        .catch(error => {
+        } catch (error) {
           console.error('Failed to fetch questions:', error);
           setError('Sunucuya ulaşılamıyor. Lütfen sunucuyu başlatıp tekrar deneyin.');
           setLoading(false);
-        });
+        }
+      };
+      load();
     } else {
       // Format questions from state as well
       const formattedQuestions = location.state.questions.map((q: Question) => {
@@ -272,9 +285,11 @@ const Exam: React.FC = () => {
     }
   };
 
-  // Sınavı history'ye kaydet
-  const saveToHistory = async () => {
-    const token = localStorage.getItem('token');
+  // Sınavı history'ye kaydet (explicit payload to avoid stale state)
+  const saveToHistory = async (payload?: { correct: number; incorrect: number; duration: number; answersArray: (string | null)[] }) => {
+  const token = localStorage.getItem('token');
+  // Kullanıcı giriş yapmadıysa history kaydı denemeyelim; sessizce çık
+  if (!token) return;
     try {
       const res = await fetch('http://localhost:4000/api/history', {
         method: 'POST',
@@ -285,40 +300,42 @@ const Exam: React.FC = () => {
         body: JSON.stringify({
           category: typeof questions[0]?.categoryId === 'string' ? questions[0]?.categoryId : String(questions[0]?.categoryId),
           seriesId: questions[0]?.seriesId || null,
-          duration: time,
-          correct: score,
-          incorrect: mistakes,
+          duration: payload ? payload.duration : time,
+          correct: payload ? payload.correct : score,
+          incorrect: payload ? payload.incorrect : mistakes,
           questions: questions.map((q, idx) => ({
             questionId: q.id,
-            userAnswer: answers[idx],
-            isCorrect: answers[idx] ? compareAnswers(answers[idx]!, q.correct) : false
+            userAnswer: (payload ? payload.answersArray[idx] : answers[idx]),
+            isCorrect: (() => {
+              const ua = payload ? payload.answersArray[idx] : answers[idx];
+              return ua ? compareAnswers(ua!, q.correct) : false;
+            })()
           }))
         })
       });
       if (!res.ok) {
-        let msg = 'History kaydı başarısız';
         try {
           const data = await res.json();
-          msg += `: ${data.error || data.message || res.statusText}`;
           // eslint-disable-next-line no-console
           console.error('History save error:', data);
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error('History save error (no json):', res.status, res.statusText);
         }
-        alert(msg);
+        // Do not alert here; interceptor will handle auth expiry. Avoid noisy UI.
       }
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error('History save network error:', e);
-      alert('History kaydı sırasında ağ hatası oluştu.');
+  console.error('History save network error:', e);
+  // silence network errors for history save to avoid user confusion
     }
   };
 
   const handleFinish = async () => {
     // Ensure answers array is properly sized
+    const finalizedAnswers = Array.from({ length: questions.length }, (_, i) => (answers[i] !== undefined ? answers[i] : null));
     if (answers.length === 0 || answers.length !== questions.length) {
-      setAnswers(Array(questions.length).fill(null));
+      setAnswers(finalizedAnswers);
     }
     
     // Calculate final scores
@@ -327,7 +344,7 @@ const Exam: React.FC = () => {
     let unansweredCount = 0;
     
     questions.forEach((question, idx) => {
-      const userAnswer = answers[idx];
+      const userAnswer = finalizedAnswers[idx];
       if (userAnswer === null || userAnswer === undefined || userAnswer === '') {
         unansweredCount++;
       } else if (compareAnswers(userAnswer, question.correct)) {
@@ -346,7 +363,12 @@ const Exam: React.FC = () => {
     setTimerPaused(true); // Permanently pause timer when exam is finished
     if (timerRef.current) clearInterval(timerRef.current);
     
-    await saveToHistory();
+    await saveToHistory({
+      correct: correctCount,
+      incorrect: incorrectCount,
+      duration: time,
+      answersArray: finalizedAnswers,
+    });
   };
 
   const handleCloseSummary = () => {
@@ -395,13 +417,17 @@ const Exam: React.FC = () => {
         }
         if (!res.ok) {
           console.error('Ranking save error:', data);
-          let errorMessage = 'Failed to save ranking: ' + (data?.message || res.statusText);
-          
-          // Check for authentication related errors
+          let errorMessage = 'Sıralamaya eklenemedi: ' + (data?.message || res.statusText);
+
+          // Auth-related errors
           if (data?.message === 'Authorization header missing' || res.status === 401) {
-            errorMessage = 'Giriş yapmak zorunludur\n(Bu exam kısmında bitire bastıktan sonra çıkan yerde gözükecek)';
+            errorMessage = 'Sıralamaya eklemek için giriş yapmalısınız.';
           }
-          
+          // Backend may block creating ranking-only rows to prevent "Detay Yok" duplicates
+          if (typeof data?.error === 'string' && data.error.includes('Detailed test record not found')) {
+            errorMessage = 'Önce sınavı başarıyla bitirip kaydettiğinizden emin olun, sonra sıralamaya ekleyin.';
+          }
+
           alert(errorMessage);
           return;
         }
@@ -427,42 +453,54 @@ const Exam: React.FC = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#b2ebf2', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-      {/* Timer at top right with pause indicator */}
-      <Box
+    <Box sx={{ 
+      minHeight: '100vh', 
+      bgcolor: '#b2ebf2', 
+      display: 'flex', 
+      alignItems: { xs: 'center', md: 'flex-start' },
+      justifyContent: 'center', 
+      position: 'relative',
+      pt: { xs: 2, md: 4, lg: 6 },
+      pb: { xs: 12, md: 16 }
+    }}>
+      {/* Fixed timer for tablet/desktop (sticky at top-right) */}
+    <Box
         sx={{
+          display: { xs: 'none', md: 'flex' },
           position: 'fixed',
-          top: 90,
-          right: 32,
-          zIndex: 1000,
-          background: timerPaused 
-            ? 'linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%)' 
+      top: { md: 84, lg: 96 },
+          right: { md: 20, lg: 28 },
+          zIndex: 1200,
+          background: timerPaused
+            ? 'linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%)'
             : 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
           color: '#fff',
-          px: 3,
-          py: 1,
+          px: { md: 2, lg: 2.5 },
+          py: { md: 0.75, lg: 1 },
           borderRadius: 3,
-          fontWeight: 700,
-          fontSize: 18,
-          boxShadow: '0 6px 16px rgba(0, 184, 148, 0.4)',
-          display: 'flex',
+          fontWeight: 800,
+          fontSize: { md: 16, lg: 18 },
+          boxShadow: '0 10px 24px rgba(0,0,0,0.12)',
           alignItems: 'center',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          gap: 1,
-          transition: 'background-color 0.3s ease',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255,255,255,0.25)',
+          gap: 1
         }}
+        aria-label="exam-timer-desktop"
       >
         {timerPaused && <span>⏸️</span>}
         {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, '0')}
       </Box>
+  {/* Timer now lives inside the main Paper (card) */}
       {/* Navigation buttons outside the card */}
       <IconButton
         sx={{
+          display: { xs: 'none', md: 'inline-flex' },
           position: 'absolute',
           left: { xs: 8, md: 32 },
           top: '50%',
           transform: 'translateY(-50%)',
+          zIndex: 2,
           background: current > 0 
             ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%)'
             : 'rgba(255,255,255,0.4)',
@@ -490,10 +528,12 @@ const Exam: React.FC = () => {
       </IconButton>
       <IconButton
         sx={{
+          display: { xs: 'none', md: 'inline-flex' },
           position: 'absolute',
           right: { xs: 8, md: 32 },
           top: '50%',
           transform: 'translateY(-50%)',
+          zIndex: 2,
           background: current < questions.length - 1 
             ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%)'
             : 'rgba(255,255,255,0.4)',
@@ -523,11 +563,11 @@ const Exam: React.FC = () => {
         <Paper 
           elevation={6} 
           sx={{ 
-            p: 5, 
+            p: { xs: 2, sm: 3, md: 5 },
+            position: 'relative',
             borderRadius: 4, 
-            minWidth: 340, 
-            maxWidth: 600, 
             width: '100%', 
+            maxWidth: { xs: 360, sm: 560, md: 600 },
             background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
             backdropFilter: 'blur(10px)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -538,6 +578,34 @@ const Exam: React.FC = () => {
             }
           }}
         >
+      {/* Inset timer at top-right inside the card (mobile only) */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 10,
+              right: { xs: 18, md: 10 },
+              zIndex: 2,
+        display: { xs: 'flex', md: 'none' },
+              background: timerPaused 
+                ? 'linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%)' 
+                : 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+              color: '#fff',
+              px: { xs: 1.25, md: 3 },
+              py: { xs: 0.5, md: 1 },
+              borderRadius: { xs: 2, md: 3 },
+              fontWeight: 700,
+              fontSize: { xs: 13, md: 18 },
+              boxShadow: '0 6px 16px rgba(0, 184, 148, 0.4)',
+              alignItems: 'center',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              gap: { xs: 0.5, md: 1 },
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            {timerPaused && <span>⏸️</span>}
+            {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, '0')}
+          </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2 }}>
             <Typography 
               variant="h5" 
@@ -560,10 +628,10 @@ const Exam: React.FC = () => {
             sx={{
               color: '#2c3e50',
               fontWeight: 600,
-              fontSize: '1.2rem',
+              fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
               lineHeight: 1.6,
               textAlign: 'center',
-              padding: '16px',
+              p: { xs: 1.25, sm: 1.5, md: 2 },
               background: 'rgba(255, 255, 255, 0.7)',
               borderRadius: '12px',
               border: '1px solid rgba(0, 184, 148, 0.2)',
@@ -579,17 +647,18 @@ const Exam: React.FC = () => {
                 const isCorrect = compareAnswers(optionLetter, q.correct);
                 const showColor = !!selected;
                 return (
-                  <Button
+          <Button
                     key={idx}
                     variant={isSelected ? 'contained' : 'outlined'}
                     color={showColor ? (isCorrect ? 'primary' : isSelected ? 'error' : 'primary') : 'primary'}
                     sx={{
                       textAlign: 'left',
                       fontWeight: 600,
-                      fontSize: 18,
+            fontSize: { xs: 15, sm: 16, md: 18 },
+                      textTransform: 'none',
                       borderRadius: 4,
-                      py: 2,
-                      px: 2,
+            py: { xs: 1.25, sm: 1.5, md: 2 },
+            px: { xs: 1.5, sm: 2 },
                       background: !showColor 
                         ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)'
                         : isSelected
@@ -620,7 +689,7 @@ const Exam: React.FC = () => {
                     onClick={() => !showResult && handleSelect(idx)}
                     disabled={!!selected}
                   >
-                    <span style={{ position: 'relative', zIndex: 2 }}>{String.fromCharCode(65 + idx)}) {opt}</span>
+                    <span style={{ position: 'relative', zIndex: 2 }}>{String.fromCharCode(65 + idx)}) {formatText(opt)}</span>
                     {showColor && isSelected && (
                       <span style={{
                         position: 'absolute',
@@ -650,7 +719,7 @@ const Exam: React.FC = () => {
           </Box>
           {showResult && (
             <Box sx={{ mb: 2 }}>
-              <Typography color={compareAnswers(selected || '', q.correct) ? 'success.main' : 'error.main'} fontWeight={700} mb={1}>
+              <Typography color="success.main" fontWeight={700} mb={1}>
                 {compareAnswers(selected || '', q.correct) ? 'Doğru!' : `Doğru Yanıt: ${getCorrectAnswerText()}`}
               </Typography>
               <Button variant="text" onClick={() => setShowExplanation(e => !e)}>
@@ -661,16 +730,57 @@ const Exam: React.FC = () => {
               )}
             </Box>
           )}
-          {/* Bitir button, only show if not finished */}
+          {/* Bottom controls: mobile shows Önceki/Bitir/Sonraki, desktop shows only Bitir */}
           {!showSummary && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'space-between', md: 'center' }, gap: 1.5, mt: 3 }}>
+              <Button
+                variant="outlined"
+                onClick={prevQuestion}
+                disabled={current === 0}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 700,
+                  borderWidth: 2,
+                  borderColor: '#00b894',
+                  color: '#00b894',
+                  '&:hover': { borderColor: '#00cec9', background: 'rgba(0,206,201,0.08)' },
+                  display: { xs: 'inline-flex', md: 'none' },
+                }}
+              >
+                Önceki
+              </Button>
               <Button
                 variant="contained"
-                color="success"
-                sx={{ fontWeight: 700, fontSize: 18, borderRadius: 3, px: 4, py: 1.5, boxShadow: 2, textTransform: 'none' }}
                 onClick={handleFinish}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 800,
+                  borderRadius: 3,
+                  px: 3,
+                  py: 1.2,
+                  boxShadow: 2,
+                  background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                  color: '#fff',
+                  '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' }
+                }}
               >
-                Bitir
+                Testi Bitir
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={nextQuestion}
+                disabled={current === questions.length - 1}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 700,
+                  borderWidth: 2,
+                  borderColor: '#00b894',
+                  color: '#00b894',
+                  '&:hover': { borderColor: '#00cec9', background: 'rgba(0,206,201,0.08)' },
+                  display: { xs: 'inline-flex', md: 'none' },
+                }}
+              >
+                Sonraki
               </Button>
             </Box>
           )}

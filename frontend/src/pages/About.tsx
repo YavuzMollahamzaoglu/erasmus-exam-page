@@ -17,7 +17,7 @@ const About: React.FC = () => {
       display: 'flex', 
       flexDirection: 'column', 
       alignItems: 'center', 
-      pb: { xs: 7, md: 8 },
+      pb: { xs: 12, md: 16 },
       pt: 0
     }}>
       <Paper 
@@ -27,7 +27,7 @@ const About: React.FC = () => {
           width: '100%', 
           borderRadius: 4, 
           overflow: 'hidden', 
-          mt: '15px',
+          mt: { xs: 1, md: '15px' },
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -127,36 +127,89 @@ const About: React.FC = () => {
             p: { xs: 2.5, md: 3 },
           }}>
             <Typography variant="h5" fontWeight={700} mb={3} color="#00695c">Teknolojiler</Typography>
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-              columnGap: 3,
-              rowGap: 2
-            }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', p: 1, minWidth: 120 }}>
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" width={40} height={40} />
-                <Typography fontSize={13} fontWeight={700} sx={{ mt: 1 }}>React</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', p: 1, minWidth: 120, borderLeft: '1px solid rgba(0, 184, 148, 0.25)', pl: 2 }}>
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" width={40} height={40} />
-                <Typography fontSize={13} fontWeight={700} sx={{ mt: 1 }}>TypeScript</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', p: 1, minWidth: 120, borderLeft: '1px solid rgba(0, 184, 148, 0.25)', pl: 2 }}>
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width={40} height={40} />
-                <Typography fontSize={13} fontWeight={700} sx={{ mt: 1 }}>Node.js</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', p: 1, minWidth: 120, borderLeft: '1px solid rgba(0, 184, 148, 0.25)', pl: 2 }}>
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg" alt="Material UI" width={40} height={40} />
-                <Typography fontSize={13} fontWeight={700} sx={{ mt: 1 }}>Material UI</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', p: 1, minWidth: 120, borderLeft: '1px solid rgba(0, 184, 148, 0.25)', pl: 2 }}>
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" width={40} height={40} />
-                <Typography fontSize={13} fontWeight={700} sx={{ mt: 1 }}>MySQL Database</Typography>
-              </Box>
-            </Box>
+            {(() => {
+              const techs = [
+                { label: 'React', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+                { label: 'TypeScript', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
+                { label: 'Node.js', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
+                { label: 'Material UI', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg' },
+                { label: 'MySQL Database', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
+              ];
+              return (
+                <Box sx={{ 
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(5, minmax(120px, 1fr))' },
+                  gap: { xs: 1.5, md: 2.5 },
+                  justifyItems: 'center',
+                  alignItems: 'stretch'
+                }}>
+                  {techs.map((t) => (
+                    <Box
+                      key={t.label}
+                      tabIndex={0}
+                      aria-label={t.label}
+                      sx={{
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        px: { xs: 1.5, md: 2 },
+                        py: { xs: 1.2, md: 1.5 },
+                        width: '100%',
+                        borderRadius: 2,
+                        background: 'linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.95))',
+                        border: '1px solid rgba(0, 184, 148, 0.18)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+                        cursor: 'default',
+                        transition: 'transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms cubic-bezier(.2,.8,.2,1), border-color 220ms',
+                        outline: 'none',
+                        '& img': {
+                          transition: 'transform 220ms cubic-bezier(.2,.8,.2,1)',
+                          filter: 'drop-shadow(0 1px 0 rgba(0,0,0,.04))',
+                        },
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          left: '50%',
+                          bottom: -6,
+                          width: '70%',
+                          height: 10,
+                          transform: 'translateX(-50%)',
+                          background: 'radial-gradient(50% 60% at 50% 50%, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 70%)',
+                          filter: 'blur(6px)',
+                          opacity: 0,
+                          transition: 'opacity 220ms ease',
+                          pointerEvents: 'none',
+                        },
+                        '&:hover, &:focus-visible': {
+                          transform: 'translateY(-4px)',
+                          boxShadow: '0 12px 28px rgba(0,0,0,0.12)',
+                          borderColor: 'rgba(0, 184, 148, 0.55)',
+                          '& img': { transform: 'scale(1.06)' },
+                          '&::before': { opacity: 1 },
+                        },
+                        '&:focus-visible': {
+                          outline: '2px solid #00b894',
+                          outlineOffset: '2px',
+                        },
+                      }}
+                    >
+                      <img
+                        src={t.src}
+                        alt={t.label}
+                        width={40}
+                        height={40}
+                        loading="lazy"
+                        decoding="async"
+                        draggable={false}
+                      />
+                      <Typography fontSize={13} fontWeight={700} sx={{ mt: 1 }}>{t.label}</Typography>
+                    </Box>
+                  ))}
+                </Box>
+              );
+            })()}
           </Box>
 
           {/* CTA Buttons removed */}

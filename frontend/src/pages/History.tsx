@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Box, Paper, Typography, Button, Collapse, Chip, Select, MenuItem, Dialog, DialogTitle, DialogContent, IconButton, FormControl, InputLabel } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -19,32 +20,98 @@ interface HistoryProps {
 }
 
 const History: React.FC<HistoryProps> = ({ token }) => {
+  // Redirect in effect to keep hooks order intact
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (!token || !localStorage.getItem('token'))) {
+      window.location.href = '/login?session=expired';
+    }
+  }, [token]);
   const [history, setHistory] = useState<any[]>([]);
+  const [allHistory, setAllHistory] = useState<any[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [questionDialog, setQuestionDialog] = useState<{ open: boolean, question: any, idx: number, qIdx: number } | null>(null);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('desc');
+  const [categoryTypeFilter, setCategoryTypeFilter] = useState('all');
+  const location = useLocation();
 
+  // Helpers
+  function getExamCategoryType(exam: any): 'ERASMUS' | 'GENEL' | 'HAZIRLIK' | null {
+    const title = (exam.title || exam.examTitle || '').toString().toLowerCase();
+    const catName = (exam.categoryName || exam.category || '').toString().toLowerCase();
+    const s = `${title} ${catName}`;
+    if (s.includes('erasmus')) return 'ERASMUS';
+    if (s.includes('genel') || s.includes('general')) return 'GENEL';
+    if (s.includes('hazırlık') || s.includes('hazirlik')) return 'HAZIRLIK';
+    return null;
+  }
+
+  function matchCategory(exam: any, value: string) {
+    if (value === 'all') return true;
+    const title = (exam.title || exam.examTitle || '').toString().toUpperCase();
+    const cat = (exam.category || exam.categoryName || exam.level || '').toString().toUpperCase();
+    return title.includes(value.toUpperCase()) || cat === value.toUpperCase();
+  }
+
+  function getDateValue(exam: any): number {
+    const d = exam.date || exam.completedAt || exam.createdAt;
+    const dt = d ? new Date(d) : null;
+    return dt ? dt.getTime() : 0;
+  }
+
+  function applyFilters(source: any[]) {
+    let list = source;
+    // Level (A1/A2/B1/B2)
+    if (filter !== 'all') list = list.filter((exam) => matchCategory(exam, filter));
+    // Category type (Erasmus/Genel/Hazırlık)
+    if (categoryTypeFilter !== 'all') {
+      const want = categoryTypeFilter.toUpperCase();
+      list = list.filter((exam) => getExamCategoryType(exam) === (want === 'GENEL İNGİLİZCE' ? 'GENEL' : (want as any)));
+    }
+    // Sort by date
+    list = [...list].sort((a, b) => getDateValue(b) - getDateValue(a));
+    if (sort === 'asc') list.reverse();
+    setHistory(list);
+  }
+
+  // Initial load + parse URL filters
   useEffect(() => {
+    if (!token) return; // defensive: avoid fetching without token
     setLoading(true);
-    let url = 'http://localhost:4000/api/history';
-    if (filter !== 'all') url += `?category=${filter}`;
-    fetch(url, {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    })
+    const params = new URLSearchParams(location.search);
+    const qCategoryLegacy = params.get('category');
+    const qLevel = params.get('level');
+    const qCatType = params.get('cat');
+    // Backward compat: category=A1|A2.. used as level; if it's a known type, map accordingly
+    if (qLevel) setFilter(qLevel);
+    if (qCatType) setCategoryTypeFilter(qCatType);
+    if (qCategoryLegacy) {
+      const val = qCategoryLegacy.toUpperCase();
+      if (['A1', 'A2', 'B1', 'B2'].includes(val)) setFilter(val);
+      else if (['ERASMUS', 'HAZIRLIK', 'GENEL', 'GENEL İNGİLİZCE', 'GENEL INGILIZCE'].includes(val)) setCategoryTypeFilter(qCategoryLegacy);
+    }
+    fetch('http://localhost:4000/api/history', { headers: token ? { 'Authorization': `Bearer ${token}` } : {} })
       .then(res => res.json())
       .then(data => {
-        let list = data.history || [];
-        if (sort === 'asc') list = [...list].reverse();
-        setHistory(list);
+        const list = data.history || [];
+        setAllHistory(list);
+        applyFilters(list);
         setLoading(false);
       })
       .catch(() => {
+        setAllHistory([]);
         setHistory([]);
         setLoading(false);
       });
-  }, [filter, sort]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Re-apply filters when controls change or data changes
+  useEffect(() => {
+    applyFilters(allHistory);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, sort, categoryTypeFilter, allHistory]);
 
   if (loading) {
     return (
@@ -63,7 +130,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
     );
   }
 
-  if (history.length === 0) {
+  if (allHistory.length === 0) {
     return (
       <Box 
         sx={{ 
@@ -84,7 +151,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: palette.bg, pt: 0, pb: 6, px: { xs: 1, md: 4 }, display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: palette.bg, pt: 0, pb: { xs: 12, md: 16 }, px: { xs: 1, md: 4 }, display: 'flex', flexDirection: 'column' }}>
       <Paper 
         elevation={6} 
         sx={{ 
@@ -92,7 +159,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
           maxWidth: 1300, 
           mx: 'auto', 
           p: 0,
-          mt: '15px',
+          mt: { xs: 1, md: '15px' },
           borderRadius: 4,
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
           backdropFilter: 'blur(10px)',
@@ -124,7 +191,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
             <Typography variant="h4" fontWeight={800} mb={1} sx={{ color: '#fff' }}>Geçmiş Testleriniz</Typography>
             <Typography sx={{ opacity: 0.95, color: '#fff' }}>Daha önce çözdüğünüz testlerin detaylarını burada görebilirsiniz.</Typography>
             {/* Filters in header, styled like Rankings */}
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 2, flexWrap: 'wrap' }}>
               <FormControl variant="outlined" sx={{ minWidth: 120 }}>
                 <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.9)', '&.Mui-focused': { color: 'rgba(255, 255, 255, 0.9)' } }}>Seviye</InputLabel>
                 <Select
@@ -138,6 +205,20 @@ const History: React.FC<HistoryProps> = ({ token }) => {
                   <MenuItem value="A2">A2</MenuItem>
                   <MenuItem value="B1">B1</MenuItem>
                   <MenuItem value="B2">B2</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl variant="outlined" sx={{ minWidth: 180 }}>
+                <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.9)', '&.Mui-focused': { color: 'rgba(255, 255, 255, 0.9)' } }}>Kategori</InputLabel>
+                <Select
+                  value={categoryTypeFilter}
+                  onChange={(e) => setCategoryTypeFilter(e.target.value)}
+                  label="Kategori"
+                  sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' }, '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.8)' }, '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.9)' }, '& .MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.9)' } }}
+                >
+                  <MenuItem value="all">Tümü</MenuItem>
+                  <MenuItem value="Erasmus">Erasmus</MenuItem>
+                  <MenuItem value="Hazırlık">Hazırlık</MenuItem>
+                  <MenuItem value="Genel İngilizce">Genel İngilizce</MenuItem>
                 </Select>
               </FormControl>
               <FormControl variant="outlined" sx={{ minWidth: 160 }}>
@@ -158,6 +239,16 @@ const History: React.FC<HistoryProps> = ({ token }) => {
 
         {/* Content wrapper */}
         <Box sx={{ p: { xs: 2, sm: 4, md: 5 } }}>
+          {/* No results for current filters */}
+          {history.length === 0 && (
+            <Box sx={{ textAlign: 'center', py: 6 }}>
+              <Typography variant="h6" color={palette.accent} fontWeight={700}>Bu filtrelere uygun kayıt bulunamadı.</Typography>
+              <Button variant="outlined" sx={{ mt: 2 }} onClick={() => { setFilter('all'); setCategoryTypeFilter('all'); }}>
+                Filtreleri Temizle
+              </Button>
+            </Box>
+          )}
+
           {/* Cards grid */}
           <Box
             sx={{
@@ -170,14 +261,14 @@ const History: React.FC<HistoryProps> = ({ token }) => {
             }}
           >
             {history.map((exam, idx) => (
-              <Paper
+        <Paper
                 key={exam.id}
                 elevation={4}
                 sx={{
                   width: '100%',
                   maxWidth: 400,
                   minWidth: 260,
-                  p: 3,
+          p: 3,
                   borderRadius: 3,
                   mb: 2,
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease',
@@ -186,9 +277,16 @@ const History: React.FC<HistoryProps> = ({ token }) => {
                   '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 30px rgba(0,0,0,0.12)' },
                   background: 'rgba(255, 255, 255, 0.9)',
                   border: '1px solid rgba(0, 184, 148, 0.2)',
-                  alignSelf: 'start',
+          alignSelf: 'start',
+          minHeight: 180,
                 }}
               >
+              {/** Some older records may not have per-question answers saved. */}
+              {/** Detect if this record actually has question details we can show. */}
+              {(() => {
+                /* no render here; used only to keep types happy in JSX scope */
+                return null;
+              })()}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                 <Typography fontWeight={700} fontSize={18}>{exam.title || exam.examTitle}</Typography>
                 {(() => {
@@ -242,16 +340,37 @@ const History: React.FC<HistoryProps> = ({ token }) => {
                 <Chip label={`✅ ${exam.correct ?? exam.totalCorrectAnswers ?? 0}`} sx={{ bgcolor: palette.correct, color: '#fff' }} />
                 <Chip label={`❌ ${exam.incorrect ?? exam.totalIncorrectAnswers ?? 0}`} sx={{ bgcolor: palette.wrong, color: '#fff' }} />
               </Box>
+              {(() => {
+                const hasDetails = (exam.questions && exam.questions.length > 0) || (exam.answers && exam.answers.length > 0);
+                return (
               <Button
                 variant="outlined"
                 size="small"
                 sx={{ mt: 1, borderRadius: 2, fontWeight: 700 }}
-                onClick={() => setExpanded(expanded === `card-${idx}` ? null : `card-${idx}`)}
+                disabled={!hasDetails}
+                onClick={() => {
+                  if (!hasDetails) return;
+                  setExpanded(expanded === `card-${idx}` ? null : `card-${idx}`);
+                }}
               >
-                {expanded === `card-${idx}` ? 'Detayı Gizle' : 'Detayları Gör'}
+                {!hasDetails ? 'Detay Yok' : expanded === `card-${idx}` ? 'Detayı Gizle' : 'Detayları Gör'}
               </Button>
+                );
+              })()}
+              {/* Removed extra message to keep card heights equal in collapsed view */}
               <Collapse in={expanded === `card-${idx}`}> 
                 <Box mt={2}>
+                  {(() => {
+                    const hasDetails = (exam.questions && exam.questions.length > 0) || (exam.answers && exam.answers.length > 0);
+                    if (!hasDetails) {
+                      return (
+                        <Typography mt={1} color="text.secondary" fontSize={13}>
+                          Bu test için soru bazlı detay kaydı bulunmuyor (eski kayıt).
+                        </Typography>
+                      );
+                    }
+                    return null;
+                  })()}
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
                     {(exam.questions || exam.answers || []).map((q: any, i: number) => (
                       <Box

@@ -24,8 +24,32 @@ const HistoryController = {
         },
       });
 
+      // Merge duplicates from the same run (e.g., a separate ranking-only row)
+      // Use a composite key to group close-in-time entries with identical stats.
+      const groups = new Map<string, typeof tests>();
+      for (const t of tests) {
+        const key = [
+          t.userId || "",
+          t.seriesId || "",
+          t.category || "",
+          t.correct,
+          t.mistakes,
+          t.time,
+        ].join("|");
+        const existing = groups.get(key) as any[] | undefined;
+        if (!existing) groups.set(key, [t] as any);
+        else existing.push(t);
+      }
+
+      // Pick best representative per group: prefer one with answers
+      const merged: typeof tests = [] as any;
+      for (const arr of groups.values() as any) {
+        const withAns = arr.find((x: any) => x.answers && x.answers.length > 0);
+        merged.push(withAns || arr[0]);
+      }
+
       // Back to simple title: series name or 'Test'
-      const history = tests.map((test) => ({
+      const history = merged.map((test) => ({
         id: test.id,
         title: test.series?.name || "Test",
         category: test.category,
@@ -81,6 +105,7 @@ const HistoryController = {
           mistakes: Number(incorrect) || 0,
           score: Number(correct) || 0,
           seriesId: seriesId || undefined,
+          isRanked: false,
           ...(createAnswers.length > 0
             ? { answers: { create: createAnswers } }
             : {}),

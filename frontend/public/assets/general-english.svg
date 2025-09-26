@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Genel İngilizce illüstrasyonu">
+  <!-- Rounded card background -->
+  <rect x="0" y="0" width="1200" height="800" rx="120" fill="#E6F4FF"/>
+
+  <!-- Union Jack simplified background -->
+  <clipPath id="clip">
+    <rect x="120" y="80" width="960" height="640" rx="80"/>
+  </clipPath>
+  <g clip-path="url(#clip)">
+    <rect x="120" y="80" width="960" height="640" fill="#0A53B0"/>
+    <!-- White cross -->
+    <rect x="570" y="80" width="60" height="640" fill="#FFFFFF"/>
+    <rect x="120" y="370" width="960" height="60" fill="#FFFFFF"/>
+    <!-- Red cross -->
+    <rect x="585" y="80" width="30" height="640" fill="#D22F27"/>
+    <rect x="120" y="385" width="960" height="30" fill="#D22F27"/>
+    <!-- White diagonals -->
+    <polygon points="120,80 180,80 1080,640 1080,720 1020,720 120,160" fill="#FFFFFF" opacity="0.95"/>
+    <polygon points="1080,80 1020,80 120,640 120,720 180,720 1080,160" fill="#FFFFFF" opacity="0.95"/>
+    <!-- Red diagonals (narrow) -->
+    <polygon points="120,80 150,80 1080,650 1080,680 1050,680 120,110" fill="#D22F27"/>
+    <polygon points="1080,80 1050,80 120,650 120,680 150,680 1080,110" fill="#D22F27"/>
+  </g>
+
+  <!-- Person illustration (center) -->
+  <!-- Shadow ellipse -->
+  <ellipse cx="600" cy="610" rx="220" ry="35" fill="#000" opacity="0.1"/>
+
+  <!-- Torso -->
+  <path d="M420 620 C430 520 510 500 600 500 C690 500 770 520 780 620 L780 660 L420 660 Z" fill="#0A3D62"/>
+
+  <!-- Shirt -->
+  <path d="M520 500 L600 560 L680 500 L720 620 L480 620 Z" fill="#FFFFFF"/>
+  <!-- Tie -->
+  <path d="M600 560 L620 500 L580 500 Z" fill="#1B73E8"/>
+  <path d="M600 560 L630 610 L600 640 L570 610 Z" fill="#1B73E8"/>
+
+  <!-- Neck -->
+  <rect x="570" y="450" width="60" height="50" rx="10" fill="#FFD7B8"/>
+
+  <!-- Head -->
+  <circle cx="600" cy="390" r="90" fill="#FFD7B8"/>
+  <!-- Hair -->
+  <path d="M520 380 C520 320 560 300 600 300 C680 300 705 350 705 385 C665 360 625 355 600 355 C565 355 540 365 520 380 Z" fill="#5C3A2E"/>
+
+  <!-- Glasses -->
+  <circle cx="560" cy="395" r="30" stroke="#1C1C1C" stroke-width="8" fill="none"/>
+  <circle cx="640" cy="395" r="30" stroke="#1C1C1C" stroke-width="8" fill="none"/>
+  <rect x="590" y="390" width="20" height="10" fill="#1C1C1C"/>
+
+  <!-- Eyes and smile -->
+  <circle cx="560" cy="395" r="6" fill="#1C1C1C"/>
+  <circle cx="640" cy="395" r="6" fill="#1C1C1C"/>
+  <path d="M565 430 Q600 450 635 430" stroke="#D46A6A" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+  <!-- Right arm up -->
+  <path d="M760 520 C780 470 830 460 860 480 C875 490 880 515 870 530 C855 555 820 555 795 540 C790 570 780 600 760 620 Z" fill="#0A3D62"/>
+  <circle cx="865" cy="490" r="22" fill="#FFD7B8"/>
+
+  <!-- Left arm down holding book -->
+  <path d="M440 560 C430 590 430 620 450 640 C470 660 500 660 520 645 C500 615 500 585 505 560 Z" fill="#0A3D62"/>
+  <!-- Book -->
+  <rect x="465" y="585" width="120" height="85" rx="10" fill="#1B73E8"/>
+  <rect x="470" y="590" width="110" height="75" rx="8" fill="#FFFFFF"/>
+  <text x="525" y="637" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="22" fill="#1B73E8">EN</text>
+
+  <!-- Caption -->
+  <g aria-hidden="true">
+    <text x="600" y="740" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="800" fill="#0B3552">Genel İngilizce</text>
+  </g>
+</svg>

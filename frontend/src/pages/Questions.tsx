@@ -1,69 +1,54 @@
 import React from 'react';
 import { Box, Paper, Typography, Button } from '@mui/material';
+import TravelExploreRoundedIcon from '@mui/icons-material/TravelExploreRounded';
+import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
+import ShortTextRoundedIcon from '@mui/icons-material/ShortTextRounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
+import ExtensionRoundedIcon from '@mui/icons-material/ExtensionRounded';
+import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
 
 const games = [
 	{
 		title: 'Kelime Avı Oyunu',
 		description: 'Türkçe kelimenin İngilizcesini kartlardan seç!',
-		icon: (
-			<svg width="48" height="48" fill="none">
-				<circle cx="24" cy="24" r="20" fill="#F9D923" />
-				<path
-					d="M32 32l8 8"
-					stroke="#19376D"
-					strokeWidth="3"
-					strokeLinecap="round"
-				/>
-				<circle cx="24" cy="24" r="10" stroke="#19376D" strokeWidth="3" />
-			</svg>
-		),
+		icon: <TravelExploreRoundedIcon sx={{ fontSize: 36, color: '#19376D' }} />,
 		color: '#F9D923',
 		link: '/kelime-avi',
 	},
 	{
 		title: 'Yazı Yazma Oyunu',
 		description: 'Türkçe kelimeyi İngilizce doğru yaz!',
-		icon: (
-			<svg width="48" height="48" fill="none">
-				<rect x="10" y="34" width="28" height="4" rx="2" fill="#36AE7C" />
-				<path d="M14 34L34 14" stroke="#19376D" strokeWidth="3" />
-				<rect x="32" y="12" width="4" height="8" rx="2" fill="#36AE7C" />
-			</svg>
-		),
+		icon: <EditNoteRoundedIcon sx={{ fontSize: 36, color: '#19376D' }} />,
 		color: '#36AE7C',
 		link: '/yazi-yazma',
 	},
 	{
 		title: 'Boşluk Doldurma Oyunu',
 		description: 'Paragraftaki boşlukları doğru kelimelerle doldur!',
-		icon: (
-			<svg width="48" height="48" fill="none">
-				<rect x="8" y="12" width="32" height="24" rx="4" fill="#1877F2" />
-				<rect x="12" y="16" width="24" height="4" rx="2" fill="#fff" />
-				<rect x="12" y="24" width="16" height="4" rx="2" fill="#fff" />
-			</svg>
-		),
+		icon: <ShortTextRoundedIcon sx={{ fontSize: 36, color: '#19376D' }} />,
 		color: '#1877F2',
 		link: '/bosluk-doldurma',
 	},
 	{
 		title: 'AI Essay Değerlendirici',
 		description: 'AI ile essay yazın ve detaylı değerlendirme alın!',
-		icon: (
-			<svg width="48" height="48" fill="none">
-				<rect x="6" y="10" width="36" height="28" rx="4" fill="#9C27B0" />
-				<circle cx="18" cy="20" r="3" fill="#fff" />
-				<circle cx="30" cy="20" r="3" fill="#fff" />
-				<path
-					d="M15 28c3 2 15 2 18 0"
-					stroke="#fff"
-					strokeWidth="2"
-					strokeLinecap="round"
-				/>
-			</svg>
-		),
+		icon: <FactCheckRoundedIcon sx={{ fontSize: 36, color: '#FFFFFF' }} />,
 		color: '#9C27B0',
 		link: '/essay-writing',
+	},
+	{
+		title: 'Kelime Eşleştirme Oyunu',
+		description: 'Türkçe ve İngilizce kelimeleri eşleştir!',
+		icon: <ExtensionRoundedIcon sx={{ fontSize: 36, color: '#FFFFFF' }} />,
+		color: '#FF6B35',
+		link: '/kelime-eslestirme',
+	},
+	{
+		title: 'Okuma Oyunu',
+		description: 'Paragrafları okuyup soruları cevaplayın.',
+		icon: <MenuBookRoundedIcon sx={{ fontSize: 36, color: '#19376D' }} />,
+		color: '#FFD166',
+		link: '/okuma',
 	},
 ];
 
@@ -76,7 +61,7 @@ const Questions: React.FC = () => {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				pb: { xs: 7, md: 8 },
+				pb: { xs: 12, md: 16 },
 				pt: 0,
 				px: 2,
 			}}
@@ -89,7 +74,7 @@ const Questions: React.FC = () => {
 					minWidth: 340,
 					width: '100%',
 					maxWidth: 820,
-					mt: '15px',
+					mt: { xs: 1, md: '15px' },
 					background:
 						'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
 					backdropFilter: 'blur(10px)',
@@ -138,7 +123,10 @@ const Questions: React.FC = () => {
 							variant="h6"
 							sx={{ opacity: 0.9 }}
 						>
-							Seviyene uygun oyunu seç ve hemen başla
+							Kendi seviyenize uygun seçebileceğiniz sorularla eğlenerek İngilizce öğrenin
+						</Typography>
+						<Typography variant="body2" sx={{ opacity: 0.9, mt: 1 }}>
+							Genel olarak kelime ve yazma hafızasını geliştiren oyunlardır; sınavlardan önce ısınmak için idealdir. Kendinizi eksik hissederseniz önce Kelimeler bölümünde çalışmanızı öneririz.
 						</Typography>
 					</Box>
 				</Box>
@@ -241,14 +229,7 @@ const Questions: React.FC = () => {
 						))}
 					</Box>
 
-					<Typography
-						fontSize={15}
-						color="#455a64"
-						align="center"
-						mt={4}
-					>
-						Başlamak için bir oyun seçin
-					</Typography>
+					{/* Info text moved to header */}
 				</Box>
 			</Paper>
 		</Box>

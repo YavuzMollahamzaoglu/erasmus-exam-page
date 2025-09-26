@@ -14,6 +14,33 @@ const TestsController = {
     res.json({ message: "get test result" });
   },
 
+  // Generic: get questions by QuestionSeries ID
+  getQuestionsBySeries: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params; // seriesId
+      if (!id) return res.status(400).json({ error: "series id is required" });
+
+      const series = await prisma.questionSeries.findUnique({ where: { id } });
+      if (!series) return res.status(404).json({ error: "Series not found" });
+
+      const questions = await prisma.question.findMany({
+        where: { seriesId: id },
+        include: { category: true, series: true },
+        orderBy: { id: "asc" },
+      });
+
+      return res.json({ questions, count: questions.length, series });
+    } catch (error) {
+      console.error("Error fetching questions by series:", error);
+      res
+        .status(500)
+        .json({
+          error: "Failed to fetch questions for series",
+          details: (error as any)?.message,
+        });
+    }
+  },
+
   // Get A1 Erasmus questions
   getA1ErasmusQuestions: async (req: Request, res: Response) => {
     try {
