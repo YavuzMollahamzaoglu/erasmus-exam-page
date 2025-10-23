@@ -220,11 +220,11 @@ async function main() {
   console.log("🎉 Game seeding completed!");
 
   // Ensure some extra word examples exist for demo words
-    // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
-    // A2Words ve extra word example kodları kaldırıldı.
+  // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
+  // A2Words ve extra word example kodları kaldırıldı.
 
   // Add A2 words with base example and 3 extra sentences
-    // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
+  // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
 
   for (const w of a2Words) {
     let word = await prisma.word.findFirst({ where: { english: w.english } });
@@ -239,20 +239,32 @@ async function main() {
       });
     } else {
       // ensure base example/level updated if missing
-      const needsUpdate = (!word.example && w.example) || word.level !== w.level || word.turkish !== w.turkish;
+      const needsUpdate =
+        (!word.example && w.example) ||
+        word.level !== w.level ||
+        word.turkish !== w.turkish;
       if (needsUpdate) {
         word = await prisma.word.update({
           where: { id: word.id },
-          data: { example: word.example || w.example, level: w.level, turkish: w.turkish },
+          data: {
+            example: word.example || w.example,
+            level: w.level,
+            turkish: w.turkish,
+          },
         });
       }
     }
     for (const s of w.extras) {
-      const exists = await prisma.wordExample.findFirst({ where: { wordId: word.id, sentence: s } });
-      if (!exists) await prisma.wordExample.create({ data: { wordId: word.id, sentence: s } });
+      const exists = await prisma.wordExample.findFirst({
+        where: { wordId: word.id, sentence: s },
+      });
+      if (!exists)
+        await prisma.wordExample.create({
+          data: { wordId: word.id, sentence: s },
+        });
     }
   }
-  console.log('✅ A2 words and extra examples ensured');
+  console.log("✅ A2 words and extra examples ensured");
 }
 
 main()

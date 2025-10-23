@@ -63,50 +63,7 @@ const WordsController = {
     }
   },
 
-  // GET /api/words/:id/examples  -> returns array of example sentences from DB
-  getExamples: async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params as { id: string };
-      if (!id) return res.status(400).json({ error: "id is required" });
 
-      const word = await prisma.word.findUnique({ where: { id } });
-      if (!word) return res.status(404).json({ error: "word not found" });
-
-      const extras = await prisma.wordExample.findMany({
-        where: { wordId: id },
-        orderBy: { createdAt: "asc" },
-        select: { id: true, sentence: true },
-      });
-
-      // Build unique, normalized sentence list (avoid duplicates)
-      const seen = new Set<string>();
-      const out: string[] = [];
-      const norm = (s: string) =>
-        s
-          .trim()
-          .replace(/\s+/g, " ")
-          .replace(/[.!?]+$/g, "")
-          .toLowerCase();
-
-      const pushUnique = (s?: string | null) => {
-        if (!s) return;
-        const trimmed = s.trim();
-        if (!trimmed) return;
-        const key = norm(trimmed);
-        if (seen.has(key)) return;
-        seen.add(key);
-        out.push(trimmed);
-      };
-
-  // Only include extra examples; avoid repeating the card's base example in the dialog
-  for (const ex of extras) pushUnique(ex.sentence);
-
-  res.json({ wordId: id, sentences: out });
-    } catch (error) {
-      console.error("getExamples error", error);
-      res.status(500).json({ error: "Failed to fetch examples" });
-    }
-  },
 };
 
 export default WordsController;
