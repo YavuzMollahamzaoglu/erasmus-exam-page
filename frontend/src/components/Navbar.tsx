@@ -39,6 +39,7 @@ const allPages = [
   { label: 'Geçmiş', value: 'history', auth: true },
   { label: 'Kategoriler', value: 'categories', auth: false },
   { label: 'Kelimeler', value: 'words', auth: false },
+  { label: 'Konular', value: 'topics', auth: false },
   { label: 'Hakkımızda', value: 'about', auth: false }
   // Login ve Register menüde gösterilmeyecek, sadece sağda buton olarak olacak
 ];
@@ -57,14 +58,15 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
     if (token) {
       // Giriş yapanlar
       return [
-        { label: 'Ana Sayfa', value: 'home', auth: false },         // 0 - mobile menu access to home
-        { label: 'Profil', value: 'profile', auth: true },           // 1
-        { label: 'Testler', value: 'categories', auth: false },       // 2
-        { label: 'Klasik Sorular', value: 'questions', auth: false }, // 3 (yer değiştirildi)
-        { label: 'Kelimeler', value: 'words', auth: false },          // 4 (yer değiştirildi)
-        { label: 'Geçmiş', value: 'history', auth: true },            // 5
-        { label: 'Sıralamalar', value: 'rankings', auth: false },     // 6
-        { label: 'Hakkımızda', value: 'about', auth: false },         // 7
+  { label: 'Ana Sayfa', value: 'home', auth: false },         // 0 - mobile menu access to home
+  { label: 'Profil', value: 'profile', auth: true },           // 1
+  { label: 'Testler', value: 'categories', auth: false },       // 2
+  { label: 'Klasik Sorular', value: 'questions', auth: false }, // 3 (yer değiştirildi)
+  { label: 'Kelimeler', value: 'words', auth: false },          // 4 (yer değiştirildi)
+  { label: 'Konular', value: 'topics', auth: false },           // 5 (yeni eklendi)
+  { label: 'Geçmiş', value: 'history', auth: true },            // 6
+  { label: 'Sıralamalar', value: 'rankings', auth: false },     // 7
+  { label: 'Hakkımızda', value: 'about', auth: false },         // 8
       ];
     }
     // Giriş yapmayanlar
@@ -73,8 +75,9 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
       { label: 'Testler', value: 'categories', auth: false },        // 1
       { label: 'Klasik Sorular', value: 'questions', auth: false },  // 2
       { label: 'Kelimeler', value: 'words', auth: false },           // 3
-      { label: 'Sıralamalar', value: 'rankings', auth: false },      // 4
-      { label: 'Hakkımızda', value: 'about', auth: false },          // 5
+      { label: 'Konular', value: 'topics', auth: false },            // 4 (yeni eklendi)
+      { label: 'Sıralamalar', value: 'rankings', auth: false },      // 5
+      { label: 'Hakkımızda', value: 'about', auth: false },          // 6
     ];
   }, [token]);
 
@@ -99,30 +102,43 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
   const currentPath = location.pathname.replace(/^\//, '');
   return (
     <AppBar position="fixed" elevation={0} sx={{
-      bgcolor: '#2D5BBA',
-      color: '#fff',
+      background: 'linear-gradient(90deg, rgba(13,82,166,0.92) 0%, rgba(24,110,200,0.92) 100%)',
+      backdropFilter: 'saturate(160%) blur(6px)',
+      WebkitBackdropFilter: 'saturate(160%) blur(6px)',
+      color: 'rgba(255,255,255,0.98)',
       minHeight: { xs: 56, md: 64 },
-      boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+      boxShadow: '0 8px 28px rgba(0,0,0,0.18)',
       borderBottom: '1px solid rgba(255,255,255,0.08)',
       fontFamily: 'Poppins, sans-serif',
       top: 0,
       zIndex: (theme) => (theme.zIndex?.appBar ?? 1100) + 10,
+      // Make nav text and buttons more prominent on the translucent background
+      '& .MuiButton-root': {
+        color: 'rgba(255,255,255,0.98)',
+        fontWeight: 600,
+      },
+      '& .MuiTypography-root': {
+        color: 'rgba(255,255,255,0.98)'
+      }
     }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, md: 64 }, pl: 1, pr: 1 }}>
+  <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, md: 64 }, pl: 0, pr: 1, overflow: 'visible' }}>
           {/* Mobile menu icon */}
-          <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center' }}>
-            <IconButton
-              size="large"
-              aria-label="menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-    <Menu
+            <Box sx={{ width: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }, display: { xs: 'flex', lg: 'none' }, alignItems: 'center', justifyContent: 'center', pr: { xs: 0.5, sm: 1 } }}>
+              <IconButton
+                size="large"
+                aria-label="Ana menüyü aç"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                aria-expanded={Boolean(anchorElNav) ? 'true' : undefined}
+                onClick={handleOpenNavMenu}
+                color="inherit"
+                sx={{ p: 0 }}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Box>
+  <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
@@ -154,7 +170,11 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
               {pages.map((page) => (
                 <MenuItem 
                   key={page.value} 
-                  onClick={() => { handleCloseNavMenu(); onNavigate(page.value); }}
+                  onClick={() => { 
+                    console.log('Navbar mobile menu onNavigate value:', page.value);
+                    handleCloseNavMenu(); 
+                    onNavigate(page.value); 
+                  }}
                   sx={{
                     borderRadius: 1.5,
                     mx: 0.5,
@@ -162,7 +182,7 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                     '&:hover': { backgroundColor: 'rgba(45,91,186,0.08)' },
                   }}
                 >
-                  <Typography sx={{ textAlign: 'center' }}>{page.label}</Typography>
+                  <Typography sx={{ textAlign: 'center' }} aria-current={(currentPath === page.value) || (page.value === 'home' && currentPath === '') ? 'page' : undefined}>{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -195,17 +215,24 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                   fontFamily: 'Poppins, sans-serif',
                   fontWeight: 700,
                   background: 'linear-gradient(135deg, #2D5BBA 0%, #20C4A4 100%)',
-                  boxShadow: 'inset 0 -1px 0 rgba(255,255,255,0.25)'
+                  boxShadow: 'inset 0 -1px 0 rgba(255,255,255,0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
-                Menü
+                <Typography sx={{ fontSize: '1.15rem', letterSpacing: '.06rem', fontWeight: 800, textAlign: 'center' }}>İNGİLİZCE HAZIRLIK</Typography>
               </DialogTitle>
               <DialogContent sx={{ pt: 0, pb: 1 }}>
                 <List sx={{ py: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
       {pages.map((page) => (
                     <ListItemButton
                       key={page.value}
-                      onClick={() => { handleCloseNavMenu(); onNavigate(page.value); }}
+                      onClick={() => { 
+                        console.log('Navbar mobile dialog onNavigate value:', page.value);
+                        handleCloseNavMenu(); 
+                        onNavigate(page.value); 
+                      }}
                       sx={{
                         borderRadius: 2,
                         px: 2,
@@ -223,37 +250,74 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                 </List>
               </DialogContent>
             </Dialog>
-          </Box>
+          {/* Small screen brand logo (left of menu icon) - compact */}
+          {/* Removed redundant small logo-only box */}
 
           {/* Brand Logo (click to home) */}
           <Box
-            sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1, flexGrow: 0, cursor: 'pointer', height: 40 }}
+            component="span"
             onClick={() => onNavigate('home')}
+            aria-label="Ana sayfa"
+            sx={{
+              display: { xs: 'none', lg: 'inline-flex' },
+              alignItems: 'center',
+              cursor: 'pointer',
+              position: 'relative',
+              zIndex: 3000,
+              ml: '-8px',
+              mr: '8px',
+              // constrain the wrapper height to keep the navbar size unchanged
+              height: '64px',
+              overflow: 'visible',
+            }}
           >
-            <img
-              src="/assets/ingilizcehazirlik-logo.svg"
+            <Box
+              component="img"
+              src="/logo.png"
               alt="İngilizce Hazırlık"
-              height={32}
-              style={{ display: 'block', transform: 'translateY(-2px)' }}
-            />
-      <Typography
-              component="span"
               sx={{
-        ml: 0.5,
-        display: { xs: 'none', sm: 'flex' },
+                  // responsive visual size: larger logo on wide screens for stronger branding
+                  height: { xs: '64px', sm: '120px', md: '96px', lg: '140px' },
+                width: 'auto',
+                objectFit: 'contain',
+                display: 'block',
+                position: 'relative',
+                  top: { xs: '-2px', sm: '-4px', md: '0px' },
+                transition: 'height 160ms ease, top 160ms ease'
+              }}
+            />
+          </Box>
+
+          <Box sx={{ position: { lg: 'relative' }, left: { lg: 'auto' }, transform: { lg: 'none' }, display: { xs: 'none', sm: 'none', md: 'none', lg: 'inline-flex' }, alignItems: 'center', pointerEvents: 'none', overflow: 'visible' }}>
+            <Typography
+              component="span"
+              onClick={() => onNavigate('home')}
+                sx={{
                 alignItems: 'center',
-                height: 32,
                 fontFamily: 'Poppins, sans-serif',
                 fontWeight: 700,
-                fontSize: { xs: '0.95rem', sm: '1.1rem', md: '1.3rem', lg: '1.5rem' },
+                fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem', lg: '1.3rem' },
                 letterSpacing: '.05rem',
-                color: 'inherit',
-                lineHeight: 1,
+                color: 'white',
                 userSelect: 'none',
+                cursor: 'pointer',
+                lineHeight: 1,
+                // force a hard left margin so the title doesn't get pushed; keep it from shrinking
+                // keep a small visual gap from the logo (approx 4-8px)
+                ml: { sm: '-3px', md: '-3px', lg: '-3px' },
+                position: 'relative',
+                left: { lg: '-3px' },
+                pointerEvents: 'auto',
+                flexShrink: 0,
+                minWidth: 0,
+                // use important via nested selector to ensure the computed margin wins over inline styles
+                '&, & .MuiTypography-root': {
+                  marginLeft: '-3px !important'
+                }
               }}
             >
               <span style={{ color: '#fff', fontWeight: 700 }}>İngilizce</span>
-              <span style={{ color: '#fff', fontWeight: 700, marginLeft: 6 }}>Hazırlık</span>
+              <span style={{ color: '#fff', fontWeight: 700, marginLeft: 3 }}>Hazırlık</span>
             </Typography>
           </Box>
 
@@ -272,9 +336,13 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                               (page.value === 'profile' && currentPath === 'profile') || 
                               (page.value === 'about' && currentPath === 'about');
               return (
-                <Button
-                  key={page.value}
-                  onClick={() => onNavigate(page.value)}
+                  <Button
+                    key={page.value}
+                    onClick={() => {
+                      console.log('Navbar onNavigate value:', page.value);
+                      onNavigate(page.value);
+                    }}
+                  aria-current={isActive ? 'page' : undefined}
                   sx={{
                     my: 0,
                     mx: { md: 0.3, lg: 0.5, xl: 1 },
@@ -312,9 +380,11 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
               flexGrow: 0, 
               display: 'flex', 
               alignItems: 'center', 
-              justifyContent: 'flex-end' 
+              justifyContent: 'flex-end',
+              // reserve width on small/tablet screens so title can be centered visually
+              minWidth: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }
             }}>
-              <Tooltip title="Ayarlar">
+              <Tooltip title="Kullanıcı menüsü">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar
                     alt="Profil"
@@ -371,10 +441,10 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                   },
                 }}
               >
-                <MenuItem sx={{ borderRadius: 1.5, mx: 0.5, my: 0.25, '&:hover': { backgroundColor: 'rgba(45,91,186,0.08)' } }} onClick={() => { handleCloseUserMenu(); onNavigate('profile'); }}>
+                <MenuItem role="menuitem" sx={{ borderRadius: 1.5, mx: 0.5, my: 0.25, '&:hover': { backgroundColor: 'rgba(45,91,186,0.08)' } }} onClick={() => { handleCloseUserMenu(); onNavigate('profile'); }}>
                   <Typography textAlign="center">Profilim</Typography>
                 </MenuItem>
-                <MenuItem sx={{ borderRadius: 1.5, mx: 0.5, my: 0.25, '&:hover': { backgroundColor: 'rgba(45,91,186,0.08)' } }} onClick={() => { handleCloseUserMenu(); onLogout(); }}>
+                <MenuItem role="menuitem" sx={{ borderRadius: 1.5, mx: 0.5, my: 0.25, '&:hover': { backgroundColor: 'rgba(45,91,186,0.08)' } }} onClick={() => { handleCloseUserMenu(); onLogout(); }}>
                   <Typography textAlign="center" color="error">Çıkış Yap</Typography>
                 </MenuItem>
               </Menu>
@@ -385,7 +455,10 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
               display: 'flex', 
               gap: { xs: 0.4, sm: 1 }, 
               alignItems: 'center', 
-              justifyContent: 'flex-end' 
+              justifyContent: 'flex-end',
+              // Reserve the same width on the right as the left mobile menu spacer
+              // so the absolutely-centered title stays visually centered on xs/sm/md
+              minWidth: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }
             }}>
               <Button 
                 color="inherit" 

@@ -149,11 +149,12 @@ model Word {
 }
 
 model WordExample {
-  id        String   @id @default(uuid())
-  word      Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
-  wordId    String
-  sentence  String
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  word        Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
+  wordId      String
+  sentence    String
+  translation String // Türkçe çeviri
+  createdAt   DateTime @default(now())
 }
 
 // Word Matching game (sets + items). This is additive and does not touch existing tables.

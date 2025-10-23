@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import setMetaTags from '../utils/seo';
+import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, TextField, InputAdornment, List, ListItemButton, Button, Chip } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -51,11 +53,19 @@ const cardSx = {
 } as const;
 
 const HomePage: React.FC<Props> = ({ token }) => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [lastVisited, setLastVisited] = useState<string | null>(null);
 
   useEffect(() => {
+    setMetaTags({
+      title: 'İngilizce Hazırlık — Ücretsiz İngilizce Testleri ve Pratik',
+      description: 'Erasmus ve üniversite sınavlarına yönelik ücretsiz İngilizce testleri, kelime çalışmaları ve dinleme alıştırmaları. Hemen sınavına hazırlan.',
+      keywords: 'İngilizce sınav hazırlık, erasmus hazırlık, ücretsiz ingilizce testleri, kelime çalışmaları, dinleme alıştırmaları',
+      ogImage: '/social-preview.svg',
+      canonical: '/'
+    });
     try {
       const p = localStorage.getItem('lastVisitedPath');
       if (p) setLastVisited(p);
@@ -249,7 +259,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
           {/* Oyunlarımız */}
           <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Oyunlarımız</Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: { xs: 2, md: 2.5 }, mb: 3 }}>
-            <Box sx={cardSx as any}>
+            <Box
+              sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate('/kelime-avi')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/kelime-avi'); }}
+            >
               <Typography fontSize={28} mb={1}>🔢</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Seri Soru Çözümü</Typography>
               <Typography fontSize={14} color="#455a64">A1–B2 seviyelerinde kelime odaklı ardışık soru çözümü.</Typography>
@@ -258,7 +274,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Chip label="~8 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
             </Box>
-            <Box sx={cardSx as any}>
+            <Box
+              sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate('/yazi-yazma')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/yazi-yazma'); }}
+            >
               <Typography fontSize={28} mb={1}>⌨️</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Yazı Yazma</Typography>
               <Typography fontSize={14} color="#455a64">Türkçe kelimenin İngilizcesini yaz, anında geri bildirim al.</Typography>
@@ -267,7 +289,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Chip label="~5 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
             </Box>
-            <Box sx={cardSx as any}>
+            <Box
+              sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate('/kelime-eslestirme')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/kelime-eslestirme'); }}
+            >
               <Typography fontSize={28} mb={1}>🧩</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Kelime Eşleştirme</Typography>
               <Typography fontSize={14} color="#455a64">15 kelimeyle hızlı eşleştirme; iki satır havuz ve 3x5 hedef ızgarası.</Typography>
@@ -276,7 +304,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Chip label="Zaman takibi" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
             </Box>
-            <Box sx={cardSx as any}>
+            <Box
+              sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate('/okuma')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/okuma'); }}
+            >
               <Typography fontSize={28} mb={1}>📖</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Okuma Oyunu</Typography>
               <Typography fontSize={14} color="#455a64">Uzun paragraf + 4–5 soru ile okuduğunu anlama; doğru/yanlış geri bildirim ve açıklamalar.</Typography>
@@ -285,7 +319,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Chip label="Seviye: A1–B2" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
             </Box>
-            <Box sx={cardSx as any}>
+            <Box
+              sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate('/bosluk-doldurma')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/bosluk-doldurma'); }}
+            >
               <Typography fontSize={28} mb={1}>🧠</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Boşluk Doldurma</Typography>
               <Typography fontSize={14} color="#455a64">Paragrafta boşlukları doğru seçenekle doldur; bağlam içinde kelime/gramer pekiştir.</Typography>
@@ -294,7 +334,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Chip label="A1–B2" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
             </Box>
-            <Box sx={cardSx as any}>
+            <Box
+              sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate('/essay-writing')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/essay-writing'); }}
+            >
               <Typography fontSize={28} mb={1}>📝</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Essay</Typography>
               <Typography fontSize={14} color="#455a64">Yapay zekâ ile değerlendirilen essay yazma deneyimi.</Typography>
@@ -321,11 +367,19 @@ const HomePage: React.FC<Props> = ({ token }) => {
               <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Üye Olunca Neler Kazanırsın?</Typography>
               <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: { xs: 2, md: 2.5 }, mb: 3 }}>
                 {[ 
-                  { icon: '🏆', title: 'Sıralamalar', desc: 'Puanın ve rozetlerinle listelerde yer al.' },
-                  { icon: '🕒', title: 'Çözüm Geçmişi', desc: 'Geçmiş sonuçlarını ve gelişimini takip et.' },
-                  { icon: '💬', title: 'Yorumlar', desc: 'Sorulara yorum yap, tartışmalara katıl.' },
+                  { icon: '🏆', title: 'Sıralamalar', desc: 'Puanın ve rozetlerinle listelerde yer al.', href: '/rankings' },
+                  { icon: '🕒', title: 'Çözüm Geçmişi', desc: 'Geçmiş sonuçlarını ve gelişimini takip et.', href: '/register' },
+                  { icon: '💬', title: 'Yorumlar', desc: 'Sorulara yorum yap, tartışmalara katıl.', href: '/register' },
                 ].map((f) => (
-                  <Box key={f.title} sx={cardSx as any}>
+                  <Box
+                    key={f.title}
+                    sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${f.title} kartı, ${f.href === '/register' ? 'kayıt ol' : 'sıralamalar'} sayfasına gider`}
+                    onClick={() => navigate(f.href)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') navigate(f.href); }}
+                  >
                     <Typography fontSize={28} mb={1}>{f.icon}</Typography>
                     <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>{f.title}</Typography>
                     <Typography fontSize={14} color="#455a64">{f.desc}</Typography>

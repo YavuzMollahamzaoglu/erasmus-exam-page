@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import setMetaTags from '../utils/seo';
 import {
   Box,
   Typography,
@@ -43,6 +44,15 @@ const EssayTopics = [
 ];
 
 export default function EssayWriting() {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Essay Yazma — İngilizce Essay Değerlendirme',
+      description: 'Essay yazma alıştırmaları ve otomatik değerlendirme. Essay’inizi yazın ve geri bildirim alın.',
+      keywords: 'essay yazma, essay değerlendirme, ingilizce essay',
+      canonical: '/essay-writing',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
   const navigate = useNavigate();
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [customTopic, setCustomTopic] = useState<string>('');

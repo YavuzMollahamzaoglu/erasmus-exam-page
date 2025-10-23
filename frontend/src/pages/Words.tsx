@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Select, MenuItem, Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, Alert } from '@mui/material';
 
 interface Word { id: string; english: string; turkish: string; example?: string | null; level: string; }
@@ -21,12 +22,24 @@ const Words: React.FC = () => {
   const [currentWord, setCurrentWord] = useState<string>('');
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
+  // Progress bar için state
+  const [isSeeding, setIsSeeding] = useState(false);
 
   useEffect(() => {
+    setMetaTags({
+      title: 'Kelimeler — İngilizce Kelime Çalışması',
+      description: 'Seviye bazlı İngilizce kelime listeleri, örnek cümleler ve hızlı alıştırmalar. Kelime bilginizi sınavlara yönelik geliştirin.',
+      keywords: 'ingilizce kelimeler, kelime çalışması, erasmus kelime hazırlık, sınav kelimeleri',
+      canonical: '/words',
+      ogImage: '/social-preview.svg'
+    });
     fetch(`http://localhost:4000/api/words?level=${level}`)
       .then(res => res.json())
       .then(data => setWords(data.words || []))
       .catch(() => setWords([]));
+    // Örnek: seed işlemi başlatıldığında progress barı göster
+    // setIsSeeding(true); // Gerçek seed işlemiyle entegre et
+    // setTimeout(() => setIsSeeding(false), 5000); // Örnek: 5 saniye sonra kapat
   }, [level]);
 
   const handleMoreSentences = async (wordId: string, wordText: string) => {
@@ -85,29 +98,7 @@ const Words: React.FC = () => {
                   {w.example && (
                     <Typography variant="body2" color="text.secondary">Örnek: {w.example}</Typography>
                   )}
-                  <Box sx={{ mt: 1.5, display: 'flex', gap: 1 }}>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      onClick={() => handleMoreSentences(w.id, w.english)}
-                      disabled={loading}
-                      sx={{
-                        textTransform: 'none',
-                        fontWeight: 700,
-                        borderRadius: 999,
-                        px: 1.8,
-                        borderWidth: 2,
-                        borderColor: brand.primary,
-                        color: brand.primary,
-                        '&:hover': {
-                          borderColor: brand.secondary,
-                          bgcolor: 'rgba(0,206,201,0.08)',
-                        },
-                      }}
-                    >
-                      Daha fazla cümle
-                    </Button>
-                  </Box>
+                  {/* Daha fazla cümle butonu kaldırıldı */}
                 </Paper>
               ))}
             </Box>
@@ -115,6 +106,18 @@ const Words: React.FC = () => {
         </Box>
       </Paper>
 
+      {isSeeding && (
+        <Box sx={{ width: '100%', mb: 2 }}>
+          <Paper elevation={2} sx={{ p: 2, background: '#e0f7fa' }}>
+            <Box sx={{ width: '100%' }}>
+              <div style={{ width: '100%', marginBottom: 8 }}>
+                <div className="MuiLinearProgress-root MuiLinearProgress-colorPrimary MuiLinearProgress-barColorPrimary" style={{ height: 6, background: '#00b894' }} />
+              </div>
+              <Typography align="center" color="primary">Örnek cümleler ekleniyor, lütfen bekleyin...</Typography>
+            </Box>
+          </Paper>
+        </Box>
+      )}
       {/* Sentences Dialog */}
       <Dialog
         open={open}

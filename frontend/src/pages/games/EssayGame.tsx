@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import setMetaTags from '../../utils/seo';
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -18,6 +19,15 @@ interface ParagraphQuestion {
 }
 
 function EssayGame() {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Essay Oyunu — Yazma Pratiği',
+      description: 'Essay yazma alıştırmaları ile yazılı anlatım becerilerinizi geliştirin. Otomatik değerlendirme ve geri bildirim alın.',
+      keywords: 'essay yazma, yazma pratik, essay alıştırma',
+      canonical: '/essay-game',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]); 

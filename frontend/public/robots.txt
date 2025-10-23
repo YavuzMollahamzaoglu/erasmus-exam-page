@@ -1,3 +1,7 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt for search engines
 User-agent: *
-Disallow:
+Disallow: /api/
+Allow: /
+
+# Sitemap (leave as root-relative; replace with absolute URL when deploying if needed)
+Sitemap: /sitemap.xml

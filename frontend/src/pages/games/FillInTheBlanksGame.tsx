@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import setMetaTags from '../../utils/seo';
 import { Box, Typography, Button, Paper, Alert, IconButton, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+ 
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -20,7 +22,45 @@ type QuestionState = {
   score: number;
 };
 
+// Helper: number of blanks shown in the text
+const getBlankCount = (q: FillInTheBlanksQuestion) =>
+  Math.max(0, (q.text.split('__________').length - 1));
+
+// Remove only the first occurrence of a value from an array
+const removeOne = (arr: string[], value: string) => {
+  const idx = arr.indexOf(value);
+  if (idx === -1) return arr;
+  const copy = arr.slice();
+  copy.splice(idx, 1);
+  return copy;
+};
+
+// Build display options: exactly the needed correct answers (for visible blanks)
+// plus one extra distractor if available, then shuffle
+const pickDisplayOptions = (q: FillInTheBlanksQuestion): string[] => {
+  const blanks = getBlankCount(q);
+  const size = Math.min(blanks, q.correctAnswers.length);
+  const needed = q.correctAnswers.slice(0, size);
+  const distractor = (q.options || []).find(o => !needed.includes(o));
+  const combined = distractor ? [...needed, distractor] : [...needed];
+  // Shuffle
+  for (let i = combined.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [combined[i], combined[j]] = [combined[j], combined[i]];
+  }
+  return combined;
+};
+
 const FillInTheBlanksGame: React.FC = () => {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Boşluk Doldurma — Paragraf Oyunu',
+      description: 'Boşluk doldurma oyunu ile paragraf içi kelime bilgisi ve bağlam kullanımını geliştirin.',
+      keywords: 'boşluk doldurma, paragraph oyunu, kelime bilgisi',
+      canonical: '/bosluk-doldurma',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<FillInTheBlanksQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,9 +69,6 @@ const FillInTheBlanksGame: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
-  // Cumulative summary across submitted questions
-  const [summary, setSummary] = useState<{ correct: number; total: number }>({ correct: 0, total: 0 });
-  const [showSummary, setShowSummary] = useState(false);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null); // touch/tap support
   const [loading, setLoading] = useState(true);
@@ -50,17 +87,19 @@ const FillInTheBlanksGame: React.FC = () => {
           setQuestions(data);
           // Initialize state store for questions
           const initialMap: Record<string, QuestionState> = {};
-          data.forEach((q: FillInTheBlanksQuestion) => {
-            initialMap[q.id] = {
-              userAnswers: Array(q.correctAnswers.length).fill(null),
-              availableOptions: [...q.options],
+          (data as FillInTheBlanksQuestion[]).forEach((q, idx) => {
+            const blanks = getBlankCount(q);
+            const size = Math.min(blanks, q.correctAnswers.length);
+            const key = `${idx}:${q.id || 'noid'}`;
+            initialMap[key] = {
+              userAnswers: Array(size).fill(null),
+              availableOptions: pickDisplayOptions(q),
               isSubmitted: false,
               showResults: false,
               score: 0,
             };
           });
           setQuestionStates(initialMap);
-          setSummary({ correct: 0, total: 0 });
           setError(null);
         } else {
           throw new Error('Failed to fetch questions');
@@ -81,17 +120,19 @@ const FillInTheBlanksGame: React.FC = () => {
   setQuestions(sampleQuestions);
         // Initialize state for fallback sample
         const initialMap: Record<string, QuestionState> = {};
-        sampleQuestions.forEach((q) => {
-          initialMap[q.id] = {
-            userAnswers: Array(q.correctAnswers.length).fill(null),
-            availableOptions: [...q.options],
+        sampleQuestions.forEach((q, idx) => {
+          const blanks = getBlankCount(q);
+          const size = Math.min(blanks, q.correctAnswers.length);
+          const key = `${idx}:${q.id || 'noid'}`;
+          initialMap[key] = {
+            userAnswers: Array(size).fill(null),
+            availableOptions: pickDisplayOptions(q),
             isSubmitted: false,
             showResults: false,
             score: 0,
           };
         });
-        setQuestionStates(initialMap);
-  setSummary({ correct: 0, total: 0 });
+    setQuestionStates(initialMap);
       } finally {
         setLoading(false);
       }
@@ -101,8 +142,9 @@ const FillInTheBlanksGame: React.FC = () => {
   }, []);
 
   // Load current question state from store or initialize if missing
-  const resetCurrentQuestion = (question: FillInTheBlanksQuestion) => {
-    const existing = questionStates[question.id];
+  const resetCurrentQuestion = (question: FillInTheBlanksQuestion, index: number) => {
+    const key = `${index}:${question.id || 'noid'}`;
+    const existing = questionStates[key];
     if (existing) {
       setUserAnswers(existing.userAnswers);
       setAvailableOptions(existing.availableOptions);
@@ -111,14 +153,16 @@ const FillInTheBlanksGame: React.FC = () => {
       setScore(existing.score);
   setSelectedOption(null);
     } else {
+      const blanks = getBlankCount(question);
+      const size = Math.min(blanks, question.correctAnswers.length);
       const init: QuestionState = {
-        userAnswers: Array(question.correctAnswers.length).fill(null),
-        availableOptions: [...question.options],
+        userAnswers: Array(size).fill(null),
+        availableOptions: pickDisplayOptions(question),
         isSubmitted: false,
         showResults: false,
         score: 0,
       };
-      setQuestionStates((prev) => ({ ...prev, [question.id]: init }));
+      setQuestionStates((prev) => ({ ...prev, [key]: init }));
       setUserAnswers(init.userAnswers);
       setAvailableOptions(init.availableOptions);
       setIsSubmitted(false);
@@ -138,11 +182,13 @@ const FillInTheBlanksGame: React.FC = () => {
   }, [showResults]);
 
   const currentQuestion = questions[currentIndex];
+  const currentKey = currentQuestion ? `${currentIndex}:${currentQuestion.id || 'noid'}` : '';
+  const currentBlankCount = currentQuestion ? getBlankCount(currentQuestion) : 0;
 
   // When currentIndex or questions change, load that question's saved state
   useEffect(() => {
     if (!currentQuestion) return;
-    resetCurrentQuestion(currentQuestion);
+    resetCurrentQuestion(currentQuestion, currentIndex);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, questions.length]);
 
@@ -170,7 +216,7 @@ const FillInTheBlanksGame: React.FC = () => {
       setUserAnswers(newAnswers);
 
       // Kullanılan seçeneği available options'dan çıkar
-      setAvailableOptions(prev => prev.filter(option => option !== draggedItem));
+  setAvailableOptions(prev => removeOne(prev, draggedItem));
       setDraggedItem(null);
     }
   };
@@ -205,7 +251,7 @@ const FillInTheBlanksGame: React.FC = () => {
 
   const handleRemoveAnswer = (blankIndex: number) => {
     if (userAnswers[blankIndex] && !isSubmitted) {
-      setAvailableOptions(prev => [...prev, userAnswers[blankIndex] as string]);
+  setAvailableOptions(prev => [...prev, userAnswers[blankIndex] as string]);
       const newAnswers = [...userAnswers];
       newAnswers[blankIndex] = null;
       setUserAnswers(newAnswers);
@@ -241,17 +287,17 @@ const FillInTheBlanksGame: React.FC = () => {
   const handleSubmit = () => {
     setIsSubmitted(true);
     let correctCount = 0;
-    currentQuestion.correctAnswers.forEach((correct, index) => {
-      if (userAnswers[index] === correct) {
-        correctCount++;
-      }
-    });
+    const limit = Math.min(currentBlankCount, currentQuestion.correctAnswers.length);
+    for (let index = 0; index < limit; index++) {
+      const correct = currentQuestion.correctAnswers[index];
+      if (userAnswers[index] === correct) correctCount++;
+    }
     setScore(correctCount);
     setShowResults(true);
     // persist state for this question
     setQuestionStates((prev) => ({
       ...prev,
-      [currentQuestion.id]: {
+      [currentKey]: {
         userAnswers: [...userAnswers],
         availableOptions: [...availableOptions],
         isSubmitted: true,
@@ -259,11 +305,7 @@ const FillInTheBlanksGame: React.FC = () => {
         score: correctCount,
       },
     }));
-    // Update cumulative summary
-    setSummary(prev => ({
-      correct: prev.correct + correctCount,
-      total: prev.total + currentQuestion.correctAnswers.length
-    }));
+    // Otomatik geçiş yok: kullanıcı Sonraki/Kapat ile kendisi ilerler
   };
 
   const nextQuestion = () => {
@@ -282,10 +324,13 @@ const FillInTheBlanksGame: React.FC = () => {
     if (questions.length === 0) return;
     // Rebuild initial states for all questions
     const initialMap: Record<string, QuestionState> = {};
-    questions.forEach((q) => {
-      initialMap[q.id] = {
-        userAnswers: Array(q.correctAnswers.length).fill(null),
-        availableOptions: [...q.options],
+    questions.forEach((q, idx) => {
+      const blanks = getBlankCount(q);
+      const size = Math.min(blanks, q.correctAnswers.length);
+      const key = `${idx}:${q.id || 'noid'}`;
+      initialMap[key] = {
+        userAnswers: Array(size).fill(null),
+        availableOptions: pickDisplayOptions(q),
         isSubmitted: false,
         showResults: false,
         score: 0,
@@ -293,19 +338,18 @@ const FillInTheBlanksGame: React.FC = () => {
     });
     setQuestionStates(initialMap);
     setCurrentIndex(0);
-    setSummary({ correct: 0, total: 0 });
-    setShowSummary(false);
+  // clear timer only
     setTime(0);
     // Load first question fresh
-    if (questions[0]) resetCurrentQuestion(questions[0]);
+  if (questions[0]) resetCurrentQuestion(questions[0], 0);
   };
 
   // Sync current local state back into the questionStates store on any change
   useEffect(() => {
-    if (!currentQuestion) return;
+    if (!currentQuestion || !currentKey) return;
     setQuestionStates((prev) => ({
       ...prev,
-      [currentQuestion.id]: {
+      [currentKey]: {
         userAnswers: [...userAnswers],
         availableOptions: [...availableOptions],
         isSubmitted,
@@ -313,7 +357,7 @@ const FillInTheBlanksGame: React.FC = () => {
         score,
       },
     }));
-  }, [userAnswers, availableOptions, isSubmitted, showResults, score, currentQuestion?.id]);
+  }, [userAnswers, availableOptions, isSubmitted, showResults, score, currentKey]);
 
   const renderTextWithBlanks = () => {
     if (!currentQuestion) return null;
@@ -438,6 +482,7 @@ const FillInTheBlanksGame: React.FC = () => {
               Geri Dön
             </Typography>
           </Box>
+      
         </Box>
       );
     }
@@ -720,7 +765,7 @@ const FillInTheBlanksGame: React.FC = () => {
             }}>
               Sonuç: {score}/{currentQuestion.correctAnswers.length} doğru
             </Typography>
-            {currentQuestion.correctAnswers.map((correct, index) => (
+            {currentQuestion.correctAnswers.slice(0, currentBlankCount).map((correct, index) => (
               <Typography key={index} variant="body2" sx={{ mt: 1, color: '#2c3e50' }}>
                 Boşluk {index + 1}: <strong>{correct}</strong>
                 {userAnswers[index] !== correct && userAnswers[index] && 
@@ -760,7 +805,7 @@ const FillInTheBlanksGame: React.FC = () => {
 
             {/* Kontrol Et */}
             {(() => {
-              const hasBlank = userAnswers.some(a => a === null);
+              const hasBlank = (userAnswers.length < currentBlankCount) || userAnswers.slice(0, currentBlankCount).some(a => a === null);
               const Btn = (
                 <button
                   style={{
@@ -814,95 +859,30 @@ const FillInTheBlanksGame: React.FC = () => {
           </Box>
         )}
 
-        {/* Action buttons */}
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 4 }}>
-          {isSubmitted && (
+        {/* After submission: fallback Next/Kapat button (also auto-advances) */}
+        {isSubmitted && (
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 3 }}>
             <button
               style={{
                 background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
                 color: '#fff',
                 fontWeight: 700,
-                fontSize: 18,
+                fontSize: 16,
                 border: 'none',
                 borderRadius: 12,
-                padding: '12px 32px',
+                padding: '12px 24px',
                 cursor: 'pointer',
                 minWidth: 120,
                 boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(-2px)';
-                target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
+              onClick={() => {
+                if (currentIndex < questions.length - 1) nextQuestion();
+                else navigate('/questions');
               }}
-              onMouseLeave={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(0)';
-                target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
-              }}
-              onClick={() => setShowSummary(true)}
             >
-              Bitir
+              {currentIndex < questions.length - 1 ? 'Sonraki →' : 'Kapat'}
             </button>
-          )}
-        </Box>
-        {/* Summary overlay */}
-        {showSummary && (
-          <Box 
-            sx={{ position: 'fixed', inset: 0, bgcolor: 'rgba(178,235,242,0.95)', backdropFilter: 'blur(6px)', zIndex: 1300, display: 'flex', alignItems: 'center', justifyContent: 'center', px: 2 }}
-          >
-            <Box sx={{ background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)', borderRadius: 4, boxShadow: '0 30px 60px rgba(0,0,0,0.2)', p: 4, width: '100%', maxWidth: 520, textAlign: 'center', border: '1px solid rgba(255,255,255,0.3)' }}>
-              <Typography variant="h5" sx={{ fontWeight: 800, color: '#2c3e50', mb: 2 }}>Genel Sonuç</Typography>
-              <Box sx={{ p: 2, mb: 2, borderRadius: 3, bgcolor: 'rgba(0, 184, 148, 0.06)', border: '1px solid rgba(0, 184, 148, 0.2)' }}>
-                <Typography variant="h6" sx={{ color: '#00695c', fontWeight: 700 }}>
-                  Doğru: {summary.correct}/{summary.total}
-                </Typography>
-                <Typography variant="h6" sx={{ color: '#c62828', fontWeight: 700, mt: 1 }}>
-                  Yanlış: {summary.total - summary.correct}/{summary.total}
-                </Typography>
-              </Box>
-              <Typography variant="body2" sx={{ color: '#607d8b', mb: 3 }}>
-                Toplam boşluk: {summary.total}. Çözmediğiniz sorular bu toplam dışında kalır.
-              </Typography>
-
-              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-                <button
-                  style={{
-                    background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
-                    color: '#fff',
-                    fontWeight: 700,
-                    fontSize: 16,
-                    border: 'none',
-                    borderRadius: 12,
-                    padding: '12px 28px',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onClick={() => navigate('/questions')}
-                >
-                  Kapat
-                </button>
-                <button
-                  style={{
-                    background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                    color: '#fff',
-                    fontWeight: 700,
-                    fontSize: 16,
-                    border: 'none',
-                    borderRadius: 12,
-                    padding: '12px 28px',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(0, 184, 148, 0.3)',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onClick={restartGame}
-                >
-                  Yeniden Başla
-                </button>
-              </Box>
-            </Box>
           </Box>
         )}
       </Box>

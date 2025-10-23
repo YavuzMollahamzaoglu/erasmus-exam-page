@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
+ 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 
@@ -35,6 +37,13 @@ export default function WritingGame() {
 
   // Fetch questions from API
   useEffect(() => {
+    setMetaTags({
+      title: 'Yazma Oyunu — Writing Practice',
+      description: 'Yazma alıştırmaları ile cümle kurma ve essay öncesi pratikler. Seviye seçerek başlayın.',
+      keywords: 'yazma oyunu, writing practice, yazma alıştırmaları',
+      canonical: '/yazi-yazma',
+      ogImage: '/social-preview.svg'
+    });
     const fetchQuestions = async () => {
       try {
         setLoading(true);
@@ -700,6 +709,7 @@ export default function WritingGame() {
           </Box>
         </Box>
       )}
+      
     </Box>
   );
 }

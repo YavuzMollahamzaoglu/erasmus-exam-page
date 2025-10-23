@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Paper, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
+import setMetaTags from '../utils/seo';
 
 const palette = {
   rose: '#E7CCCC',
@@ -9,6 +10,16 @@ const palette = {
 };
 
 const About: React.FC = () => {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Hakkımızda — İngilizce Hazırlık',
+      description: 'İngilizce Hazırlık hakkında bilgi. Amacımız Erasmus ve üniversite hazırlığı için ücretsiz içerikler sunmaktır.',
+      keywords: 'hakkımızda, ingilizce hazırlık, erasmus',
+      canonical: '/about',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
+
   return (
     <Box sx={{ 
       minHeight: '100vh', 
@@ -20,6 +31,7 @@ const About: React.FC = () => {
       pb: { xs: 12, md: 16 },
       pt: 0
     }}>
+    
       <Paper 
         elevation={6} 
         sx={{ 
@@ -96,12 +108,12 @@ const About: React.FC = () => {
             gap: 3,
             mb: 3
           }}>
-            {[
-              { value: '500+', label: 'Aktif Kullanıcı' },
-              { value: '1000+', label: 'Soru Bankası' },
-              { value: '4', label: 'Sınav Seviyesi' },
+            {([
+              { value: '6', label: 'Oyun' },
+              { value: '1000+', label: 'Soru' },
+              { value: '4', label: 'Sınav Seviyesi', sub: 'A1 • A2 • B1 • B2' },
               { value: '2025', label: 'Güncel İçerik' },
-            ].map((s) => (
+            ] as Array<{ value: string; label: string; sub?: string }>).map((s) => (
               <Box key={s.label} sx={{ 
                 textAlign: 'center', 
                 p: 2.5, 
@@ -114,6 +126,11 @@ const About: React.FC = () => {
               }}>
                 <Typography variant="h4" fontWeight={800} color="#00695c">{s.value}</Typography>
                 <Typography color="#455a64">{s.label}</Typography>
+                {s.sub && (
+                  <Typography variant="caption" sx={{ display: 'block', color: '#78909c', mt: 0.5, fontSize: 12 }}>
+                    {s.sub}
+                  </Typography>
+                )}
               </Box>
             ))}
           </Box>

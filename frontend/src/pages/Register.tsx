@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import setMetaTags from '../utils/seo';
 import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 
@@ -7,6 +8,15 @@ interface Props {
 }
 
 const Register: React.FC<Props> = () => {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Kayıt Ol — Hesap Oluştur',
+      description: 'Hesap oluşturun ve İngilizce pratik yapmaya hemen başlayın. Basit kayıt formu ile üye olun.',
+      keywords: 'kayıt ol, üye ol, hesap oluştur',
+      canonical: '/register',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import setMetaTags from '../utils/seo';
 import { useLocation } from 'react-router-dom';
-import { Box, Paper, Typography, Button, Collapse, Chip, Select, MenuItem, Dialog, DialogTitle, DialogContent, IconButton, FormControl, InputLabel } from '@mui/material';
+import { Box, Paper, Typography, Button, Collapse, Chip, Select, MenuItem, Dialog, DialogTitle, DialogContent, IconButton, FormControl, InputLabel, Tooltip } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -77,6 +78,13 @@ const History: React.FC<HistoryProps> = ({ token }) => {
 
   // Initial load + parse URL filters
   useEffect(() => {
+    setMetaTags({
+      title: 'Geçmiş — Çözdüğünüz Testler',
+      description: 'Daha önce çözdüğünüz sınavların detayları ve istatistikleri. Performansınızı takip edin.',
+      keywords: 'geçmiş testler, sınav geçmişi, sınav sonuçları',
+      canonical: '/history',
+      ogImage: '/social-preview.svg'
+    });
     if (!token) return; // defensive: avoid fetching without token
     setLoading(true);
     const params = new URLSearchParams(location.search);
@@ -143,7 +151,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
           px: 2 
         }}
       >
-        <img src="/empty-history.svg" alt="" style={{ width: 180, marginBottom: 24 }} />
+  <img src="/empty-history.svg" alt="Henüz test geçmişiniz yok" style={{ width: 180, marginBottom: 24 }} />
         <Typography variant="h5" color={palette.accent} fontWeight={700}>Henüz test çözmediniz!</Typography>
         <Typography color="text.secondary" mt={1}>Çözdüğünüz sınavlar burada listelenecek.</Typography>
       </Box>
@@ -279,30 +287,47 @@ const History: React.FC<HistoryProps> = ({ token }) => {
                   border: '1px solid rgba(0, 184, 148, 0.2)',
           alignSelf: 'start',
           minHeight: 180,
+          position: 'relative',
                 }}
               >
+              {(() => {
+                // Colored number badge at top-right (single badge)
+                const lvl = (exam.title || exam.examTitle || '').toString().toUpperCase().match(/\b(A1|A2|B1|B2)\b/);
+                const levelIndex = lvl ? (['A1','A2','B1','B2'].indexOf(lvl[1]) + 1) : 1;
+                // Normalize difficulty and add robust fallbacks
+                const totalAns = (Number(exam.correct || 0) + Number(exam.incorrect || 0)) || 0;
+                const ratio = totalAns > 0 ? Number(exam.correct || 0) / totalAns : null;
+                let diffRaw = (exam.difficultyOverall || (exam.difficulty || '')).toString().toLowerCase();
+                if (!diffRaw) {
+                  if (ratio == null) diffRaw = 'orta';
+                  else if (ratio >= 0.75) diffRaw = 'kolay';
+                  else if (ratio <= 0.4) diffRaw = 'zor';
+                  else diffRaw = 'orta';
+                }
+                // Map: kolay/çok kolay -> yellow, orta -> blue, zor/çok zor -> red
+                let bg = '#90caf9'; // default blue for orta
+                let fg = '#0d47a1';
+                if (diffRaw.includes('kolay')) { bg = '#ffd54f'; fg = '#5d4037'; }
+                if (diffRaw.includes('zor')) { bg = '#ef5350'; fg = '#fff'; }
+                const titleTxt = `Zorluk: ${diffRaw}`;
+                return (
+                  <Tooltip title={titleTxt} placement="left">
+                    <Box sx={{ position: 'absolute', top: 8, right: 8, width: 36, height: 36, borderRadius: '50%', bgcolor: bg, color: fg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, boxShadow: '0 2px 8px rgba(0,0,0,0.18)', border: '2px solid #fff', zIndex: 2 }}>
+                      {levelIndex}
+                    </Box>
+                  </Tooltip>
+                );
+              })()}
               {/** Some older records may not have per-question answers saved. */}
               {/** Detect if this record actually has question details we can show. */}
               {(() => {
                 /* no render here; used only to keep types happy in JSX scope */
                 return null;
               })()}
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', mb: 1 }}>
                 <Typography fontWeight={700} fontSize={18}>{exam.title || exam.examTitle}</Typography>
-                {(() => {
-                   const title = (exam.title || exam.examTitle || '').toLowerCase();
-                   let chipColor = { bgcolor: '#90caf9', color: '#19376D' }, chipLabel = exam.category || exam.categoryName;
-                   if (title.includes('erasmus')) {
-                     chipColor = { bgcolor: '#90caf9', color: '#19376D' };
-                   } else if (title.includes('genel')) {
-                     chipColor = { bgcolor: '#43a047', color: '#fff' };
-                   } else if (title.includes('hazırlık')) {
-                     chipColor = { bgcolor: '#e53935', color: '#fff' };
-                   }
-                   return <Chip label={chipLabel} size="small" sx={chipColor} />;
-                 })()}
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, width: '100%' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, width: '100%', pr: 6 }}>
                 <Typography color="text.secondary" fontSize={15} sx={{ flex: 1 }}>
                   {(() => {
                     let dateObj = null;
@@ -316,7 +341,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
                     return '';
                   })()}
                 </Typography>
-                <Box sx={{ minWidth: 90, display: 'flex', justifyContent: 'flex-end' }}>
+                <Box sx={{ minWidth: 90, display: 'flex', justifyContent: 'flex-end', position: 'relative', zIndex: 0 }}>
                   <Chip
                     label={(() => {
                       const duration = exam.duration || exam.totalDuration;

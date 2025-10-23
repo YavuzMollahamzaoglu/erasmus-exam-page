@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import setMetaTags from '../utils/seo';
 import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, Button } from '@mui/material';
 import TopicPreview from '../components/TopicPreview';
@@ -68,6 +69,14 @@ const testData: {
   };
 } = {
   A1: {
+    'Erasmus Sınavı 2': [
+      {
+        id: 'a1-erasmus-2',
+        name: 'Erasmus Sınavı 2',
+        description: 'A1 seviyesinde Erasmus Sınavı 2 soruları için tıklayın.',
+        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+      },
+    ],
     'Erasmus Sınavı 1': [
       {
         id: 'dynamic-a1',
@@ -77,11 +86,11 @@ const testData: {
         isDynamic: true,
       },
     ],
-    'Genel İngilizce 1': [
+    'Genel İngilizce Sınavı 2': [
       {
-        id: 'a1-genel',
-        name: 'Genel İngilizce 1',
-        description: 'A1 seviyesinde Genel İngilizce 1 soruları için tıklayın.',
+        id: 'a1-genel-2',
+        name: 'Genel İngilizce Sınavı 2',
+        description: 'A1 seviyesinde Genel İngilizce Sınavı 2 soruları için tıklayın.',
         img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
       },
     ],
@@ -95,6 +104,14 @@ const testData: {
     ],
   },
   A2: {
+    'Erasmus Sınavı 2': [
+      {
+        id: 'a2-erasmus-2',
+        name: 'Erasmus Sınavı 2',
+        description: 'A2 seviyesinde Erasmus Sınavı 2 soruları için tıklayın.',
+        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+      },
+    ],
     'Erasmus Sınavı 1': [
       {
         id: 'dynamic',
@@ -104,11 +121,11 @@ const testData: {
         isDynamic: true,
       },
     ],
-    'Genel İngilizce 1': [
+    'Genel İngilizce Sınavı 2': [
       {
-        id: 'a2-genel',
-        name: 'Genel İngilizce 1',
-        description: 'A2 seviyesinde Genel İngilizce 1 soruları için tıklayın.',
+        id: 'a2-genel-2',
+        name: 'Genel İngilizce Sınavı 2',
+        description: 'A2 seviyesinde Genel İngilizce Sınavı 2 soruları için tıklayın.',
         img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
       },
     ],
@@ -122,6 +139,22 @@ const testData: {
     ],
   },
   B1: {
+    'Erasmus Sınavı 2': [
+      {
+        id: 'b1-erasmus-2',
+        name: 'Erasmus Sınavı 2',
+        description: 'B1 seviyesinde Erasmus Sınavı 2 soruları için tıklayın.',
+        img: 'https://images.unsplash.com/photo-1523246190605-794f60787378',
+      },
+    ],
+    'Genel İngilizce Sınavı 2': [
+      {
+        id: 'b1-genel-2',
+        name: 'Genel İngilizce Sınavı 2',
+        description: 'B1 seviyesinde Genel İngilizce Sınavı 2 soruları için tıklayın.',
+        img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
+      },
+    ],
     'Erasmus Sınavı 1': [
       {
         id: 'dynamic-b1',
@@ -149,6 +182,22 @@ const testData: {
     ],
   },
   B2: {
+    'Genel İngilizce Sınavı 2': [
+      {
+        id: 'b2-genel-2',
+        name: 'Genel İngilizce Sınavı 2',
+        description: 'B2 seviyesinde Genel İngilizce Sınavı 2 soruları için tıklayın.',
+        img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
+      },
+    ],
+    'Erasmus Sınavı 2': [
+      {
+        id: 'b2-erasmus-2',
+        name: 'Erasmus Sınavı 2',
+        description: 'B2 seviyesinde Erasmus Sınavı 2 soruları için tıklayın.',
+        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+      },
+    ],
     'Erasmus Sınavı 1': [
       {
         id: 'dynamic-b2',
@@ -191,6 +240,13 @@ const Categories: React.FC = () => {
   const [checking, setChecking] = useState(false);
   const [preview, setPreview] = useState<{ open: boolean; category?: string; series?: string; seriesId?: string }>(() => ({ open: false }));
   const [seriesList, setSeriesList] = useState<Array<{ id: string; name: string }>>([]);
+  const [createdA2Genel2, setCreatedA2Genel2] = useState(false);
+  const [createdA1Erasmus2, setCreatedA1Erasmus2] = useState(false);
+  const [createdA2Erasmus2, setCreatedA2Erasmus2] = useState(false);
+  const [createdB1Erasmus2, setCreatedB1Erasmus2] = useState(false);
+  const [createdB2Erasmus2, setCreatedB2Erasmus2] = useState(false);
+  const [createdB1Genel2, setCreatedB1Genel2] = useState(false);
+  const [createdB2Genel2, setCreatedB2Genel2] = useState(false);
 
   // Find a QuestionSeries by combining level (categoryKey) and test name, return its id
   const resolveSeriesId = async (categoryKey: string, testName: string): Promise<string | null> => {
@@ -234,8 +290,40 @@ const Categories: React.FC = () => {
   };
 
   useEffect(() => {
+    setMetaTags({
+      title: 'Kategoriler — Sınav Türlerine Göre Alıştırmalar',
+      description: 'Erasmus ve üniversite hazırlığı için kategori bazlı sınavlar ve alıştırmalar. Dilbilgisi ve kelime pratiğinizi kategoriye göre geliştirin.',
+      keywords: 'sınav kategorileri, erasmus sınavları, ingilizce pratik kategori',
+      canonical: '/categories',
+      ogImage: '/social-preview.svg'
+    });
     checkHealth();
   }, []);
+
+  // Ensure a series exists on the backend; if missing, create and return its id
+  const ensureSeriesId = async (categoryKey: string, testName: string): Promise<string | null> => {
+    // Prefer existing in local state first
+    const local = findSeriesIdLocal(categoryKey, testName);
+    if (local) return local;
+    // Try resolving from backend list
+    const resolved = await resolveSeriesId(categoryKey, testName);
+    if (resolved) return resolved;
+    // Create new series
+    try {
+      const name = `${categoryKey} ${testName}`;
+      const res = await fetch(`${API_URL}/api/series`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      if (!res.ok) return null;
+      const created: { id: string; name: string } = await res.json();
+      setSeriesList((prev) => [...prev, created]);
+      return created.id;
+    } catch {
+      return null;
+    }
+  };
 
   // Fetch QuestionSeries list to bind cards to real series IDs
   useEffect(() => {
@@ -256,6 +344,7 @@ const Categories: React.FC = () => {
     const byLevel: Record<string, Record<string, TestType[]>> = { A1: {}, A2: {}, B1: {}, B2: {} };
     const ensure = (lvl: string, key: string) => (byLevel[lvl][key] = byLevel[lvl][key] || []);
     const norm = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const seen = new Set<string>(); // dedupe per level by display name
     const typeFrom = (name: string) => {
       const n = norm(name);
       if (n.includes('erasmus')) return 'Erasmus Sınavı 1';
@@ -270,15 +359,228 @@ const Categories: React.FC = () => {
       const key = typeFrom(s.name);
       const displayRaw = s.name.replace(/^\s*(A1|A2|B1|B2)\s*/i, '').trim() || key;
       const display = fixTurkish(displayRaw);
+      // Skip rendering of 'Genel İngilizce 1' cards as requested
+      if (display.trim().toLocaleLowerCase('tr-TR') === 'genel ingilizce 1') continue;
+      // Dedupe by (level, display)
+      const dedupeKey = `${lvl}:${norm(display.replace(/\s+/g, ' ').trim())}`;
+      if (seen.has(dedupeKey)) continue;
+      seen.add(dedupeKey);
       ensure(lvl, key).push({
         id: s.id,
         name: display,
-        description: `${lvl} seviyesinde ${key} soruları için tıklayın.`,
+        description: `${lvl} seviyesinde ${display} soruları için tıklayın.`,
         img: getCardImage(key, DEFAULT_IMG.erasmus),
       });
     }
+    // Ensure only one Erasmus card per level (prefer 'Sınavı 2' if present)
+    const enforceSingleErasmus = (lvl: 'A1' | 'A2' | 'B1' | 'B2') => {
+      const types = byLevel[lvl];
+      if (!types) return;
+      const candidates: Array<{ key: string; idx: number; test: TestType }> = [];
+      Object.entries(types).forEach(([k, arr]) => {
+        arr.forEach((t, i) => {
+          const n = norm(String(t.name));
+          if (n.includes('erasmus') && n.includes('sinavi')) candidates.push({ key: k, idx: i, test: t });
+        });
+      });
+      if (candidates.length <= 1) return;
+      const preferred = candidates.find(c => norm(String(c.test.name)).includes('sinavi 2')) || candidates[0];
+      candidates.forEach(c => {
+        if (c !== preferred) {
+          types[c.key] = types[c.key].filter((_, i) => i !== c.idx);
+        }
+      });
+    };
+    enforceSingleErasmus('A1');
+    enforceSingleErasmus('A2');
+    enforceSingleErasmus('B1');
+    enforceSingleErasmus('B2');
     return byLevel;
   }, [seriesList]);
+
+  // Ensure 'A2 Genel İngilizce Sınavı 2' exists so its card appears even in dynamic mode
+  useEffect(() => {
+    const allowAuto = String(process.env.REACT_APP_ALLOW_AUTO_SERIES_CREATE || '').toLowerCase();
+    if (allowAuto !== '1' && allowAuto !== 'true') return; // auto-creates disabled by default
+    const run = async () => {
+      if (createdA2Genel2) return;
+      const targetName = 'A2 Genel İngilizce Sınavı 2';
+      const normalizeName = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+      const exists = seriesList.some(s => normalizeName(s.name) === normalizeName(targetName));
+      if (exists) { setCreatedA2Genel2(true); return; }
+      try {
+        const res = await fetch(`${API_URL}/api/series`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: targetName })
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setSeriesList(prev => [...prev, created]);
+          setCreatedA2Genel2(true);
+        }
+      } catch {
+        // ignore; user can still create on first click via ensureSeriesId
+      }
+    };
+    if (seriesList) run();
+  }, [seriesList, API_URL, createdA2Genel2]);
+
+  // Ensure 'A1 Erasmus Sınavı 2'
+  useEffect(() => {
+    const allowAuto = String(process.env.REACT_APP_ALLOW_AUTO_SERIES_CREATE || '').toLowerCase();
+    if (allowAuto !== '1' && allowAuto !== 'true') return;
+    const run = async () => {
+      if (createdA1Erasmus2) return;
+      const targetName = 'A1 Erasmus Sınavı 2';
+      const normalizeName = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+      const exists = seriesList.some(s => normalizeName(s.name) === normalizeName(targetName));
+      if (exists) { setCreatedA1Erasmus2(true); return; }
+      try {
+        const res = await fetch(`${API_URL}/api/series`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: targetName })
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setSeriesList(prev => [...prev, created]);
+          setCreatedA1Erasmus2(true);
+        }
+      } catch {}
+    };
+    if (seriesList) run();
+  }, [seriesList, API_URL, createdA1Erasmus2]);
+
+  // Ensure 'A2 Erasmus Sınavı 2'
+  useEffect(() => {
+    const allowAuto = String(process.env.REACT_APP_ALLOW_AUTO_SERIES_CREATE || '').toLowerCase();
+    if (allowAuto !== '1' && allowAuto !== 'true') return;
+    const run = async () => {
+      if (createdA2Erasmus2) return;
+      const targetName = 'A2 Erasmus Sınavı 2';
+      const normalizeName = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+      const exists = seriesList.some(s => normalizeName(s.name) === normalizeName(targetName));
+      if (exists) { setCreatedA2Erasmus2(true); return; }
+      try {
+        const res = await fetch(`${API_URL}/api/series`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: targetName })
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setSeriesList(prev => [...prev, created]);
+          setCreatedA2Erasmus2(true);
+        }
+      } catch {}
+    };
+    if (seriesList) run();
+  }, [seriesList, API_URL, createdA2Erasmus2]);
+
+  // Ensure 'B1 Erasmus Sınavı 2'
+  useEffect(() => {
+    const allowAuto = String(process.env.REACT_APP_ALLOW_AUTO_SERIES_CREATE || '').toLowerCase();
+    if (allowAuto !== '1' && allowAuto !== 'true') return;
+    const run = async () => {
+      if (createdB1Erasmus2) return;
+      const targetName = 'B1 Erasmus Sınavı 2';
+      const normalizeName = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+      const exists = seriesList.some(s => normalizeName(s.name) === normalizeName(targetName));
+      if (exists) { setCreatedB1Erasmus2(true); return; }
+      try {
+        const res = await fetch(`${API_URL}/api/series`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: targetName })
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setSeriesList(prev => [...prev, created]);
+          setCreatedB1Erasmus2(true);
+        }
+      } catch {}
+    };
+    if (seriesList) run();
+  }, [seriesList, API_URL, createdB1Erasmus2]);
+
+  // Ensure 'B2 Erasmus Sınavı 2'
+  useEffect(() => {
+    const allowAuto = String(process.env.REACT_APP_ALLOW_AUTO_SERIES_CREATE || '').toLowerCase();
+    if (allowAuto !== '1' && allowAuto !== 'true') return;
+    const run = async () => {
+      if (createdB2Erasmus2) return;
+      const targetName = 'B2 Erasmus Sınavı 2';
+      const normalizeName = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+      const exists = seriesList.some(s => normalizeName(s.name) === normalizeName(targetName));
+      if (exists) { setCreatedB2Erasmus2(true); return; }
+      try {
+        const res = await fetch(`${API_URL}/api/series`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: targetName })
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setSeriesList(prev => [...prev, created]);
+          setCreatedB2Erasmus2(true);
+        }
+      } catch {}
+    };
+    if (seriesList) run();
+  }, [seriesList, API_URL, createdB2Erasmus2]);
+
+  // Ensure 'B1 Genel İngilizce Sınavı 2'
+  useEffect(() => {
+    const allowAuto = String(process.env.REACT_APP_ALLOW_AUTO_SERIES_CREATE || '').toLowerCase();
+    if (allowAuto !== '1' && allowAuto !== 'true') return;
+    const run = async () => {
+      if (createdB1Genel2) return;
+      const targetName = 'B1 Genel İngilizce Sınavı 2';
+      const normalizeName = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+      const exists = seriesList.some(s => normalizeName(s.name) === normalizeName(targetName));
+      if (exists) { setCreatedB1Genel2(true); return; }
+      try {
+        const res = await fetch(`${API_URL}/api/series`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: targetName })
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setSeriesList(prev => [...prev, created]);
+          setCreatedB1Genel2(true);
+        }
+      } catch {}
+    };
+    if (seriesList) run();
+  }, [seriesList, API_URL, createdB1Genel2]);
+
+  // Ensure 'B2 Genel İngilizce Sınavı 2'
+  useEffect(() => {
+    const allowAuto = String(process.env.REACT_APP_ALLOW_AUTO_SERIES_CREATE || '').toLowerCase();
+    if (allowAuto !== '1' && allowAuto !== 'true') return;
+    const run = async () => {
+      if (createdB2Genel2) return;
+      const targetName = 'B2 Genel İngilizce Sınavı 2';
+      const normalizeName = (s: string) => s.toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+      const exists = seriesList.some(s => normalizeName(s.name) === normalizeName(targetName));
+      if (exists) { setCreatedB2Genel2(true); return; }
+      try {
+        const res = await fetch(`${API_URL}/api/series`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: targetName })
+        });
+        if (res.ok) {
+          const created = await res.json();
+          setSeriesList(prev => [...prev, created]);
+          setCreatedB2Genel2(true);
+        }
+      } catch {}
+    };
+    if (seriesList) run();
+  }, [seriesList, API_URL, createdB2Genel2]);
 
   return (
     <Box sx={{ 
@@ -304,33 +606,32 @@ const Categories: React.FC = () => {
         </Box>
       )}
 
-      <Paper 
-        elevation={6} 
-        sx={{ 
-          maxWidth: 1200, 
-          width: '100%', 
-          borderRadius: 4, 
-          overflow: 'hidden', 
+      <Paper
+        elevation={6}
+        sx={{
+          maxWidth: 1200,
+          width: '100%',
+          borderRadius: 4,
+          overflow: 'visible',
           mt: { xs: 1, md: '15px' },
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
           backdropFilter: 'blur(10px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-          transition: 'transform 0.3s ease'
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)'
         }}
       >
-        {/* Gradient header like Rankings, merged with top and inheriting radii */}
-        <Box sx={{ 
-          background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', 
-          color: '#fff', 
-          p: { xs: 3, md: 4 }, 
+        {/* Gradient header */}
+        <Box sx={{
+          background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+          color: '#fff',
+          p: { xs: 3, md: 4 },
           borderTopLeftRadius: 'inherit',
           borderTopRightRadius: 'inherit',
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
           textAlign: 'center',
           position: 'relative',
-          overflow: 'hidden',
+          overflow: 'visible',
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -340,16 +641,30 @@ const Categories: React.FC = () => {
             bottom: 0,
             background: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(5px)',
-            zIndex: 0,
+            zIndex: 0
           }
         }}>
-          <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography variant="h3" fontWeight={700} mb={1} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: { xs: '2rem', md: '2.5rem' } }}>Sınav Kategorileri</Typography>
+          <Box sx={{ position: 'relative', zIndex: 1, overflow: 'visible' }}>
+            <Typography
+              variant="h3"
+              fontWeight={700}
+              mb={1}
+              sx={{
+                textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                fontSize: { xs: '2rem', md: '2.5rem' },
+                position: 'relative',
+                left: { xs: '-3px', md: '-3px' },
+                ml: { xs: '-3px', md: '-3px' },
+                overflow: 'visible'
+              }}
+            >
+              Sınav Kategorileri
+            </Typography>
             <Typography variant="h6" sx={{ opacity: 0.9, mb: 2 }}>Seviyene ve kategorine uygun testi seç</Typography>
-            
+
             {/* Bilgilendirme metni */}
-            <Typography variant="body1" sx={{ 
-              opacity: 1, 
+            <Typography variant="body1" sx={{
+              opacity: 1,
               fontSize: { xs: '0.95rem', md: '1.05rem' },
               lineHeight: 1.7,
               maxWidth: 900,
@@ -359,9 +674,9 @@ const Categories: React.FC = () => {
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
               mt: 2
             }}>
-              Bazı testlerde 4, bazılarında 5 seçenekli sorular bulunabilir ve bu durum üniversite sınavlarındaki çeşitliliği yansıtmaktadır. 
-              Genel İngilizce testleri aynı zamanda akademik İngilizce sınavlarına uygun içerik sunar ve sorular genel olarak kelime bilgisi 
-              ile gramer konularını ölçmektedir. Sınavların kendi seviyesinde zorluk dereceleri değişmektedir. Her testten önce ön izlemeyi 
+              Bazı testlerde 4, bazılarında 5 seçenekli sorular bulunabilir ve bu durum üniversite sınavlarındaki çeşitliliği yansıtmaktadır.
+              Genel İngilizce testleri aynı zamanda akademik İngilizce sınavlarına uygun içerik sunar ve sorular genel olarak kelime bilgisi
+              ile gramer konularını ölçmektedir. Sınavların kendi seviyesinde zorluk dereceleri değişmektedir. Her testten önce ön izlemeyi
               inceleyerek nelerle karşılaşacağınız hakkında bilgi alabilirsiniz.
             </Typography>
           </Box>
@@ -417,13 +732,31 @@ const Categories: React.FC = () => {
                             transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                             '&:hover': { boxShadow: '0 12px 30px rgba(0,0,0,0.12)', transform: 'translateY(-3px)' },
                           }}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`${categoryKey} ${test.name} kartı, tıklayın`}
                           onClick={async () => {
                             if (dynamicData) {
                               navigate(`/exam/${test.id}`);
                             } else {
-                              // Try to resolve a real series id
-                              const sid = await resolveSeriesId(categoryKey, test.name);
-                              navigate(`/exam/${sid || test.id}`);
+                              // Ensure a real series exists, create if needed
+                              const sid = await ensureSeriesId(categoryKey, test.name);
+                              if (sid) navigate(`/exam/${sid}`);
+                              else {
+                                const fallback = await resolveSeriesId(categoryKey, test.name);
+                                navigate(`/exam/${fallback || test.id}`);
+                              }
+                            }
+                          }}
+                          onKeyDown={async (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              if (dynamicData) {
+                                navigate(`/exam/${test.id}`);
+                              } else {
+                                const sid = await resolveSeriesId(categoryKey, test.name);
+                                navigate(`/exam/${sid || test.id}`);
+                              }
                             }
                           }}
                         >
@@ -455,12 +788,13 @@ const Categories: React.FC = () => {
                             <Button
                               size="small"
                               variant="outlined"
-                              onClick={(e) => { 
+                              onClick={async (e) => { 
                                 e.stopPropagation(); 
                                 if (dynamicData) {
                                   setPreview({ open: true, seriesId: String(test.id) } as any);
                                 } else {
-                                  const sid = findSeriesIdLocal(categoryKey, String(test.name));
+                                  // Create series if missing so preview can analyze
+                                  const sid = await ensureSeriesId(categoryKey, String(test.name));
                                   if (sid) setPreview({ open: true, seriesId: sid } as any);
                                   else setPreview({ open: true, category: categoryKey, series: String(test.name).replace(/\s*\d+$/, '') });
                                 }
@@ -514,7 +848,11 @@ const DynamicA1Card: React.FC<{ serverOnline: boolean; onCheck: () => void; chec
         '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 30px rgba(0,0,0,0.12)' },
         opacity: serverOnline ? 1 : 0.9,
       }}
+      role="button"
+      tabIndex={0}
+      aria-label={`A1 Erasmus Sınavı 1 kartı, tıklayın`}
       onClick={handleClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
     >
       <Box
         component="img"
@@ -567,7 +905,11 @@ const DynamicA2Card: React.FC<{ serverOnline: boolean; onCheck: () => void; chec
         '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 30px rgba(0,0,0,0.12)' },
         opacity: serverOnline ? 1 : 0.9,
       }}
+      role="button"
+      tabIndex={0}
+      aria-label={`A2 Erasmus Sınavı 1 kartı, tıklayın`}
       onClick={handleClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
     >
       <Box
         component="img"
@@ -620,7 +962,11 @@ const DynamicB1Card: React.FC<{ serverOnline: boolean; onCheck: () => void; chec
         '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 30px rgba(0,0,0,0.12)' },
         opacity: serverOnline ? 1 : 0.9,
       }}
+      role="button"
+      tabIndex={0}
+      aria-label={`B1 Erasmus Sınavı 1 kartı, tıklayın`}
       onClick={handleClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
     >
       <Box
         component="img"
@@ -673,7 +1019,11 @@ const DynamicB2Card: React.FC<{ serverOnline: boolean; onCheck: () => void; chec
         '&:hover': { transform: 'translateY(-3px)', boxShadow: '0 12px 30px rgba(0,0,0,0.12)' },
         opacity: serverOnline ? 1 : 0.9,
       }}
+      role="button"
+      tabIndex={0}
+      aria-label={`B2 Erasmus Sınavı 1 kartı, tıklayın`}
       onClick={handleClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
     >
       <Box
         component="img"

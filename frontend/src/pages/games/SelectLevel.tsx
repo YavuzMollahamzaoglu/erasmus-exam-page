@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import setMetaTags from '../../utils/seo';
 import { Box, Typography, Button, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +11,15 @@ const levels = [
 ];
 
 export default function SelectLevel({ game }: { game: "kelime-avi" | "yazi-yazma" | "kelime-eslestirme" | "okuma" }) {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Seviye Seçimi — Oyun Seçin ve Başlayın',
+      description: 'Oynamak istediğiniz oyun için seviye seçin: Kelime Avı, Yazma, Okuma ve daha fazlası. Hemen pratik yapın.',
+      keywords: 'seviye seçimi, oyunlar, kelime avı, yazma pratik, okuma',
+      canonical: '/select-level',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
   const navigate = useNavigate();
   const handleSelect = (level: string) => {
     if (game === 'kelime-avi') {
@@ -58,6 +68,26 @@ export default function SelectLevel({ game }: { game: "kelime-avi" | "yazi-yazma
             backdropFilter: 'blur(5px)'
           }
         }}>
+          {/* Klasik Sorulara Dön */}
+          <Button
+            aria-label="Klasik Sorulara Dön"
+            onClick={() => navigate('/questions')}
+            size="small"
+            variant="outlined"
+            sx={{
+              position: 'absolute',
+              display: { xs: 'none', md: 'inline-flex' },
+              right: { md: 12 },
+              top: { md: 12 },
+              color: '#fff',
+              borderColor: 'rgba(255,255,255,0.7)',
+              textTransform: 'none',
+              fontWeight: 700,
+              '&:hover': { borderColor: '#fff', backgroundColor: 'rgba(255,255,255,0.12)' }
+            }}
+          >
+            Klasik Sorulara Dön
+          </Button>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Typography variant="h4" fontWeight={800} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.15)' }}>
               Seviye Seçin
@@ -101,6 +131,27 @@ export default function SelectLevel({ game }: { game: "kelime-avi" | "yazi-yazma
             <Typography variant="body2" sx={{ color: '#607d8b' }}>
               Seviyenizi bilmiyorsanız A1 ile başlayıp ilerleyebilirsiniz. Dilediğiniz an geri dönebilirsiniz.
             </Typography>
+            {/* Mobile-only duplicate of the header button: placed under helper text */}
+            <Box sx={{ mt: 2, display: { xs: 'block', md: 'none' } }}>
+              <Button
+                aria-label="Klasik Sorulara Dön (mobil)"
+                onClick={() => navigate('/questions')}
+                size="small"
+                variant="outlined"
+                sx={{
+                  color: '#00695c',
+                  borderColor: 'rgba(0,0,0,0.08)',
+                  textTransform: 'none',
+                  fontWeight: 700,
+                  px: 2.5,
+                  py: 0.7,
+                  borderRadius: 3,
+                  background: 'rgba(255,255,255,0.9)'
+                }}
+              >
+                Klasik Sorulara Dön
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Paper>

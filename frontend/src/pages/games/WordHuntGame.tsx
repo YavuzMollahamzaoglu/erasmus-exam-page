@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, LinearProgress, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
@@ -44,6 +45,13 @@ export default function WordHuntGame() {
   
   // Fetch questions from API
   useEffect(() => {
+    setMetaTags({
+      title: 'Kelime Avı — Kelime Oyunu',
+      description: 'Kelime avı oyunu ile kelime bilginizi eğlenceli şekilde geliştirin. Seviye seçerek pratik yapın.',
+      keywords: 'kelime oyunu, kelime avı, kelime çalışması',
+      canonical: '/kelime-avi',
+      ogImage: '/social-preview.svg'
+    });
     const fetchQuestions = async () => {
       try {
         setLoading(true);

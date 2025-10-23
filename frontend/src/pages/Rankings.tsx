@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 interface Props {
@@ -25,6 +26,13 @@ const Rankings: React.FC<Props> = ({ token }) => {
   const [me, setMe] = useState<any>(null);
 
   useEffect(() => {
+    setMetaTags({
+      title: 'Sıralama — En Başarılı Öğrenciler',
+      description: 'Öğrencilerin sınav başarılarına göre sıralandığı tablo. Başarıları takip edin ve kendinizi karşılaştırın.',
+      keywords: 'sıralama, leaderboard, sınav puanları',
+      canonical: '/rankings',
+      ogImage: '/social-preview.svg'
+    });
     if (!token) return;
     (async () => {
       try {
@@ -248,7 +256,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                       {r.user?.profilePhoto ? (
                         <img
                           src={`http://localhost:4000${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}`}
-                          alt="profile"
+                          alt={r.user?.name ? `${r.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
                           style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flex: '0 0 auto', border: '1px solid rgba(0,0,0,0.08)' }}
                         />
                       ) : (
@@ -321,7 +329,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                 {me?.profilePhoto ? (
                   <img
                     src={`http://localhost:4000${me.profilePhoto}?t=${Date.now()}`}
-                    alt="me"
+                    alt={me?.name ? `${me.name} adlı kullanıcının profili` : 'Benim profil fotoğrafım'}
                     style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894' }}
                   />
                 ) : (
@@ -438,7 +446,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                     {c.user?.profilePhoto ? (
                       <img
                         src={`http://localhost:4000${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}`}
-                        alt="profile"
+                        alt={c.user?.name ? `${c.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
                         style={{ 
                           width: 40, 
                           height: 40, 

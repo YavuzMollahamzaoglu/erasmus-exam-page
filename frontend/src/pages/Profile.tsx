@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import setMetaTags from '../utils/seo';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { Box, Typography, Button, Paper, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
 
@@ -107,6 +108,13 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
   };
 
   useEffect(() => {
+    setMetaTags({
+      title: 'Profilim — Hesabım',
+      description: 'Kişisel profil bilgilerinizi görüntüleyin ve güncelleyin. Profil fotoğrafı ve hesap ayarları.',
+      keywords: 'profilim, hesap, kullanıcı bilgileri',
+      canonical: '/profile',
+      ogImage: '/social-preview.svg'
+    });
     if (!token) return;
     fetchProfile();
     // eslint-disable-next-line

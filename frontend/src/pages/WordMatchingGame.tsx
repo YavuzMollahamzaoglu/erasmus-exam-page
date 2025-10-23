@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Paper, Typography, Button, Alert, Fade } from '@mui/material';
+import setMetaTags from '../utils/seo';
+import { Box, Paper, Typography, Button, Alert, Fade, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+ 
 
 type WordPair = {
   id: number; // internal sequential id for matching
@@ -48,6 +50,15 @@ const shuffle = <T,>(arr: T[]): T[] => {
 };
 
 export default function WordMatchingGame() {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Kelime Eşleştirme — Kelime Oyunu',
+      description: 'Kelime eşleştirme oyunu ile kelime bilginizi eşleştirerek güçlendirin. Seviye ve set seçerek başlayın.',
+      keywords: 'kelime eşleştirme, kelime oyunu, kelime çalışması',
+      canonical: '/kelime-eslestirme',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const level = (searchParams.get('level') || 'a1').toUpperCase();
@@ -271,19 +282,39 @@ export default function WordMatchingGame() {
       <Paper elevation={6} sx={{ p: 0, borderRadius: 4, minWidth: 340, width: '100%', maxWidth: 1000, mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         {/* Header */}
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
-          <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/kelime-eslestirme')} sx={{ color: '#fff', fontWeight: 600 }}>
-            Geri
-          </Button>
-          <Box sx={{ textAlign: 'center', flex: 1 }}>
-            <Typography variant="h5" fontWeight={700} mb={1}>
+          {/* Mobile stacked back (icon above label) */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 56 }}>
+            <IconButton onClick={() => navigate('/kelime-eslestirme')} sx={{ color: '#fff', p: 0.5 }} aria-label="Geri">
+              <ArrowBackIcon sx={{ fontSize: 26 }} />
+            </IconButton>
+            <Typography variant="caption" sx={{ mt: 0.25, color: '#fff', fontWeight: 700 }}>Geri</Typography>
+          </Box>
+
+          {/* Title - centered on mobile using absolute positioning to avoid shift from side buttons */}
+          <Box sx={{ textAlign: 'center', flex: 1, position: { xs: 'absolute', md: 'static' }, left: { xs: '50%', md: 'auto' }, transform: { xs: 'translateX(-50%)', md: 'none' }, zIndex: 1 }}>
+            <Typography variant="h5" fontWeight={700} mb={1} sx={{ fontSize: { xs: '1.1rem', md: '1.25rem' } }}>
               Kelime Eşleştirme
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.9 }}>
               Seviye: {level}
             </Typography>
           </Box>
+
+          {/* Right controls - shrink on mobile and tighten icon spacing */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <Button startIcon={<RefreshIcon />} onClick={handleNewWords} sx={{ color: '#fff', fontWeight: 600 }}>
+            {/* Mobile: stacked refresh icon + short label */}
+            <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 56 }}>
+                <IconButton onClick={handleNewWords} sx={{ color: '#fff', p: 0.5 }} aria-label="Yeni Kelimeler">
+                  <RefreshIcon sx={{ fontSize: 22 }} />
+                </IconButton>
+                <Typography variant="caption" sx={{ mt: 0.25, color: '#fff', fontWeight: 700, lineHeight: 1 }}>
+                  <span style={{ display: 'block' }}>Yeni</span>
+                  <span style={{ display: 'block', fontSize: 11 }}>Kelimeler</span>
+                </Typography>
+              </Box>
+
+            {/* Desktop: full text button */}
+            <Button onClick={handleNewWords} startIcon={<RefreshIcon sx={{ fontSize: 20 }} />} sx={{ display: { xs: 'none', md: 'inline-flex' }, color: '#fff', fontWeight: 600, textTransform: 'none', px: 2, py: 0.5 }}>
               Yeni Kelimeler
             </Button>
           </Box>
@@ -346,7 +377,9 @@ export default function WordMatchingGame() {
                           opacity: w.used ? 0.35 : 1,
                           borderRadius: 2,
                           p: 1.2,
-                          textAlign: 'center',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                           color: '#fff',
                           fontWeight: 700,
                           fontSize: { xs: 12, sm: 14 },
@@ -416,7 +449,29 @@ export default function WordMatchingGame() {
               </Button>
             )}
           </Box>
+          {/* Finish button below actions to go to classic questions */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 0.5, mb: 3 }}>
+            <Button
+              aria-label="Bitir ve Klasik Sorulara Dön"
+              onClick={() => navigate('/questions')}
+              sx={{
+                textTransform: 'none',
+                fontWeight: 700,
+                borderRadius: 3,
+                px: 3,
+                py: 1.1,
+                background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                color: '#fff',
+                boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
+                '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' }
+              }}
+              variant="contained"
+            >
+              Bitir
+            </Button>
+          </Box>
       </Paper>
+      
     </Box>
   );
 }

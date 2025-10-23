@@ -19,6 +19,7 @@ const TopicPreview: React.FC<Props> = ({ category, series, categoryId, seriesId 
   const [grammar, setGrammar] = useState<Topic[] | null>(null);
   const [total, setTotal] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [difficultyOverall, setDifficultyOverall] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -35,16 +36,23 @@ const TopicPreview: React.FC<Props> = ({ category, series, categoryId, seriesId 
   setLoading(true);
   fetch(`${API_URL}/api/topics/preview?${params.toString()}`)
       .then(async (r) => {
-        const ct = r.headers.get('content-type') || '';
-        if (!r.ok || !ct.includes('application/json')) {
-          throw new Error(`status ${r.status}`);
+        // Be tolerant to wrong content-type: parse as text first
+        const text = await r.text();
+        if (!r.ok) throw new Error(`status ${r.status}`);
+        let json: any = null;
+        try { json = JSON.parse(text); }
+        catch {
+          const m = text.match(/\{[\s\S]*\}/);
+          if (m) json = JSON.parse(m[0]);
+          else throw new Error('JSON parse error');
         }
-        return r.json();
+        return json;
       })
       .then(json => {
         setTopics(json.topics || []);
-    setGrammar(json.grammar || null);
+        setGrammar(json.grammar || null);
         setTotal(json.total || 0);
+        setDifficultyOverall(json.difficulty?.overall || null);
         setLoading(false);
       })
       .catch((e) => {
@@ -87,10 +95,27 @@ const TopicPreview: React.FC<Props> = ({ category, series, categoryId, seriesId 
     return tr ? `${name} (${tr})` : name;
   };
 
+  const diffChip = (() => {
+    if (!difficultyOverall) return null;
+    const diff = (difficultyOverall || '').toString().toLowerCase();
+    let bg = '#90caf9', fg = '#083a6b', bd = '#64b5f6'; // orta -> blue
+    if (diff.includes('kolay')) { bg = '#fff3cd'; fg = '#5d4037'; bd = '#ffe082'; }
+    if (diff.includes('zor')) { bg = '#ffcdd2'; fg = '#8a1c1c'; bd = '#ef9a9a'; }
+    return (
+      <Chip
+        size="small"
+        aria-label={`Zorluk: ${diff}`}
+        label={`Zorluk: ${diff}`}
+        sx={{ bgcolor: bg, color: fg, border: `1px solid ${bd}` }}
+      />
+    );
+  })();
+
   return (
     <Box sx={{ mt: 1.25 }}>
-      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
-  {useItems.slice(0, 4).map((t, i) => (
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1, alignItems: 'center' }}>
+        {diffChip}
+        {useItems.slice(0, 4).map((t, i) => (
           <Chip key={t.name}
             size="small"
             label={`${labelTR(t.name)} • ${t.percentage ?? Math.round((t.count/(total||1))*100)}% • ${t.count} soru`}

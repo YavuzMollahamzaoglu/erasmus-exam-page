@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Paper, Typography, Button } from '@mui/material';
 import TravelExploreRoundedIcon from '@mui/icons-material/TravelExploreRounded';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
@@ -6,6 +6,7 @@ import ShortTextRoundedIcon from '@mui/icons-material/ShortTextRounded';
 import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 import ExtensionRoundedIcon from '@mui/icons-material/ExtensionRounded';
 import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
+import setMetaTags from '../utils/seo';
 
 const games = [
 	{
@@ -53,6 +54,15 @@ const games = [
 ];
 
 const Questions: React.FC = () => {
+	useEffect(() => {
+		setMetaTags({
+			title: 'Sınavlar — İngilizce Deneme Sınavları',
+			description: 'Gerçek sınav formatında İngilizce deneme sınavları ve alıştırmalar. Erasmus ve B1 sınavlarına hazırlık için pratik yapın.',
+			keywords: 'deneme sınavı, ingilizce sınav, erasmus deneme, b1 hazırlık',
+			canonical: '/questions',
+			ogImage: '/social-preview.svg'
+		});
+	}, []);
 	return (
 		<Box
 			sx={{

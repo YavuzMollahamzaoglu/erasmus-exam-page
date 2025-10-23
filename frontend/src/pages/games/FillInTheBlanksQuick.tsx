@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useNavigate } from 'react-router-dom';
+ 
 
 interface FillInTheBlanksQuestion {
   id: string;
@@ -32,6 +34,13 @@ const FillInTheBlanksQuick: React.FC = () => {
   const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
+    setMetaTags({
+      title: 'Hızlı Boşluk Doldurma — Pratik Modu',
+      description: 'Hızlı boşluk doldurma modu ile hız ve doğruluk geliştir. Kısa sürede çok sayıda soru çözün.',
+      keywords: 'hızlı boşluk doldurma, quick fill, pratik modu',
+      canonical: '/bosluk-doldurma-quick',
+      ogImage: '/social-preview.svg'
+    });
     const fetchQuestions = async () => {
       try {
         setLoading(true);
@@ -409,6 +418,7 @@ const FillInTheBlanksQuick: React.FC = () => {
           </Box>
         </Box>
       )}
+      
     </Box>
   );
 };

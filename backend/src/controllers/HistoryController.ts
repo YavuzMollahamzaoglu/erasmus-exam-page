@@ -48,23 +48,74 @@ const HistoryController = {
         merged.push(withAns || arr[0]);
       }
 
+      // Lookup difficulty previews in bulk by seriesId
+      const uniqueSeriesIds = Array.from(
+        new Set(
+          merged
+            .map((t: any) => t.seriesId)
+            .filter((id: any) => typeof id === "string" && id.length > 0)
+        )
+      );
+      let previewsBySeries: Record<string, any> = {};
+      if (uniqueSeriesIds.length) {
+        try {
+          const previews = await (prisma as any).examPreview.findMany({
+            where: { seriesId: { in: uniqueSeriesIds } },
+            select: { seriesId: true, difficulty: true },
+          });
+          previewsBySeries = Object.fromEntries(
+            previews.map((p: any) => [p.seriesId, p])
+          );
+        } catch (e) {
+          // ignore preview join errors; continue without difficulty
+          previewsBySeries = {};
+        }
+      }
+
       // Back to simple title: series name or 'Test'
-      const history = merged.map((test) => ({
-        id: test.id,
-        title: test.series?.name || "Test",
-        category: test.category,
-        date: test.createdAt,
-        duration: test.time + " sn",
-        correct: test.correct,
-        incorrect: test.mistakes,
-        questions: test.answers.map((ans) => ({
-          text: ans.question.text,
-          userAnswer: ans.selected,
-          isCorrect: ans.correct,
-          correctAnswer: ans.question.correct,
-          explanation: ans.question.explanation,
-        })),
-      }));
+      const history = merged.map((test) => {
+        const seriesId = (test as any).seriesId || undefined;
+        const prev = seriesId ? previewsBySeries[seriesId] : undefined;
+        let difficultyOverall: string | null = null;
+        if (prev && prev.difficulty && prev.difficulty.overall) {
+          difficultyOverall = String(prev.difficulty.overall);
+        } else {
+          // Heuristic fallback using avg question text length
+          try {
+            const texts = (test.answers || []).map(
+              (a: any) => a?.question?.text || ""
+            );
+            const totalLen = texts.reduce(
+              (s: number, t: string) => s + (t?.length || 0),
+              0
+            );
+            const avg = texts.length ? totalLen / texts.length : 0;
+            if (avg <= 60) difficultyOverall = "kolay";
+            else if (avg >= 180) difficultyOverall = "zor";
+            else difficultyOverall = "orta";
+          } catch {
+            difficultyOverall = null;
+          }
+        }
+        return {
+          id: test.id,
+          title: test.series?.name || "Test",
+          category: test.category,
+          date: test.createdAt,
+          duration: test.time + " sn",
+          correct: test.correct,
+          incorrect: test.mistakes,
+          seriesId,
+          difficultyOverall,
+          questions: test.answers.map((ans) => ({
+            text: ans.question.text,
+            userAnswer: ans.selected,
+            isCorrect: ans.correct,
+            correctAnswer: ans.question.correct,
+            explanation: ans.question.explanation,
+          })),
+        };
+      });
 
       res.json({ history });
     } catch (err) {

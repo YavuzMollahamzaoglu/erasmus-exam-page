@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import setMetaTags from '../utils/seo';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, Button, CircularProgress, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -46,6 +47,13 @@ const Exam: React.FC = () => {
   };
 
   useEffect(() => {
+    setMetaTags({
+      title: 'Sınav — Deneme Sınavı',
+      description: 'Gerçek sınav formatında deneme sınavı. Süre ve puanlama ile pratik yapın.',
+      keywords: 'deneme sınavı, ingilizce sınav, online sınav',
+      canonical: `/exam${testId ? `/${testId}` : ''}`,
+      ogImage: '/social-preview.svg'
+    });
     // Fetch if no state or empty state provided
     if (!location.state?.questions || location.state.questions.length === 0) {
       setLoading(true);
@@ -233,6 +241,20 @@ const Exam: React.FC = () => {
   }
 
   const q = questions[current];
+  // Robustly fetch explanation: backend may store it under different keys (explanation_tr, explanation_A, etc.)
+  const getExplanation = (question: any): string | undefined => {
+    if (!question || typeof question !== 'object') return undefined;
+    // Prefer exact keys first
+    const preferred = ['explanation', 'explanation_tr', 'explanation_tr_a', 'explanation_A', 'explanationTr', 'explanation_tr'];
+    for (const k of preferred) {
+      if (Object.prototype.hasOwnProperty.call(question, k) && question[k]) return question[k];
+    }
+    // Fallback: any key that contains 'explan' (case-insensitive)
+    const found = Object.keys(question).find(k => /explan/i.test(k) && question[k]);
+    if (found) return question[found];
+    return undefined;
+  };
+  const explanation = getExplanation(q);
   // Ensure options is always an array
   let options: string[] = [];
   if (Array.isArray(q.options)) {
@@ -273,6 +295,8 @@ const Exam: React.FC = () => {
     } else {
       setMistakes((m) => m + 1);
     }
+    // Show explanation immediately after selection so users see why the answer is correct/wrong
+    setShowExplanation(true);
   };
 
   const nextQuestion = () => {
@@ -287,9 +311,9 @@ const Exam: React.FC = () => {
 
   // Sınavı history'ye kaydet (explicit payload to avoid stale state)
   const saveToHistory = async (payload?: { correct: number; incorrect: number; duration: number; answersArray: (string | null)[] }) => {
-  const token = localStorage.getItem('token');
-  // Kullanıcı giriş yapmadıysa history kaydı denemeyelim; sessizce çık
-  if (!token) return;
+    const token = localStorage.getItem('token');
+    // Kullanıcı giriş yapmadıysa history kaydı denemeyelim; sessizce çık
+    if (!token) return;
     try {
       const res = await fetch('http://localhost:4000/api/history', {
         method: 'POST',
@@ -326,8 +350,8 @@ const Exam: React.FC = () => {
       }
     } catch (e) {
       // eslint-disable-next-line no-console
-  console.error('History save network error:', e);
-  // silence network errors for history save to avoid user confusion
+      console.error('History save network error:', e);
+      // silence network errors for history save to avoid user confusion
     }
   };
 
@@ -463,6 +487,35 @@ const Exam: React.FC = () => {
       pt: { xs: 2, md: 4, lg: 6 },
       pb: { xs: 12, md: 16 }
     }}>
+      {/* Fixed top-left Finish button (aligned with fixed timer) for tablet/desktop */}
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'flex' },
+          position: 'fixed',
+          top: { md: 84, lg: 96 },
+          left: { md: 20, lg: 28 },
+          zIndex: 1200,
+        }}
+      >
+        <Button
+          onClick={handleFinish}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 800,
+            borderRadius: 3,
+            px: { md: 2, lg: 2.5 },
+            py: { md: 0.75, lg: 1 },
+            boxShadow: '0 10px 24px rgba(0,0,0,0.12)',
+            background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.25)',
+            backdropFilter: 'blur(8px)',
+            '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' },
+          }}
+        >
+          Testi Bitir
+        </Button>
+      </Box>
       {/* Fixed timer for tablet/desktop (sticky at top-right) */}
     <Box
         sx={{
@@ -493,6 +546,7 @@ const Exam: React.FC = () => {
       </Box>
   {/* Timer now lives inside the main Paper (card) */}
       {/* Navigation buttons outside the card */}
+      <span title={current === 0 ? 'İlk soru' : 'Önceki soruya git'}>
       <IconButton
         sx={{
           display: { xs: 'none', md: 'inline-flex' },
@@ -502,30 +556,38 @@ const Exam: React.FC = () => {
           transform: 'translateY(-50%)',
           zIndex: 2,
           background: current > 0 
-            ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%)'
-            : 'rgba(255,255,255,0.4)',
-          color: current > 0 ? '#00b894' : '#bdc3c7',
+            ? 'linear-gradient(135deg, #e6fffa 0%, #f0ffff 100%)'
+            : 'rgba(255,255,255,0.5)',
+          color: current > 0 ? '#00b894' : '#9e9e9e',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: current > 0 ? '0 8px 25px rgba(0, 184, 148, 0.2)' : '0 4px 15px rgba(0, 0, 0, 0.1)',
-          borderRadius: 3,
-          p: 2,
+          border: current > 0 ? '2px solid rgba(0, 184, 148, 0.35)' : '1px solid rgba(255,255,255,0.6)',
+          boxShadow: current > 0 ? '0 10px 28px rgba(0, 184, 148, 0.25)' : '0 6px 18px rgba(0, 0, 0, 0.08)',
+          borderRadius: '50%',
+          width: { md: 64, lg: 72 },
+          height: { md: 64, lg: 72 },
+          p: 0,
           cursor: current > 0 ? 'pointer' : 'default',
           opacity: current > 0 ? 1 : 0.5,
           transition: 'all 0.3s ease',
           '&:hover': {
-            transform: current > 0 ? 'translateY(-50%) translateX(-3px)' : 'translateY(-50%)',
+            transform: current > 0 ? 'translateY(-50%) translateX(-4px)' : 'translateY(-50%)',
             background: current > 0 
-              ? 'linear-gradient(135deg, rgba(0, 184, 148, 0.1) 0%, rgba(0, 206, 201, 0.1) 100%)'
-              : 'rgba(255,255,255,0.4)',
-            boxShadow: current > 0 ? '0 12px 30px rgba(0, 184, 148, 0.3)' : '0 4px 15px rgba(0, 0, 0, 0.1)',
+              ? 'linear-gradient(135deg, rgba(0, 184, 148, 0.15) 0%, rgba(0, 206, 201, 0.15) 100%)'
+              : 'rgba(255,255,255,0.5)',
+            boxShadow: current > 0 ? '0 14px 34px rgba(0, 184, 148, 0.3)' : '0 6px 18px rgba(0, 0, 0, 0.08)',
+          },
+          '&:focus-visible': {
+            outline: '3px solid rgba(0, 184, 148, 0.5)',
+            outlineOffset: '2px',
           },
         }}
         onClick={prevQuestion}
         disabled={current === 0}
       >
-        <ArrowBackIcon fontSize="large" />
-      </IconButton>
+        <ArrowBackIcon sx={{ fontSize: { md: 34, lg: 38 } }} />
+  </IconButton>
+  </span>
+      <span title={current === questions.length - 1 ? 'Son soru' : 'Sonraki soruya git'}>
       <IconButton
         sx={{
           display: { xs: 'none', md: 'inline-flex' },
@@ -535,30 +597,37 @@ const Exam: React.FC = () => {
           transform: 'translateY(-50%)',
           zIndex: 2,
           background: current < questions.length - 1 
-            ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%)'
-            : 'rgba(255,255,255,0.4)',
-          color: current < questions.length - 1 ? '#00b894' : '#bdc3c7',
+            ? 'linear-gradient(135deg, #e6fffa 0%, #f0ffff 100%)'
+            : 'rgba(255,255,255,0.5)',
+          color: current < questions.length - 1 ? '#00b894' : '#9e9e9e',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: current < questions.length - 1 ? '0 8px 25px rgba(0, 184, 148, 0.2)' : '0 4px 15px rgba(0, 0, 0, 0.1)',
-          borderRadius: 3,
-          p: 2,
+          border: current < questions.length - 1 ? '2px solid rgba(0, 184, 148, 0.35)' : '1px solid rgba(255,255,255,0.6)',
+          boxShadow: current < questions.length - 1 ? '0 10px 28px rgba(0, 184, 148, 0.25)' : '0 6px 18px rgba(0, 0, 0, 0.08)',
+          borderRadius: '50%',
+          width: { md: 64, lg: 72 },
+          height: { md: 64, lg: 72 },
+          p: 0,
           cursor: current < questions.length - 1 ? 'pointer' : 'default',
           opacity: current < questions.length - 1 ? 1 : 0.5,
           transition: 'all 0.3s ease',
           '&:hover': {
-            transform: current < questions.length - 1 ? 'translateY(-50%) translateX(3px)' : 'translateY(-50%)',
+            transform: current < questions.length - 1 ? 'translateY(-50%) translateX(4px)' : 'translateY(-50%)',
             background: current < questions.length - 1 
-              ? 'linear-gradient(135deg, rgba(0, 184, 148, 0.1) 0%, rgba(0, 206, 201, 0.1) 100%)'
-              : 'rgba(255,255,255,0.4)',
-            boxShadow: current < questions.length - 1 ? '0 12px 30px rgba(0, 184, 148, 0.3)' : '0 4px 15px rgba(0, 0, 0, 0.1)',
+              ? 'linear-gradient(135deg, rgba(0, 184, 148, 0.15) 0%, rgba(0, 206, 201, 0.15) 100%)'
+              : 'rgba(255,255,255,0.5)',
+            boxShadow: current < questions.length - 1 ? '0 14px 34px rgba(0, 184, 148, 0.3)' : '0 6px 18px rgba(0, 0, 0, 0.08)',
+          },
+          '&:focus-visible': {
+            outline: '3px solid rgba(0, 184, 148, 0.5)',
+            outlineOffset: '2px',
           },
         }}
         onClick={nextQuestion}
         disabled={current === questions.length - 1}
       >
-        <ArrowForwardIcon fontSize="large" />
-      </IconButton>
+        <ArrowForwardIcon sx={{ fontSize: { md: 34, lg: 38 } }} />
+  </IconButton>
+  </span>
       {!reviewMode && (
         <Paper 
           elevation={6} 
@@ -578,7 +647,36 @@ const Exam: React.FC = () => {
             }
           }}
         >
-      {/* Inset timer at top-right inside the card (mobile only) */}
+      {/* Mobile top controls: Finish (left) + Timer (right) inside the card */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 10,
+              left: { xs: 18, md: 10 },
+              zIndex: 2,
+              display: { xs: 'flex', md: 'none' },
+            }}
+          >
+            <Button
+              size="small"
+              onClick={handleFinish}
+              sx={{
+                textTransform: 'none',
+                fontWeight: 700,
+                borderRadius: 2,
+                px: 1.5,
+                py: 0.5,
+                boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
+                background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.25)',
+                backdropFilter: 'blur(8px)'
+              }}
+            >
+              Bitir
+            </Button>
+          </Box>
+          {/* Inset timer at top-right inside the card (mobile only) */}
           <Box
             sx={{
               position: 'absolute',
@@ -761,7 +859,8 @@ const Exam: React.FC = () => {
                   boxShadow: 2,
                   background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
                   color: '#fff',
-                  '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' }
+                  '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' },
+                  display: { xs: 'inline-flex', md: 'none' },
                 }}
               >
                 Testi Bitir

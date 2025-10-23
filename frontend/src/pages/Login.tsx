@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import setMetaTags from '../utils/seo';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Box, Paper, Typography, TextField, Button, Snackbar, Alert } from '@mui/material';
 
@@ -19,6 +20,13 @@ const Login: React.FC<Props> = ({ onLogin }) => {
 
   // Show popup if redirected with session=expired
   useEffect(() => {
+    setMetaTags({
+      title: 'Giriş — Hesabınıza Erişin',
+      description: 'Hesabınıza giriş yaparak sınavlarınızı çözün ve ilerlemenizi takip edin.',
+      keywords: 'giriş, hesabım, oturum aç',
+      canonical: '/login',
+      ogImage: '/social-preview.svg'
+    });
     const params = new URLSearchParams(location.search);
     if (params.get('session') === 'expired') {
       setSnackOpen(true);
