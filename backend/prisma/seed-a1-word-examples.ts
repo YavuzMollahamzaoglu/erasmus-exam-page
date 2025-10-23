@@ -1,45 +1,13 @@
+// This file is intentionally left blank. No longer used.
+
+
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const examples = [
   {
     english: "apple",
-    sentences: [
-      {
-        sentence: "I eat an apple every morning.",
-        translation: "Her sabah bir elma yerim.",
-      },
-      {
-        sentence: "The apple is red and sweet.",
-        translation: "Elma kırmızı ve tatlıdır.",
-      },
-      {
-        sentence: "She bought some apples from the market.",
-        translation: "O, marketten birkaç elma aldı.",
-      },
-    ],
-  },
-  {
-    english: "book",
-    sentences: [
-      {
-        sentence: "This is my favorite book.",
-        translation: "Bu benim en sevdiğim kitap.",
-      },
-      {
-        sentence: "I read a book before bed.",
-        translation: "Yatmadan önce kitap okurum.",
-      },
-      {
-        sentence: "The book is on the table.",
-        translation: "Kitap masanın üstünde.",
-      },
-    ],
-  },
-  {
-    english: "teacher",
-    sentences: [
-      {
+  // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
         sentence: "My teacher is very kind.",
         translation: "Öğretmenim çok naziktir.",
       },
@@ -274,13 +242,7 @@ const a2Examples = [
   },
 ];
 // B1 seviyesindeki kelimeler ve örnek cümleleri
-const b1Examples = [
-  {
-    english: "a.m.",
-    sentences: [
-      {
-        sentence: "A.m. is important in daily life.",
-        translation: "Öğleden önce günlük hayatta önemlidir.",
+// Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
       },
       {
         sentence: "I often use the word a.m. in a sentence.",
@@ -384,83 +346,10 @@ const b1Examples = [
 ];
 
 // B1 kelimelerini de seed'le
-async function seedB1Examples() {
-  for (const word of b1Examples) {
-    const dbWord = await prisma.word.findFirst({
-      where: { english: word.english, level: "B1" },
-    });
-    if (dbWord) {
-      for (const ex of word.sentences) {
-        await prisma.wordExample.create({
-          data: {
-            wordId: dbWord.id,
-            sentence: ex.sentence,
-          },
-        });
-      }
-    }
-  }
-}
-
-// A2 kelimelerini de seed'le
-async function seedA2Examples() {
-  for (const word of a2Examples) {
-    const dbWord = await prisma.word.findFirst({
-      where: { english: word.english, level: "A2" },
-    });
-    if (dbWord) {
-      for (const ex of word.sentences) {
-        await prisma.wordExample.create({
-          data: {
-            wordId: dbWord.id,
-            sentence: ex.sentence,
-          },
-        });
-      }
-    }
-  }
-}
+// Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
 
 async function main() {
-  for (const word of examples) {
-    const dbWord = await prisma.word.findFirst({
-      where: { english: word.english },
-    });
-    if (dbWord) {
-      for (const ex of word.sentences) {
-        await prisma.wordExample.create({
-          data: {
-            wordId: dbWord.id,
-            sentence: ex.sentence,
-          },
-        });
-      }
-    }
-  }
-  const total = examples.length;
-  let done = 0;
-  for (const word of examples) {
-    const dbWord = await prisma.word.findFirst({
-      where: { english: word.english },
-    });
-    if (dbWord) {
-      for (const ex of word.sentences) {
-        await prisma.wordExample.create({
-          data: {
-            wordId: dbWord.id,
-            sentence: ex.sentence,
-          },
-        });
-      }
-      done++;
-      const percent = Math.round((done / total) * 100);
-      console.log(`[A1] Progress: ${done}/${total} (${percent}%) - ${word.english}`);
-    }
-  }
-  // A2 kelimeleri için seed fonksiyonunu çağır
-  await seedA2Examples();
-  // B1 kelimeleri için seed fonksiyonunu çağır
-  await seedB1Examples();
+  // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
 }
 
 main()

@@ -220,45 +220,11 @@ async function main() {
   console.log("🎉 Game seeding completed!");
 
   // Ensure some extra word examples exist for demo words
-  const candidates = [
-    { english: 'apple', examples: ['She bought fresh apples from the market.', 'An apple a day keeps the doctor away.'] },
-    { english: 'teacher', examples: ['The teacher explained the lesson clearly.', 'She is a dedicated and patient teacher.'] },
-  ];
-  for (const c of candidates) {
-    const w = await prisma.word.findFirst({ where: { english: c.english } });
-    if (!w) continue;
-    for (const s of c.examples) {
-      const exists = await prisma.wordExample.findFirst({ where: { wordId: w.id, sentence: s } });
-      if (!exists) await prisma.wordExample.create({ data: { wordId: w.id, sentence: s } });
-    }
-  }
-  console.log('✅ Extra word examples ensured');
+    // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
+    // A2Words ve extra word example kodları kaldırıldı.
 
   // Add A2 words with base example and 3 extra sentences
-  const a2Words = [
-    {
-      english: 'exercise',
-      turkish: 'egzersiz',
-      example: 'I do exercise every morning.',
-      level: 'A2',
-      extras: [
-        'Regular exercise is good for your health.',
-        'He exercises at the gym three times a week.',
-        'They decided to exercise together in the park.'
-      ],
-    },
-    {
-      english: 'prepare',
-      turkish: 'hazırlamak',
-      example: 'She prepared dinner for her family.',
-      level: 'A2',
-      extras: [
-        'Please prepare your notes before the meeting.',
-        'We need to prepare for the exam.',
-        'He prepared a short speech.'
-      ],
-    },
-  ] as const;
+    // Çoklu örnek cümleler kaldırıldı. Artık kullanılmıyor.
 
   for (const w of a2Words) {
     let word = await prisma.word.findFirst({ where: { english: w.english } });
