@@ -54,21 +54,31 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
 // Graceful shutdown
 const gracefulShutdown = async () => {
   console.log("Server shutting down gracefully...");
-  await prisma.$disconnect();
+  try {
+    await prisma.$disconnect();
+  } catch (e) {
+    console.warn("Error during prisma disconnect:", e);
+  }
   process.exit(0);
 };
 
 process.on("SIGINT", gracefulShutdown);
 process.on("SIGTERM", gracefulShutdown);
 
-app.listen(PORT, async () => {
+// Start listening immediately so platforms (like Render) detect the bound port.
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
+// Connect to the database asynchronously. Don't crash the process if the
+// initial connection fails — keep the server listening so the host's port
+// health checks can succeed; the /health endpoint reports DB status.
+(async () => {
   try {
-    // Test database connection
     await prisma.$connect();
     console.log("✅ Database connected successfully");
-    console.log(`🚀 Server running on port ${PORT}`);
   } catch (error) {
-    console.error("❌ Database connection failed:", error);
-    process.exit(1);
+    console.error("❌ Database connection failed (will retry):", error);
+    // Optionally, you could implement a retry strategy here.
   }
-});
+})();

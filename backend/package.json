@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "nodemon src/app.ts",
     "start": "ts-node src/app.ts",
+    "build": "tsc",
+    "start:prod": "node dist/app.js",
+    "postinstall": "prisma generate",
     "add:paragraph": "ts-node prisma/add-paragraph-question.ts",
     "cleanup:series": "ts-node prisma/cleanup-series.ts",
     "cleanup:series:dry": "DRY_RUN=1 ts-node prisma/cleanup-series.ts",
-  "cleanup:empty-series": "ts-node prisma/delete-empty-series.ts",
-  "cleanup:empty-series:dry": "DRY_RUN=1 ts-node prisma/delete-empty-series.ts",
+    "cleanup:empty-series": "ts-node prisma/delete-empty-series.ts",
+    "cleanup:empty-series:dry": "DRY_RUN=1 ts-node prisma/delete-empty-series.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
