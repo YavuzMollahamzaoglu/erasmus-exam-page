@@ -281,14 +281,14 @@ const TopicsController = {
       // Try persisted preview (24h TTL) but always honor live question count for total
       // NOTE: Current schema does not include JSON fields (topics, grammar, difficulty, gains),
       // so skip returning persisted rich preview to avoid type mismatches.
-      if (where.categoryId || where.seriesId) {
+      if (where.categoryId != null && where.seriesId != null) {
         try {
           const existing = await prisma.examPreview.findUnique({
             where: {
               categoryId_seriesId: {
-                categoryId: where.categoryId ?? null,
-                seriesId: where.seriesId ?? null,
-              } as any,
+                categoryId: where.categoryId,
+                seriesId: where.seriesId,
+              },
             },
           });
           const fresh =
