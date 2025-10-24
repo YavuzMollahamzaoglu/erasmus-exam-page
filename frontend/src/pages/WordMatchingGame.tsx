@@ -78,17 +78,18 @@ export default function WordMatchingGame() {
   const [successMsg, setSuccessMsg] = useState(false);
 
   // Prepare game by fetching: if setId is provided, use that set; otherwise choose 15 random from words API
+  const API_URL = process.env.REACT_APP_API_URL;
   const initGame = async () => {
     try {
       let pairs: WordPair[] = [];
       if (setId) {
-        const res = await fetch(`http://localhost:4000/api/games/word-matching/sets/${setId}`, { cache: 'no-store' });
+        const res = await fetch(`${API_URL}/api/games/word-matching/sets/${setId}`, { cache: 'no-store' });
         const data = await res.json();
         const items: Array<{ english: string; turkish: string }> = Array.isArray(data?.items) ? data.items : [];
         pairs = items.slice(0, GAME_WORD_COUNT).map((w, idx) => ({ id: idx + 1, english: w.english, turkish: w.turkish }));
       } else {
         const apiLevel = ['A1','A2','B1','B2'].includes(level) ? level : 'A1';
-        const res = await fetch(`http://localhost:4000/api/words?level=${apiLevel}&limit=200`, { cache: 'no-store' });
+        const res = await fetch(`${API_URL}/api/words?level=${apiLevel}&limit=200`, { cache: 'no-store' });
         const data = await res.json();
         const raw: Array<{ id: string; english: string; turkish: string }> = Array.isArray(data?.words) ? data.words : [];
         const chosen = shuffle(raw).slice(0, GAME_WORD_COUNT);
