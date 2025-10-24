@@ -16,7 +16,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   const [snackOpen, setSnackOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Show popup if redirected with session=expired
   useEffect(() => {

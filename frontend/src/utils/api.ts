@@ -1,10 +1,7 @@
 // Central place for API base URL so we don't hardcode localhost
 // Priority: REACT_APP_API_URL env -> window.__API_URL__ (optional) -> default localhost:4000
 export const API_URL: string =
-  (process.env.REACT_APP_API_URL as string | undefined)?.trim() ||
-  (typeof window !== "undefined" &&
-    (window as any).__API_URL__?.toString().trim()) ||
-  "http://localhost:4000";
+  (process.env.REACT_APP_API_URL as string | undefined)?.trim() || "";
 
 export function isApiRequest(target: string): boolean {
   try {

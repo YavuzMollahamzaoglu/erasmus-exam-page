@@ -55,7 +55,8 @@ export default function WordHuntGame() {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:4000/api/games/word-hunt/questions?level=${apiLevel}`);
+        const API_URL = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${API_URL}/api/games/word-hunt/questions?level=${apiLevel}`);
         if (!response.ok) {
           throw new Error('Failed to fetch questions');
         }

@@ -235,7 +235,7 @@ const categoryTitles = {
 
 const Categories: React.FC = () => {
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.REACT_APP_API_URL;
   const [serverOnline, setServerOnline] = useState(true);
   const [checking, setChecking] = useState(false);
   const [preview, setPreview] = useState<{ open: boolean; category?: string; series?: string; seriesId?: string }>(() => ({ open: false }));

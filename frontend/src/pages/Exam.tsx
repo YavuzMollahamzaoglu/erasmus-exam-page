@@ -60,7 +60,7 @@ const Exam: React.FC = () => {
       setError(null);
       
       // For dynamic tests, use the questions endpoint directly with filters
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.REACT_APP_API_URL;
       let apiUrl: string;
       
       if (testId === 'dynamic' || testId?.startsWith('dynamic-')) {
@@ -96,7 +96,7 @@ const Exam: React.FC = () => {
           let questionsData = data.questions || data || [];
           // Fallback: if tests endpoint returned empty, try querying by seriesId directly
           if ((!questionsData || questionsData.length === 0) && testId && !(testId === 'dynamic' || testId.startsWith('dynamic-'))) {
-            const API_URL2 = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+            const API_URL2 = process.env.REACT_APP_API_URL;
             const altUrl = `${API_URL2}/api/questions?seriesId=${encodeURIComponent(testId)}`;
             console.log('Primary returned empty, trying fallback:', altUrl);
             const res2 = await fetch(altUrl);
@@ -315,7 +315,8 @@ const Exam: React.FC = () => {
     // Kullanıcı giriş yapmadıysa history kaydı denemeyelim; sessizce çık
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:4000/api/history', {
+      const API_URL = process.env.REACT_APP_API_URL;
+      const res = await fetch(`${API_URL}/api/history`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -427,7 +428,8 @@ const Exam: React.FC = () => {
     // Send all relevant exam result data to backend
     const categoryId = q.categoryId;
     const seriesId = q.seriesId;
-    fetch('http://localhost:4000/api/rankings', {
+    const API_URL = process.env.REACT_APP_API_URL;
+    fetch(`${API_URL}/api/rankings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ score, time, categoryId, seriesId, correct: score, mistakes }),

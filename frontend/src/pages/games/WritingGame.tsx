@@ -47,7 +47,8 @@ export default function WritingGame() {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:4000/api/games/writing/questions?level=${apiLevel}`);
+        const API_URL = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${API_URL}/api/games/writing/questions?level=${apiLevel}`);
         if (!response.ok) {
           throw new Error('Failed to fetch questions');
         }

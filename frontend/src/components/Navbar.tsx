@@ -388,7 +388,7 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar
                     alt="Profil"
-                    src={userImage ? `http://localhost:4000${userImage}?t=${Date.now()}` : "https://www.gravatar.com/avatar/?d=mp"}
+                    src={userImage ? `${process.env.REACT_APP_API_URL}${userImage}?t=${Date.now()}` : "https://www.gravatar.com/avatar/?d=mp"}
                     imgProps={{ loading: 'lazy' }}
                     sx={{ 
                       width: 36, 

@@ -44,7 +44,8 @@ const FillInTheBlanksQuick: React.FC = () => {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const res = await fetch('http://localhost:4000/api/games/fill-in-the-blanks/questions');
+        const API_URL = process.env.REACT_APP_API_URL;
+        const res = await fetch(`${API_URL}/api/games/fill-in-the-blanks/questions`);
         if (!res.ok) throw new Error('Failed to fetch questions');
         const data = await res.json();
         setQuestions(data);
