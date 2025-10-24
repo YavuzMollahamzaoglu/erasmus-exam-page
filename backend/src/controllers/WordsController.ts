@@ -62,8 +62,6 @@ const WordsController = {
       res.status(500).json({ error: "Failed to create word" });
     }
   },
-
-
 };
 
 export default WordsController;

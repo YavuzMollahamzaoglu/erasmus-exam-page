@@ -6,7 +6,11 @@ class GameController {
   static async getWordHuntQuestions(req: Request, res: Response) {
     try {
       const { level } = req.query;
-      const where = level ? { level: level as string } : {};
+      let where: any = {};
+      if (level) {
+        const lv = String(level);
+        where = { level: { in: [lv, lv.toUpperCase(), lv.toLowerCase()] } };
+      }
 
       const questions = await prisma.wordHuntQuestion.findMany({
         where,
@@ -150,8 +154,14 @@ class GameController {
   // Paragraph Game endpoints (level-agnostic)
   static async getParagraphQuestions(req: Request, res: Response) {
     try {
-      // Level is intentionally ignored to make the game level-less
+      const { level } = req.query;
+      let where: any = {};
+      if (level) {
+        const lv = String(level);
+        where = { level: { in: [lv, lv.toUpperCase(), lv.toLowerCase()] } };
+      }
       const questions = await prisma.paragraphQuestion.findMany({
+        where,
         orderBy: { createdAt: "desc" },
       });
 
@@ -174,7 +184,11 @@ class GameController {
   static async listWordMatchingSets(req: Request, res: Response) {
     try {
       const { level } = req.query as { level?: string };
-      const where = level ? { level } : {};
+      let where: any = {};
+      if (level) {
+        const lv = String(level);
+        where = { level: { in: [lv, lv.toUpperCase(), lv.toLowerCase()] } };
+      }
       const sets = await (prisma as any).wordMatchSet.findMany({
         where,
         orderBy: { createdAt: "desc" },
