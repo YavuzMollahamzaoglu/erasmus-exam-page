@@ -1,6 +1,10 @@
+
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Box from '@mui/material/Box';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import SkipLink from './components/SkipLink';
+import { installAuthFetchInterceptor } from './utils/installAuthFetchInterceptor';
 
 const Login = lazy(() => import('./pages/Login'));
 const Exam = lazy(() => import('./pages/Exam'));
@@ -22,9 +26,6 @@ const Words = lazy(() => import('./pages/Words'));
 const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame'));
 const WordMatchingGame = lazy(() => import('./pages/WordMatchingGame'));
 const ReadingGame = lazy(() => import('./pages/games/ReadingGame'));
-import Navbar from './components/Navbar';
-import SkipLink from './components/SkipLink';
-import { installAuthFetchInterceptor } from './utils/installAuthFetchInterceptor';
  
 
 
