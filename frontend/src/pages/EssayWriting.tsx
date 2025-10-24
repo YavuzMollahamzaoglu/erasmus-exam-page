@@ -125,7 +125,7 @@ export default function EssayWriting() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:4000/api/essays/evaluate', {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/essays/evaluate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

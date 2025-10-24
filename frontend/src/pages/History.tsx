@@ -99,7 +99,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
       if (['A1', 'A2', 'B1', 'B2'].includes(val)) setFilter(val);
       else if (['ERASMUS', 'HAZIRLIK', 'GENEL', 'GENEL İNGİLİZCE', 'GENEL INGILIZCE'].includes(val)) setCategoryTypeFilter(qCategoryLegacy);
     }
-    fetch('http://localhost:4000/api/history', { headers: token ? { 'Authorization': `Bearer ${token}` } : {} })
+  fetch(`${process.env.REACT_APP_API_URL}/api/history`, { headers: token ? { 'Authorization': `Bearer ${token}` } : {} })
       .then(res => res.json())
       .then(data => {
         const list = data.history || [];
@@ -151,7 +151,7 @@ const History: React.FC<HistoryProps> = ({ token }) => {
           px: 2 
         }}
       >
-  <img src="/empty-history.svg" alt="Henüz test geçmişiniz yok" style={{ width: 180, marginBottom: 24 }} />
+  <img src="/empty-history.svg" alt="Henüz test geçmişiniz yok" style={{ width: 180, marginBottom: 24 }} loading="lazy" />
         <Typography variant="h5" color={palette.accent} fontWeight={700}>Henüz test çözmediniz!</Typography>
         <Typography color="text.secondary" mt={1}>Çözdüğünüz sınavlar burada listelenecek.</Typography>
       </Box>

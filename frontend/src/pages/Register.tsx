@@ -24,7 +24,7 @@ const Register: React.FC<Props> = () => {
   const [message, setMessage] = useState('');
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string; name?: string; general?: string } >({});
   const [showSuccess, setShowSuccess] = useState(false);
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const validateClient = () => {
     const errs: { email?: string; password?: string; name?: string } = {};

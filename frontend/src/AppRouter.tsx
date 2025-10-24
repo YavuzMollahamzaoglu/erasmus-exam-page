@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Box from '@mui/material/Box';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Exam from './pages/Exam';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
-import Questions from './pages/Questions';
-import Rankings from './pages/Rankings';
-import Categories from './pages/Categories';
-import About from './pages/About';
-import TopicsPage from './pages/TopicsPage';
-import HomePage from './pages/HomePage';
-import History from './pages/History';
+
+const Login = lazy(() => import('./pages/Login'));
+const Exam = lazy(() => import('./pages/Exam'));
+const Register = lazy(() => import('./pages/Register'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Questions = lazy(() => import('./pages/Questions'));
+const Rankings = lazy(() => import('./pages/Rankings'));
+const Categories = lazy(() => import('./pages/Categories'));
+const About = lazy(() => import('./pages/About'));
+const TopicsPage = lazy(() => import('./pages/TopicsPage'));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const History = lazy(() => import('./pages/History'));
+const WordHuntGame = lazy(() => import('./pages/games/WordHuntGame'));
+const WritingGame = lazy(() => import('./pages/games/WritingGame'));
+const SelectLevel = lazy(() => import('./pages/games/SelectLevel'));
+const EssayGame = lazy(() => import('./pages/games/EssayGame'));
+const EssayWriting = lazy(() => import('./pages/EssayWriting'));
+const Words = lazy(() => import('./pages/Words'));
+const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame'));
+const WordMatchingGame = lazy(() => import('./pages/WordMatchingGame'));
+const ReadingGame = lazy(() => import('./pages/games/ReadingGame'));
 import Navbar from './components/Navbar';
 import SkipLink from './components/SkipLink';
-import WordHuntGame from './pages/games/WordHuntGame';
-import WritingGame from './pages/games/WritingGame';
-import SelectLevel from './pages/games/SelectLevel';
-import EssayGame from './pages/games/EssayGame';
-import EssayWriting from './pages/EssayWriting';
-import Words from './pages/Words';
-import FillInTheBlanksGame from './pages/games/FillInTheBlanksGame';
-import WordMatchingGame from './pages/WordMatchingGame';
-import ReadingGame from './pages/games/ReadingGame';
 import { installAuthFetchInterceptor } from './utils/installAuthFetchInterceptor';
  
 
@@ -35,7 +36,7 @@ const AppRouter: React.FC = () => {
     localStorage.setItem('token', jwt);
     (async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/auth/me');
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`);
         const data = await res.json();
         if (data?.user?.profilePhoto) setUserImage(data.user.profilePhoto);
       } catch {}
@@ -81,36 +82,37 @@ const AppRouter: React.FC = () => {
 
   return (
     <Router>
-  <SkipLink />
-  <NavbarWithNavigate userImage={userImage} />
-  {/* Fixed AppBar spacer to avoid content jump under navbar */}
-  <Box sx={{ height: { xs: 56, md: 64 } }} />
-      
-      <Routes>
-  <Route path="/" element={<Box component="main" id="main-content"><HomePage token={token} /></Box>} />
-  <Route path="/topics" element={<Box component="main" id="main-content"><TopicsPage /></Box>} />
-        <Route path="/login" element={<Login onLogin={handleLogin} onShowRegister={() => {}} />} />
-        <Route path="/register" element={<Register onShowLogin={() => {}} />} />
-    <Route path="/profile" element={token ? <Box component="main" id="main-content"><Profile token={token} onProfilePhotoChange={setUserImage} /></Box> : <Navigate to="/login" replace />} />
-    <Route path="/questions" element={<Box component="main" id="main-content"><Questions /></Box>} />
-        <Route path="/kelime-avi" element={<SelectLevel game="kelime-avi" />} />
-  <Route path="/kelime-avi-game" element={<WordHuntGame />} />
-        <Route path="/yazi-yazma" element={<SelectLevel game="yazi-yazma" />} />
-  <Route path="/yazi-yazma-game" element={<WritingGame />} />
-  <Route path="/bosluk-doldurma" element={<FillInTheBlanksGame />} />
-  <Route path="/essay-writing" element={<EssayWriting />} />
-  <Route path="/kelime-eslestirme" element={<SelectLevel game="kelime-eslestirme" />} />
-  <Route path="/kelime-eslestirme-game" element={<WordMatchingGame />} />
-  <Route path="/okuma" element={<SelectLevel game="okuma" />} />
-  <Route path="/okuma-game" element={<ReadingGame />} />
-    <Route path="/rankings" element={<Box component="main" id="main-content"><Rankings token={token} /></Box>} />
-    <Route path="/categories" element={<Box component="main" id="main-content"><Categories /></Box>} />
-    <Route path="/about" element={<Box component="main" id="main-content"><About /></Box>} />
-    <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
-  <Route path="/history" element={token ? <Box component="main" id="main-content"><History token={token} /></Box> : <Navigate to="/login" replace />} />
-    <Route path="/exam/:testId" element={<Box component="main" id="main-content"><Exam /></Box>} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <SkipLink />
+      <NavbarWithNavigate userImage={userImage} />
+      {/* Fixed AppBar spacer to avoid content jump under navbar */}
+      <Box sx={{ height: { xs: 56, md: 64 } }} />
+      <Suspense fallback={<div>Yükleniyor...</div>}>
+        <Routes>
+          <Route path="/" element={<Box component="main" id="main-content"><HomePage token={token} /></Box>} />
+          <Route path="/topics" element={<Box component="main" id="main-content"><TopicsPage /></Box>} />
+          <Route path="/login" element={<Login onLogin={handleLogin} onShowRegister={() => {}} />} />
+          <Route path="/register" element={<Register onShowLogin={() => {}} />} />
+          <Route path="/profile" element={token ? <Box component="main" id="main-content"><Profile token={token} onProfilePhotoChange={setUserImage} /></Box> : <Navigate to="/login" replace />} />
+          <Route path="/questions" element={<Box component="main" id="main-content"><Questions /></Box>} />
+          <Route path="/kelime-avi" element={<SelectLevel game="kelime-avi" />} />
+          <Route path="/kelime-avi-game" element={<WordHuntGame />} />
+          <Route path="/yazi-yazma" element={<SelectLevel game="yazi-yazma" />} />
+          <Route path="/yazi-yazma-game" element={<WritingGame />} />
+          <Route path="/bosluk-doldurma" element={<FillInTheBlanksGame />} />
+          <Route path="/essay-writing" element={<EssayWriting />} />
+          <Route path="/kelime-eslestirme" element={<SelectLevel game="kelime-eslestirme" />} />
+          <Route path="/kelime-eslestirme-game" element={<WordMatchingGame />} />
+          <Route path="/okuma" element={<SelectLevel game="okuma" />} />
+          <Route path="/okuma-game" element={<ReadingGame />} />
+          <Route path="/rankings" element={<Box component="main" id="main-content"><Rankings token={token} /></Box>} />
+          <Route path="/categories" element={<Box component="main" id="main-content"><Categories /></Box>} />
+          <Route path="/about" element={<Box component="main" id="main-content"><About /></Box>} />
+          <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
+          <Route path="/history" element={token ? <Box component="main" id="main-content"><History token={token} /></Box> : <Navigate to="/login" replace />} />
+          <Route path="/exam/:testId" element={<Box component="main" id="main-content"><Exam /></Box>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 };

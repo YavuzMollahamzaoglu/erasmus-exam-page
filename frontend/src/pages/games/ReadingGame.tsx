@@ -10,7 +10,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 type Passage = { id: string; title: string; text: string; level: string };
 type ReadingQuestion = { id: string; question: string; options: string[]; correctIndex: number; explanation?: string };
 
-const API = 'http://localhost:4000/api/games/reading';
+const API = `${process.env.REACT_APP_API_URL}/api/games/reading`;
 
 const ReadingGame: React.FC = () => {
   useEffect(() => {

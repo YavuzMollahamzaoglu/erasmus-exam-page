@@ -36,7 +36,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
     if (!token) return;
     (async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
         const data = await res.json();
         setMe(data.user || null);
       } catch { setMe(null); }
@@ -55,7 +55,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
   useEffect(() => {
     setLoading(true);
     const qs = `?exam=${selectedExam}&type=${encodeURIComponent(selectedType)}`;
-    fetch(`http://localhost:4000/api/rankings${qs}`, {
+  fetch(`${process.env.REACT_APP_API_URL}/api/rankings${qs}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
       .then((res) => res.json())
@@ -68,7 +68,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
         setLoading(false);
       });
     // Fetch comments for selected exam (type bağımsız bırakıldı)
-    fetch(`http://localhost:4000/api/comments?exam=${selectedExam}`, {
+  fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
       .then(res => res.json())
@@ -254,8 +254,8 @@ const Rankings: React.FC<Props> = ({ token }) => {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, overflow: 'hidden' }}>
                       {r.user?.profilePhoto ? (
-                        <img
-                          src={`http://localhost:4000${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}`}
+                        <img loading="lazy"
+                          src={`${process.env.REACT_APP_API_URL}${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}`}
                           alt={r.user?.name ? `${r.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
                           style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flex: '0 0 auto', border: '1px solid rgba(0,0,0,0.08)' }}
                         />
@@ -327,8 +327,8 @@ const Rankings: React.FC<Props> = ({ token }) => {
             }}>
               <Box sx={{ mr: 2 }}>
                 {me?.profilePhoto ? (
-                  <img
-                    src={`http://localhost:4000${me.profilePhoto}?t=${Date.now()}`}
+                  <img loading="lazy"
+                    src={`${process.env.REACT_APP_API_URL}${me.profilePhoto}?t=${Date.now()}`}
                     alt={me?.name ? `${me.name} adlı kullanıcının profili` : 'Benim profil fotoğrafım'}
                     style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894' }}
                   />
@@ -377,7 +377,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                 disabled={commentLoading || !commentText.trim()}
                 onClick={async () => {
                   setCommentLoading(true);
-                  await fetch('http://localhost:4000/api/comments', {
+                  await fetch(`${process.env.REACT_APP_API_URL}/api/comments`, {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
@@ -388,7 +388,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                   setCommentText('');
                   setCommentLoading(false);
                   // Refetch comments
-                  fetch(`http://localhost:4000/api/comments?exam=${selectedExam}`, {
+                  fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
                     headers: token ? { Authorization: `Bearer ${token}` } : {}
                   })
                     .then(res => res.json())
@@ -444,8 +444,8 @@ const Rankings: React.FC<Props> = ({ token }) => {
                 >
                   <Box sx={{ mr: 2 }}>
                     {c.user?.profilePhoto ? (
-                      <img
-                        src={`http://localhost:4000${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}`}
+                      <img loading="lazy"
+                        src={`${process.env.REACT_APP_API_URL}${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}`}
                         alt={c.user?.name ? `${c.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
                         style={{ 
                           width: 40, 

@@ -24,7 +24,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
 
   const fetchProfile = async () => {
     try {
-      const res = await fetch('http://localhost:4000/api/auth/me', {
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -75,7 +75,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
     setUpdateError('');
 
     try {
-      const res = await fetch('http://localhost:4000/api/auth/update-profile', {
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -235,7 +235,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
       const filename = (raw.name?.replace(/\.[^.]+$/, '') || 'avatar') + '-square.jpg';
       formData.append('photo', squareBlob, filename);
 
-      const res = await fetch('http://localhost:4000/api/auth/upload-profile-photo', {
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/upload-profile-photo`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
@@ -267,7 +267,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
     </Box>
   );
 
-  const photoUrl = profile.profilePhoto ? `http://localhost:4000${profile.profilePhoto}?t=${Date.now()}` : undefined;
+  const photoUrl = profile.profilePhoto ? `${process.env.REACT_APP_API_URL}${profile.profilePhoto}?t=${Date.now()}` : undefined;
   const joinedDate = profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('tr-TR') : '-';
 
   return (

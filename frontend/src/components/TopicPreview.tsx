@@ -112,8 +112,8 @@ const TopicPreview: React.FC<Props> = ({ category, series, categoryId, seriesId 
   })();
 
   return (
-    <Box sx={{ mt: 1.25 }}>
-      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1, alignItems: 'center' }}>
+    <Box sx={{ mt: 1.25, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1, alignItems: 'center', justifyContent: 'center', width: '100%' }}>
         {diffChip}
         {useItems.slice(0, 4).map((t, i) => (
           <Chip key={t.name}
@@ -144,7 +144,7 @@ const TopicPreview: React.FC<Props> = ({ category, series, categoryId, seriesId 
           segs[segs.length - 1].pct += (100 - sum);
         }
         return (
-          <Box sx={{ display: 'flex', height: 8, borderRadius: 6, overflow: 'hidden', bgcolor: 'rgba(0,0,0,0.06)' }}>
+          <Box sx={{ display: 'flex', height: 8, borderRadius: 6, overflow: 'hidden', bgcolor: 'rgba(0,0,0,0.06)', width: '100%', maxWidth: 340, margin: '0 auto' }}>
             {segs.map((s) => {
               const pctRoundedForLabel = Math.round((s.count / (total || 1)) * 100);
               const label = s.name === '__other__' ? `Diğer` : labelTR(s.name);

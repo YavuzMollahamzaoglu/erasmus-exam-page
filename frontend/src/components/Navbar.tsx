@@ -389,6 +389,7 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
           <Avatar
                     alt="Profil"
                     src={userImage ? `http://localhost:4000${userImage}?t=${Date.now()}` : "https://www.gravatar.com/avatar/?d=mp"}
+                    imgProps={{ loading: 'lazy' }}
                     sx={{ 
                       width: 36, 
                       height: 36, 

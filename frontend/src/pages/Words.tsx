@@ -33,7 +33,7 @@ const Words: React.FC = () => {
       canonical: '/words',
       ogImage: '/social-preview.svg'
     });
-    fetch(`http://localhost:4000/api/words?level=${level}`)
+  fetch(`${process.env.REACT_APP_API_URL}/api/words?level=${level}`)
       .then(res => res.json())
       .then(data => setWords(data.words || []))
       .catch(() => setWords([]));
@@ -50,7 +50,7 @@ const Words: React.FC = () => {
     }
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:4000/api/words/${wordId}/examples`);
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/words/${wordId}/examples`);
       const data = await res.json();
       // Deduplicate again on client and remove the card's example to avoid repeating the same sentence
       const raw = Array.isArray(data.sentences) ? data.sentences : [];
