@@ -1,6 +1,16 @@
+// Diziyi karıştıran yardımcı fonksiyon
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 import React, { useState, useEffect } from 'react';
 import setMetaTags from '../../utils/seo';
-import { Box, Typography, Button, Paper, Alert, IconButton, LinearProgress, CircularProgress, Tooltip } from '@mui/material';
+import { Box, Typography, Button, Paper, Alert, IconButton, LinearProgress, CircularProgress, Tooltip, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
  
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -52,6 +62,8 @@ const pickDisplayOptions = (q: FillInTheBlanksQuestion): string[] => {
 };
 
 const FillInTheBlanksGame: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   useEffect(() => {
     setMetaTags({
       title: 'Boşluk Doldurma — Paragraf Oyunu',
@@ -77,48 +89,73 @@ const FillInTheBlanksGame: React.FC = () => {
   // Persist each question's state while navigating
   const [questionStates, setQuestionStates] = useState<Record<string, QuestionState>>({});
   // Backend'den soruları çek
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        setLoading(true);
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/games/fill-in-the-blanks/questions`);
-        if (response.ok) {
-          const data = await response.json();
-          setQuestions(data);
-          // Initialize state store for questions
-          const initialMap: Record<string, QuestionState> = {};
-          (data as FillInTheBlanksQuestion[]).forEach((q, idx) => {
-            const blanks = getBlankCount(q);
-            const size = Math.min(blanks, q.correctAnswers.length);
-            const key = `${idx}:${q.id || 'noid'}`;
-            initialMap[key] = {
-              userAnswers: Array(size).fill(null),
-              availableOptions: pickDisplayOptions(q),
-              isSubmitted: false,
-              showResults: false,
-              score: 0,
-            };
-          });
-          setQuestionStates(initialMap);
-          setError(null);
-        } else {
-          throw new Error('Failed to fetch questions');
-        }
-      } catch (error) {
-        console.error('Error fetching questions:', error);
-        setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
-        // Fallback to sample data
-        const sampleQuestions: FillInTheBlanksQuestion[] = [
-          {
-            id: 'fill-1',
-            text: 'I __________ from Turkey. My name __________ John. She __________ a student. We __________ happy today. They __________ at home.',
-            options: ['am', 'is', 'are', 'was', 'were'],
-            correctAnswers: ['am', 'is', 'is', 'are', 'are'],
-            explanation: 'Bu soruda "to be" fiilinin doğru kullanımları test ediliyor.'
-          }
-        ];
-  setQuestions(sampleQuestions);
-        // Initialize state for fallback sample
+  // Modern buton stili
+  const optionButtonSx = {
+    minWidth: 110,
+    minHeight: 44,
+    borderRadius: 3,
+    fontWeight: 600,
+    fontSize: 18,
+    background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+    color: '#fff',
+    boxShadow: '0 2px 8px 0 rgba(0,0,0,0.08)',
+    mb: 1,
+    mx: 1,
+    transition: 'transform 0.1s',
+    '&:hover': {
+      background: 'linear-gradient(135deg, #0984e3 0%, #00b894 100%)',
+      transform: 'scale(1.05)',
+    },
+    '&.Mui-selected': {
+      background: 'linear-gradient(135deg, #00cec9 0%, #00b894 100%)',
+      color: '#fff',
+    },
+  };
+
+  return (
+    <Box>
+      {/* ...diğer oyun içeriği... */}
+      <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
+        <Typography variant="h6" mb={1}>Seçenekler:</Typography>
+        <Box display="flex" flexWrap="wrap" justifyContent="center">
+          {availableOptions.map((option, idx) => (
+            <Button
+              key={option}
+              variant={selectedOption === option ? 'contained' : 'outlined'}
+              color="primary"
+              onClick={() => handleOptionClick(option)}
+              sx={optionButtonSx}
+              className={selectedOption === option ? 'Mui-selected' : ''}
+            >
+              {option}
+            </Button>
+          ))}
+        </Box>
+      </Box>
+      {/* ...diğer oyun içeriği... */}
+      <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
+        <Button onClick={handlePrev} variant="outlined" color="primary" startIcon={<ArrowBackIcon />}>
+          Önceki
+        </Button>
+        <Button onClick={handleCheck} variant="contained" color="success">
+          Kontrol Et
+        </Button>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Button onClick={handleNext} variant="outlined" color="primary">
+            Sonraki
+          </Button>
+          <ArrowForwardIcon sx={{ mt: 0.5 }} />
+        </Box>
+      </Box>
+      {/* Şeffaf arrowlar sadece masaüstünde gösterilecek */}
+      {!isMobile && (
+        <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+          <IconButton onClick={handlePrev} sx={{ opacity: 0.3, mx: 2 }}><ArrowBackIcon fontSize="large" /></IconButton>
+          <IconButton onClick={handleNext} sx={{ opacity: 0.3, mx: 2 }}><ArrowForwardIcon fontSize="large" /></IconButton>
+        </Box>
+      )}
+    </Box>
+  );
         const initialMap: Record<string, QuestionState> = {};
         sampleQuestions.forEach((q, idx) => {
           const blanks = getBlankCount(q);
@@ -138,6 +175,25 @@ const FillInTheBlanksGame: React.FC = () => {
       }
     };
 
+    // fetchQuestions fonksiyonunu burada tanımlıyoruz
+    const fetchQuestions = async () => {
+      try {
+        setLoading(true);
+        const API_URL = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${API_URL}/api/games/fill-in-the-blanks/questions?level=a1`); // level parametresi gerekiyorsa ekle
+        if (!response.ok) {
+          throw new Error('Failed to fetch questions');
+        }
+        const data = await response.json();
+        setQuestions(shuffleArray(data));
+        setError(null);
+      } catch (err) {
+        setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
+        setQuestions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchQuestions();
   }, []);
 

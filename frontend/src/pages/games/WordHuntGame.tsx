@@ -1,3 +1,12 @@
+// Diziyi karıştıran yardımcı fonksiyon
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 import React, { useState, useEffect, useRef } from "react";
 import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, LinearProgress, CircularProgress } from "@mui/material";
@@ -61,13 +70,13 @@ export default function WordHuntGame() {
           throw new Error('Failed to fetch questions');
         }
         const data = await response.json();
-        setWords(data);
+  setWords(shuffleArray(data));
         setError(null);
       } catch (err) {
         console.error('Error fetching questions:', err);
         setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
         // Remove fallback data to see if API is working
-        setWords([]);
+  setWords(shuffleArray([]));
       } finally {
         setLoading(false);
       }

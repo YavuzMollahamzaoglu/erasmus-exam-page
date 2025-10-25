@@ -151,8 +151,9 @@ const ReadingGame: React.FC = () => {
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {questions.map((q, idx) => {
                   const selected = answers[q.id] ?? null;
-                  const isCorrect = selected !== null && selected === q.correctIndex;
-                  const isWrong = selected !== null && selected !== q.correctIndex;
+                  // Doğru/yanlış ve açıklama sadece submitted true ise gösterilsin
+                  const isCorrect = submitted && selected !== null && selected === q.correctIndex;
+                  const isWrong = submitted && selected !== null && selected !== q.correctIndex;
                   const explanation = getExplanation(q);
                   return (
                     <Paper key={q.id} elevation={0} sx={{ p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: isCorrect ? '#e6ffe6' : isWrong ? '#ffe6e6' : '#fff' }}>
@@ -171,12 +172,11 @@ const ReadingGame: React.FC = () => {
                           <FormControlLabel key={i} value={i} control={<Radio disabled={submitted} />} label={opt} />
                         ))}
                       </RadioGroup>
-                      {explanation && (expandedExplanations[q.id] || (selected !== null && submitted)) && (
+                      {explanation && (expandedExplanations[q.id] || (submitted && selected !== null)) && (
                         <Box
                           ref={(el) => {
                             const node = el as HTMLElement | null;
-                            if (node && (expandedExplanations[q.id] || (selected !== null && submitted)) && typeof node.scrollIntoView === 'function') {
-                              // scroll explanation into view on mobile/smaller containers
+                            if (node && (expandedExplanations[q.id] || (submitted && selected !== null)) && typeof node.scrollIntoView === 'function') {
                               setTimeout(() => node.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
                             }
                           }}

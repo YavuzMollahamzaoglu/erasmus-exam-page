@@ -1,4 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+// Diziyi karıştıran yardımcı fonksiyon
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
  
@@ -53,16 +62,16 @@ export default function WritingGame() {
           throw new Error('Failed to fetch questions');
         }
         const data = await response.json();
-        setWords(data);
+  setWords(shuffleArray(data));
         setError(null);
       } catch (err) {
         console.error('Error fetching questions:', err);
         setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
         // Fallback to hard coded data
-        setWords([
+        setWords(shuffleArray([
           { tr: "masa", en: "table" },
           { tr: "kitap", en: "book" }
-        ]);
+        ]));
       } finally {
         setLoading(false);
       }

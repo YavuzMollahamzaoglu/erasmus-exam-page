@@ -56,28 +56,28 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
   // Pages to show depending on login state (custom order requested)
   const pages = React.useMemo(() => {
     if (token) {
-      // Giriş yapanlar
+      // Giriş yapanlar - Profil en sonda
       return [
-  { label: 'Ana Sayfa', value: 'home', auth: false },         // 0 - mobile menu access to home
-  { label: 'Profil', value: 'profile', auth: true },           // 1
-  { label: 'Testler', value: 'categories', auth: false },       // 2
-  { label: 'Klasik Sorular', value: 'questions', auth: false }, // 3 (yer değiştirildi)
-  { label: 'Kelimeler', value: 'words', auth: false },          // 4 (yer değiştirildi)
-  { label: 'Konular', value: 'topics', auth: false },           // 5 (yeni eklendi)
-  { label: 'Geçmiş', value: 'history', auth: true },            // 6
-  { label: 'Sıralamalar', value: 'rankings', auth: false },     // 7
-  { label: 'Hakkımızda', value: 'about', auth: false },         // 8
+        { label: 'Ana Sayfa', value: 'home', auth: false },
+        { label: 'Testler', value: 'categories', auth: false },
+        { label: 'Klasik Sorular', value: 'questions', auth: false },
+        { label: 'Kelimeler', value: 'words', auth: false },
+        { label: 'Konular', value: 'topics', auth: false },
+        { label: 'Geçmiş', value: 'history', auth: true },
+        { label: 'Sıralamalar', value: 'rankings', auth: false },
+        { label: 'Hakkımızda', value: 'about', auth: false },
+        { label: 'Profil', value: 'profile', auth: true }, // Profil EN SONDA
       ];
     }
     // Giriş yapmayanlar
     return [
-      { label: 'Ana Sayfa', value: 'home', auth: false },           // 0 - mobile menu access to home
-      { label: 'Testler', value: 'categories', auth: false },        // 1
-      { label: 'Klasik Sorular', value: 'questions', auth: false },  // 2
-      { label: 'Kelimeler', value: 'words', auth: false },           // 3
-      { label: 'Konular', value: 'topics', auth: false },            // 4 (yeni eklendi)
-      { label: 'Sıralamalar', value: 'rankings', auth: false },      // 5
-      { label: 'Hakkımızda', value: 'about', auth: false },          // 6
+      { label: 'Ana Sayfa', value: 'home', auth: false },
+      { label: 'Testler', value: 'categories', auth: false },
+      { label: 'Klasik Sorular', value: 'questions', auth: false },
+      { label: 'Kelimeler', value: 'words', auth: false },
+      { label: 'Konular', value: 'topics', auth: false },
+      { label: 'Sıralamalar', value: 'rankings', auth: false },
+      { label: 'Hakkımızda', value: 'about', auth: false },
     ];
   }, [token]);
 

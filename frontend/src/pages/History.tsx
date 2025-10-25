@@ -151,7 +151,6 @@ const History: React.FC<HistoryProps> = ({ token }) => {
           px: 2 
         }}
       >
-  <img src="/empty-history.svg" alt="Henüz test geçmişiniz yok" style={{ width: 180, marginBottom: 24 }} loading="lazy" />
         <Typography variant="h5" color={palette.accent} fontWeight={700}>Henüz test çözmediniz!</Typography>
         <Typography color="text.secondary" mt={1}>Çözdüğünüz sınavlar burada listelenecek.</Typography>
       </Box>

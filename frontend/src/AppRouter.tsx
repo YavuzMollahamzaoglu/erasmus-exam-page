@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import ModernLoader from './components/ModernLoader';
 import Box from '@mui/material/Box';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -87,7 +88,7 @@ const AppRouter: React.FC = () => {
       <NavbarWithNavigate userImage={userImage} />
       {/* Fixed AppBar spacer to avoid content jump under navbar */}
       <Box sx={{ height: { xs: 56, md: 64 } }} />
-      <Suspense fallback={<div>Yükleniyor...</div>}>
+  <Suspense fallback={<ModernLoader text="Yükleniyor..." />}> 
         <Routes>
           <Route path="/" element={<Box component="main" id="main-content"><HomePage token={token} /></Box>} />
           <Route path="/topics" element={<Box component="main" id="main-content"><TopicsPage /></Box>} />
