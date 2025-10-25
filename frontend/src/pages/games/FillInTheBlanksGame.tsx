@@ -1,3 +1,10 @@
+import React, { useState, useEffect } from 'react';
+import setMetaTags from '../../utils/seo';
+import { Box, Typography, Button, Paper, Alert, IconButton, LinearProgress, CircularProgress, Tooltip, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 // Diziyi karıştıran yardımcı fonksiyon
 function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -7,14 +14,6 @@ function shuffleArray<T>(array: T[]): T[] {
   }
   return arr;
 }
-import React, { useState, useEffect } from 'react';
-import setMetaTags from '../../utils/seo';
-import { Box, Typography, Button, Paper, Alert, IconButton, LinearProgress, CircularProgress, Tooltip, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
- 
-import { useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 interface FillInTheBlanksQuestion {
   id: string;
