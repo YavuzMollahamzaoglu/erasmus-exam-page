@@ -260,7 +260,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
               </Box>
               <Box>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>6) 🎧 Listening (Yakında)</Typography>
-                <Typography fontSize={13} color="#607d8b">Listening çalışması çok yakında! <b>Yükleniyor...</b></Typography>
+                <Typography fontSize={13} color="#607d8b">Listening çalışması çok yakında! </Typography>
               </Box>
             </Box>
           </Paper>
