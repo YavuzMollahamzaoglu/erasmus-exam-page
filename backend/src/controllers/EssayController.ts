@@ -5,13 +5,14 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const getGeminiClient = () => {
   if (
     !process.env.GEMINI_API_KEY ||
-    process.env.GEMINI_API_KEY === "your-gemini-api-key-here"
+    process.env.GEMINI_API_KEY === "AIzaSyBnVI4KBht0T9uQNKRuzn99BrDZWjbKnPc"
   ) {
     return null;
   }
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  return genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  // Use the latest stable Gemini model for essay evaluation
+  return genAI.getGenerativeModel({ model: "gemini-pro" });
 };
 
 interface EssayScores {
