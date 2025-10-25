@@ -64,15 +64,6 @@ const pickDisplayOptions = (q: FillInTheBlanksQuestion): string[] => {
 const FillInTheBlanksGame: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  useEffect(() => {
-    setMetaTags({
-      title: 'Boşluk Doldurma — Paragraf Oyunu',
-      description: 'Boşluk doldurma oyunu ile paragraf içi kelime bilgisi ve bağlam kullanımını geliştirin.',
-      keywords: 'boşluk doldurma, paragraph oyunu, kelime bilgisi',
-      canonical: '/bosluk-doldurma',
-      ogImage: '/social-preview.svg'
-    });
-  }, []);
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<FillInTheBlanksQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -86,9 +77,7 @@ const FillInTheBlanksGame: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [time, setTime] = useState(0);
-  // Persist each question's state while navigating
   const [questionStates, setQuestionStates] = useState<Record<string, QuestionState>>({});
-  // Backend'den soruları çek
   // Modern buton stili
   const optionButtonSx = {
     minWidth: 110,
@@ -112,70 +101,26 @@ const FillInTheBlanksGame: React.FC = () => {
     },
   };
 
-  return (
-    <Box>
-      {/* ...diğer oyun içeriği... */}
-      <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
-        <Typography variant="h6" mb={1}>Seçenekler:</Typography>
-        <Box display="flex" flexWrap="wrap" justifyContent="center">
-          {availableOptions.map((option, idx) => (
-            <Button
-              key={option}
-              variant={selectedOption === option ? 'contained' : 'outlined'}
-              color="primary"
-              onClick={() => handleOptionClick(option)}
-              sx={optionButtonSx}
-              className={selectedOption === option ? 'Mui-selected' : ''}
-            >
-              {option}
-            </Button>
-          ))}
-        </Box>
-      </Box>
-      {/* ...diğer oyun içeriği... */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
-        <Button onClick={handlePrev} variant="outlined" color="primary" startIcon={<ArrowBackIcon />}>
-          Önceki
-        </Button>
-        <Button onClick={handleCheck} variant="contained" color="success">
-          Kontrol Et
-        </Button>
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <Button onClick={handleNext} variant="outlined" color="primary">
-            Sonraki
-          </Button>
-          <ArrowForwardIcon sx={{ mt: 0.5 }} />
-        </Box>
-      </Box>
-      {/* Şeffaf arrowlar sadece masaüstünde gösterilecek */}
-      {!isMobile && (
-        <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-          <IconButton onClick={handlePrev} sx={{ opacity: 0.3, mx: 2 }}><ArrowBackIcon fontSize="large" /></IconButton>
-          <IconButton onClick={handleNext} sx={{ opacity: 0.3, mx: 2 }}><ArrowForwardIcon fontSize="large" /></IconButton>
-        </Box>
-      )}
-    </Box>
-  );
-        const initialMap: Record<string, QuestionState> = {};
-        sampleQuestions.forEach((q, idx) => {
-          const blanks = getBlankCount(q);
-          const size = Math.min(blanks, q.correctAnswers.length);
-          const key = `${idx}:${q.id || 'noid'}`;
-          initialMap[key] = {
-            userAnswers: Array(size).fill(null),
-            availableOptions: pickDisplayOptions(q),
-            isSubmitted: false,
-            showResults: false,
-            score: 0,
-          };
-        });
-    setQuestionStates(initialMap);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Shuffle fonksiyonu
+  function shuffleArray<T>(array: T[]): T[] {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
 
-    // fetchQuestions fonksiyonunu burada tanımlıyoruz
+  useEffect(() => {
+    setMetaTags({
+      title: 'Boşluk Doldurma — Paragraf Oyunu',
+      description: 'Boşluk doldurma oyunu ile paragraf içi kelime bilgisi ve bağlam kullanımını geliştirin.',
+      keywords: 'boşluk doldurma, paragraph oyunu, kelime bilgisi',
+      canonical: '/bosluk-doldurma',
+      ogImage: '/social-preview.svg'
+    });
+
+    // Soruları fetch et ve karıştır
     const fetchQuestions = async () => {
       try {
         setLoading(true);
@@ -196,6 +141,8 @@ const FillInTheBlanksGame: React.FC = () => {
     };
     fetchQuestions();
   }, []);
+
+  // ...existing code...
 
   // Load current question state from store or initialize if missing
   const resetCurrentQuestion = (question: FillInTheBlanksQuestion, index: number) => {
