@@ -200,11 +200,19 @@ Yanıtı sadece aşağıdaki JSON formatında ver:
         grScore -= turkishChars > 5 ? 2 : turkishChars > 0 ? 1 : 0;
         grScore = to10(grScore);
 
-        const overall = clamp(
+        // Eğer konuya hiç değinilmiyorsa (topicBoost 0), task_response ve overall puanını 1'e çek
+        if (topicBoost === 0) {
+          trScore = 1;
+        }
+
+        let overall = clamp(
           Math.round(((trScore + ccScore + lrScore + grScore) / 4) * 10),
           0,
           100
         );
+        if (topicBoost === 0) {
+          overall = 1;
+        }
 
         const feedback = [
           `Metin uzunluğu: ${wordCount} kelime, ${sentenceCount} cümle. Ortalama cümle uzunluğu ${avgSentence.toFixed(
@@ -272,6 +280,7 @@ Yanıtı sadece aşağıdaki JSON formatında ver:
         if (jsonMatch) cleanedResponse = jsonMatch[0];
 
         let evaluation: EssayEvaluation = JSON.parse(cleanedResponse);
+
         if (!evaluation.scores || !evaluation.feedback)
           throw new Error("Invalid evaluation structure");
 
@@ -288,7 +297,15 @@ Yanıtı sadece aşağıdaki JSON formatında ver:
             throw new Error(`Invalid score for ${key}: ${score}`);
           }
         }
+        // Eğer AI'dan gelen task_response veya coherence_cohesion 2 veya daha düşükse, overall puanını 1'e çek
         if (
+          (typeof scores.task_response === "number" &&
+            scores.task_response <= 2) ||
+          (typeof scores.coherence_cohesion === "number" &&
+            scores.coherence_cohesion <= 2)
+        ) {
+          scores.overall = 1;
+        } else if (
           typeof scores.overall !== "number" ||
           scores.overall < 0 ||
           scores.overall > 100

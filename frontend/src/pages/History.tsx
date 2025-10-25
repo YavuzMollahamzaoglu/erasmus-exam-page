@@ -396,34 +396,51 @@ const History: React.FC<HistoryProps> = ({ token }) => {
                     return null;
                   })()}
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                    {(exam.questions || exam.answers || []).map((q: any, i: number) => (
-                      <Box
-                        key={i}
-                        sx={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: '50%',
-                          bgcolor: q.isCorrect ? palette.correct : palette.wrong,
-                          color: '#fff',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 700,
-                          fontSize: 18,
-                          cursor: 'pointer',
-                          border: '2px solid #fff',
-                          boxShadow: '0 1px 4px #0001',
-                          transition: 'transform 0.1s',
-                          '&:hover': { transform: 'scale(1.12)' },
-                        }}
-                        onClick={e => {
-                          e.stopPropagation();
-                          setQuestionDialog({ open: true, question: q, idx, qIdx: i });
-                        }}
-                      >
-                        {i + 1}
-                      </Box>
-                    ))}
+                    {(exam.questions || exam.answers || []).map((q: any, i: number) => {
+                      // Boş bırakılan sorular için özel renk
+                      const isEmpty = !q.userAnswer && q.userAnswer !== 0;
+                      let bg, fg;
+                      if (isEmpty) {
+                        bg = '#ffe082'; // sarı
+                        fg = '#795548';
+                      } else if (q.isCorrect) {
+                        bg = palette.correct;
+                        fg = '#fff';
+                      } else {
+                        bg = palette.wrong;
+                        fg = '#fff';
+                      }
+                      return (
+                        <Box
+                          key={i}
+                          sx={{
+                            width: 36,
+                            height: 36,
+                            borderRadius: '50%',
+                            bgcolor: bg,
+                            color: fg,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 700,
+                            fontSize: 18,
+                            cursor: isEmpty ? 'default' : 'pointer',
+                            border: '2px solid #fff',
+                            boxShadow: '0 1px 4px #0001',
+                            transition: 'transform 0.1s',
+                            '&:hover': { transform: isEmpty ? 'none' : 'scale(1.12)' },
+                            opacity: isEmpty ? 0.7 : 1,
+                          }}
+                          onClick={e => {
+                            if (isEmpty) return;
+                            e.stopPropagation();
+                            setQuestionDialog({ open: true, question: q, idx, qIdx: i });
+                          }}
+                        >
+                          {i + 1}
+                        </Box>
+                      );
+                    })}
                   </Box>
                   <Dialog
                     open={!!questionDialog && questionDialog.open && questionDialog.idx === idx}

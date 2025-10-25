@@ -237,28 +237,30 @@ const HomePage: React.FC<Props> = ({ token }) => {
               Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap. <br/>
               <b>Küçük not:</b> Konu sayfasında genel konuları öğrenebilir, her konuya özel küçük notlar alarak soruları nasıl çözeceğini görebilirsin.
             </Typography>
-            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 1.5 }}>
-              <Box>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gridTemplateRows: { xs: 'repeat(6, 1fr)', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
+              {/* 1. Satır */}
+              <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>1) Kelimeleri Öğren</Typography>
                 <Typography fontSize={13} color="#607d8b">Kelimeler sayfası, Kelime Avı ve Kelime Eşleştirme oyunları ile seviyene uygun kelime çalış.</Typography>
               </Box>
-              <Box>
+              <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>2) Konu Sayfasında Çalış</Typography>
                 <Typography fontSize={13} color="#607d8b">Konu sayfasında genel konuları öğren, üzerine çalış ve küçük notlar alarak soruları nasıl çözeceğini öğren.</Typography>
               </Box>
-              <Box>
+              <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>3) Klasik Sorularla Pekiştir</Typography>
                 <Typography fontSize={13} color="#607d8b">Testler bölümünde dilbilgisi (grammar) ve kelime (vocabulary) odaklı sorularla pratik yap.</Typography>
               </Box>
-              <Box>
+              {/* 2. Satır */}
+              <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>4) Gerçek Sınav Tarzı</Typography>
                 <Typography fontSize={13} color="#607d8b">Üniversite ve kitaplardan derlenmiş, gerçek sınavlara yakın soruları A1, A2, B1 ve B2 seviyelerinde çözerek seviyeni ölç.</Typography>
               </Box>
-              <Box>
+              <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>5) Okuma (Reading)</Typography>
                 <Typography fontSize={13} color="#607d8b">Uzun paragraf + 4–5 çoktan seçmeli soruyla okuduğunu anlama becerini geliştir.</Typography>
               </Box>
-              <Box>
+              <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>6) 🎧 Listening (Yakında)</Typography>
                 <Typography fontSize={13} color="#607d8b">Listening çalışması çok yakında! </Typography>
               </Box>
@@ -278,7 +280,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
               <Typography fontSize={28} mb={1}>🔢</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Kelime Avı Oyunu</Typography>
               <Typography fontSize={14} color="#455a64">
-                A1, A2, B1 ve B2 seviyelerinde kelime bilgisini geliştirmek için oynanır. Her seviyede 10 kelime sorusu ardışık olarak gelir. Doğru cevabı seç, puan topla! Yanlış cevapta doğru seçenek gösterilir. Tüm seviyelerde oynayarak kelime dağarcığını artırabilirsin.
+                Her seviyede 10 kelime sorusunu hızlıca çözerek puan toplarsın. Yanlış cevapta doğru seçeneği ve açıklamasını görürsün. Oyun sonunda toplam puanını ve doğru-yanlışlarını görebilirsin. Seviyeni seçerek kelime bilginin hangi düzeyde olduğunu test edebilirsin. Hedefin, her oynayışta daha yüksek puan almak ve kelime dağarcığını geliştirmek.
               </Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Seviye: A1–B2" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
@@ -294,7 +296,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
             >
               <Typography fontSize={28} mb={1}>⌨️</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Yazı Yazma</Typography>
-              <Typography fontSize={14} color="#455a64">Türkçe kelimenin İngilizcesini yaz, anında geri bildirim al.</Typography>
+              <Typography fontSize={14} color="#455a64">Ekranda verilen Türkçe kelimenin İngilizcesini yazarsın. Her girişte anında doğru-yanlış geri bildirimi alırsın. Hatalı cevaplarda doğru yazılışı öğrenirsin. Oyun sonunda başarı oranını görebilirsin. Pratik yaparak yazılı kelime bilgin gelişir.</Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Zorluk: Kolay" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
                 <Chip label="~5 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
@@ -309,7 +311,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
             >
               <Typography fontSize={28} mb={1}>🧩</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Kelime Eşleştirme</Typography>
-              <Typography fontSize={14} color="#455a64">15 kelimeyle hızlı eşleştirme; iki satır havuz ve 3x5 hedef ızgarası.</Typography>
+              <Typography fontSize={14} color="#455a64">15 İngilizce kelimeyi anlamlarıyla eşleştirirsin. Hızlı ve doğru eşleştirme yaparak puan toplarsın. Zaman baskısı ile reflekslerini ve kelime-anlam bağlantılarını güçlendirirsin. Yanlış eşleşmelerde doğru cevabı öğrenirsin. Oyun sonunda performansını görebilirsin.</Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Kelime odaklı" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
                 <Chip label="Zaman takibi" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
@@ -324,7 +326,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
             >
               <Typography fontSize={28} mb={1}>📖</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Okuma Oyunu</Typography>
-              <Typography fontSize={14} color="#455a64">Uzun paragraf + 4–5 soru ile okuduğunu anlama; doğru/yanlış geri bildirim ve açıklamalar.</Typography>
+              <Typography fontSize={14} color="#455a64">Bir paragrafı okuyup ardından 4-5 çoktan seçmeli soruyu cevaplıyorsun. Her sorudan sonra doğru-yanlış geri bildirimi ve açıklama alırsın. Okuduğunu anlama ve çıkarım yapma becerini geliştirirsin. Oyun sonunda genel başarını görebilirsin. Farklı seviyelerde metinlerle pratik yapabilirsin.</Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Reading" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
                 <Chip label="Seviye: A1–B2" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
@@ -339,7 +341,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
             >
               <Typography fontSize={28} mb={1}>🧠</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Boşluk Doldurma</Typography>
-              <Typography fontSize={14} color="#455a64">Paragrafta boşlukları doğru seçenekle doldur; bağlam içinde kelime/gramer pekiştir.</Typography>
+              <Typography fontSize={14} color="#455a64">Bir paragraftaki boşlukları doğru kelime veya gramer seçeneğiyle doldurursun. Her seçimden sonra anında geri bildirim alırsın. Yanlışlarda açıklama ve doğru cevabı öğrenirsin. Bağlam içinde kelime ve dilbilgisi pratiği yaparsın. Oyun sonunda genel başarını görebilirsin.</Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Bağlamlı alıştırma" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
                 <Chip label="A1–B2" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
@@ -354,7 +356,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
             >
               <Typography fontSize={28} mb={1}>📝</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Essay</Typography>
-              <Typography fontSize={14} color="#455a64">Yapay zekâ ile değerlendirilen essay yazma deneyimi.</Typography>
+              <Typography fontSize={14} color="#455a64">Belirlenen konuda İngilizce essay yazarsın. Yazdığın metin yapay zekâ tarafından değerlendirilir ve puanlanır. Hataların ve güçlü yönlerin detaylı şekilde gösterilir. Gelişim için öneriler alırsın. Her denemede yazma becerini artırabilirsin.</Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Zorluk: Orta" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
                 <Chip label="~10 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
@@ -380,7 +382,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 {[ 
                   { icon: '🏆', title: 'Sıralamalar', desc: 'Puanın ve rozetlerinle listelerde yer al.', href: '/rankings' },
                   { icon: '🕒', title: 'Çözüm Geçmişi', desc: 'Geçmiş sonuçlarını ve gelişimini takip et.', href: '/register' },
-                  { icon: '💬', title: 'Yorumlar', desc: 'Sorulara yorum yap, tartışmalara katıl.', href: '/register' },
+                  { icon: '💬', title: 'Yorumlar', desc: 'Sıralama sayfasında yorum yap, iletişime geç.', href: '/register' },
                 ].map((f) => (
                   <Box
                     key={f.title}

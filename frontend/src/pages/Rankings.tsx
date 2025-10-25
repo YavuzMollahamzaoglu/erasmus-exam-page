@@ -443,34 +443,46 @@ const Rankings: React.FC<Props> = ({ token }) => {
                   }}
                 >
                   <Box sx={{ mr: 2 }}>
-                    {c.user?.profilePhoto ? (
-                      <img loading="lazy"
-                        src={`${process.env.REACT_APP_API_URL}${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}`}
-                        alt={c.user?.name ? `${c.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
-                        style={{ 
-                          width: 40, 
-                          height: 40, 
-                          borderRadius: '50%', 
+                    {c.user?.profilePhoto && typeof c.user.profilePhoto === 'string' ? (
+                      <img
+                        loading="lazy"
+                        src={`${process.env.REACT_APP_API_URL}${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}?t=${Date.now()}`}
+                        alt={c.user?.name ? `${c.user.name} adlı kullanıcının profil fotoğrafı` : 'Kullanıcı profil fotoğrafı'}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: '50%',
                           objectFit: 'cover',
-                          border: '2px solid #00b894'
+                          border: '2px solid #00b894',
+                          display: 'block',
+                        }}
+                        onError={e => {
+                          const img = e.target as HTMLImageElement;
+                          img.onerror = null;
+                          img.style.display = 'none';
+                          const fallback = img.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
                         }}
                       />
-                    ) : (
-                      <Box sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        fontWeight: 700,
-                        fontSize: '1.2rem'
-                      }}>
-                        {c.user?.name?.charAt(0).toUpperCase() || 'A'}
-                      </Box>
-                    )}
+                    ) : null}
+                    {/* Fallback avatar, her zaman DOM'da olsun ki onError'da gösterilebilsin */}
+                    <Box sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                      display: c.user?.profilePhoto ? 'none' : 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontWeight: 700,
+                      fontSize: '1.2rem',
+                      position: 'absolute',
+                      left: 0,
+                      top: 0
+                    }}>
+                      {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name.charAt(0).toUpperCase() : 'A'}
+                    </Box>
                   </Box>
                   <Box sx={{ flex: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
@@ -480,7 +492,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                           fontSize: '1rem',
                         }
                       }}>
-                        {c.user?.name || 'Anonim'}
+                        {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name : 'Anonim'}
                       </Typography>
                       {/* Tarih sadece gün/ay/yıl, mobilde sağ alt köşe */}
                       <Box
