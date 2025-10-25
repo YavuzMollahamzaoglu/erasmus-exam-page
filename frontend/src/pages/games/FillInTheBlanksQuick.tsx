@@ -359,19 +359,49 @@ const FillInTheBlanksQuick: React.FC = () => {
         )}
 
         {!isSubmitted && (
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, mt: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2 }}>
             <button
-              style={{ background: '#fff', color: currentIndex === 0 ? '#999' : '#00b894', fontWeight: 700, border: `2px solid ${currentIndex === 0 ? '#ddd' : 'rgba(0, 184, 148, 0.5)'}`, borderRadius: 12, padding: '10px 18px', cursor: currentIndex === 0 ? 'not-allowed' : 'pointer', minWidth: 110 }}
+              style={{
+                background: currentIndex === 0 ? '#f4f4f4' : 'linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)',
+                color: currentIndex === 0 ? '#b2bec3' : '#0984e3',
+                fontWeight: 700,
+                border: 'none',
+                borderRadius: 50,
+                padding: '12px 18px',
+                minWidth: 56,
+                minHeight: 56,
+                boxShadow: currentIndex === 0 ? 'none' : '0 2px 12px 0 rgba(0,184,148,0.10)',
+                cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
+                transition: 'all 0.18s',
+                fontSize: 20,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: 8
+              }}
               onClick={() => setCurrentIndex(i => Math.max(0, i - 1))}
               disabled={currentIndex === 0}
             >
-              ← Önceki
+              ←
             </button>
             {(() => {
               const hasBlank = userAnswers.some(a => a === null);
               const Btn = (
                 <button
-                  style={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', fontWeight: 800, fontSize: 16, border: 'none', borderRadius: 12, padding: '12px 24px', cursor: hasBlank ? 'not-allowed' : 'pointer', opacity: hasBlank ? 0.7 : 1 }}
+                  style={{
+                    background: hasBlank ? 'linear-gradient(135deg, #b2bec3 0%, #dfe6e9 100%)' : 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: 18,
+                    border: 'none',
+                    borderRadius: 32,
+                    padding: '14px 36px',
+                    boxShadow: hasBlank ? 'none' : '0 2px 16px 0 rgba(0,184,148,0.13)',
+                    cursor: hasBlank ? 'not-allowed' : 'pointer',
+                    opacity: hasBlank ? 0.7 : 1,
+                    margin: '0 8px',
+                    transition: 'all 0.18s',
+                  }}
                   onClick={() => { if (!hasBlank) handleSubmit(); }}
                   disabled={hasBlank}
                 >
@@ -381,11 +411,28 @@ const FillInTheBlanksQuick: React.FC = () => {
               return <Tooltip title={hasBlank ? 'Bütün boşlukları doldurmalısınız' : ''} arrow placement="top" disableHoverListener={!hasBlank}><span style={{ display: 'inline-flex' }}>{Btn}</span></Tooltip>;
             })()}
             <button
-              style={{ background: '#fff', color: currentIndex >= questions.length - 1 ? '#999' : '#00b894', fontWeight: 700, border: `2px solid ${currentIndex >= questions.length - 1 ? '#ddd' : 'rgba(0, 184, 148, 0.5)'}`, borderRadius: 12, padding: '10px 18px', cursor: currentIndex >= questions.length - 1 ? 'not-allowed' : 'pointer', minWidth: 110 }}
+              style={{
+                background: currentIndex >= questions.length - 1 ? '#f4f4f4' : 'linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)',
+                color: currentIndex >= questions.length - 1 ? '#b2bec3' : '#0984e3',
+                fontWeight: 700,
+                border: 'none',
+                borderRadius: 50,
+                padding: '12px 18px',
+                minWidth: 56,
+                minHeight: 56,
+                boxShadow: currentIndex >= questions.length - 1 ? 'none' : '0 2px 12px 0 rgba(0,184,148,0.10)',
+                cursor: currentIndex >= questions.length - 1 ? 'not-allowed' : 'pointer',
+                transition: 'all 0.18s',
+                fontSize: 20,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: 8
+              }}
               onClick={() => setCurrentIndex(i => Math.min(questions.length - 1, i + 1))}
               disabled={currentIndex >= questions.length - 1}
             >
-              Sonraki →
+              →
             </button>
           </Box>
         )}

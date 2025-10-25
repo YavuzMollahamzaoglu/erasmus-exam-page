@@ -694,9 +694,23 @@ const Categories: React.FC = () => {
                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                 gap: 3
               }}>
-                {Object.entries(types).map(([typeKey, tests]) => (
-                  <React.Fragment key={typeKey}>
-                    {tests.map((test: TestType) => {
+                {Object.entries(types)
+                  .sort(([a], [b]) => {
+                    // Sıralama: Genel İngilizce -> Üniversite Hazırlık -> Erasmus 1 -> Erasmus 2
+                    const order = [
+                      'Genel İngilizce Sınavı 1',
+                      'Genel İngilizce Sınavı 2',
+                      'Üniversite Hazırlık Sınavı 1',
+                      'Erasmus Sınavı 1',
+                      'Erasmus Sınavı 2',
+                    ];
+                    const idxA = order.findIndex(t => a.includes(t));
+                    const idxB = order.findIndex(t => b.includes(t));
+                    return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+                  })
+                  .map(([typeKey, tests]) => (
+                    <React.Fragment key={typeKey}>
+                      {tests.map((test: TestType) => {
                       // If we have real series from backend, hide dynamic placeholders
                       if (dynamicData && test.isDynamic) return null;
 

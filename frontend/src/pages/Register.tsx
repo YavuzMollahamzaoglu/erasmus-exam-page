@@ -107,7 +107,10 @@ const Register: React.FC<Props> = () => {
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit', borderBottomLeftRadius: 0, borderBottomRightRadius: 0, textAlign: 'center', position: 'relative', overflow: 'hidden', '&::before': { content: '""', position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(4px)' } }}>
           <Box sx={{ position: 'relative' }}>
             <Typography variant="h4" fontWeight={800} mb={1}>Kayıt Ol</Typography>
-            <Typography variant="subtitle1" sx={{ opacity: 0.95 }}>Hesap oluştur ve hemen başla</Typography>
+            <Typography variant="subtitle1" sx={{ opacity: 0.95 }}>
+              İngilizce hazırlık sayfamıza kayıt olun ve İngilizce gelişiminize katkıda bulunun.<br/>
+              Sınavlara özel içerikler, pratik testler ve gelişmiş analizlerle İngilizcenizi bir üst seviyeye taşıyın. Hemen üye olun, avantajlardan faydalanmaya başlayın!
+            </Typography>
           </Box>
         </Box>
 

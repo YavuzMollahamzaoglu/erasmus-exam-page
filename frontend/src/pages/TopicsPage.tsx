@@ -475,7 +475,7 @@ const TopicsPage: React.FC = () => {
             variant={window.innerWidth < 600 ? 'scrollable' : 'fullWidth'}
             scrollButtons={window.innerWidth < 600 ? 'auto' : false}
             allowScrollButtonsMobile
-            sx={{ mb: 2, overflowX: { xs: 'auto', sm: 'visible' }, minWidth: { xs: 340, sm: 'unset' } }}
+            sx={{ mb: 2, overflowX: { xs: 'auto', sm: 'visible' }, minWidth: { xs: 340, sm: 'unset' }, justifyContent: { xs: 'center', sm: 'flex-start' }, display: 'flex' }}
           >
             {levels.map(level => (
               <Tab key={level} value={level} label={level} sx={{ minWidth: 80 }} />

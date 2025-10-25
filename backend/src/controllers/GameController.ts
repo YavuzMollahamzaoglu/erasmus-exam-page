@@ -162,11 +162,11 @@ class GameController {
       }
       const questions = await prisma.paragraphQuestion.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: "asc" }, // kolaydan zora (en eski en önce)
       });
 
       const formattedQuestions = questions.map((q) => ({
-        id: parseInt(q.id.slice(-1)), // Simple ID for frontend
+        id: q.id, // Tüm id'yi kullan
         title: q.title,
         text: q.text,
         options: JSON.parse(q.options),

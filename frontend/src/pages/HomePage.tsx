@@ -269,7 +269,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
 
           {/* Oyunlarımız */}
           <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Oyunlarımız</Typography>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: { xs: 2, md: 2.5 }, mb: 3 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: { xs: 2, md: 2.5 }, mb: 3 }}>
             <Box
               sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
               role="button"
