@@ -98,18 +98,11 @@ export default function WritingGame() {
   // Hint functions
   const getHint = () => {
     if (!words[index]) return;
-    
     const currentWord = words[index].en.toLowerCase().trim();
     const usedHints = hintsUsed[index] || [];
-    
-    // Split by spaces to handle multiple words
     const wordParts = currentWord.split(' ').filter(part => part.length > 0);
     const wordCount = wordParts.length;
-    
-    // Generate hints based on word count
     const availableHints = [];
-    
-    // Add one hint for each word (showing first letters)
     for (let i = 0; i < wordCount; i++) {
       if (wordCount === 1) {
         availableHints.push({
@@ -123,17 +116,11 @@ export default function WritingGame() {
         });
       }
     }
-    
-    // Find next unused hint
     const nextHint = availableHints.find(hint => !usedHints.includes(hint.type));
-    
     if (nextHint) {
       const newUsedHints = [...usedHints, nextHint.type];
       setHintsUsed(prev => ({ ...prev, [index]: newUsedHints }));
       setCurrentHint(nextHint.message);
-      
-      // Clear hint after 3 seconds
-      setTimeout(() => setCurrentHint(""), 3000);
     } else {
       setCurrentHint("Tüm ipuçları kullanıldı!");
       setTimeout(() => setCurrentHint(""), 2000);
@@ -455,20 +442,50 @@ export default function WritingGame() {
           Türkçe Kelime: {words[index].tr}
         </Typography>
         
-        {/* Hint message */}
-        {currentHint && (
-          <Box sx={{
-            bgcolor: 'rgba(255, 152, 0, 0.1)',
-            border: '2px solid rgba(255, 152, 0, 0.3)',
-            borderRadius: 2,
-            p: 2,
-            mb: 2,
-            textAlign: 'center',
-            animation: 'fadeIn 0.3s ease-in'
-          }}>
-            <Typography sx={{ color: '#f57c00', fontWeight: 600, fontSize: 16 }}>
-              💡 {currentHint}
-            </Typography>
+        {/* Kalıcı ipucu kutusu */}
+        {hintsUsed[index] && hintsUsed[index].length > 0 && (
+          <Box
+            sx={{
+              bgcolor: 'rgba(255, 152, 0, 0.08)',
+              border: '2px solid rgba(255, 152, 0, 0.18)',
+              borderRadius: 2,
+              p: 1.2,
+              mb: 2,
+              textAlign: 'center',
+              fontSize: 15,
+              color: '#f57c00',
+              fontWeight: 600,
+              display: 'inline-block',
+              minWidth: 120,
+              maxWidth: '90vw',
+              position: 'relative',
+              zIndex: 2,
+              boxShadow: '0 2px 8px rgba(255,152,0,0.07)',
+              '@media (max-width:600px)': {
+                fontSize: 15,
+                minWidth: 100,
+                px: 1,
+              },
+            }}
+          >
+            <span role="img" aria-label="ipucu">💡</span> {hintsUsed[index].map((hintType, i) => {
+              // Sadece ilk harf ipucunu göster
+              // compute wordParts from current word so it's available here
+              const wordParts = (words[index] && words[index].en)
+                ? words[index].en.toLowerCase().trim().split(' ').filter(part => part.length > 0)
+                : [''];
+              if (hintType.startsWith('firstLetter')) {
+                const partIdx = parseInt(hintType.split('_')[1], 10);
+                return (
+                  <span key={hintType} style={{ marginLeft: i > 0 ? 8 : 0 }}>
+                    {wordParts.length === 1
+                      ? `İlk harf: ${wordParts[partIdx][0].toUpperCase()}`
+                      : `${partIdx + 1}. kelimenin ilk harfi: ${wordParts[partIdx][0].toUpperCase()}`}
+                  </span>
+                );
+              }
+              return null;
+            })}
           </Box>
         )}
         

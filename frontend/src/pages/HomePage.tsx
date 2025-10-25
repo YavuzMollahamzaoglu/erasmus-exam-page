@@ -234,7 +234,8 @@ const HomePage: React.FC<Props> = ({ token }) => {
           <Paper elevation={0} sx={{ mb: 4, p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: '#fff' }}>
             <Typography variant="h6" fontWeight={800} mb={1} sx={{ color: '#00695c' }}>Nasıl çalışmalı?</Typography>
             <Typography fontSize={14} color="#455a64" mb={1.5}>
-              Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap.
+              Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap. <br/>
+              <b>Küçük not:</b> Konu sayfasında genel konuları öğrenebilir, her konuya özel küçük notlar alarak soruları nasıl çözeceğini görebilirsin.
             </Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 1.5 }}>
               <Box>
@@ -242,16 +243,24 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Typography fontSize={13} color="#607d8b">Kelimeler sayfası, Kelime Avı ve Kelime Eşleştirme oyunları ile seviyene uygun kelime çalış.</Typography>
               </Box>
               <Box>
-                <Typography fontWeight={700} color="#19376D" mb={0.5}>2) Klasik Sorularla Pekiştir</Typography>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>2) Konu Sayfasında Çalış</Typography>
+                <Typography fontSize={13} color="#607d8b">Konu sayfasında genel konuları öğren, üzerine çalış ve küçük notlar alarak soruları nasıl çözeceğini öğren.</Typography>
+              </Box>
+              <Box>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>3) Klasik Sorularla Pekiştir</Typography>
                 <Typography fontSize={13} color="#607d8b">Testler bölümünde dilbilgisi (grammar) ve kelime (vocabulary) odaklı sorularla pratik yap.</Typography>
               </Box>
               <Box>
-                <Typography fontWeight={700} color="#19376D" mb={0.5}>3) Gerçek Sınav Tarzı</Typography>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>4) Gerçek Sınav Tarzı</Typography>
                 <Typography fontSize={13} color="#607d8b">Üniversite ve kitaplardan derlenmiş, gerçek sınavlara yakın soruları A1, A2, B1 ve B2 seviyelerinde çözerek seviyeni ölç.</Typography>
               </Box>
               <Box>
-                <Typography fontWeight={700} color="#19376D" mb={0.5}>4) Okuma (Reading)</Typography>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>5) Okuma (Reading)</Typography>
                 <Typography fontSize={13} color="#607d8b">Uzun paragraf + 4–5 çoktan seçmeli soruyla okuduğunu anlama becerini geliştir.</Typography>
+              </Box>
+              <Box>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>6) 🎧 Listening (Yakında)</Typography>
+                <Typography fontSize={13} color="#607d8b">Listening çalışması çok yakında! <b>Yükleniyor...</b></Typography>
               </Box>
             </Box>
           </Paper>
@@ -267,11 +276,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
               onKeyDown={(e) => { if (e.key === 'Enter') navigate('/kelime-avi'); }}
             >
               <Typography fontSize={28} mb={1}>🔢</Typography>
-              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Seri Soru Çözümü</Typography>
-              <Typography fontSize={14} color="#455a64">A1–B2 seviyelerinde kelime odaklı ardışık soru çözümü.</Typography>
+              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Kelime Avı Oyunu</Typography>
+              <Typography fontSize={14} color="#455a64">
+                A1, A2, B1 ve B2 seviyelerinde kelime bilgisini geliştirmek için oynanır. Her seviyede 10 kelime sorusu ardışık olarak gelir. Doğru cevabı seç, puan topla! Yanlış cevapta doğru seçenek gösterilir. Tüm seviyelerde oynayarak kelime dağarcığını artırabilirsin.
+              </Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Chip label="Zorluk: Orta" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
-                <Chip label="~8 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
+                <Chip label="Seviye: A1–B2" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
+                <Chip label="Her seviyede 10 soru" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
             </Box>
             <Box

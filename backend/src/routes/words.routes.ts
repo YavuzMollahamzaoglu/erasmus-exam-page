@@ -5,6 +5,6 @@ const router = Router();
 
 router.get("/", WordsController.getWords);
 router.post("/", WordsController.createWord);
-router.get("/:id/examples", WordsController.getExamples);
+router.get("/:id/examples", (WordsController as any).getExamples);
 
 export default router;

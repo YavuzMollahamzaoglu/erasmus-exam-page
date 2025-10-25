@@ -545,8 +545,8 @@ const FillInTheBlanksGame: React.FC = () => {
         // Show nav arrows on hover for desktop
         '&:hover .navArrow': { opacity: 1 }
       }}>
-        {/* Overlay navigation arrows */}
-        {currentIndex > 0 && (
+        {/* Overlay navigation arrows (only show on desktop) */}
+        {!isMobile && currentIndex > 0 && (
           <IconButton
             aria-label="Önceki soru"
             onClick={prevQuestion}
@@ -554,7 +554,6 @@ const FillInTheBlanksGame: React.FC = () => {
             disableRipple
             sx={{
               position: 'absolute',
-              // On very small phones: bring arrows to bottom center
               left: { xs: '50%', sm: -56, md: -72 },
               right: { xs: 'auto' },
               top: { xs: 'auto', sm: '50%' },
@@ -582,7 +581,7 @@ const FillInTheBlanksGame: React.FC = () => {
             <ArrowBackIcon fontSize="medium" sx={{ color: '#00b894' }} />
           </IconButton>
         )}
-        {currentIndex < questions.length - 1 && (
+        {!isMobile && currentIndex < questions.length - 1 && (
           <IconButton
             aria-label="Sonraki soru"
             onClick={nextQuestion}
@@ -590,7 +589,6 @@ const FillInTheBlanksGame: React.FC = () => {
             disableRipple
             sx={{
               position: 'absolute',
-              // On very small phones: bring arrows to bottom center
               left: { xs: '50%', sm: 'auto' },
               right: { xs: 'auto', sm: -56, md: -72 },
               top: { xs: 'auto', sm: '50%' },

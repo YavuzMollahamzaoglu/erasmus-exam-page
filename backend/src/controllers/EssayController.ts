@@ -45,19 +45,20 @@ const EssayController = {
       }
 
       // Prepare the prompt for Gemini
-      const prompt = `Sen bir IELTS sınavı değerlendirme uzmanısın. Aşağıdaki essay'i IELTS yazım kriterlerine göre değerlendir.
-Essay konusu: ${topic || "(konu belirtilmedi)"}
-Her kategori için 1-10 arası puan ver:
-- Task Response (Görev Yanıtı)
-- Coherence and Cohesion (Tutarlılık ve Bağlantı)
-- Lexical Resource (Kelime Dağarcığı)
-- Grammatical Range and Accuracy (Dilbilgisi Doğruluğu)
+      const prompt = `Sen bir IELTS sınavı yazılı değerlendirme uzmanısın. Sana verilen essay'i, verilen konuya uygunluk açısından ve IELTS yazma kriterlerine göre değerlendirmeni istiyorum. Lütfen aşağıdaki kurallara kesinlikle uy:
 
-Genel puanı 0-100 arası hesapla ve yapıcı geri bildirim ver.
+1. Essay'in verilen konuya ne kadar uygun olduğunu (Task Response) değerlendir. Konudan sapma, alakasız içerik veya eksik yanıt varsa puanı düşür.
+2. Coherence and Cohesion (Tutarlılık ve Bağlantı): Paragraflar arası ve cümleler arası mantıklı geçişleri, bağlaç ve bağlantı kelimelerinin kullanımını değerlendir.
+3. Lexical Resource (Kelime Dağarcığı): Farklı ve uygun kelime kullanımı, akademik kelimeler, tekrar eden kelimelerden kaçınma.
+4. Grammatical Range and Accuracy (Dilbilgisi): Farklı gramer yapıları, doğru zaman ve cümle yapısı, dilbilgisi hataları.
+5. Genel puan (overall): Tüm kriterlerin ortalamasına göre 0-100 arası bir puan ver.
 
+Her kategori için 1-10 arası puan ver. Geri bildirimi detaylı, yapıcı ve tamamen Türkçe olarak yaz. Geri bildirimin essayin içeriğiyle ve verilen konuyla doğrudan ilgili olsun, genel geçer veya alakasız yorumlar yapma. Essay metnini dikkatlice oku ve sadece verilen konuya odaklan.
+
+Konu: ${topic || "(konu belirtilmedi)"}
 Essay: ${essayText}
 
-Lütfen sadece aşağıdaki JSON formatında yanıtla:
+Yanıtı sadece aşağıdaki JSON formatında ver:
 {
   "scores": {
     "task_response": [1-10 arası puan],

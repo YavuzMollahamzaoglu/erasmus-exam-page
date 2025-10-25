@@ -472,11 +472,13 @@ const TopicsPage: React.FC = () => {
           <Tabs
             value={selectedLevel}
             onChange={(_, val) => setSelectedLevel(val)}
-            variant="fullWidth"
-            sx={{ mb: 2 }}
+            variant={window.innerWidth < 600 ? 'scrollable' : 'fullWidth'}
+            scrollButtons={window.innerWidth < 600 ? 'auto' : false}
+            allowScrollButtonsMobile
+            sx={{ mb: 2, overflowX: { xs: 'auto', sm: 'visible' }, minWidth: { xs: 340, sm: 'unset' } }}
           >
             {levels.map(level => (
-              <Tab key={level} value={level} label={level} />
+              <Tab key={level} value={level} label={level} sx={{ minWidth: 80 }} />
             ))}
           </Tabs>
           <TextField

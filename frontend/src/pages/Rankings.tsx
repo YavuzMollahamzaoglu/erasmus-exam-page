@@ -474,12 +474,41 @@ const Rankings: React.FC<Props> = ({ token }) => {
                   </Box>
                   <Box sx={{ flex: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                      <Typography fontWeight={600} color="#00b894">
+                      <Typography fontWeight={600} color="#00b894" sx={{
+                        display: 'block',
+                        '@media (max-width:600px)': {
+                          fontSize: '1rem',
+                        }
+                      }}>
                         {c.user?.name || 'Anonim'}
                       </Typography>
-                      <Typography fontSize="0.8rem" color="#666">
-                        {c.createdAt ? new Date(c.createdAt).toLocaleString('tr-TR') : ''}
-                      </Typography>
+                      {/* Tarih sadece gün/ay/yıl, mobilde sağ alt köşe */}
+                      <Box
+                        sx={{
+                          ml: 'auto',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: { xs: 'flex-end', md: 'flex-start' },
+                          width: { xs: '100%', md: 'auto' },
+                          position: { xs: 'absolute', md: 'static' },
+                          right: { xs: 16, md: 'unset' },
+                          bottom: { xs: 8, md: 'unset' },
+                          mt: { xs: 0.5, md: 0 },
+                        }}
+                      >
+                        <Typography
+                          fontSize="0.8rem"
+                          color="#666"
+                          sx={{
+                            display: 'block',
+                            '@media (max-width:600px)': {
+                              fontSize: '0.85rem',
+                            },
+                          }}
+                        >
+                          {c.createdAt ? new Date(c.createdAt).toLocaleDateString('tr-TR') : ''}
+                        </Typography>
+                      </Box>
                     </Box>
                     <Typography color="#2c3e50" lineHeight={1.5}>
                       {c.text}
