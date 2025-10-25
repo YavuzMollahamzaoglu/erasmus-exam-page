@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
+import setMetaTags from '../../utils/seo';
+import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
 // Diziyi karıştıran yardımcı fonksiyon
 function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -8,11 +12,6 @@ function shuffleArray<T>(array: T[]): T[] {
   }
   return arr;
 }
-import setMetaTags from '../../utils/seo';
-import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
- 
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import LightbulbIcon from "@mui/icons-material/Lightbulb";
 
 interface WordData {
   tr: string;
