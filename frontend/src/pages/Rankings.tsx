@@ -442,7 +442,7 @@ const Rankings: React.FC<Props> = ({ token }) => {
                     }
                   }}
                 >
-                  <Box sx={{ mr: 2 }}>
+                  <Box sx={{ mr: 2, minWidth: 40, width: 40, height: 40, position: 'relative', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {c.user?.profilePhoto && typeof c.user.profilePhoto === 'string' ? (
                       <img
                         loading="lazy"
@@ -479,7 +479,8 @@ const Rankings: React.FC<Props> = ({ token }) => {
                       fontSize: '1.2rem',
                       position: 'absolute',
                       left: 0,
-                      top: 0
+                      top: 0,
+                      zIndex: 1
                     }}>
                       {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name.charAt(0).toUpperCase() : 'A'}
                     </Box>
