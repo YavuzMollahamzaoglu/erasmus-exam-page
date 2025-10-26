@@ -397,23 +397,43 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                 disabled={commentLoading || !commentText.trim()}
                 onClick={async () => {
                   setCommentLoading(true);
-                  await fetch(`${process.env.REACT_APP_API_URL}/api/comments`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      ...(token ? { Authorization: `Bearer ${token}` } : {})
-                    },
-                    body: JSON.stringify({ text: commentText, exam: selectedExam })
-                  });
-                  setCommentText('');
-                  setCommentLoading(false);
-                  // Refetch comments
-                  fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
-                    headers: token ? { Authorization: `Bearer ${token}` } : {}
-                  })
-                    .then(res => res.json())
-                    .then(data => setComments(data.comments || []))
-                    .catch(() => setComments([]));
+                  try {
+                    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/comments`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                      },
+                      body: JSON.stringify({ text: commentText, exam: selectedExam })
+                    });
+                    setCommentText('');
+                    if (res.ok) {
+                      // Yorum başarılıysa, local olarak güncel avatar ve isimle ekle
+                      const now = new Date();
+                      setComments(prev => [
+                        {
+                          id: 'local-' + now.getTime(),
+                          text: commentText,
+                          createdAt: now.toISOString(),
+                          user: {
+                            name: me?.name || '',
+                            profilePhoto: me?.avatar || me?.profilePhoto || userAvatar || '',
+                          }
+                        },
+                        ...prev
+                      ]);
+                    } else {
+                      // Refetch comments fallback
+                      fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
+                        headers: token ? { Authorization: `Bearer ${token}` } : {}
+                      })
+                        .then(res => res.json())
+                        .then(data => setComments(data.comments || []))
+                        .catch(() => setComments([]));
+                    }
+                  } finally {
+                    setCommentLoading(false);
+                  }
                 }}
                 sx={{
                   background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
