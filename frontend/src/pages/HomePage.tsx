@@ -240,8 +240,8 @@ const HomePage: React.FC<Props> = ({ token }) => {
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gridTemplateRows: { xs: 'repeat(6, 1fr)', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
               {/* 1. Satır */}
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
-                <Typography fontWeight={700} color="#19376D" mb={0.5}>1) Kelimeleri Öğren</Typography>
-                <Typography fontSize={13} color="#607d8b">Kelimeler sayfası, Kelime Avı ve Kelime Eşleştirme oyunları ile seviyene uygun kelime çalış.</Typography>
+                <Typography fontWeight={700} color="#19376D" mb={0.5}>1) Kelime Öğrenme Sayfası</Typography>
+                <Typography fontSize={13} color="#607d8b">Kelime Öğrenme sayfası, Kelime Avı ve Kelime Eşleştirme oyunları ile seviyene uygun kelime çalış.</Typography>
               </Box>
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>2) Konu Sayfasında Çalış</Typography>

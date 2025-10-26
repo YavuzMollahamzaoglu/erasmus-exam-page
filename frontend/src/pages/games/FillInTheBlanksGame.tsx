@@ -124,7 +124,7 @@ const FillInTheBlanksGame: React.FC = () => {
       try {
         setLoading(true);
         const API_URL = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${API_URL}/api/games/fill-in-the-blanks/questions?level=a1`); // level parametresi gerekiyorsa ekle
+  const response = await fetch(`${API_URL}/api/games/fill-in-the-blanks/questions`); // tüm seviyeler
         if (!response.ok) {
           throw new Error('Failed to fetch questions');
         }
@@ -781,21 +781,35 @@ const FillInTheBlanksGame: React.FC = () => {
 
         {/* While solving: show Önceki - Kontrol Et - Sonraki on one row */}
         {!isSubmitted && (
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5, mt: 3, width: '100%' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: 'stretch',
+              justifyContent: { xs: 'center', sm: 'space-between' },
+              gap: { xs: 1.2, sm: 1.5 },
+              mt: 3,
+              width: '100%',
+              maxWidth: 420,
+              mx: 'auto',
+            }}
+          >
             {/* Prev */}
             <button
               style={{
                 background: 'linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 100%)',
                 color: currentIndex === 0 ? '#b0b0b0' : '#00b894',
                 fontWeight: 700,
-                fontSize: 15,
+                fontSize: 16,
                 border: `2px solid ${currentIndex === 0 ? '#e0e0e0' : 'rgba(0, 184, 148, 0.4)'}`,
-                borderRadius: 12,
-                padding: '10px 12px',
+                borderRadius: 16,
+                padding: '14px 0',
                 cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
                 minWidth: 0,
-                flex: '1 1 0',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
+                width: '100%',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+                marginBottom: 0,
+                transition: 'all 0.2s',
               }}
               onClick={prevQuestion}
               disabled={currentIndex === 0}
@@ -812,16 +826,17 @@ const FillInTheBlanksGame: React.FC = () => {
                     background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
                     color: '#fff',
                     fontWeight: 800,
-                    fontSize: 16,
+                    fontSize: 17,
                     border: 'none',
-                    borderRadius: 12,
-                    padding: '12px 18px',
+                    borderRadius: 16,
+                    padding: '14px 0',
                     cursor: hasBlank ? 'not-allowed' : 'pointer',
                     boxShadow: '0 6px 16px rgba(0, 184, 148, 0.35)',
                     opacity: hasBlank ? 0.7 : 1,
                     transition: 'all 0.3s ease',
-                    flex: '1.2 1 0',
-                    minWidth: 0
+                    width: '100%',
+                    minWidth: 0,
+                    marginBottom: 0,
                   }}
                   onClick={() => { if (!hasBlank) handleSubmit(); }}
                   disabled={hasBlank}
@@ -842,14 +857,16 @@ const FillInTheBlanksGame: React.FC = () => {
                 background: 'linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 100%)',
                 color: currentIndex >= questions.length - 1 ? '#b0b0b0' : '#00b894',
                 fontWeight: 700,
-                fontSize: 15,
+                fontSize: 16,
                 border: `2px solid ${currentIndex >= questions.length - 1 ? '#e0e0e0' : 'rgba(0, 184, 148, 0.4)'}`,
-                borderRadius: 12,
-                padding: '10px 12px',
+                borderRadius: 16,
+                padding: '14px 0',
                 cursor: currentIndex >= questions.length - 1 ? 'not-allowed' : 'pointer',
                 minWidth: 0,
-                flex: '1 1 0',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
+                width: '100%',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+                marginBottom: 0,
+                transition: 'all 0.2s',
               }}
               onClick={nextQuestion}
               disabled={currentIndex >= questions.length - 1}
