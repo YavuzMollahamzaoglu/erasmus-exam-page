@@ -171,20 +171,22 @@ const AuthController = {
     if (!userId)
       return res.status(400).json({ error: "Invalid token payload" });
 
-    const { name, email, newPassword, currentPassword, avatar } =
+    const { name, email, newPassword, currentPassword, avatar, profilePhoto } =
       req.body || {};
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // If only avatar is being updated, skip password check
-    const onlyAvatar =
-      typeof avatar === "string" &&
+    // If only profilePhoto is being updated, skip password check
+    // Allow both avatar and profilePhoto to update the same field
+    const avatarValue = typeof avatar === "string" ? avatar : profilePhoto;
+    const onlyProfilePhoto =
+      typeof avatarValue === "string" &&
       !name &&
       !email &&
       !newPassword &&
       !currentPassword;
 
-    if (!onlyAvatar) {
+    if (!onlyProfilePhoto) {
       if (!currentPassword) {
         return res.status(400).json({ error: "Mevcut şifre gerekli" });
       }
@@ -205,7 +207,7 @@ const AuthController = {
       const hashed = await bcrypt.hash(newPassword, 10);
       data.password = hashed;
     }
-    if (typeof avatar === "string") data.avatar = avatar;
+    if (typeof avatarValue === "string") data.profilePhoto = avatarValue;
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: "Güncellenecek bir alan yok" });
@@ -219,7 +221,7 @@ const AuthController = {
         name: updated.name,
         email: updated.email,
         profilePhoto: updated.profilePhoto,
-        avatar: updated.avatar,
+        avatar: updated.profilePhoto, // avatar olarak profilePhoto'yu dön
       },
     });
   },
