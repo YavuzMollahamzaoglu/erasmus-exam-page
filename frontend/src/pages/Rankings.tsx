@@ -1,3 +1,8 @@
+// Helper to check if a string is a single emoji
+function isSingleEmoji(str: string) {
+  // This regex matches a single emoji (including most common ones)
+  return typeof str === 'string' && str.length <= 3 && /^(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
+}
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
@@ -254,11 +259,15 @@ const Rankings: React.FC<Props> = ({ token }) => {
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, overflow: 'hidden' }}>
                       {r.user?.profilePhoto ? (
-                        <img loading="lazy"
-                          src={`${process.env.REACT_APP_API_URL}${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}`}
-                          alt={r.user?.name ? `${r.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
-                          style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894', flex: '0 0 auto' }}
-                        />
+                        isSingleEmoji(r.user.profilePhoto) ? (
+                          <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{r.user.profilePhoto}</span>
+                        ) : (
+                          <img loading="lazy"
+                            src={`${process.env.REACT_APP_API_URL}${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}`}
+                            alt={r.user?.name ? `${r.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
+                            style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894', flex: '0 0 auto' }}
+                          />
+                        )
                       ) : (
                         <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
                           {(r.user?.name?.[0] || 'U').toUpperCase()}
@@ -444,26 +453,30 @@ const Rankings: React.FC<Props> = ({ token }) => {
                 >
                   <Box sx={{ mr: 2, minWidth: 40, width: 40, height: 40, position: 'relative', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {c.user?.profilePhoto && typeof c.user.profilePhoto === 'string' ? (
-                      <img
-                        loading="lazy"
-                        src={`${process.env.REACT_APP_API_URL}${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}?t=${Date.now()}`}
-                        alt={c.user?.name ? `${c.user.name} adlı kullanıcının profil fotoğrafı` : 'Kullanıcı profil fotoğrafı'}
-                        style={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          border: '2px solid #00b894',
-                          display: 'block',
-                        }}
-                        onError={e => {
-                          const img = e.target as HTMLImageElement;
-                          img.onerror = null;
-                          img.style.display = 'none';
-                          const fallback = img.nextElementSibling as HTMLElement;
-                          if (fallback) fallback.style.display = 'flex';
-                        }}
-                      />
+                      isSingleEmoji(c.user.profilePhoto) ? (
+                        <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{c.user.profilePhoto}</span>
+                      ) : (
+                        <img
+                          loading="lazy"
+                          src={`${process.env.REACT_APP_API_URL}${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}?t=${Date.now()}`}
+                          alt={c.user?.name ? `${c.user.name} adlı kullanıcının profil fotoğrafı` : 'Kullanıcı profil fotoğrafı'}
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            border: '2px solid #00b894',
+                            display: 'block',
+                          }}
+                          onError={e => {
+                            const img = e.target as HTMLImageElement;
+                            img.onerror = null;
+                            img.style.display = 'none';
+                            const fallback = img.nextElementSibling as HTMLElement;
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                      )
                     ) : null}
                     {/* Fallback avatar, her zaman DOM'da olsun ki onError'da gösterilebilsin */}
                     <Box sx={{
