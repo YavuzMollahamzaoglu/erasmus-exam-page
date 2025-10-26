@@ -22,6 +22,7 @@ model User {
 
   role         Role    @default(USER)
   profilePhoto String?
+  avatar       String?
 
   passwordResetToken   String?
   passwordResetExpires DateTime?
