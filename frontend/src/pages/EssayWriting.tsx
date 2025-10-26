@@ -563,7 +563,9 @@ export default function EssayWriting() {
                       { key: 'lexical_resource', label: 'Kelime Bilgisi' },
                       { key: 'grammar', label: 'Dilbilgisi' }
                     ].map(({ key, label }) => {
-                      const score = evaluation.scores[key as keyof EssayScores];
+                      let score = evaluation.scores[key as keyof EssayScores];
+                      // Clamp score to 1-9
+                      score = Math.max(1, Math.min(9, Math.round(score)));
                       return (
                         <Box key={key} sx={{ mb: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>

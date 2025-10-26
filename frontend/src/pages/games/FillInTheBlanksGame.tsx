@@ -398,12 +398,12 @@ const FillInTheBlanksGame: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minWidth: '120px',
-              height: '40px',
-              border: '2px solid',
-              borderRadius: '8px',
-              margin: '0 4px',
-              padding: '4px 8px',
+              minWidth: { xs: '110px', md: '150px' },
+              height: { xs: '40px', md: '54px' },
+              border: '2.5px solid',
+              borderRadius: '12px',
+              margin: { xs: '0 4px', md: '0 8px' },
+              padding: { xs: '4px 8px', md: '8px 18px' },
               textAlign: 'center',
               verticalAlign: 'baseline',
               cursor: !isSubmitted ? 'pointer' : 'default',
@@ -426,11 +426,12 @@ const FillInTheBlanksGame: React.FC = () => {
             <Typography 
               variant="body1" 
               sx={{ 
-                fontWeight: userAnswer ? 600 : 400,
+                fontWeight: userAnswer ? 700 : 500,
                 color: isSubmitted 
                   ? (isCorrect ? '#43ea7c' : isIncorrect ? '#e74c3c' : '#2c3e50')
                   : userAnswer ? '#00b894' : '#666',
-                fontSize: '1rem'
+                fontSize: { xs: '1.1rem', md: '1.35rem' },
+                letterSpacing: 0.2,
               }}
             >
               {userAnswer || (index + 1)}
@@ -784,13 +785,13 @@ const FillInTheBlanksGame: React.FC = () => {
           <Box
             sx={{
               display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
+              flexDirection: { xs: 'column', md: 'row' },
               alignItems: 'stretch',
-              justifyContent: { xs: 'center', sm: 'space-between' },
-              gap: { xs: 1.2, sm: 1.5 },
+              justifyContent: { xs: 'center', md: 'space-between' },
+              gap: { xs: 1.2, md: 2.5 },
               mt: 3,
               width: '100%',
-              maxWidth: 420,
+              maxWidth: { xs: 420, md: 600 },
               mx: 'auto',
             }}
           >
