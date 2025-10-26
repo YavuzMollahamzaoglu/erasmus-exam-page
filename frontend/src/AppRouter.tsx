@@ -94,7 +94,7 @@ const AppRouter: React.FC = () => {
   return (
     <Router>
       <SkipLink />
-      <NavbarWithNavigate userImage={userImage} />
+  <NavbarWithNavigate userAvatar={userAvatar} userInitial={userInitial} />
       {/* Fixed AppBar spacer to avoid content jump under navbar */}
       <Box sx={{ height: { xs: 56, md: 64 } }} />
   <Suspense fallback={<ModernLoader text="Yükleniyor..." />}> 
