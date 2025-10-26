@@ -1,11 +1,13 @@
+
+import React, { useEffect, useState } from 'react';
+import setMetaTags from '../utils/seo';
+import { Box, Paper, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+
 // Helper to check if a string is a single emoji
 function isSingleEmoji(str: string) {
   // This regex matches a single emoji (including most common ones)
   return typeof str === 'string' && str.length <= 3 && /^(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
 }
-import React, { useEffect, useState } from 'react';
-import setMetaTags from '../utils/seo';
-import { Box, Paper, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 interface Props {
   token: string;
