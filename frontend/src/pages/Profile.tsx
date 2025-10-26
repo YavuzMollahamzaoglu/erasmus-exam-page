@@ -135,6 +135,7 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
   const joinedDate = profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('tr-TR') : '-';
   // Avatar logic: show selected emoji, or fallback to initial
   const getInitial = () => (profile.name && profile.name[0] ? profile.name[0].toUpperCase() : '?');
+
   const avatarDisplay = avatar || getInitial();
 
   return (
@@ -212,17 +213,14 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
             >
               {avatarDisplay}
             </Avatar>
-            <Typography fontWeight={600} fontSize={16} mt={1} mb={2}>
-              Avatar
-            </Typography>
+            <Button
+              variant="outlined"
+              sx={{ mt: 2, mb: 2, borderRadius: 2, fontWeight: 700, color: '#00b894', borderColor: '#00b894', '&:hover': { background: 'rgba(0,184,148,0.08)', borderColor: '#00cec9', color: '#00b894' } }}
+              onClick={() => setAvatarDialogOpen(true)}
+            >
+              Avatarını Değiştir
+            </Button>
           </Box>
-          <Button
-            variant="outlined"
-            sx={{ mb: 2, borderRadius: 2, fontWeight: 700, color: '#00b894', borderColor: '#00b894', '&:hover': { background: 'rgba(0,184,148,0.08)', borderColor: '#00cec9', color: '#00b894' } }}
-            onClick={() => setAvatarDialogOpen(true)}
-          >
-            Avatarını Değiştir
-          </Button>
           <Dialog open={avatarDialogOpen} onClose={() => setAvatarDialogOpen(false)} maxWidth="xs" fullWidth>
             <DialogTitle>Avatar Seç</DialogTitle>
             <DialogContent>
