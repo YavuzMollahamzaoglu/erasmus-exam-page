@@ -187,7 +187,7 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
 
         {/* Content */}
         <Box sx={{ p: { xs: 3, md: 4 }, textAlign: 'center' }}>
-          <Box sx={{ position: 'relative', display: 'inline-block', mx: 'auto', mb: 2 }}>
+          <Box sx={{ position: 'relative', display: 'inline-block', mx: 'auto', mb: 1 }}>
             <Avatar
               sx={{
                 width: 96,
@@ -212,6 +212,9 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
             >
               {avatarDisplay}
             </Avatar>
+            <Typography fontWeight={600} fontSize={16} mt={1} mb={2}>
+              Avatar
+            </Typography>
           </Box>
           <Button
             variant="outlined"
