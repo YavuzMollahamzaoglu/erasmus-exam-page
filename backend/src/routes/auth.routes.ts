@@ -27,10 +27,23 @@ router.post('/logout', AuthController.logout);
 router.put(
   '/update-profile',
   [
-    body('currentPassword').notEmpty().withMessage('Mevcut şifre zorunludur'),
+    // currentPassword is only required if name, email, or newPassword is present
     body('name').optional().isLength({ min: 2 }).withMessage('Ad Soyad en az 2 karakter olmalı'),
     body('email').optional().isEmail().withMessage('Geçerli bir email giriniz'),
     body('newPassword').optional().isLength({ min: 6 }).withMessage('Yeni şifre en az 6 karakter olmalı'),
+    // custom validator for currentPassword
+    body().custom((value, { req }) => {
+      if (
+        (req.body.name && req.body.name.length >= 2) ||
+        (req.body.email && req.body.email.length > 0) ||
+        (req.body.newPassword && req.body.newPassword.length >= 6)
+      ) {
+        if (!req.body.currentPassword) {
+          throw new Error('Mevcut şifre zorunludur');
+        }
+      }
+      return true;
+    }),
   ],
   validateRequest,
   AuthController.updateProfile

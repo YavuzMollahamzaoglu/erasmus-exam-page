@@ -90,12 +90,10 @@ const AuthController = {
     const user = await prisma.user.create({
       data: { email, password: hashedPassword, name },
     });
-    res
-      .status(201)
-      .json({
-        message: "User registered",
-        user: { id: user.id, email: user.email, name: user.name },
-      });
+    res.status(201).json({
+      message: "User registered",
+      user: { id: user.id, email: user.email, name: user.name },
+    });
   },
   login: async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -173,14 +171,18 @@ const AuthController = {
     if (!userId)
       return res.status(400).json({ error: "Invalid token payload" });
 
-    const { name, email, newPassword, currentPassword, avatar } = req.body || {};
+    const { name, email, newPassword, currentPassword, avatar } =
+      req.body || {};
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // If only avatar is being updated, skip password check
     const onlyAvatar =
       typeof avatar === "string" &&
-      !name && !email && !newPassword && !currentPassword;
+      !name &&
+      !email &&
+      !newPassword &&
+      !currentPassword;
 
     if (!onlyAvatar) {
       if (!currentPassword) {
