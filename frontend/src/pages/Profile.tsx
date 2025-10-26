@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import setMetaTags from '../utils/seo';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import { Box, Typography, Button, Paper, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
+import { Box, Typography, Button, Paper, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { AVATAR_EMOJIS } from '../utils/avatars';
 
 interface Props {
   token: string;
@@ -10,17 +10,13 @@ interface Props {
 
 const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
   const [profile, setProfile] = useState<any>(null);
-  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
+  const [avatar, setAvatar] = useState<string | null>(null);
   const [updateDialog, setUpdateDialog] = useState(false);
   const [updateData, setUpdateData] = useState({ name: '', email: '', newPassword: '', currentPassword: '' });
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Popup dialog for invalid image uploads
-  const [imageDialogOpen, setImageDialogOpen] = useState(false);
-  const [imageDialogMessage, setImageDialogMessage] = useState('');
+  // No file input or image dialog needed
 
   const fetchProfile = async () => {
     try {
@@ -30,9 +26,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
       });
       const data = await res.json();
       setProfile(data.user || data);
-      if (onProfilePhotoChange && (data.user?.profilePhoto || data.profilePhoto)) {
-        onProfilePhotoChange(data.user?.profilePhoto || data.profilePhoto);
-      }
+      setAvatar(data.user?.avatar || data.avatar || null);
     } catch {
       setProfile(null);
     }
@@ -120,141 +114,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
     // eslint-disable-next-line
   }, [token]);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return;
-    setUploading(true);
-    setError('');
-    const raw = e.target.files[0];
-    // Basic validation
-    if (!raw.type.startsWith('image/')) {
-      setError('Lütfen bir resim dosyası seçin.');
-      // Show guidance popup
-      setImageDialogMessage('Geçersiz dosya türü. Lütfen JPG veya PNG formatında bir profil fotoğrafı yükleyin.');
-      setImageDialogOpen(true);
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
-    if (raw.size > 10 * 1024 * 1024) { // 10MB
-      setError('Resim boyutu çok büyük (maks. 10MB).');
-      setImageDialogMessage('Yüklemeye çalıştığınız görsel 10MB sınırını aşıyor. Lütfen dosya boyutunu küçültüp tekrar deneyin.');
-      setImageDialogOpen(true);
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
 
-    // Load dimensions for further validation
-    const readImageDims = (file: File): Promise<{ w: number; h: number }> => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-          const w = img.naturalWidth || img.width;
-          const h = img.naturalHeight || img.height;
-          if (!w || !h) return reject(new Error('Görsel okunamadı'));
-          resolve({ w, h });
-        };
-        img.onerror = () => reject(new Error('Görsel yüklenemedi'));
-        img.src = URL.createObjectURL(file);
-      });
-    };
-
-    try {
-      const { w, h } = await readImageDims(raw);
-      const shortSide = Math.min(w, h);
-      const longSide = Math.max(w, h);
-      const aspect = longSide / (shortSide || 1);
-
-      // Block too small or extreme aspect-ratio images and guide user
-      if (shortSide < 512) {
-        const msg = `Görsel çözünürlüğü çok düşük (${w}x${h}). En az 512x512 piksel veya daha büyük bir görsel yükleyin.`;
-        setError(msg);
-        setImageDialogMessage(msg + '\n\nİpucu: Kare (1:1) oranlı ve en az 512x512 piksel bir fotoğraf kullanın. Çok küçük görseller kalite kaybına neden olur.');
-        setImageDialogOpen(true);
-        setUploading(false);
-        if (fileInputRef.current) fileInputRef.current.value = '';
-        return;
-      }
-      if (aspect > 3) {
-        const msg = `Görsel en-boy oranı çok uç (${w}x${h}). Aşırı uzun veya panoramik görseller kabul edilmez.`;
-        setError(msg);
-        setImageDialogMessage(msg + '\n\nİpucu: Kare (1:1) oranına yakın bir fotoğraf tercih edin. Gerekirse kırpıp tekrar yükleyin.');
-        setImageDialogOpen(true);
-        setUploading(false);
-        if (fileInputRef.current) fileInputRef.current.value = '';
-        return;
-      }
-    } catch (dimErr: any) {
-      // If we cannot read dimensions, show guidance and stop
-      const msg = dimErr?.message || 'Görsel okunamadı, lütfen farklı bir dosya deneyin.';
-      setError(msg);
-      setImageDialogMessage(msg + '\n\nDesteklenen formatlar: JPG, PNG.');
-      setImageDialogOpen(true);
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
-
-    // Helper: crop center-square and resize to 512x512
-    const toSquareBlob = (file: File, target = 512): Promise<Blob> => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-          try {
-            const w = img.naturalWidth || img.width;
-            const h = img.naturalHeight || img.height;
-            if (!w || !h) throw new Error('Görsel okunamadı');
-            const side = Math.min(w, h);
-            const sx = (w - side) / 2;
-            const sy = (h - side) / 2;
-            const canvas = document.createElement('canvas');
-            canvas.width = target;
-            canvas.height = target;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) throw new Error('Canvas desteklenmiyor');
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, sx, sy, side, side, 0, 0, target, target);
-            canvas.toBlob((blob) => {
-              if (!blob) return reject(new Error('Resim dönüştürülemedi'));
-              resolve(blob);
-            }, 'image/jpeg', 0.9);
-          } catch (er) {
-            reject(er);
-          }
-        };
-        img.onerror = () => reject(new Error('Görsel yüklenemedi'));
-        const url = URL.createObjectURL(file);
-        img.src = url;
-      });
-    };
-
-    try {
-      const squareBlob = await toSquareBlob(raw, 512);
-      const formData = new FormData();
-      const filename = (raw.name?.replace(/\.[^.]+$/, '') || 'avatar') + '-square.jpg';
-      formData.append('photo', squareBlob, filename);
-
-  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/upload-profile-photo`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData,
-      } as any);
-      let data: any = null;
-      try { data = await res.json(); } catch {}
-      if (res.ok) {
-        // Wait for backend to save, then fetch updated profile
-        setTimeout(fetchProfile, 500);
-      } else {
-        setError((data && (data.error || data.message)) || 'Upload failed');
-      }
-    } catch (er: any) {
-      setError(er?.message || 'Upload failed');
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  };
 
   if (!token) return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -267,8 +127,10 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
     </Box>
   );
 
-  const photoUrl = profile.profilePhoto ? `${process.env.REACT_APP_API_URL}${profile.profilePhoto}?t=${Date.now()}` : undefined;
   const joinedDate = profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('tr-TR') : '-';
+  // Avatar logic: show selected emoji, or fallback to initial
+  const getInitial = () => (profile.name && profile.name[0] ? profile.name[0].toUpperCase() : '?');
+  const avatarDisplay = avatar || getInitial();
 
   return (
     <Box sx={{ 
@@ -321,61 +183,65 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
         {/* Content */}
         <Box sx={{ p: { xs: 3, md: 4 }, textAlign: 'center' }}>
           <Box sx={{ position: 'relative', display: 'inline-block', mx: 'auto', mb: 2 }}>
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              disabled={uploading}
-              style={{ display: 'none' }}
-              id="profile-photo-upload"
-            />
-            <label htmlFor="profile-photo-upload">
-        <Avatar
-                src={photoUrl}
-                sx={{ 
-                  width: 96, 
-                  height: 96, 
-                  minWidth: 96,
-                  minHeight: 96,
-                  maxWidth: 96,
-                  maxHeight: 96,
-          borderRadius: '50%',
-          aspectRatio: '1 / 1',
-                  display: 'block',
-                  overflow: 'hidden',
-                  flexShrink: 0,
-                  flexGrow: 0,
-                  flexBasis: '96px',
-                  lineHeight: '96px',
-                  bgcolor: '#26c6da', 
-                  cursor: 'pointer', 
-                  mx: 'auto', 
-                  boxShadow: 2, 
-                  border: '3px solid #fff',
-                  // Keep inside image always covering and not stretching the avatar size
-                  '& .MuiAvatar-img': { objectFit: 'cover', width: '100%', height: '100%', borderRadius: '50%', display: 'block' }
-                }}
-              />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  bottom: 8,
-                  right: 8,
-                  bgcolor: 'white',
-                  borderRadius: '50%',
-                  p: 0.5,
-                  boxShadow: 1,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <PhotoCameraIcon fontSize="small" color="primary" />
-              </Box>
-            </label>
+            <Avatar
+              sx={{
+                width: 96,
+                height: 96,
+                minWidth: 96,
+                minHeight: 96,
+                maxWidth: 96,
+                maxHeight: 96,
+                borderRadius: '50%',
+                aspectRatio: '1 / 1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 48,
+                bgcolor: '#26c6da',
+                mx: 'auto',
+                boxShadow: 2,
+                border: '3px solid #fff',
+                fontWeight: 700,
+                userSelect: 'none',
+              }}
+            >
+              {avatarDisplay}
+            </Avatar>
           </Box>
+          {/* Avatar selection */}
+          <Typography fontWeight={600} fontSize={16} mb={1} mt={2}>Avatarını Seç</Typography>
+          <ToggleButtonGroup
+            value={avatar || ''}
+            exclusive
+            onChange={(_e, newAvatar) => { if (newAvatar) setAvatar(newAvatar); }}
+            sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 2 }}
+          >
+            {AVATAR_EMOJIS.map((emo) => (
+              <ToggleButton key={emo} value={emo} sx={{ fontSize: 32, px: 2, py: 1, borderRadius: 2, border: '2px solid #00b894', bgcolor: '#fff', '&.Mui-selected': { bgcolor: '#00b894', color: '#fff' } }}>{emo}</ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+          <Button
+            variant="contained"
+            sx={{ mb: 2, borderRadius: 2, background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' } }}
+            onClick={async () => {
+              // Save avatar selection to backend
+              setError('');
+              try {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                  body: JSON.stringify({ avatar }),
+                });
+                if (res.ok) fetchProfile();
+                else setError('Avatar güncellenemedi');
+              } catch {
+                setError('Avatar güncellenemedi');
+              }
+            }}
+            disabled={!avatar}
+          >
+            Avatarı Kaydet
+          </Button>
           {/* Name under avatar, thicker */}
           <Typography sx={{ fontWeight: 900, fontSize: { xs: '1.4rem', md: '1.6rem' }, mb: 0.5 }}>
             {profile.name || '-'}
@@ -401,7 +267,6 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
             Profili Yenile
           </Button>
           <Box sx={{ mt: 2 }}>
-            {uploading && <span style={{ marginLeft: 8 }}>Yükleniyor...</span>}
             {error && <Typography color="error" fontSize={14} mt={1}>{error}</Typography>}
           </Box>
 
@@ -461,29 +326,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
             </DialogActions>
           </Dialog>
 
-          {/* Image requirements / guidance dialog */}
-          <Dialog open={imageDialogOpen} onClose={() => setImageDialogOpen(false)} maxWidth="xs" fullWidth>
-            <DialogTitle>Uygun Olmayan Görsel</DialogTitle>
-            <DialogContent>
-              <Typography sx={{ whiteSpace: 'pre-wrap' }} gutterBottom>
-                {imageDialogMessage}
-              </Typography>
-              <Typography variant="subtitle2" sx={{ mt: 1, mb: 0.5 }}>
-                Önerilen Profil Fotoğrafı Özellikleri
-              </Typography>
-              <ul style={{ marginTop: 0 }}>
-                <li>Kare (1:1) oranı</li>
-                <li>En az 512x512 piksel</li>
-                <li>JPG veya PNG formatı</li>
-                <li>Maksimum boyut 10MB</li>
-              </ul>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setImageDialogOpen(false)} autoFocus>
-                Tamam
-              </Button>
-            </DialogActions>
-          </Dialog>
+
         </Box>
       </Paper>
     </Box>
