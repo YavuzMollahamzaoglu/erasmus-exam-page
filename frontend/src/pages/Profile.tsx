@@ -237,42 +237,44 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
                   </ToggleButton>
                 ))}
               </Box>
-              <Button
-                variant="outlined"
-                color="secondary"
-                sx={{ mt: 1, mb: 2, borderRadius: 2, fontWeight: 700, color: '#555', borderColor: '#bbb', '&:hover': { background: 'rgba(0,0,0,0.04)', borderColor: '#00b894', color: '#00b894' } }}
-                onClick={() => setAvatar(null)}
-              >
-                Sadece Baş Harfini Göster
-              </Button>
-              <Button
-                variant="contained"
-                sx={{ mb: 1, borderRadius: 2, background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' } }}
-                onClick={async () => {
-                  setError('');
-                  try {
-                    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, {
-                      method: 'PUT',
-                      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                      body: JSON.stringify({ avatar }),
-                    });
-                    if (res.ok) {
-                      // Fetch new profile and update both local and global avatar state
-                      const updated = await res.json();
-                      setAvatar(updated?.user?.profilePhoto || avatar || undefined);
-                      if (onAvatarChange) onAvatarChange(updated?.user?.profilePhoto || avatar || undefined);
-                      if (onInitialChange && updated?.user?.name) onInitialChange(updated.user.name[0]?.toUpperCase() || '?');
-                      setAvatarDialogOpen(false);
-                      fetchProfile();
-                    } else setError('Avatar güncellenemedi');
-                  } catch {
-                    setError('Avatar güncellenemedi');
-                  }
-                }}
-                disabled={avatar === profile.avatar}
-              >
-                Kaydet
-              </Button>
+              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center', alignItems: 'center', mb: 1 }}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  sx={{ borderRadius: 2, fontWeight: 700, color: '#555', borderColor: '#bbb', '&:hover': { background: 'rgba(0,0,0,0.04)', borderColor: '#00b894', color: '#00b894' } }}
+                  onClick={() => setAvatar(null)}
+                >
+                  Sadece Baş Harfini Göster
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{ borderRadius: 2, background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' } }}
+                  onClick={async () => {
+                    setError('');
+                    try {
+                      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ avatar }),
+                      });
+                      if (res.ok) {
+                        // Fetch new profile and update both local and global avatar state
+                        const updated = await res.json();
+                        setAvatar(updated?.user?.profilePhoto || avatar || undefined);
+                        if (onAvatarChange) onAvatarChange(updated?.user?.profilePhoto || avatar || undefined);
+                        if (onInitialChange && updated?.user?.name) onInitialChange(updated.user.name[0]?.toUpperCase() || '?');
+                        setAvatarDialogOpen(false);
+                        fetchProfile();
+                      } else setError('Avatar güncellenemedi');
+                    } catch {
+                      setError('Avatar güncellenemedi');
+                    }
+                  }}
+                  disabled={avatar === profile.avatar}
+                >
+                  Kaydet
+                </Button>
+              </Box>
             </DialogContent>
           </Dialog>
           {/* Name under avatar, thicker */}
