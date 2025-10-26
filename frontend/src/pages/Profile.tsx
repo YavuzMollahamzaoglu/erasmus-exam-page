@@ -5,10 +5,11 @@ import { AVATAR_EMOJIS } from '../utils/avatars';
 
 interface Props {
   token: string;
-  onProfilePhotoChange?: (url: string) => void;
+  onAvatarChange?: (avatar: string | undefined) => void;
+  onInitialChange?: (initial: string) => void;
 }
 
-const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
+const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) => {
   const [profile, setProfile] = useState<any>(null);
   const [error, setError] = useState('');
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -26,8 +27,11 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await res.json();
-      setProfile(data.user || data);
-      setAvatar(data.user?.avatar || data.avatar || null);
+  const user = data.user || data;
+  setProfile(user);
+  setAvatar(user.avatar || null);
+  if (onAvatarChange) onAvatarChange(user.avatar || undefined);
+  if (onInitialChange && user.name) onInitialChange(user.name[0]?.toUpperCase() || '?');
     } catch {
       setProfile(null);
     }
@@ -251,7 +255,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
                       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                       body: JSON.stringify({ avatar }),
                     });
-                    if (res.ok) { fetchProfile(); setAvatarDialogOpen(false); }
+                    if (res.ok) { fetchProfile(); setAvatarDialogOpen(false); if (onAvatarChange) onAvatarChange(avatar || undefined); }
                     else setError('Avatar güncellenemedi');
                   } catch {
                     setError('Avatar güncellenemedi');
