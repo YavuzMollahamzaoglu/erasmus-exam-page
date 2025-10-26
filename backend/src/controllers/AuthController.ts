@@ -134,14 +134,6 @@ const AuthController = {
     } catch (err) {
       res.status(401).json({ error: 'Invalid or expired token' });
     }
-          profilePhoto: true,
-        },
-      });
-      if (!user) return res.status(404).json({ error: "User not found" });
-      res.json({ user: { ...user, avatar: user.profilePhoto } });
-    } catch (err) {
-      res.status(401).json({ error: "Invalid or expired token" });
-    }
   },
   logout: async (req: Request, res: Response) => {
     // For JWT, logout is handled client-side by deleting the token
