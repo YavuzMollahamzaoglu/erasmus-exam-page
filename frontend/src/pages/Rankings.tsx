@@ -337,32 +337,31 @@ const Rankings: React.FC<Props> = ({ token }) => {
               backdropFilter: 'blur(5px)'
             }}>
               <Box sx={{ mr: 2 }}>
-                {me?.profilePhoto ? (
-                  isSingleEmoji(me.profilePhoto) ? (
-                    <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{me.profilePhoto}</span>
-                  ) : (
-                    <img loading="lazy"
-                      src={`${process.env.REACT_APP_API_URL}${me.profilePhoto}?t=${Date.now()}`}
+                {(() => {
+                  const avatar = me?.avatar || me?.profilePhoto;
+                  if (avatar && isSingleEmoji(avatar)) {
+                    return <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{avatar}</span>;
+                  } else if (avatar) {
+                    return <img loading="lazy"
+                      src={`${process.env.REACT_APP_API_URL}${avatar}?t=${Date.now()}`}
                       alt={me?.name ? `${me.name} adlı kullanıcının profili` : 'Benim profil fotoğrafım'}
                       style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894' }}
-                    />
-                  )
-                ) : (
-                  <Box sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    fontWeight: 700,
-                    fontSize: '1.2rem'
-                  }}>
-                    {(me?.name?.charAt(0).toUpperCase()) || 'U'}
-                  </Box>
-                )}
+                    />;
+                  } else {
+                    return <Box sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontWeight: 700,
+                      fontSize: '1.2rem'
+                    }}>{(me?.name?.charAt(0).toUpperCase()) || 'U'}</Box>;
+                  }
+                })()}
               </Box>
               <TextField
                 fullWidth
