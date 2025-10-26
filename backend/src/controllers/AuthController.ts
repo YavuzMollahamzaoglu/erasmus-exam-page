@@ -138,7 +138,7 @@ const AuthController = {
         },
       });
       if (!user) return res.status(404).json({ error: "User not found" });
-      res.json({ user });
+      res.json({ user: { ...user, avatar: user.profilePhoto } });
     } catch (err) {
       res.status(401).json({ error: "Invalid or expired token" });
     }
