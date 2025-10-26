@@ -231,7 +231,7 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
                     value={emo}
                     selected={avatar === emo}
                     onClick={() => setAvatar(emo)}
-                    sx={{ fontSize: 32, px: 2, py: 1, borderRadius: 2, border: '2px solid #00b894', bgcolor: '#fff', '&.Mui-selected': { bgcolor: '#00b894', color: '#fff' } }}
+                    sx={{ fontSize: 32, px: 2, py: 1, borderRadius: 2, border: '2px solid #00b894', bgcolor: '#fff', '&.Mui-selected': { bgcolor: '#00b894', color: '#fff' }, m: 0.5 }}
                   >
                     {emo}
                   </ToggleButton>
@@ -256,8 +256,15 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
                       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                       body: JSON.stringify({ avatar }),
                     });
-                    if (res.ok) { fetchProfile(); setAvatarDialogOpen(false); if (onAvatarChange) onAvatarChange(avatar || undefined); }
-                    else setError('Avatar güncellenemedi');
+                    if (res.ok) {
+                      // Fetch new profile and update both local and global avatar state
+                      const updated = await res.json();
+                      setAvatar(updated?.user?.profilePhoto || avatar || undefined);
+                      if (onAvatarChange) onAvatarChange(updated?.user?.profilePhoto || avatar || undefined);
+                      if (onInitialChange && updated?.user?.name) onInitialChange(updated.user.name[0]?.toUpperCase() || '?');
+                      setAvatarDialogOpen(false);
+                      fetchProfile();
+                    } else setError('Avatar güncellenemedi');
                   } catch {
                     setError('Avatar güncellenemedi');
                   }
