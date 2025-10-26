@@ -28,7 +28,8 @@ interface Props {
   onNavigate: (page: string) => void;
   token: string;
   onLogout: () => void;
-  userImage?: string; // profil fotoğrafı
+  userAvatar?: string; // emoji avatar
+  userInitial?: string; // baş harf fallback
 }
 
 
@@ -45,7 +46,7 @@ const allPages = [
 ];
 
 // Login and Register are not navigation pages, only right-side buttons
-const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => {
+const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, userInitial }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
@@ -387,31 +388,29 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userImage }) => 
               <Tooltip title="Kullanıcı menüsü">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar
-                    alt="Profil"
-                    src={userImage ? `${process.env.REACT_APP_API_URL}${userImage}?t=${Date.now()}` : "https://www.gravatar.com/avatar/?d=mp"}
-                    imgProps={{ loading: 'lazy' }}
-                    sx={{ 
-                      width: 36, 
-                      height: 36, 
-                      minWidth: 36,
-                      minHeight: 36,
-                      maxWidth: 36,
-                      maxHeight: 36,
-            borderRadius: '50%',
-            aspectRatio: '1 / 1',
-                      display: 'block',
-                      overflow: 'hidden',
-                      flexShrink: 0,
-                      flexGrow: 0,
-                      flexBasis: '36px',
-                      lineHeight: '36px',
-                      bgcolor: '#26c6da', 
-                      boxShadow: 2,
-                      border: '2px solid rgba(255,255,255,0.85)',
-                      // Always keep image cropped nicely regardless of original size/ratio
-                      '& .MuiAvatar-img': { objectFit: 'cover', width: '100%', height: '100%', borderRadius: '50%', display: 'block' }
-                    }}
-                  />
+            alt="Profil"
+            sx={{
+              width: 36,
+              height: 36,
+              minWidth: 36,
+              minHeight: 36,
+              maxWidth: 36,
+              maxHeight: 36,
+              borderRadius: '50%',
+              aspectRatio: '1 / 1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 22,
+              bgcolor: '#26c6da',
+              boxShadow: 2,
+              border: '2px solid rgba(255,255,255,0.85)',
+              fontWeight: 700,
+              userSelect: 'none',
+            }}
+          >
+            {userAvatar || userInitial || '?'}
+          </Avatar>
                 </IconButton>
               </Tooltip>
               <Menu

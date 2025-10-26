@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import setMetaTags from '../utils/seo';
-import { Box, Typography, Button, Paper, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, Typography, Button, Paper, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions, ToggleButton, ToggleButtonGroup, IconButton } from '@mui/material';
 import { AVATAR_EMOJIS } from '../utils/avatars';
 
 interface Props {
@@ -12,6 +12,7 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
   const [profile, setProfile] = useState<any>(null);
   const [error, setError] = useState('');
   const [avatar, setAvatar] = useState<string | null>(null);
+  const [avatarDialogOpen, setAvatarDialogOpen] = useState(false);
   const [updateDialog, setUpdateDialog] = useState(false);
   const [updateData, setUpdateData] = useState({ name: '', email: '', newPassword: '', currentPassword: '' });
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -208,40 +209,60 @@ const Profile: React.FC<Props> = ({ token, onProfilePhotoChange }) => {
               {avatarDisplay}
             </Avatar>
           </Box>
-          {/* Avatar selection */}
-          <Typography fontWeight={600} fontSize={16} mb={1} mt={2}>Avatarını Seç</Typography>
-          <ToggleButtonGroup
-            value={avatar || ''}
-            exclusive
-            onChange={(_e, newAvatar) => { if (newAvatar) setAvatar(newAvatar); }}
-            sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 2 }}
-          >
-            {AVATAR_EMOJIS.map((emo) => (
-              <ToggleButton key={emo} value={emo} sx={{ fontSize: 32, px: 2, py: 1, borderRadius: 2, border: '2px solid #00b894', bgcolor: '#fff', '&.Mui-selected': { bgcolor: '#00b894', color: '#fff' } }}>{emo}</ToggleButton>
-            ))}
-          </ToggleButtonGroup>
           <Button
-            variant="contained"
-            sx={{ mb: 2, borderRadius: 2, background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' } }}
-            onClick={async () => {
-              // Save avatar selection to backend
-              setError('');
-              try {
-                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                  body: JSON.stringify({ avatar }),
-                });
-                if (res.ok) fetchProfile();
-                else setError('Avatar güncellenemedi');
-              } catch {
-                setError('Avatar güncellenemedi');
-              }
-            }}
-            disabled={!avatar}
+            variant="outlined"
+            sx={{ mb: 2, borderRadius: 2, fontWeight: 700, color: '#00b894', borderColor: '#00b894', '&:hover': { background: 'rgba(0,184,148,0.08)', borderColor: '#00cec9', color: '#00b894' } }}
+            onClick={() => setAvatarDialogOpen(true)}
           >
-            Avatarı Kaydet
+            Avatarını Değiştir
           </Button>
+          <Dialog open={avatarDialogOpen} onClose={() => setAvatarDialogOpen(false)} maxWidth="xs" fullWidth>
+            <DialogTitle>Avatar Seç</DialogTitle>
+            <DialogContent>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 2, mt: 1 }}>
+                {AVATAR_EMOJIS.map((emo) => (
+                  <ToggleButton
+                    key={emo}
+                    value={emo}
+                    selected={avatar === emo}
+                    onClick={() => setAvatar(emo)}
+                    sx={{ fontSize: 32, px: 2, py: 1, borderRadius: 2, border: '2px solid #00b894', bgcolor: '#fff', '&.Mui-selected': { bgcolor: '#00b894', color: '#fff' } }}
+                  >
+                    {emo}
+                  </ToggleButton>
+                ))}
+              </Box>
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{ mt: 1, mb: 2, borderRadius: 2, fontWeight: 700, color: '#555', borderColor: '#bbb', '&:hover': { background: 'rgba(0,0,0,0.04)', borderColor: '#00b894', color: '#00b894' } }}
+                onClick={() => setAvatar(null)}
+              >
+                Sadece Baş Harfini Göster
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ mb: 1, borderRadius: 2, background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' } }}
+                onClick={async () => {
+                  setError('');
+                  try {
+                    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, {
+                      method: 'PUT',
+                      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                      body: JSON.stringify({ avatar }),
+                    });
+                    if (res.ok) { fetchProfile(); setAvatarDialogOpen(false); }
+                    else setError('Avatar güncellenemedi');
+                  } catch {
+                    setError('Avatar güncellenemedi');
+                  }
+                }}
+                disabled={avatar === profile.avatar}
+              >
+                Kaydet
+              </Button>
+            </DialogContent>
+          </Dialog>
           {/* Name under avatar, thicker */}
           <Typography sx={{ fontWeight: 900, fontSize: { xs: '1.4rem', md: '1.6rem' }, mb: 0.5 }}>
             {profile.name || '-'}

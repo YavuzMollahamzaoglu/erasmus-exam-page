@@ -38,14 +38,23 @@ const AppRouter: React.FC = () => {
     localStorage.setItem('token', jwt);
     (async () => {
       try {
-  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
+          headers: { 'Authorization': `Bearer ${jwt}` },
+        });
         const data = await res.json();
-        if (data?.user?.profilePhoto) setUserImage(data.user.profilePhoto);
-      } catch {}
+        if (data?.user?.avatar) setUserAvatar(data.user.avatar);
+        else setUserAvatar(undefined);
+        if (data?.user?.name) setUserInitial(data.user.name[0]?.toUpperCase() || '?');
+        else setUserInitial('?');
+      } catch {
+        setUserAvatar(undefined);
+        setUserInitial('?');
+      }
     })();
   };
   const [token, setToken] = useState(() => localStorage.getItem('token') || '');
-  const [userImage, setUserImage] = useState<string | undefined>(undefined);
+  const [userAvatar, setUserAvatar] = useState<string | undefined>(undefined);
+  const [userInitial, setUserInitial] = useState<string>('?');
   // no dialog; we'll redirect to login with a popup message there
 
   // Install global interceptor once
@@ -77,7 +86,7 @@ const AppRouter: React.FC = () => {
       }
     };
     const handleLogoutNav = () => handleLogout(navigate);
-    return <Navbar onNavigate={handleNavigate} token={token} onLogout={handleLogoutNav} userImage={userImage} />;
+  return <Navbar onNavigate={handleNavigate} token={token} onLogout={handleLogoutNav} userAvatar={userAvatar} userInitial={userInitial} />;
   };
 
 
@@ -94,7 +103,7 @@ const AppRouter: React.FC = () => {
           <Route path="/topics" element={<Box component="main" id="main-content"><TopicsPage /></Box>} />
           <Route path="/login" element={<Login onLogin={handleLogin} onShowRegister={() => {}} />} />
           <Route path="/register" element={<Register onShowLogin={() => {}} />} />
-          <Route path="/profile" element={token ? <Box component="main" id="main-content"><Profile token={token} onProfilePhotoChange={setUserImage} /></Box> : <Navigate to="/login" replace />} />
+          <Route path="/profile" element={token ? <Box component="main" id="main-content"><Profile token={token} onAvatarChange={setUserAvatar} onInitialChange={setUserInitial} /></Box> : <Navigate to="/login" replace />} />
           <Route path="/questions" element={<Box component="main" id="main-content"><Questions /></Box>} />
           <Route path="/kelime-avi" element={<SelectLevel game="kelime-avi" />} />
           <Route path="/kelime-avi-game" element={<WordHuntGame />} />
