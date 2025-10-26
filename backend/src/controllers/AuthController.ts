@@ -142,7 +142,7 @@ const AuthController = {
     const userId = typeof payload === 'object' && 'userId' in payload ? (payload as any).userId : undefined;
     if (!userId) return res.status(400).json({ error: 'Invalid token payload' });
 
-    const { name, email, newPassword, currentPassword } = req.body || {};
+  const { name, email, newPassword, currentPassword, avatar } = req.body || {};
     if (!currentPassword) {
       return res.status(400).json({ error: 'Mevcut şifre gerekli' });
     }
@@ -165,13 +165,14 @@ const AuthController = {
       const hashed = await bcrypt.hash(newPassword, 10);
       data.password = hashed;
     }
+    if (typeof avatar === 'string') data.profilePhoto = avatar;
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: 'Güncellenecek bir alan yok' });
     }
 
     const updated = await prisma.user.update({ where: { id: userId }, data });
-    res.json({ message: 'Profil güncellendi', user: { id: updated.id, name: updated.name, email: updated.email, profilePhoto: updated.profilePhoto } });
+    res.json({ message: 'Profil güncellendi', user: { id: updated.id, name: updated.name, email: updated.email, profilePhoto: updated.profilePhoto, avatar: updated.profilePhoto } });
   },
 
   forgotPassword: async (req: Request, res: Response) => {
