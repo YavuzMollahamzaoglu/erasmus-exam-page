@@ -173,22 +173,27 @@ const AuthController = {
     if (!userId)
       return res.status(400).json({ error: "Invalid token payload" });
 
-    const { name, email, newPassword, currentPassword, avatar } =
-      req.body || {};
-    if (!currentPassword) {
-      return res.status(400).json({ error: "Mevcut şifre gerekli" });
-    }
+    const { name, email, newPassword, currentPassword, avatar } = req.body || {};
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    const valid = await bcrypt.compare(currentPassword, user.password || "");
-    if (!valid) return res.status(401).json({ error: "Mevcut şifre hatalı" });
+    // If only avatar is being updated, skip password check
+    const onlyAvatar =
+      typeof avatar === "string" &&
+      !name && !email && !newPassword && !currentPassword;
 
-    // If email is being changed, check uniqueness
-    if (email && email !== user.email) {
-      const exists = await prisma.user.findUnique({ where: { email } });
-      if (exists)
-        return res.status(409).json({ error: "Bu email zaten kullanılıyor" });
+    if (!onlyAvatar) {
+      if (!currentPassword) {
+        return res.status(400).json({ error: "Mevcut şifre gerekli" });
+      }
+      const valid = await bcrypt.compare(currentPassword, user.password || "");
+      if (!valid) return res.status(401).json({ error: "Mevcut şifre hatalı" });
+      // If email is being changed, check uniqueness
+      if (email && email !== user.email) {
+        const exists = await prisma.user.findUnique({ where: { email } });
+        if (exists)
+          return res.status(409).json({ error: "Bu email zaten kullanılıyor" });
+      }
     }
 
     const data: any = {};
