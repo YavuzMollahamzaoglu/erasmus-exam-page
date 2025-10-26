@@ -341,9 +341,9 @@ const Rankings: React.FC<Props> = ({ token }) => {
                   const avatar = me?.avatar || me?.profilePhoto;
                   if (avatar && isSingleEmoji(avatar)) {
                     return <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{avatar}</span>;
-                  } else if (avatar) {
+                  } else if (avatar && typeof avatar === 'string' && (avatar.startsWith('/') || avatar.startsWith('uploads/') || avatar.startsWith('http'))) {
                     return <img loading="lazy"
-                      src={`${process.env.REACT_APP_API_URL}${avatar}?t=${Date.now()}`}
+                      src={`${process.env.REACT_APP_API_URL}${avatar.startsWith('http') ? '' : avatar}?t=${Date.now()}`}
                       alt={me?.name ? `${me.name} adlı kullanıcının profili` : 'Benim profil fotoğrafım'}
                       style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894' }}
                     />;
