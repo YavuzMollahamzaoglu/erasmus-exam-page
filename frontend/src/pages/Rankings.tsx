@@ -9,6 +9,7 @@ function isSingleEmoji(str: string) {
   return typeof str === 'string' && str.length <= 3 && /^(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
 }
 
+interface Props {
   token: string;
   userAvatar?: string;
   userInitial?: string;
@@ -337,8 +338,27 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
               border: '1px solid rgba(0, 184, 148, 0.2)',
               backdropFilter: 'blur(5px)'
             }}>
-              <Box sx={{ mr: 2 }}>
-                {userAvatar || userInitial || '?'}
+              <Box sx={{
+                mr: 2,
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 700,
+                fontSize: userAvatar && /^\p{Emoji}/u.test(userAvatar) ? 32 : '1.2rem',
+                bgcolor: '#26c6da',
+                boxShadow: 2,
+                border: '2px solid rgba(255,255,255,0.85)',
+                userSelect: 'none',
+                background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                color: '#fff',
+              }}>
+                {/* Emoji avatar ise büyük göster, yoksa baş harfi */}
+                {userAvatar && /^\p{Emoji}/u.test(userAvatar)
+                  ? userAvatar
+                  : (userInitial || '?')}
               </Box>
               <TextField
                 fullWidth
