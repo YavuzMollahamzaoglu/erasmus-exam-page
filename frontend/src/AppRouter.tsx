@@ -117,7 +117,7 @@ const AppRouter: React.FC = () => {
           <Route path="/kelime-eslestirme-game" element={<WordMatchingGame />} />
           <Route path="/okuma" element={<SelectLevel game="okuma" />} />
           <Route path="/okuma-game" element={<ReadingGame />} />
-          <Route path="/rankings" element={<Box component="main" id="main-content"><Rankings token={token} /></Box>} />
+          <Route path="/rankings" element={<Box component="main" id="main-content"><Rankings token={token} userAvatar={userAvatar} userInitial={userInitial} /></Box>} />
           <Route path="/categories" element={<Box component="main" id="main-content"><Categories /></Box>} />
           <Route path="/about" element={<Box component="main" id="main-content"><About /></Box>} />
           <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
