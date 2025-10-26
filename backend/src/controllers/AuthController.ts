@@ -118,22 +118,22 @@ const AuthController = {
   me: async (req: Request, res: Response) => {
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "No token provided" });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'No token provided' });
     }
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
     try {
-      const payload: any = jwt.verify(
-        token,
-        process.env.JWT_SECRET || "secret"
-      );
+      const payload: any = jwt.verify(token, process.env.JWT_SECRET || 'secret');
       const user = await prisma.user.findUnique({
         where: { id: payload.userId },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          createdAt: true,
+        select: { id: true, email: true, name: true, createdAt: true, profilePhoto: true },
+      });
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      // profilePhoto hem profilePhoto hem avatar olarak dönsün
+      res.json({ user: { ...user, avatar: user.profilePhoto } });
+    } catch (err) {
+      res.status(401).json({ error: 'Invalid or expired token' });
+    }
           profilePhoto: true,
         },
       });
