@@ -10,7 +10,12 @@ export const getComments = async (req: Request, res: Response) => {
   try {
     const exam = req.query.exam as string | undefined;
     const comments = await repoGetComments(exam);
-    res.json({ comments });
+    // Her user objesine avatar: profilePhoto ekle
+    const commentsWithAvatar = comments.map(c => ({
+      ...c,
+      user: c.user ? { ...c.user, avatar: c.user.profilePhoto } : null
+    }));
+    res.json({ comments: commentsWithAvatar });
   } catch (err) {
     res.status(500).json({ error: "Yorumlar alınamadı." });
   }

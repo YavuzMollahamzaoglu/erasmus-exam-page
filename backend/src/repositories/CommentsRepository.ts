@@ -1,10 +1,19 @@
 import prisma from "../prismaClient";
 
 export const getComments = async (exam?: string) => {
+  // user.avatar olarak da dön (profilePhoto'dan alias)
   return prisma.comment.findMany({
     where: exam ? { exam } : {},
     orderBy: { createdAt: "desc" },
-    include: { user: { select: { name: true, id: true, profilePhoto: true } } },
+    include: {
+      user: {
+        select: {
+          name: true,
+          id: true,
+          profilePhoto: true,
+        },
+      },
+    },
   });
 };
 
