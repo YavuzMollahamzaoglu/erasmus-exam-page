@@ -3,10 +3,38 @@ import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
+
 // Helper to check if a string is a single emoji
 function isSingleEmoji(str: string) {
   // This regex matches a single emoji (including most common ones)
   return typeof str === 'string' && str.length <= 3 && /^(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
+}
+
+// Navbar ile aynı avatar render fonksiyonu
+function renderAvatar(avatar?: string, initial?: string) {
+  const isEmoji = avatar && isSingleEmoji(avatar);
+  return (
+    <Box
+      sx={{
+        width: 40,
+        height: 40,
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700,
+        fontSize: isEmoji ? 32 : '1.2rem',
+        bgcolor: '#26c6da',
+        boxShadow: 2,
+        border: '2px solid rgba(255,255,255,0.85)',
+        userSelect: 'none',
+        background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+        color: '#fff',
+      }}
+    >
+      {isEmoji ? avatar : (initial || '?')}
+    </Box>
+  );
 }
 
 interface Props {
@@ -338,27 +366,8 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
               border: '1px solid rgba(0, 184, 148, 0.2)',
               backdropFilter: 'blur(5px)'
             }}>
-              <Box sx={{
-                mr: 2,
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 700,
-                fontSize: userAvatar && /^\p{Emoji}/u.test(userAvatar) ? 32 : '1.2rem',
-                bgcolor: '#26c6da',
-                boxShadow: 2,
-                border: '2px solid rgba(255,255,255,0.85)',
-                userSelect: 'none',
-                background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                color: '#fff',
-              }}>
-                {/* Emoji avatar ise büyük göster, yoksa baş harfi */}
-                {userAvatar && /^\p{Emoji}/u.test(userAvatar)
-                  ? userAvatar
-                  : (userInitial || '?')}
+              <Box sx={{ mr: 2 }}>
+                {renderAvatar(userAvatar, userInitial)}
               </Box>
               <TextField
                 fullWidth
@@ -453,52 +462,8 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                     }
                   }}
                 >
-                  <Box sx={{ mr: 2, minWidth: 40, width: 40, height: 40, position: 'relative', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {c.user?.profilePhoto && typeof c.user.profilePhoto === 'string' ? (
-                      isSingleEmoji(c.user.profilePhoto) ? (
-                        <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{c.user.profilePhoto}</span>
-                      ) : (
-                        <img
-                          loading="lazy"
-                          src={`${process.env.REACT_APP_API_URL}${String(c.user.profilePhoto).startsWith('/') ? c.user.profilePhoto : '/uploads/profile-photos/' + c.user.profilePhoto}?t=${Date.now()}`}
-                          alt={c.user?.name ? `${c.user.name} adlı kullanıcının profil fotoğrafı` : 'Kullanıcı profil fotoğrafı'}
-                          style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: '50%',
-                            objectFit: 'cover',
-                            border: '2px solid #00b894',
-                            display: 'block',
-                          }}
-                          onError={e => {
-                            const img = e.target as HTMLImageElement;
-                            img.onerror = null;
-                            img.style.display = 'none';
-                            const fallback = img.nextElementSibling as HTMLElement;
-                            if (fallback) fallback.style.display = 'flex';
-                          }}
-                        />
-                      )
-                    ) : null}
-                    {/* Fallback avatar, her zaman DOM'da olsun ki onError'da gösterilebilsin */}
-                    <Box sx={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                      display: c.user?.profilePhoto ? 'none' : 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontWeight: 700,
-                      fontSize: '1.2rem',
-                      position: 'absolute',
-                      left: 0,
-                      top: 0,
-                      zIndex: 1
-                    }}>
-                      {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name.charAt(0).toUpperCase() : 'A'}
-                    </Box>
+                  <Box sx={{ mr: 2 }}>
+                    {renderAvatar(c.user?.profilePhoto, c.user?.name?.[0]?.toUpperCase())}
                   </Box>
                   <Box sx={{ flex: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
