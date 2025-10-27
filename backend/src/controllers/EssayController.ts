@@ -7,38 +7,9 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize Gemini client
 const getGeminiClient = () => {
-  if (
-    !process.env.GEMINI_API_KEY ||
-    process.env.GEMINI_API_KEY === "AIzaSyBnVI4KBht0T9uQNKRuzn99BrDZWjbKnPc"
-  ) {
-        if (evaluation.feedback.toLowerCase().includes("konu ile alakasız")) {
-          evaluation = {
-            scores: {
-              task_response: 1,
-              coherence_cohesion: 1,
-              lexical_resource: 1,
-              grammar: 1,
-              overall: 1,
-            },
-            feedback: "Konu ile alakasız, puan verilemez.",
-          };
-        } else if (
-          typeof scores.overall !== "number" ||
-          scores.overall < 0 ||
-          scores.overall > 100
-        ) {
-          scores.overall = Math.round(
-            ((scores.task_response +
-              scores.coherence_cohesion +
-              scores.lexical_resource +
-              scores.grammar) /
-              4) *
-              10
-          );
-        }
-          error: "Essay must be at least 50 characters long",
-        });
-      }
+  if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "AIzaSyBnVI4KBht0T9uQNKRuzn99BrDZWjbKnPc") {
+    return null;
+  }
 
       // Prepare the prompt for Gemini (stricter, shorter, force JSON, penalize off-topic)
       const prompt = `Sen bir IELTS yazılı sınav değerlendiricisisin. Sana verilen essay'i, verilen konuya uygunluk ve IELTS kriterlerine göre değerlendir. Eğer essay konu ile tamamen alakasızsa veya saçmaysa, tüm puanları 1 ver ve feedback'te "Konu ile alakasız, puan verilemez." yaz. Sadece aşağıdaki JSON formatında yanıt ver:
@@ -246,29 +217,6 @@ Essay: ${essayText}`;
         }
         // Ensure overall is 1-10, recalculate if not
         if (
-<<<<<<< Updated upstream
-=======
-          (typeof scores.task_response === "number" &&
-            scores.task_response <= 2) ||
-          (typeof scores.coherence_cohesion === "number" &&
-            scores.coherence_cohesion <= 2)
-        ) {
-          if (evaluation.feedback.toLowerCase().includes("konu ile alakasız")) {
-            evaluation = {
-              scores: {
-                task_response: 1,
-                coherence_cohesion: 1,
-                lexical_resource: 1,
-                grammar: 1,
-                overall: 1,
-              },
-              feedback: "Konu ile alakasız, puan verilemez.",
-            };
-          } else {
-            scores.overall = 1;
-          }
-        } else if (
->>>>>>> Stashed changes
           typeof scores.overall !== "number" ||
           scores.overall < 1 ||
           scores.overall > 10
