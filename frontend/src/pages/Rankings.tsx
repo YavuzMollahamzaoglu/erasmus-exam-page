@@ -10,6 +10,19 @@ function isSingleEmoji(str: string) {
   return typeof str === 'string' && str.length <= 3 && /^(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
 }
 
+// Helper: is single letter (incl. Turkish letters)
+function isSingleLetter(str?: string) {
+  if (!str) return false;
+  const t = str.trim();
+  return [...t].length === 1 && /^[A-Za-zÇĞİÖŞÜçğıöşü]$/u.test(t);
+}
+
+// Helper: looks like an image path or URL
+function isLikelyImagePath(str?: string) {
+  if (!str) return false;
+  return /^https?:\/\//.test(str) || str.startsWith('/') || /\.(png|jpe?g|gif|webp|svg)$/i.test(str);
+}
+
 // Navbar ile aynı avatar render fonksiyonu
 function renderAvatar(avatar?: string, initial?: string) {
   const isEmoji = avatar && isSingleEmoji(avatar);
@@ -475,20 +488,29 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                   }}
                 >
                   <Box sx={{ mr: 2 }}>
-                    {/* Avatar: emoji, görsel veya default */}
+                    {/* Avatar: emoji, tek harf veya görsel; aksi halde isim baş harfi */}
                     {c.user?.avatar ? (
                       isSingleEmoji(c.user.avatar) ? (
                         <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{c.user.avatar}</span>
-                      ) : (
-                        <img loading="lazy"
+                      ) : isSingleLetter(c.user.avatar) ? (
+                        <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
+                          {c.user.avatar.toUpperCase()}
+                        </Box>
+                      ) : isLikelyImagePath(c.user.avatar) ? (
+                        <img
+                          loading="lazy"
                           src={`${String(c.user.avatar).startsWith('http') ? c.user.avatar : process.env.REACT_APP_API_URL + (String(c.user.avatar).startsWith('/') ? c.user.avatar : '/uploads/profile-photos/' + c.user.avatar)}?v=${avatarVersion}`}
                           alt={c.user?.name ? `${c.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
                           style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894', flex: '0 0 auto' }}
                         />
+                      ) : (
+                        <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
+                          {(c.user?.name?.[0] || '?').toUpperCase()}
+                        </Box>
                       )
                     ) : (
                       <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
-                        {(c.user?.name?.[0] || 'U').toUpperCase()}
+                        {(c.user?.name?.[0] || '?').toUpperCase()}
                       </Box>
                     )}
                   </Box>
