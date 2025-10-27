@@ -46,6 +46,17 @@ const allPages = [
 ];
 
 // Login and Register are not navigation pages, only right-side buttons
+// basit emoji tespiti (tek karakterlik emoji)
+const isSingleEmoji = (s?: string) => {
+  if (!s) return false;
+  // geniş piktograf aralığı için unicode regex
+  try {
+    return (s.match(/\p{Extended_Pictographic}/u)?.length || 0) >= 1 && [...s.trim()].length === 1;
+  } catch {
+    return false;
+  }
+};
+
 const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, userInitial }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -387,6 +398,9 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
             }}>
               <Tooltip title="Kullanıcı menüsü">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          {
+            // Görsel mi, emoji mi karar verip Avatar'a uygun şekilde verelim
+          }
           <Avatar
             alt="Profil"
             sx={{
@@ -408,8 +422,18 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
               fontWeight: 700,
               userSelect: 'none',
             }}
+            src={(() => {
+              if (!userAvatar) return undefined;
+              if (isSingleEmoji(userAvatar)) return undefined; // emoji ise children'da göster
+              const isHttp = userAvatar.startsWith('http');
+              const isAbsolute = userAvatar.startsWith('/');
+              const base = process.env.REACT_APP_API_URL || '';
+              return isHttp
+                ? userAvatar
+                : `${base}${isAbsolute ? userAvatar : '/uploads/profile-photos/' + userAvatar}`;
+            })()}
           >
-            {userAvatar || userInitial || '?'}
+            {isSingleEmoji(userAvatar) ? userAvatar : (userInitial || '?')}
           </Avatar>
                 </IconButton>
               </Tooltip>

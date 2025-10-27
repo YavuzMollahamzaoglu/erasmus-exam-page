@@ -84,6 +84,11 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
     })();
   }, [token]);
 
+  // Avatar veya baş harf değiştiğinde yorum görsellerini tazele (cache-bust)
+  useEffect(() => {
+    setAvatarVersion(Date.now());
+  }, [userAvatar, userInitial]);
+
   // Initialize selectedExam/type from URL query
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
