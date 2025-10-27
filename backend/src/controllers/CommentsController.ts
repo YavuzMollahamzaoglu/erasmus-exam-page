@@ -9,7 +9,15 @@ import {
 export const getComments = async (req: Request, res: Response) => {
   try {
     const exam = req.query.exam as string | undefined;
-    const comments = await repoGetComments(exam);
+    const commentsRaw = await repoGetComments(exam);
+    // user.profilePhoto alanını user.avatar olarak map'le
+    const comments = commentsRaw.map((comment: any) => ({
+      ...comment,
+      user: {
+        ...comment.user,
+        avatar: comment.user?.profilePhoto || '/avatars/default.png',
+      },
+    }));
     res.json({ comments });
   } catch (err) {
     res.status(500).json({ error: "Yorumlar alınamadı." });
