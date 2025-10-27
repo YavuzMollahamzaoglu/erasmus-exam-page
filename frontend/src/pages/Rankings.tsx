@@ -411,30 +411,13 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                       body: JSON.stringify({ text: commentText, exam: selectedExam })
                     });
                     setCommentText('');
-                    if (res.ok) {
-                      // Yorum başarılıysa, local olarak güncel avatar ve isimle ekle
-                      const now = new Date();
-                      setComments(prev => [
-                        {
-                          id: 'local-' + now.getTime(),
-                          text: commentText,
-                          createdAt: now.toISOString(),
-                          user: {
-                            name: me?.name || '',
-                            profilePhoto: me?.avatar || me?.profilePhoto || userAvatar || '',
-                          }
-                        },
-                        ...prev
-                      ]);
-                    } else {
-                      // Refetch comments fallback
-                      fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
-                        headers: token ? { Authorization: `Bearer ${token}` } : {}
-                      })
-                        .then(res => res.json())
-                        .then(data => setComments(data.comments || []))
-                        .catch(() => setComments([]));
-                    }
+                    // Her durumda backend'den güncel yorumları çek
+                    fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
+                      headers: token ? { Authorization: `Bearer ${token}` } : {}
+                    })
+                      .then(res => res.json())
+                      .then(data => setComments(data.comments || []))
+                      .catch(() => setComments([]));
                   } finally {
                     setCommentLoading(false);
                   }
