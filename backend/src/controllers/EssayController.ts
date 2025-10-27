@@ -166,37 +166,57 @@ Yanıtı sadece aşağıdaki JSON formatında ver:
           Math.max(min, Math.min(max, v));
         const to10 = (v: number) => clamp(Math.round(v), 1, 10);
 
-        // Task response: length and average sentence length
-        let trScore =
-          4 +
-          (wordCount >= 100 ? 1 : 0) +
-          (wordCount >= 150 ? 1 : 0) +
-          (wordCount >= 200 ? 1 : 0) +
-          (wordCount >= 250 ? 2 : 0);
-        trScore += avgSentence >= 12 ? 1 : 0;
+        // Task response: length and average sentence length (daha kademeli)
+        // 1-10 arası dağılım: 1 (çok kısa) - 10 (çok uzun ve dengeli)
+        let trScore = 1;
+        if (wordCount < 60) {
+          trScore = 1;
+        } else if (wordCount < 90) {
+          trScore = 3;
+        } else if (wordCount < 120) {
+          trScore = 5;
+        } else if (wordCount < 160) {
+          trScore = 6;
+        } else if (wordCount < 200) {
+          trScore = 7;
+        } else if (wordCount < 250) {
+          trScore = 8;
+        } else if (wordCount < 300) {
+          trScore = 9;
+        } else {
+          trScore = 10;
+        }
+        // Cümle uzunluğu bonus/penaltı
+        if (avgSentence < 7) trScore -= 1;
+        if (avgSentence > 25) trScore -= 1;
         trScore += topicBoost; // reward topic relevance in task response
         trScore = to10(trScore);
 
-        // Coherence & cohesion: connectors and sentence structure
-        let ccScore =
-          4 +
-          Math.min(4, Math.floor(connectors / 2)) +
-          (sentenceCount >= 6 ? 1 : 0);
-        ccScore += avgSentence >= 10 && avgSentence <= 25 ? 1 : 0;
+        // Coherence & cohesion: connectors and sentence structure (daha kademeli)
+        // 1-10 arası: 1 (bağlaç yok, kısa) - 10 (çok bağlaç, uzun ve dengeli)
+        let ccScore = 1;
+        if (connectors === 0) ccScore = 2;
+        else if (connectors === 1) ccScore = 4;
+        else if (connectors === 2) ccScore = 6;
+        else if (connectors === 3) ccScore = 8;
+        else if (connectors >= 4) ccScore = 10;
+        // Cümle sayısı bonusu
+        if (sentenceCount >= 8 && ccScore < 10) ccScore += 1;
+        if (avgSentence < 7 || avgSentence > 25) ccScore -= 1;
         ccScore = to10(ccScore);
 
-        // Lexical resource: unique ratio and long word ratio
-        let lrScore =
-          4 + Math.round(uniqueRatio * 6) + (longRatio > 0.12 ? 1 : 0);
-        lrScore = to10(lrScore);
+        // Lexical resource: unique ratio ve long word ratio (oran bazlı)
+        // 1-10 arası: 1 (çok düşük çeşitlilik) - 10 (yüksek çeşitlilik ve uzun kelime)
+        let lrScore = Math.round(uniqueRatio * 7 + longRatio * 3 * 10);
+        lrScore = clamp(lrScore, 1, 10);
 
-        // Grammar: basic heuristic + penalty for Turkish chars
+        // Grammar: cümle başı büyük harf, Türkçe karakter, cümle uzunluğu
         const startsCapital = sentences.filter((s) =>
           /^[A-Z]/.test(s.trim())
         ).length;
-        let grScore =
-          4 + (startsCapital >= Math.min(5, sentenceCount - 1) ? 2 : 1);
-        grScore += avgSentence <= 30 ? 1 : 0;
+        let grScore = 5;
+        if (startsCapital >= Math.max(3, Math.floor(sentenceCount * 0.7))) grScore += 2;
+        if (avgSentence <= 30) grScore += 1;
         grScore -= turkishChars > 5 ? 2 : turkishChars > 0 ? 1 : 0;
         grScore = to10(grScore);
 
