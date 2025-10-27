@@ -42,10 +42,8 @@ const AppRouter: React.FC = () => {
           headers: { 'Authorization': `Bearer ${jwt}` },
         });
         const data = await res.json();
-        // avatar veya profilePhoto varsa onu kullan
-        if (data?.user?.avatar) setUserAvatar(data.user.avatar);
-        else if (data?.user?.profilePhoto) setUserAvatar(data.user.profilePhoto);
-        else setUserAvatar(undefined);
+        // Avatar özelliği kaldırıldı, sadece baş harf kullanıyoruz
+        setUserAvatar(undefined);
         if (data?.user?.name) setUserInitial(data.user.name[0]?.toUpperCase() || '?');
         else setUserInitial('?');
       } catch {
@@ -105,7 +103,7 @@ const AppRouter: React.FC = () => {
           <Route path="/topics" element={<Box component="main" id="main-content"><TopicsPage /></Box>} />
           <Route path="/login" element={<Login onLogin={handleLogin} onShowRegister={() => {}} />} />
           <Route path="/register" element={<Register onShowLogin={() => {}} />} />
-          <Route path="/profile" element={token ? <Box component="main" id="main-content"><Profile token={token} onAvatarChange={a => setUserAvatar(a || undefined)} onInitialChange={setUserInitial} /></Box> : <Navigate to="/login" replace />} />
+          <Route path="/profile" element={token ? <Box component="main" id="main-content"><Profile token={token} onInitialChange={setUserInitial} /></Box> : <Navigate to="/login" replace />} />
           <Route path="/questions" element={<Box component="main" id="main-content"><Questions /></Box>} />
           <Route path="/kelime-avi" element={<SelectLevel game="kelime-avi" />} />
           <Route path="/kelime-avi-game" element={<WordHuntGame />} />

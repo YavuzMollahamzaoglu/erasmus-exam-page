@@ -1,19 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
-import { Box, Typography, Button, Paper, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions, ToggleButton, ToggleButtonGroup, IconButton } from '@mui/material';
-import { AVATAR_EMOJIS } from '../utils/avatars';
+import { Box, Typography, Button, Paper, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
 
 interface Props {
   token: string;
-  onAvatarChange?: (avatar: string | undefined) => void;
   onInitialChange?: (initial: string) => void;
 }
 
-const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) => {
+const Profile: React.FC<Props> = ({ token, onInitialChange }) => {
   const [profile, setProfile] = useState<any>(null);
   const [error, setError] = useState('');
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [avatarDialogOpen, setAvatarDialogOpen] = useState(false);
   const [updateDialog, setUpdateDialog] = useState(false);
   const [updateData, setUpdateData] = useState({ name: '', email: '', newPassword: '', currentPassword: '' });
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -29,8 +25,6 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
       const data = await res.json();
   const user = data.user || data;
   setProfile(user);
-  setAvatar(user.avatar || null);
-  if (onAvatarChange) onAvatarChange(user.avatar || undefined);
   if (onInitialChange && user.name) onInitialChange(user.name[0]?.toUpperCase() || '?');
     } catch {
       setProfile(null);
@@ -133,10 +127,8 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
   );
 
   const joinedDate = profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('tr-TR') : '-';
-  // Avatar logic: show selected emoji, or fallback to initial
+  // Avatar logic removed: always use first initial of the name
   const getInitial = () => (profile.name && profile.name[0] ? profile.name[0].toUpperCase() : '?');
-
-  const avatarDisplay = avatar || getInitial();
 
   return (
     <Box sx={{ 
@@ -211,72 +203,11 @@ const Profile: React.FC<Props> = ({ token, onAvatarChange, onInitialChange }) =>
                 userSelect: 'none',
               }}
             >
-              {avatarDisplay}
+              {getInitial()}
             </Avatar>
-            <Button
-              variant="outlined"
-              sx={{ mt: 2, mb: 2, borderRadius: 2, fontWeight: 700, color: '#00b894', borderColor: '#00b894', '&:hover': { background: 'rgba(0,184,148,0.08)', borderColor: '#00cec9', color: '#00b894' } }}
-              onClick={() => setAvatarDialogOpen(true)}
-            >
-              Avatarını Değiştir
-            </Button>
+            {/* Avatar seçimi kaldırıldı: sadece baş harf gösterilir */}
           </Box>
-          <Dialog open={avatarDialogOpen} onClose={() => setAvatarDialogOpen(false)} maxWidth="xs" fullWidth>
-            <DialogTitle>Avatar Seç</DialogTitle>
-            <DialogContent>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 2, mt: 1 }}>
-                {AVATAR_EMOJIS.map((emo) => (
-                  <ToggleButton
-                    key={emo}
-                    value={emo}
-                    selected={avatar === emo}
-                    onClick={() => setAvatar(emo)}
-                    sx={{ fontSize: 32, px: 2, py: 1, borderRadius: 2, border: '2px solid #00b894', bgcolor: '#fff', '&.Mui-selected': { bgcolor: '#00b894', color: '#fff' }, m: 0.5 }}
-                  >
-                    {emo}
-                  </ToggleButton>
-                ))}
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center', alignItems: 'center', mb: 1 }}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  sx={{ borderRadius: 2, fontWeight: 700, color: '#555', borderColor: '#bbb', '&:hover': { background: 'rgba(0,0,0,0.04)', borderColor: '#00b894', color: '#00b894' } }}
-                  onClick={() => setAvatar(null)}
-                >
-                  Sadece Baş Harfini Göster
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{ borderRadius: 2, background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' } }}
-                  onClick={async () => {
-                    setError('');
-                    try {
-                      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-profile`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                        body: JSON.stringify({ avatar }),
-                      });
-                      if (res.ok) {
-                        // Fetch new profile and update both local and global avatar state
-                        const updated = await res.json();
-                        setAvatar(updated?.user?.profilePhoto || avatar || undefined);
-                        if (onAvatarChange) onAvatarChange(updated?.user?.profilePhoto || avatar || undefined);
-                        if (onInitialChange && updated?.user?.name) onInitialChange(updated.user.name[0]?.toUpperCase() || '?');
-                        setAvatarDialogOpen(false);
-                        fetchProfile();
-                      } else setError('Avatar güncellenemedi');
-                    } catch {
-                      setError('Avatar güncellenemedi');
-                    }
-                  }}
-                  disabled={avatar === profile.avatar}
-                >
-                  Kaydet
-                </Button>
-              </Box>
-            </DialogContent>
-          </Dialog>
+          {/* Avatar seçim diyalogu kaldırıldı */}
           {/* Name under avatar, thicker */}
           <Typography sx={{ fontWeight: 900, fontSize: { xs: '1.4rem', md: '1.6rem' }, mb: 0.5 }}>
             {profile.name || '-'}
