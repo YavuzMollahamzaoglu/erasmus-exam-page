@@ -487,7 +487,22 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                   }}
                 >
                   <Box sx={{ mr: 2 }}>
-                    {renderAvatar(c.user?.profilePhoto, c.user?.name?.[0]?.toUpperCase())}
+                    {/* Avatar: emoji, görsel veya default */}
+                    {c.user?.avatar ? (
+                      isSingleEmoji(c.user.avatar) ? (
+                        <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{c.user.avatar}</span>
+                      ) : (
+                        <img loading="lazy"
+                          src={`${String(c.user.avatar).startsWith('http') ? c.user.avatar : process.env.REACT_APP_API_URL + (String(c.user.avatar).startsWith('/') ? c.user.avatar : '/uploads/profile-photos/' + c.user.avatar)}?v=${avatarVersion}`}
+                          alt={c.user?.name ? `${c.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
+                          style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894', flex: '0 0 auto' }}
+                        />
+                      )
+                    ) : (
+                      <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
+                        {(c.user?.name?.[0] || 'U').toUpperCase()}
+                      </Box>
+                    )}
                   </Box>
                   <Box sx={{ flex: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
