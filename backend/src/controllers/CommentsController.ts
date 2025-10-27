@@ -9,16 +9,22 @@ import {
 export const getComments = async (req: Request, res: Response) => {
   try {
     const exam = req.query.exam as string | undefined;
-    const commentsRaw = await repoGetComments(exam);
-    // user.profilePhoto alanını user.avatar olarak map'le
-    const comments = commentsRaw.map((comment: any) => ({
-      ...comment,
-      user: {
-        ...comment.user,
-        avatar: comment.user?.profilePhoto || '/avatars/default.png',
-      },
+    const comments = await repoGetComments(exam);
+    // Her user objesine avatar: profilePhoto (emoji veya görsel) ekle, yoksa default emoji ata
+    const commentsWithAvatar = comments.map((c) => ({
+      ...c,
+      user: c.user
+        ? {
+            ...c.user,
+            avatar:
+              typeof c.user.profilePhoto === "string" &&
+              c.user.profilePhoto.trim() !== ""
+                ? c.user.profilePhoto
+                : "🙂", // default emoji
+          }
+        : { avatar: "🙂", name: "Anonim" },
     }));
-    res.json({ comments });
+    res.json({ comments: commentsWithAvatar });
   } catch (err) {
     res.status(500).json({ error: "Yorumlar alınamadı." });
   }
