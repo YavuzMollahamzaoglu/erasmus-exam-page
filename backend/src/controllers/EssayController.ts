@@ -133,24 +133,44 @@ const heuristicEvaluate = (text: string, topic?: string): EssayEvaluation => {
     (wordCount >= 250 ? 2 : 0);
   trScore += avgSentence >= 12 ? 1 : 0;
   trScore += topicBoost; // reward topic relevance in task response
-  trScore = to10(trScore);
+  // Gerçekten iyi essay'ler için 10 puan
+  if (wordCount >= 300 && avgSentence >= 15 && topicBoost >= 2) {
+    trScore = 10;
+  } else {
+    trScore = to10(trScore);
+  }
 
   // Coherence & cohesion: connectors and sentence structure
   let ccScore =
     4 + Math.min(4, Math.floor(connectors / 2)) + (sentenceCount >= 6 ? 1 : 0);
   ccScore += avgSentence >= 10 && avgSentence <= 25 ? 1 : 0;
-  ccScore = to10(ccScore);
+  // Gerçekten iyi essay'ler için 10 puan
+  if (connectors >= 4 && sentenceCount >= 10 && avgSentence >= 12) {
+    ccScore = 10;
+  } else {
+    ccScore = to10(ccScore);
+  }
 
   // Lexical resource: unique ratio and long word ratio
   let lrScore = 4 + Math.round(uniqueRatio * 6) + (longRatio > 0.12 ? 1 : 0);
-  lrScore = to10(lrScore);
+  // Gerçekten iyi essay'ler için 10 puan
+  if (uniqueRatio > 0.7 && longRatio > 0.18) {
+    lrScore = 10;
+  } else {
+    lrScore = to10(lrScore);
+  }
 
   // Grammar: basic heuristic + penalty for Turkish chars
   const startsCapital = sentences.filter((s) => /^[A-Z]/.test(s.trim())).length;
   let grScore = 4 + (startsCapital >= Math.min(5, sentenceCount - 1) ? 2 : 1);
   grScore += avgSentence <= 30 ? 1 : 0;
   grScore -= turkishChars > 5 ? 2 : turkishChars > 0 ? 1 : 0;
-  grScore = to10(grScore);
+  // Gerçekten iyi essay'ler için 10 puan
+  if (startsCapital >= sentenceCount - 1 && turkishChars === 0 && avgSentence >= 12) {
+    grScore = 10;
+  } else {
+    grScore = to10(grScore);
+  }
 
   // All scores 1-10, overall is average rounded
   const overall = to10((trScore + ccScore + lrScore + grScore) / 4);
