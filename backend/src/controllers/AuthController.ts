@@ -143,7 +143,29 @@ const AuthController = {
     const userId = typeof payload === 'object' && 'userId' in payload ? (payload as any).userId : undefined;
     if (!userId) return res.status(400).json({ error: 'Invalid token payload' });
 
-  const { name, email, newPassword, currentPassword, avatar } = req.body || {};
+    const { name, email, newPassword, currentPassword, avatar } = req.body || {};
+
+    // If ONLY avatar is being updated (or avatar=null to clear), do not require currentPassword
+    const onlyAvatarUpdate =
+      (typeof avatar === 'string' || avatar === null) &&
+      !name && !email && !newPassword && !currentPassword;
+
+    if (onlyAvatarUpdate) {
+      const data: any = { profilePhoto: avatar === null ? null : avatar };
+      const updated = await prisma.user.update({ where: { id: userId }, data });
+      return res.json({
+        message: 'Profil güncellendi',
+        user: {
+          id: updated.id,
+          name: updated.name,
+          email: updated.email,
+          profilePhoto: updated.profilePhoto,
+          avatar: updated.profilePhoto,
+        },
+      });
+    }
+
+    // For other updates, require current password
     if (!currentPassword) {
       return res.status(400).json({ error: 'Mevcut şifre gerekli' });
     }
@@ -166,7 +188,7 @@ const AuthController = {
       const hashed = await bcrypt.hash(newPassword, 10);
       data.password = hashed;
     }
-    if (typeof avatar === 'string') data.profilePhoto = avatar;
+    if (typeof avatar === 'string' || avatar === null) data.profilePhoto = avatar === null ? null : avatar;
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: 'Güncellenecek bir alan yok' });
