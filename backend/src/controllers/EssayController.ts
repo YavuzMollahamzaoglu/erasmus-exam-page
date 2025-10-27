@@ -340,7 +340,6 @@ Essay: ${essayText}`;
       } catch {
         return res.status(500).json({ error: "Failed to evaluate essay" });
       }
-
     },
   // Health check endpoint for essay service
   healthCheck: async (req: Request, res: Response) => {
