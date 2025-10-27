@@ -666,16 +666,16 @@ export default function WritingGame() {
       </Box>
       {/* Result popup bubble */}
       {showResult && (
+
         <Box 
           sx={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', bgcolor: '#b2ebf2', backdropFilter: 'blur(8px)', zIndex: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          // Do not close on backdrop click; use buttons only
         >
           <Box sx={{ background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 6, boxShadow: "0 30px 60px rgba(0,0,0,0.2)", p: 4, minWidth: 320, maxWidth: '90vw', textAlign: 'center', position: 'relative', border: "1px solid rgba(255,255,255,0.3)" }}>
             <Typography variant="h5" fontWeight={700} color="#2c3e50" mb={2}>Oyun Sonucu</Typography>
             <Typography fontSize={20} fontWeight={600} color="#43ea7c" mb={1}>Doğru: {score}</Typography>
             <Typography fontSize={20} fontWeight={600} color="#e74c3c" mb={1}>Yanlış: {mistakes}</Typography>
-            <Typography fontSize={20} fontWeight={600} color="#ff9800" mb={1}>Boş: {blanks}</Typography>
             <Typography fontSize={18} fontWeight={500} color="#2c3e50" mb={2}>Süre: {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, '0')}</Typography>
+
             <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 2 }}>
               <button
                 style={{

@@ -406,12 +406,15 @@ export default function WordHuntGame() {
                 width: { xs: '100%', sm: 200 },
                 minWidth: 160,
                 maxWidth: 240,
-                height: 60,
+                minHeight: 60,
                 borderRadius: 2,
                 bgcolor: "#fff",
                 background: gradients[i % gradients.length],
                 color: "#fff",
-                fontSize: 20,
+                fontSize: {
+                  xs: option.length > 18 ? 15 : 18,
+                  sm: option.length > 18 ? 16 : 20
+                },
                 fontWeight: 700,
                 display: "flex",
                 alignItems: "center",
@@ -423,10 +426,14 @@ export default function WordHuntGame() {
                 border: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '4px solid #43ea7c' : selected === option && status === "wrong" ? '4px solid #e74c3c' : '4px solid transparent',
                 boxShadow: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '0 0 12px #43ea7c88' : selected === option && status === "wrong" ? '0 0 12px #e74c3c88' : '0 2px 8px #0001',
                 transform: (selected === option && (status === "correct" || status === "wrong")) || savedCorrect[index]?.selected === option ? 'scale(1.05)' : undefined,
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+                textAlign: 'center',
+                px: 2,
+                py: 1.5,
               }}
               onClick={() => (status === "idle" ? handleSelect(option) : undefined)}
               style={{ 
-                // If this card is already correct (from saved state), keep it non-clickable
                 pointerEvents: (status === "correct" || savedCorrect[index]) ? 'none' : 'auto',
                 opacity: status === "wrong" && selected === option ? 0.7 : 1
               }}
@@ -437,7 +444,36 @@ export default function WordHuntGame() {
         </Box>
         {/* Navigation buttons - only hide during short celebration after a fresh correct */}
         {!showResult && !celebrating && (
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3, gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, gap: 1 }}>
+            <button
+              style={{
+                background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: 16,
+                border: 'none',
+                borderRadius: 12,
+                padding: '12px 24px',
+                cursor: 'pointer',
+                minWidth: 100,
+                boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
+                transition: 'all 0.3s ease',
+                marginBottom: 8,
+              }}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLButtonElement;
+                target.style.transform = 'translateY(-2px)';
+                target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLButtonElement;
+                target.style.transform = 'translateY(0)';
+                target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
+              }}
+              onClick={handleSkip}
+            >
+              Geç →
+            </button>
             <button
               style={{
                 background: index === 0 ? 'linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)' : 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
@@ -452,7 +488,7 @@ export default function WordHuntGame() {
                 minWidth: 100,
                 boxShadow: index === 0 ? 'none' : '0 4px 12px rgba(0, 184, 148, 0.3)',
                 transition: 'all 0.3s ease',
-                transform: index === 0 ? 'none' : 'translateY(0)',
+                marginTop: 8,
               }}
               onMouseEnter={(e) => {
                 if (index !== 0) {
@@ -472,34 +508,6 @@ export default function WordHuntGame() {
               disabled={index === 0}
             >
               ← Önceki
-            </button>
-            <button
-              style={{
-                background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 16,
-                border: 'none',
-                borderRadius: 12,
-                padding: '12px 24px',
-                cursor: 'pointer',
-                minWidth: 100,
-                boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(-2px)';
-                target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(0)';
-                target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
-              }}
-              onClick={handleSkip}
-            >
-              Geç →
             </button>
           </Box>
         )}
