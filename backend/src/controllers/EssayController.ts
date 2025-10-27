@@ -20,7 +20,7 @@ interface EssayScores {
   coherence_cohesion: number;
   lexical_resource: number;
   grammar: number;
-  overall: number;
+  overall: number; // now always 1-10
 }
 
 interface EssayEvaluation {
@@ -53,7 +53,7 @@ const EssayController = {
     "coherence_cohesion": [1-10],
     "lexical_resource": [1-10],
     "grammar": [1-10],
-    "overall": [0-100]
+    "overall": [1-10]
   },
   "feedback": "Essay ve konuya göre detaylı Türkçe geri bildirim. Eğer konu dışıysa: 'Konu ile alakasız, puan verilemez.' yaz."
 }
@@ -152,8 +152,8 @@ Essay: ${essayText}`;
           );
         }
 
-        const clamp = (v: number, min: number, max: number) =>
-          Math.max(min, Math.min(max, v));
+
+        const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
         const to10 = (v: number) => clamp(Math.round(v), 1, 10);
 
         // Task response: length and average sentence length
@@ -181,20 +181,15 @@ Essay: ${essayText}`;
         lrScore = to10(lrScore);
 
         // Grammar: basic heuristic + penalty for Turkish chars
-        const startsCapital = sentences.filter((s) =>
-          /^[A-Z]/.test(s.trim())
-        ).length;
+        const startsCapital = sentences.filter((s) => /^[A-Z]/.test(s.trim())).length;
         let grScore =
           4 + (startsCapital >= Math.min(5, sentenceCount - 1) ? 2 : 1);
         grScore += avgSentence <= 30 ? 1 : 0;
         grScore -= turkishChars > 5 ? 2 : turkishChars > 0 ? 1 : 0;
         grScore = to10(grScore);
 
-        const overall = clamp(
-          Math.round(((trScore + ccScore + lrScore + grScore) / 4) * 10),
-          0,
-          100
-        );
+        // All scores 1-10, overall is average rounded
+        const overall = to10((trScore + ccScore + lrScore + grScore) / 4);
 
         let feedback = "";
         if (topicBoost === 0) {
@@ -239,6 +234,7 @@ Essay: ${essayText}`;
         if (!evaluation.scores || !evaluation.feedback)
           throw new Error("Invalid evaluation structure");
 
+
         const scores = evaluation.scores;
         const scoreKeys = [
           "task_response",
@@ -252,18 +248,18 @@ Essay: ${essayText}`;
             throw new Error(`Invalid score for ${key}: ${score}`);
           }
         }
+        // Ensure overall is 1-10, recalculate if not
         if (
           typeof scores.overall !== "number" ||
-          scores.overall < 0 ||
-          scores.overall > 100
+          scores.overall < 1 ||
+          scores.overall > 10
         ) {
-          scores.overall = Math.round(
-            ((scores.task_response +
+          scores.overall = to10(
+            (scores.task_response +
               scores.coherence_cohesion +
               scores.lexical_resource +
               scores.grammar) /
-              4) *
-              10
+              4
           );
         }
 
@@ -346,7 +342,7 @@ Essay: ${essayText}`;
               coherence_cohesion: 1,
               lexical_resource: 1,
               grammar: 1,
-              overall: 10,
+              overall: 1,
             },
             feedback: "Konu ile alakasız, puan verilemez.",
           };
