@@ -61,6 +61,8 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
   const [commentText, setCommentText] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
   const [me, setMe] = useState<any>(null);
+  // Avatar değiştiğinde tetiklenecek state
+  const [avatarVersion, setAvatarVersion] = useState<number>(Date.now());
 
   useEffect(() => {
     setMetaTags({
@@ -73,9 +75,11 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
     if (!token) return;
     (async () => {
       try {
-  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
         const data = await res.json();
         setMe(data.user || null);
+        // Avatar değiştiyse yorumları yeniden fetch et
+        setAvatarVersion(Date.now());
       } catch { setMe(null); }
     })();
   }, [token]);
@@ -92,7 +96,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
   useEffect(() => {
     setLoading(true);
     const qs = `?exam=${selectedExam}&type=${encodeURIComponent(selectedType)}`;
-  fetch(`${process.env.REACT_APP_API_URL}/api/rankings${qs}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/rankings${qs}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
       .then((res) => res.json())
@@ -105,13 +109,13 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
         setLoading(false);
       });
     // Fetch comments for selected exam (type bağımsız bırakıldı)
-  fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
       .then(res => res.json())
       .then(data => setComments(data.comments || []))
       .catch(() => setComments([]));
-  }, [token, selectedExam, selectedType]);
+  }, [token, selectedExam, selectedType, avatarVersion]);
 
   // Only show top 20
   const topRankings = rankings.slice(0, 20);
@@ -295,7 +299,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                           <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{r.user.profilePhoto}</span>
                         ) : (
                           <img loading="lazy"
-                            src={`${process.env.REACT_APP_API_URL}${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}`}
+                            src={`${process.env.REACT_APP_API_URL}${String(r.user.profilePhoto).startsWith('/') ? r.user.profilePhoto : '/uploads/profile-photos/' + r.user.profilePhoto}?v=${avatarVersion}`}
                             alt={r.user?.name ? `${r.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
                             style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894', flex: '0 0 auto' }}
                           />

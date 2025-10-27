@@ -150,9 +150,9 @@ export default function EssayWriting() {
 
   const getScoreColor = (score: number, isOverall: boolean = false) => {
     if (isOverall) {
-      // Overall score is 0-100
-      if (score >= 80) return '#4caf50'; // Green
-      if (score >= 60) return '#ff9800'; // Orange
+      // Overall score is 1-10
+      if (score >= 7) return '#4caf50'; // Green
+      if (score >= 4) return '#ffeb3b'; // Yellow
       return '#f44336'; // Red
     } else {
       // Sub-scores are 1-10
@@ -164,13 +164,11 @@ export default function EssayWriting() {
 
   const getScoreLabel = (score: number, isOverall: boolean = false) => {
     if (isOverall) {
-      // Overall score is 0-100
-      if (score >= 90) return 'Mükemmel';
-      if (score >= 80) return 'Çok İyi';
-      if (score >= 70) return 'İyi';
-      if (score >= 60) return 'Yeterli';
-      if (score >= 50) return 'Orta';
-      return 'Geliştirilmeli';
+      // Overall score is 1-10
+      if (score >= 9) return 'Mükemmel';
+      if (score >= 7) return 'İyi';
+      if (score >= 4) return 'Geliştirilebilir';
+      return 'Zayıf';
     } else {
       // Sub-scores are 1-10
       if (score >= 9) return 'Mükemmel';
@@ -604,11 +602,7 @@ export default function EssayWriting() {
                       AI Geri Bildirim:
                     </Typography>
                     <Paper sx={{ p: 2, bgcolor: '#f8f9fa', border: '1px solid #e0e0e0' }}>
-                      {feedbackBullets.length <= 1 ? (
-                        <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
-                          {evaluation.feedback}
-                        </Typography>
-                      ) : (
+                      {feedbackBullets.length > 1 ? (
                         <Box component="ul" sx={{ m: 0, pl: 3 }}>
                           {feedbackBullets.map((b, idx) => (
                             <Box component="li" key={idx} sx={{ mb: 1.2 }}>
@@ -616,6 +610,12 @@ export default function EssayWriting() {
                             </Box>
                           ))}
                         </Box>
+                      ) : (
+                        <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+                          {evaluation.feedback && !evaluation.feedback.startsWith('Otomatik sistem tarafından puanlandı')
+                            ? evaluation.feedback
+                            : 'Daha yüksek puan almak için: Essay’inizi daha açık, tutarlı ve detaylı yazın. Giriş, gelişme ve sonuç bölümlerine dikkat edin, örnekler ve bağlantı ifadeleri kullanın, dilbilgisi ve kelime çeşitliliğinizi artırın.'}
+                        </Typography>
                       )}
                     </Paper>
                   </Box>
