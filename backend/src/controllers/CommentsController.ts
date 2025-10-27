@@ -10,20 +10,26 @@ export const getComments = async (req: Request, res: Response) => {
   try {
     const exam = req.query.exam as string | undefined;
     const comments = await repoGetComments(exam);
-    // Her user objesine avatar: profilePhoto (emoji veya görsel) ekle, yoksa default emoji ata
-    const commentsWithAvatar = comments.map((c) => ({
-      ...c,
-      user: c.user
-        ? {
-            ...c.user,
-            avatar:
-              typeof c.user.profilePhoto === "string" &&
-              c.user.profilePhoto.trim() !== ""
-                ? c.user.profilePhoto
-                : "🙂", // default emoji
-          }
-        : { avatar: "🙂", name: "Anonim" },
-    }));
+    // Her user objesine avatar: profilePhoto (emoji/görsel) ekle,
+    // yoksa isminin baş harfini varsayılan avatar olarak ata
+    const commentsWithAvatar = comments.map((c) => {
+      const initial =
+        c.user?.name && typeof c.user.name === "string" && c.user.name.trim()
+          ? c.user.name.trim().charAt(0).toUpperCase()
+          : "?";
+
+      const avatar =
+        c.user && typeof c.user.profilePhoto === "string" && c.user.profilePhoto.trim() !== ""
+          ? c.user.profilePhoto
+          : initial;
+
+      return {
+        ...c,
+        user: c.user
+          ? { ...c.user, avatar }
+          : { avatar: "?", name: "Anonim" },
+      };
+    });
     res.json({ comments: commentsWithAvatar });
   } catch (err) {
     res.status(500).json({ error: "Yorumlar alınamadı." });
