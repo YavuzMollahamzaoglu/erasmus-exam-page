@@ -5,7 +5,7 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 const router = express.Router();
 
 // Essay evaluation endpoint (no auth required)
-router.post("/evaluate", EssayController.evaluateEssay);
+router.post("/evaluate", EssayController.evaluate);
 
 // Health check endpoint
 router.get("/health", EssayController.healthCheck);
