@@ -158,6 +158,17 @@ const heuristicEvaluate = (text: string, topic?: string): EssayEvaluation => {
   let feedback = "";
   if (topicBoost === 0) {
     feedback = "Konu ile alakasız, puan verilemez.";
+    // Tüm skorları 1 olarak override et
+    return {
+      scores: {
+        task_response: 1,
+        coherence_cohesion: 1,
+        lexical_resource: 1,
+        grammar: 1,
+        overall: 1,
+      },
+      feedback,
+    };
   } else {
     feedback = `Otomatik sistem tarafından puanlandı. Metin uzunluğu: ${wordCount} kelime, ${sentenceCount} cümle.`;
   }
