@@ -94,10 +94,13 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
   }, [token]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => { 
+    // Blur trigger to avoid a11y warning when dialog sets aria-hidden on #root
+    (event.currentTarget as HTMLElement)?.blur?.();
     if (isLgUp) setAnchorElNav(event.currentTarget);
     else setMobileNavOpen(true);
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    (event.currentTarget as HTMLElement)?.blur?.();
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseNavMenu = () => {
@@ -241,9 +244,9 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
                     <ListItemButton
                       key={page.value}
                       onClick={() => { 
-                        console.log('Navbar mobile dialog onNavigate value:', page.value);
                         handleCloseNavMenu(); 
-                        onNavigate(page.value); 
+                        // Defer navigation one tick so aria-hidden is removed before focus moves
+                        setTimeout(() => onNavigate(page.value), 0);
                       }}
                       sx={{
                         borderRadius: 2,
