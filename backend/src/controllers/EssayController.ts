@@ -45,30 +45,20 @@ const EssayController = {
         });
       }
 
-      // Prepare the prompt for Gemini
-      const prompt = `Sen bir IELTS sınavı değerlendirme uzmanısın. Aşağıdaki essay'i IELTS yazım kriterlerine göre değerlendir.
-Essay konusu: ${topic || "(konu belirtilmedi)"}
-Her kategori için 1-10 arası puan ver:
-- Task Response (Görev Yanıtı)
-- Coherence and Cohesion (Tutarlılık ve Bağlantı)
-- Lexical Resource (Kelime Dağarcığı)
-- Grammatical Range and Accuracy (Dilbilgisi Doğruluğu)
-
-Genel puanı 0-100 arası hesapla ve yapıcı geri bildirim ver.
-
-Essay: ${essayText}
-
-Lütfen sadece aşağıdaki JSON formatında yanıtla:
+      // Prepare the prompt for Gemini (stricter, shorter, force JSON, penalize off-topic)
+      const prompt = `Sen bir IELTS yazılı sınav değerlendiricisisin. Sana verilen essay'i, verilen konuya uygunluk ve IELTS kriterlerine göre değerlendir. Eğer essay konu ile tamamen alakasızsa veya saçmaysa, tüm puanları 1 ver ve feedback'te "Konu ile alakasız, puan verilemez." yaz. Sadece aşağıdaki JSON formatında yanıt ver:
 {
   "scores": {
-    "task_response": [1-10 arası puan],
-    "coherence_cohesion": [1-10 arası puan],
-    "lexical_resource": [1-10 arası puan],
-    "grammar": [1-10 arası puan],
-    "overall": [0-100 arası genel puan]
+    "task_response": [1-10],
+    "coherence_cohesion": [1-10],
+    "lexical_resource": [1-10],
+    "grammar": [1-10],
+    "overall": [0-100]
   },
-  "feedback": "Detaylı Türkçe geri bildirim buraya"
-}`;
+  "feedback": "Essay ve konuya göre detaylı Türkçe geri bildirim. Eğer konu dışıysa: 'Konu ile alakasız, puan verilemez.' yaz."
+}
+Konu: ${topic || "(konu belirtilmedi)"}
+Essay: ${essayText}`;
 
       // Helper: Heuristic fallback scoring (no AI)
       const heuristicEvaluate = (text: string): EssayEvaluation => {
@@ -206,38 +196,12 @@ Lütfen sadece aşağıdaki JSON formatında yanıtla:
           100
         );
 
-        const feedback = [
-          `Metin uzunluğu: ${wordCount} kelime, ${sentenceCount} cümle. Ortalama cümle uzunluğu ${avgSentence.toFixed(
-            1
-          )} kelime.`,
-          topic
-            ? `Konu: "${topic}". Anahtar kavramlarla örtüşme ${
-                topicBoost > 0 ? "fena değil" : "zayıf"
-              }.`
-            : undefined,
-          connectors >= 2
-            ? `Bağlaç kullanımı yeterli (ör. however, moreover, because).`
-            : `Bağlaç kullanımını artırın (ör. however, moreover, because).`,
-          uniqueRatio > 0.5
-            ? `Kelime çeşitliliği iyi (benzersiz kelime oranı ${(
-                uniqueRatio * 100
-              ).toFixed(0)}%).`
-            : `Daha çeşitli kelimeler kullanın (benzersiz oran ${(
-                uniqueRatio * 100
-              ).toFixed(0)}%).`,
-          longRatio > 0.12
-            ? `Akademik kelime kullanımı fena değil (uzun kelime oranı ${(
-                longRatio * 100
-              ).toFixed(0)}%).`
-            : `Akademik kelime dağarcığınızı geliştirin (uzun kelime oranı ${(
-                longRatio * 100
-              ).toFixed(0)}%).`,
-          turkishChars > 0
-            ? `Yabancı dil karakterleriyle (ı,ğ,ş,ç,ö,ü) yazmaktan kaçının: ${turkishChars} karakter bulundu.`
-            : `Yabancı dil karakter kullanımı uygun.`,
-        ]
-          .filter(Boolean)
-          .join("\n\n");
+        let feedback = "";
+        if (topicBoost === 0) {
+          feedback = "Konu ile alakasız, puan verilemez.";
+        } else {
+          feedback = `Otomatik sistem tarafından puanlandı. Metin uzunluğu: ${wordCount} kelime, ${sentenceCount} cümle.`;
+        }
 
         return {
           scores: {
