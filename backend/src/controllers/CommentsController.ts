@@ -10,10 +10,19 @@ export const getComments = async (req: Request, res: Response) => {
   try {
     const exam = req.query.exam as string | undefined;
     const comments = await repoGetComments(exam);
-    // Her user objesine avatar: profilePhoto ekle
-    const commentsWithAvatar = comments.map(c => ({
+    // Her user objesine avatar: profilePhoto (emoji veya görsel) ekle, yoksa default emoji ata
+    const commentsWithAvatar = comments.map((c) => ({
       ...c,
-      user: c.user ? { ...c.user, avatar: c.user.profilePhoto } : null
+      user: c.user
+        ? {
+            ...c.user,
+            avatar:
+              typeof c.user.profilePhoto === "string" &&
+              c.user.profilePhoto.trim() !== ""
+                ? c.user.profilePhoto
+                : "🙂", // default emoji
+          }
+        : { avatar: "🙂", name: "Anonim" },
     }));
     res.json({ comments: commentsWithAvatar });
   } catch (err) {
