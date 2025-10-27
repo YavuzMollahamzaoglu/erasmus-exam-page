@@ -1,5 +1,6 @@
 // Utility functions for score clamping
-const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+const clamp = (v: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, v));
 const to10 = (v: number) => clamp(Math.round(v), 1, 10);
 import { Request, Response } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -155,8 +156,8 @@ Essay: ${essayText}`;
           );
         }
 
-
-        const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+        const clamp = (v: number, min: number, max: number) =>
+          Math.max(min, Math.min(max, v));
         const to10 = (v: number) => clamp(Math.round(v), 1, 10);
 
         // Task response: length and average sentence length
@@ -184,7 +185,9 @@ Essay: ${essayText}`;
         lrScore = to10(lrScore);
 
         // Grammar: basic heuristic + penalty for Turkish chars
-        const startsCapital = sentences.filter((s) => /^[A-Z]/.test(s.trim())).length;
+        const startsCapital = sentences.filter((s) =>
+          /^[A-Z]/.test(s.trim())
+        ).length;
         let grScore =
           4 + (startsCapital >= Math.min(5, sentenceCount - 1) ? 2 : 1);
         grScore += avgSentence <= 30 ? 1 : 0;
@@ -236,7 +239,6 @@ Essay: ${essayText}`;
         let evaluation: EssayEvaluation = JSON.parse(cleanedResponse);
         if (!evaluation.scores || !evaluation.feedback)
           throw new Error("Invalid evaluation structure");
-
 
         const scores = evaluation.scores;
         const scoreKeys = [
