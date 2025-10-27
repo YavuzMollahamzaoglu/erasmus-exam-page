@@ -519,35 +519,23 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                       </Box>
                     )}
                   </Box>
-                  <Box sx={{ flex: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, position: 'relative' }}>
-                      <Typography fontWeight={600} color="#00b894" sx={{
-                        display: 'block',
-                        '@media (max-width:600px)': {
-                          fontSize: '1rem',
-                        }
-                      }}>
-                        {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name : 'Anonim'}
-                      </Typography>
-                      {/* Tarih sadece gün/ay/yıl, mobilde sağ alt köşe */}
-                      <Box
-                        sx={{
-                          ml: 'auto',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: { xs: 'flex-end', md: 'flex-start' },
-                          width: { xs: '100%', md: 'auto' },
-                          position: { xs: 'absolute', md: 'static' },
-                          right: { xs: 16, md: 'unset' },
-                          bottom: { xs: 8, md: 'unset' },
-                          mt: { xs: 0.5, md: 0 },
-                        }}
-                      >
+                  <Box sx={{ flex: 1, position: 'relative' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 0.5, pr: 4 }}>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography fontWeight={600} color="#00b894" sx={{
+                          display: 'block',
+                          '@media (max-width:600px)': {
+                            fontSize: '1rem',
+                          }
+                        }}>
+                          {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name : 'Anonim'}
+                        </Typography>
                         <Typography
                           fontSize="0.8rem"
                           color="#666"
                           sx={{
                             display: 'block',
+                            mt: 0.5,
                             '@media (max-width:600px)': {
                               fontSize: '0.85rem',
                             },
@@ -558,7 +546,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                       </Box>
                       {/* Edit/Delete menüsü - sadece kendi yorumu yazıp giriş yapan görsün */}
                       {token && me?.id === c.userId && (
-                        <Box sx={{ position: 'absolute', top: -8, right: -8 }}>
+                        <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
                           <IconButton
                             size="small"
                             onClick={(e) => {
