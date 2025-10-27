@@ -20,13 +20,9 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize Gemini client (returns null if not configured)
 const getGeminiClient = () => {
-  if (
-    !process.env.GEMINI_API_KEY ||
-    process.env.GEMINI_API_KEY === "AIzaSyBnVI4KBht0T9uQNKRuzn99BrDZWjbKnPc"
-  ) {
+  if (!process.env.GEMINI_API_KEY) {
     return null;
   }
-  // Create and return a client instance (adjust constructor options if needed)
   try {
     // @ts-ignore - library may vary; keep generic instantiation
     return new GoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY });
