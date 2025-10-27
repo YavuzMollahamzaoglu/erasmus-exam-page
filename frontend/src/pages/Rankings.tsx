@@ -1,7 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
-import { Box, Paper, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Paper, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel, IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 
 // Helper to check if a string is a single emoji
@@ -76,6 +77,10 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
   const [me, setMe] = useState<any>(null);
   // Avatar değiştiğinde tetiklenecek state
   const [avatarVersion, setAvatarVersion] = useState<number>(Date.now());
+  // Yorum edit/delete
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState('');
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   useEffect(() => {
     setMetaTags({
@@ -515,7 +520,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                     )}
                   </Box>
                   <Box sx={{ flex: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, position: 'relative' }}>
                       <Typography fontWeight={600} color="#00b894" sx={{
                         display: 'block',
                         '@media (max-width:600px)': {
@@ -551,6 +556,83 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                           {c.createdAt ? new Date(c.createdAt).toLocaleDateString('tr-TR') : ''}
                         </Typography>
                       </Box>
+                      {/* Edit/Delete menüsü - sadece kendi yorumu yazıp giriş yapan görsün */}
+                      {token && me?.id === c.userId && (
+                        <Box sx={{ position: 'absolute', top: -8, right: -8 }}>
+                          <IconButton
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingCommentId(c.id);
+                            }}
+                            sx={{ color: '#00b894' }}
+                          >
+                            <SettingsIcon fontSize="small" />
+                          </IconButton>
+                          {editingCommentId === c.id && (
+                            <Box sx={{
+                              position: 'absolute',
+                              top: 32,
+                              right: 0,
+                              background: '#fff',
+                              border: '1px solid #00b894',
+                              borderRadius: 2,
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                              zIndex: 1000,
+                              minWidth: 120
+                            }}>
+                              <Button
+                                size="small"
+                                fullWidth
+                                sx={{
+                                  justifyContent: 'flex-start',
+                                  px: 2,
+                                  py: 1,
+                                  color: '#00b894',
+                                  fontSize: '0.85rem',
+                                  '&:hover': { background: 'rgba(0,184,148,0.08)' }
+                                }}
+                                onClick={() => {
+                                  setEditingText(c.text);
+                                  setEditDialogOpen(true);
+                                  setEditingCommentId(null);
+                                }}
+                              >
+                                Düzenle
+                              </Button>
+                              <Button
+                                size="small"
+                                fullWidth
+                                sx={{
+                                  justifyContent: 'flex-start',
+                                  px: 2,
+                                  py: 1,
+                                  color: '#e74c3c',
+                                  fontSize: '0.85rem',
+                                  '&:hover': { background: 'rgba(231,76,60,0.08)' }
+                                }}
+                                onClick={async () => {
+                                  if (!token) return;
+                                  try {
+                                    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${c.id}`, {
+                                      method: 'DELETE',
+                                      headers: { 'Authorization': `Bearer ${token}` }
+                                    });
+                                    if (res.ok) {
+                                      setComments(comments.filter(cm => cm.id !== c.id));
+                                      setEditingCommentId(null);
+                                    }
+                                  } catch (err) {
+                                    console.error('Error deleting comment:', err);
+                                  }
+                                }}
+                              >
+                                Sil
+                              </Button>
+                            </Box>
+                          )}
+                        </Box>
+                      )}
                     </Box>
                     <Typography color="#2c3e50" lineHeight={1.5}>
                       {c.text}
@@ -589,6 +671,71 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
           )}
         </Box>
       </Paper>
+
+      {/* Edit Comment Dialog */}
+      <Dialog 
+        open={editDialogOpen} 
+        onClose={() => setEditDialogOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle sx={{ color: '#00b894', fontWeight: 700 }}>
+          Yorum Düzenle
+        </DialogTitle>
+        <DialogContent sx={{ pt: 2 }}>
+          <TextField
+            fullWidth
+            multiline
+            minRows={3}
+            value={editingText}
+            onChange={(e) => setEditingText(e.target.value)}
+            placeholder="Yorum metni..."
+            variant="outlined"
+          />
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button 
+            onClick={() => {
+              setEditDialogOpen(false);
+              setEditingCommentId(null);
+            }}
+            sx={{ color: '#666' }}
+          >
+            İptal
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+              color: '#fff'
+            }}
+            onClick={async () => {
+              if (!token || !editingCommentId || !editingText.trim()) return;
+              try {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${editingCommentId}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ text: editingText.trim() })
+                });
+                if (res.ok) {
+                  const updated = await res.json();
+                  setComments(comments.map(c => c.id === editingCommentId ? updated : c));
+                  setEditDialogOpen(false);
+                  setEditingCommentId(null);
+                  setEditingText('');
+                }
+              } catch (err) {
+                console.error('Error updating comment:', err);
+              }
+            }}
+          >
+            Kaydet
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
