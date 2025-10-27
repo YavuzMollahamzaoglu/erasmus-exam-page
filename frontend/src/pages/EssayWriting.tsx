@@ -541,7 +541,7 @@ export default function EssayWriting() {
                   <Card sx={{ mb: 3, background: 'rgba(0, 184, 148, 0.06)', border: '1px solid rgba(0, 184, 148, 0.15)' }}>
                     <CardContent sx={{ textAlign: 'center' }}>
                       <Typography variant="h4" sx={{ fontWeight: 700, color: getScoreColor(evaluation.scores.overall, true), mb: 1 }}>
-                        {evaluation.scores.overall}/100
+                        {evaluation.scores.overall}/10
                       </Typography>
                       <Typography variant="h6" sx={{ color: '#666' }}>Genel Puan</Typography>
                       <Chip 
@@ -564,8 +564,8 @@ export default function EssayWriting() {
                       { key: 'grammar', label: 'Dilbilgisi' }
                     ].map(({ key, label }) => {
                       let score = evaluation.scores[key as keyof EssayScores];
-                      // Clamp score to 1-9
-                      score = Math.max(1, Math.min(9, Math.round(score)));
+                      // Clamp score to 1-10
+                      score = Math.max(1, Math.min(10, Math.round(score)));
                       return (
                         <Box key={key} sx={{ mb: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -577,12 +577,12 @@ export default function EssayWriting() {
                                 color: getScoreColor(score)
                               }}
                             >
-                              {score}/9
+                              {score}/10
                             </Typography>
                           </Box>
                           <LinearProgress
                             variant="determinate"
-                            value={(score / 9) * 100}
+                            value={(score / 10) * 100}
                             sx={{
                               height: 8,
                               borderRadius: 4,
