@@ -1,3 +1,6 @@
+// Utility functions for score clamping
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+const to10 = (v: number) => clamp(Math.round(v), 1, 10);
 import { Request, Response } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
