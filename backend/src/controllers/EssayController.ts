@@ -11,40 +11,31 @@ const getGeminiClient = () => {
     !process.env.GEMINI_API_KEY ||
     process.env.GEMINI_API_KEY === "AIzaSyBnVI4KBht0T9uQNKRuzn99BrDZWjbKnPc"
   ) {
-    return null;
-  }
-
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  // Use the latest stable Gemini model for essay evaluation
-  return genAI.getGenerativeModel({ model: "gemini-pro" });
-};
-
-interface EssayScores {
-  task_response: number;
-  coherence_cohesion: number;
-  lexical_resource: number;
-  grammar: number;
-  overall: number; // now always 1-10
-}
-
-interface EssayEvaluation {
-  scores: EssayScores;
-  feedback: string;
-}
-
-const EssayController = {
-  evaluateEssay: async (req: Request, res: Response) => {
-    try {
-      const { essayText, topic } = req.body;
-
-      if (!essayText || typeof essayText !== "string") {
-        return res.status(400).json({
-          error: "Essay text is required and must be a string",
-        });
-      }
-
-      if (essayText.trim().length < 50) {
-        return res.status(400).json({
+        if (evaluation.feedback.toLowerCase().includes("konu ile alakasız")) {
+          evaluation = {
+            scores: {
+              task_response: 1,
+              coherence_cohesion: 1,
+              lexical_resource: 1,
+              grammar: 1,
+              overall: 1,
+            },
+            feedback: "Konu ile alakasız, puan verilemez.",
+          };
+        } else if (
+          typeof scores.overall !== "number" ||
+          scores.overall < 0 ||
+          scores.overall > 100
+        ) {
+          scores.overall = Math.round(
+            ((scores.task_response +
+              scores.coherence_cohesion +
+              scores.lexical_resource +
+              scores.grammar) /
+              4) *
+              10
+          );
+        }
           error: "Essay must be at least 50 characters long",
         });
       }
@@ -255,6 +246,29 @@ Essay: ${essayText}`;
         }
         // Ensure overall is 1-10, recalculate if not
         if (
+<<<<<<< Updated upstream
+=======
+          (typeof scores.task_response === "number" &&
+            scores.task_response <= 2) ||
+          (typeof scores.coherence_cohesion === "number" &&
+            scores.coherence_cohesion <= 2)
+        ) {
+          if (evaluation.feedback.toLowerCase().includes("konu ile alakasız")) {
+            evaluation = {
+              scores: {
+                task_response: 1,
+                coherence_cohesion: 1,
+                lexical_resource: 1,
+                grammar: 1,
+                overall: 1,
+              },
+              feedback: "Konu ile alakasız, puan verilemez.",
+            };
+          } else {
+            scores.overall = 1;
+          }
+        } else if (
+>>>>>>> Stashed changes
           typeof scores.overall !== "number" ||
           scores.overall < 1 ||
           scores.overall > 10
@@ -336,11 +350,8 @@ Essay: ${essayText}`;
             Math.floor(overlap / Math.max(1, Math.round(tks.length / 3)))
           );
         }
-        // If Gemini feedback does not contain 'Konu ile alakasız' and topicBoost is 0, override
-        if (
-          topicBoost === 0 &&
-          !evaluation.feedback.toLowerCase().includes("konu ile alakasız")
-        ) {
+        // If Gemini feedback contains 'Konu ile alakasız', override all scores to 1
+        if (evaluation.feedback.toLowerCase().includes("konu ile alakasız")) {
           evaluation = {
             scores: {
               task_response: 1,
