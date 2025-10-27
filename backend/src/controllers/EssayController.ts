@@ -267,6 +267,91 @@ Essay: ${essayText}`;
           );
         }
 
+        // --- Strict post-processing: penalize off-topic/nonsense essays even if Gemini fails to do so ---
+        // Use the same topic overlap heuristic as fallback
+        let topicBoost = 0;
+        if (typeof topic === "string" && topic.trim()) {
+          const tks = topic
+            .toLowerCase()
+            .split(/[^a-z]+/)
+            .filter(
+              (x) =>
+                x &&
+                x.length > 2 &&
+                ![
+                  "the",
+                  "and",
+                  "for",
+                  "are",
+                  "you",
+                  "with",
+                  "that",
+                  "this",
+                  "have",
+                  "from",
+                  "was",
+                  "were",
+                  "your",
+                  "our",
+                  "their",
+                  "has",
+                  "had",
+                  "but",
+                  "not",
+                  "all",
+                  "any",
+                  "can",
+                  "who",
+                  "what",
+                  "when",
+                  "where",
+                  "why",
+                  "how",
+                  "into",
+                  "onto",
+                  "over",
+                  "under",
+                  "out",
+                  "off",
+                  "did",
+                  "does",
+                  "do",
+                  "been",
+                  "being",
+                  "than",
+                  "then",
+                  "also",
+                ].includes(x)
+            );
+          const essayTokens = new Set(
+            essayText
+              .toLowerCase()
+              .split(/[^a-z]+/)
+              .filter((x) => x)
+          );
+          const overlap = tks.filter((t) => essayTokens.has(t)).length;
+          topicBoost = Math.min(
+            3,
+            Math.floor(overlap / Math.max(1, Math.round(tks.length / 3)))
+          );
+        }
+        // If Gemini feedback does not contain 'Konu ile alakasız' and topicBoost is 0, override
+        if (
+          topicBoost === 0 &&
+          !evaluation.feedback.toLowerCase().includes("konu ile alakasız")
+        ) {
+          evaluation = {
+            scores: {
+              task_response: 1,
+              coherence_cohesion: 1,
+              lexical_resource: 1,
+              grammar: 1,
+              overall: 10,
+            },
+            feedback: "Konu ile alakasız, puan verilemez.",
+          };
+        }
+
         console.log("Essay evaluation completed successfully");
         return res.json(evaluation);
       } catch (aiErr) {
