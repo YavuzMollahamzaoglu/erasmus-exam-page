@@ -27,7 +27,6 @@ const Words = lazy(() => import('./pages/Words'));
 const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame'));
 const WordMatchingGame = lazy(() => import('./pages/WordMatchingGame'));
 const ReadingGame = lazy(() => import('./pages/games/ReadingGame'));
-const TestLevelPage = lazy(() => import('./pages/TestLevelPage'));
  
 
 
@@ -122,8 +121,6 @@ const AppRouter: React.FC = () => {
           <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
           <Route path="/history" element={token ? <Box component="main" id="main-content"><History token={token} /></Box> : <Navigate to="/login" replace />} />
           <Route path="/exam/:testId" element={<Box component="main" id="main-content"><Exam /></Box>} />
-          {/* SEO Test Level Sayfaları */}
-          <Route path="/test-level/:level" element={<Box component="main" id="main-content"><TestLevelPage /></Box>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

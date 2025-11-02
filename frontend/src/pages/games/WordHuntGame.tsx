@@ -439,88 +439,97 @@ export default function WordHuntGame() {
         </Box>
         {/* Navigation buttons - only hide during short celebration after a fresh correct */}
         {!showResult && !celebrating && (
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, gap: 1 }}>
-            <button
-              style={{
-                background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 16,
-                border: 'none',
-                borderRadius: 12,
-                padding: '12px 24px',
-                cursor: 'pointer',
-                minWidth: 100,
-                boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
-                transition: 'all 0.3s ease',
-                marginBottom: 8,
-              }}
-              onMouseEnter={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(-2px)';
-                target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                const target = e.target as HTMLButtonElement;
-                target.style.transform = 'translateY(0)';
-                target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
-              }}
-              onClick={handleSkip}
-            >
-              Geç →
-            </button>
-            <button
-              style={{
-                background: index === 0 ? 'linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)' : 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                color: index === 0 ? '#666' : '#fff',
-                fontWeight: 700,
-                fontSize: 16,
-                border: 'none',
-                borderRadius: 12,
-                padding: '12px 24px',
-                cursor: index === 0 ? 'not-allowed' : 'pointer',
-                opacity: index === 0 ? 0.7 : 1,
-                minWidth: 100,
-                boxShadow: index === 0 ? 'none' : '0 4px 12px rgba(0, 184, 148, 0.3)',
-                transition: 'all 0.3s ease',
-                marginTop: 8,
-              }}
-              onMouseEnter={(e) => {
-                if (index !== 0) {
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 3, gap: 2 }}>
+            {/* Geç ve Önceki yan yana */}
+            <Box sx={{ display: 'flex', gap: 2, width: '100%', maxWidth: 350, justifyContent: 'center' }}>
+              <button
+                style={{
+                  background: index === 0 ? 'linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%)' : 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                  color: index === 0 ? '#666' : '#fff',
+                  fontWeight: 700,
+                  fontSize: 16,
+                  border: 'none',
+                  borderRadius: 12,
+                  padding: '12px 20px',
+                  cursor: index === 0 ? 'not-allowed' : 'pointer',
+                  opacity: index === 0 ? 0.7 : 1,
+                  flex: 1,
+                  boxShadow: index === 0 ? 'none' : '0 4px 12px rgba(0, 184, 148, 0.3)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  if (index !== 0) {
+                    const target = e.target as HTMLButtonElement;
+                    target.style.transform = 'translateY(-2px)';
+                    target.style.boxShadow = '0 6px 16px rgba(0, 184, 148, 0.4)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (index !== 0) {
+                    const target = e.target as HTMLButtonElement;
+                    target.style.transform = 'translateY(0)';
+                    target.style.boxShadow = '0 4px 12px rgba(0, 184, 148, 0.3)';
+                  }
+                }}
+                onClick={handlePrev}
+                disabled={index === 0}
+              >
+                ← Önceki
+              </button>
+              <button
+                style={{
+                  background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 16,
+                  border: 'none',
+                  borderRadius: 12,
+                  padding: '12px 20px',
+                  cursor: 'pointer',
+                  flex: 1,
+                  boxShadow: '0 4px 12px rgba(116, 185, 255, 0.3)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
                   const target = e.target as HTMLButtonElement;
                   target.style.transform = 'translateY(-2px)';
-                  target.style.boxShadow = '0 6px 16px rgba(0, 184, 148, 0.4)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (index !== 0) {
+                  target.style.boxShadow = '0 6px 16px rgba(116, 185, 255, 0.4)';
+                }}
+                onMouseLeave={(e) => {
                   const target = e.target as HTMLButtonElement;
                   target.style.transform = 'translateY(0)';
-                  target.style.boxShadow = '0 4px 12px rgba(0, 184, 148, 0.3)';
-                }
-              }}
-              onClick={handlePrev}
-              disabled={index === 0}
-            >
-              ← Önceki
-            </button>
-          </Box>
-        )}
-  {/* Bitir button, keep visible unless celebrating */}
-  {!showResult && !celebrating && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                  target.style.boxShadow = '0 4px 12px rgba(116, 185, 255, 0.3)';
+                }}
+                onClick={handleSkip}
+              >
+                Geç →
+              </button>
+            </Box>
+            {/* Bitir button below */}
             <button
               style={{
                 background: 'linear-gradient(90deg,#00cec9,#00b894)',
                 color: '#fff',
                 fontWeight: 700,
-                fontSize: 18,
+                fontSize: 16,
                 border: 'none',
-                borderRadius: 8,
+                borderRadius: 12,
                 padding: '12px 32px',
                 cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(0, 184, 148, 0.3)',
-                transition: 'background 0.3s',
+                width: '100%',
+                maxWidth: 350,
+                boxShadow: '0 4px 12px rgba(0, 184, 148, 0.3)',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLButtonElement;
+                target.style.transform = 'translateY(-2px)';
+                target.style.boxShadow = '0 6px 16px rgba(0, 184, 148, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLButtonElement;
+                target.style.transform = 'translateY(0)';
+                target.style.boxShadow = '0 4px 12px rgba(0, 184, 148, 0.3)';
               }}
               onClick={handleFinish}
             >
