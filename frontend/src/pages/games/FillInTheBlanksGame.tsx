@@ -398,12 +398,12 @@ const FillInTheBlanksGame: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minWidth: { xs: '110px', md: '150px' },
-              height: { xs: '40px', md: '54px' },
+              minWidth: { xs: '90px', md: '110px' },
+              height: { xs: '36px', md: '42px' },
               border: '2.5px solid',
-              borderRadius: '12px',
-              margin: { xs: '0 4px', md: '0 8px' },
-              padding: { xs: '4px 8px', md: '8px 18px' },
+              borderRadius: '10px',
+              margin: { xs: '0 3px', md: '0 6px' },
+              padding: { xs: '3px 6px', md: '5px 10px' },
               textAlign: 'center',
               verticalAlign: 'baseline',
               cursor: !isSubmitted ? 'pointer' : 'default',
@@ -430,7 +430,7 @@ const FillInTheBlanksGame: React.FC = () => {
                 color: isSubmitted 
                   ? (isCorrect ? '#43ea7c' : isIncorrect ? '#e74c3c' : '#2c3e50')
                   : userAnswer ? '#00b894' : '#666',
-                fontSize: { xs: '1.1rem', md: '1.35rem' },
+                fontSize: { xs: '0.95rem', md: '1.1rem' },
                 letterSpacing: 0.2,
               }}
             >
@@ -787,11 +787,11 @@ const FillInTheBlanksGame: React.FC = () => {
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
               alignItems: 'stretch',
-              justifyContent: { xs: 'center', md: 'space-between' },
-              gap: { xs: 1.2, md: 2.5 },
+              justifyContent: 'center',
+              gap: { xs: 1.2, md: 2 },
               mt: 3,
               width: '100%',
-              maxWidth: { xs: 420, md: 600 },
+              maxWidth: { xs: 350, md: 700 },
               mx: 'auto',
             }}
           >
@@ -803,11 +803,11 @@ const FillInTheBlanksGame: React.FC = () => {
                 fontWeight: 700,
                 fontSize: 16,
                 border: `2px solid ${currentIndex === 0 ? '#e0e0e0' : 'rgba(0, 184, 148, 0.4)'}`,
-                borderRadius: 16,
-                padding: '14px 0',
+                borderRadius: 12,
+                padding: '12px 20px',
                 cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
                 minWidth: 0,
-                width: '100%',
+                flex: '1',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
                 marginBottom: 0,
                 transition: 'all 0.2s',
@@ -826,16 +826,16 @@ const FillInTheBlanksGame: React.FC = () => {
                   style={{
                     background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
                     color: '#fff',
-                    fontWeight: 800,
-                    fontSize: 17,
+                    fontWeight: 700,
+                    fontSize: 16,
                     border: 'none',
-                    borderRadius: 16,
-                    padding: '14px 0',
+                    borderRadius: 12,
+                    padding: '12px 20px',
                     cursor: hasBlank ? 'not-allowed' : 'pointer',
                     boxShadow: '0 6px 16px rgba(0, 184, 148, 0.35)',
                     opacity: hasBlank ? 0.7 : 1,
                     transition: 'all 0.3s ease',
-                    width: '100%',
+                    flex: '1',
                     minWidth: 0,
                     marginBottom: 0,
                   }}
@@ -847,7 +847,7 @@ const FillInTheBlanksGame: React.FC = () => {
               );
               return (
                 <Tooltip title={hasBlank ? 'Bütün boşlukları doldurmalısınız' : ''} arrow placement="top" disableHoverListener={!hasBlank}>
-                  <span style={{ display: 'inline-flex' }}>{Btn}</span>
+                  <span style={{ display: 'inline-flex', flex: '1' }}>{Btn}</span>
                 </Tooltip>
               );
             })()}
@@ -860,11 +860,11 @@ const FillInTheBlanksGame: React.FC = () => {
                 fontWeight: 700,
                 fontSize: 16,
                 border: `2px solid ${currentIndex >= questions.length - 1 ? '#e0e0e0' : 'rgba(0, 184, 148, 0.4)'}`,
-                borderRadius: 16,
-                padding: '14px 0',
+                borderRadius: 12,
+                padding: '12px 20px',
                 cursor: currentIndex >= questions.length - 1 ? 'not-allowed' : 'pointer',
                 minWidth: 0,
-                width: '100%',
+                flex: '1',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
                 marginBottom: 0,
                 transition: 'all 0.2s',

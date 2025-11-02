@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import setMetaTags from '../utils/seo';
-import { Paper, Tabs, Tab, Box, Typography, TextField, Chip } from '@mui/material';
+import { Paper, Tabs, Tab, Box, Typography, TextField, Chip, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid from '@mui/material/Grid';
 
 
@@ -409,20 +410,6 @@ const frostedPaper = {
   boxShadow: { xs: '0 8px 18px rgba(0,0,0,0.08)', md: '0 20px 40px rgba(0,0,0,0.1)' },
 } as const;
 
-const cardSx = {
-  background: 'rgba(255, 255, 255, 0.9)',
-  border: '1px solid rgba(0, 184, 148, 0.2)',
-  borderRadius: 3,
-  boxShadow: { xs: '0 3px 10px rgba(0,0,0,0.06)', md: '0 6px 20px rgba(0,0,0,0.08)' },
-  p: { xs: 1.5, md: 2.5 },
-  minHeight: { xs: 'auto', md: 160 },
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  '&:hover': { transform: { md: 'translateY(-3px)' }, boxShadow: { md: '0 12px 30px rgba(0,0,0,0.12)' } },
-} as const;
-
 const TopicsPage: React.FC = () => {
   useEffect(() => {
     setMetaTags({
@@ -435,6 +422,11 @@ const TopicsPage: React.FC = () => {
   }, []);
   const [selectedLevel, setSelectedLevel] = useState('A1');
   const [search, setSearch] = useState('');
+  const [expanded, setExpanded] = useState<string | false>(false);
+
+  const handleAccordionChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   // Türkçe karakter ve büyük/küçük harf uyumlu arama
   const normalizeTR = (s: string) =>
@@ -486,57 +478,111 @@ const TopicsPage: React.FC = () => {
             placeholder="Konu ara..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            sx={{ mb: 2 }}
+            sx={{ mb: 3 }}
           />
-          {/* Seçili seviyenin konu başlıkları listesi */}
-          <Box sx={{ mb: 3, p: 2, bgcolor: 'rgba(116,185,255,0.07)', borderRadius: 2, boxShadow: '0 2px 8px rgba(25,55,109,0.04)' }}>
-            <Typography variant="subtitle1" fontWeight={600} color="#00695c" mb={1}>
-              {selectedLevel} Seviyesi Konu Listesi
-            </Typography>
-            <Box component="ul" sx={{ pl: 2, mb: 0 }}>
-              {topicsData[selectedLevel as LevelKey].map((topic: Topic, idx: number) => (
-                <li key={idx} style={{ marginBottom: 4, fontSize: 15, color: '#19376D' }}>{topic.title}</li>
-              ))}
-            </Box>
-          </Box>
+          
+          {/* Topics as Accordions */}
           <Box sx={{ mb: 3 }}>
             {filteredTopics.map((topic: Topic, idx: number) => (
-              <Box key={idx} sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <Paper elevation={3} sx={{
-                  ...cardSx,
-                  mx: { xs: 0, sm: 3, md: '50px' },
-                  mb: 3,
-                  maxWidth: { xs: '100%', md: 900 },
-                  width: '100%',
-                  p: { xs: 1.8, md: 4 },
-                  borderRadius: { xs: 2, md: 3 }
-                }}>
-                  <Typography variant="h6" fontWeight={700} color="#00695c" mb={1.5} sx={{ fontSize: { xs: 20, md: 24 } }}>{topic.title}</Typography>
+              <Accordion 
+                key={idx}
+                expanded={expanded === `panel${idx}`}
+                onChange={handleAccordionChange(`panel${idx}`)}
+                sx={{
+                  mb: 2,
+                  borderRadius: '12px !important',
+                  overflow: 'hidden',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                  border: '1px solid rgba(0, 184, 148, 0.15)',
+                  '&:before': { display: 'none' },
+                  '&.Mui-expanded': {
+                    margin: '0 0 16px 0',
+                  }
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={{ color: '#00695c' }} />}
+                  sx={{
+                    backgroundColor: 'rgba(0, 184, 148, 0.05)',
+                    borderBottom: expanded === `panel${idx}` ? '1px solid rgba(0, 184, 148, 0.15)' : 'none',
+                    minHeight: '64px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 184, 148, 0.1)',
+                    },
+                    '& .MuiAccordionSummary-content': {
+                      margin: '12px 0',
+                    }
+                  }}
+                >
+                  <Typography 
+                    variant="h6" 
+                    fontWeight={700} 
+                    color="#00695c" 
+                    sx={{ fontSize: { xs: 18, md: 20 } }}
+                  >
+                    {topic.title}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails
+                  sx={{
+                    p: { xs: 2.5, md: 4 },
+                    backgroundColor: '#fff',
+                  }}
+                >
                   {/* Açıklama paragrafı */}
-                  <Box sx={{ mb: 1.2, fontSize: { xs: 14, md: 15 }, color: '#19376D', lineHeight: 1.6 }}>{topic.summary.split(/\n\n|\n/).map((p, i) => (
-                    <Box key={i} component="p" sx={{ mb: 0.9 }}>{p}</Box>
-                  ))}</Box>
+                  <Box sx={{ mb: 2, fontSize: { xs: 14, md: 15 }, color: '#19376D', lineHeight: 1.7 }}>
+                    {topic.summary.split(/\n\n|\n/).map((p, i) => (
+                      <Box key={i} component="p" sx={{ mb: 1.2 }}>
+                        {p}
+                      </Box>
+                    ))}
+                  </Box>
+                  
                   {/* Örnekler kutusu */}
                   {topic.example && (
                     <Box sx={{
                       bgcolor: 'rgba(116, 185, 255, 0.10)',
                       borderLeft: '4px solid #5CC9F5',
                       borderRadius: 2,
-                      px: { xs: 1.25, md: 2 },
-                      py: { xs: 0.9, md: 1.2 },
-                      my: { xs: 1, md: 1.5 },
+                      px: { xs: 1.5, md: 2.5 },
+                      py: { xs: 1.2, md: 1.8 },
+                      my: 2,
                       fontSize: { xs: 13, md: 15 },
                       color: '#1976d2',
                       fontStyle: 'italic',
                       boxShadow: '0 2px 8px rgba(25,55,109,0.04)'
                     }}>
+                      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1, color: '#0d47a1' }}>
+                        📝 Örnekler:
+                      </Typography>
                       {topic.example.split(/\n/).map((ex, i) => (
-                        <Box key={i} sx={{ mb: 0.5 }}>{ex}</Box>
+                        <Box key={i} sx={{ mb: 0.5, pl: 1 }}>
+                          {ex}
+                        </Box>
                       ))}
                     </Box>
                   )}
-                </Paper>
-              </Box>
+                  
+                  {/* İpucu kutusu */}
+                  {topic.tip && (
+                    <Box sx={{
+                      bgcolor: 'rgba(255, 193, 7, 0.1)',
+                      borderLeft: '4px solid #ffc107',
+                      borderRadius: 2,
+                      px: { xs: 1.5, md: 2.5 },
+                      py: { xs: 1.2, md: 1.5 },
+                      mt: 2,
+                      fontSize: { xs: 13, md: 14 },
+                      color: '#856404',
+                      boxShadow: '0 2px 8px rgba(133,100,4,0.04)'
+                    }}>
+                      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 0.5, color: '#f57f17' }}>
+                        💡 {topic.tip}
+                      </Typography>
+                    </Box>
+                  )}
+                </AccordionDetails>
+              </Accordion>
             ))}
             {filteredTopics.length === 0 && (
               <Typography color="text.secondary" sx={{ mt: 2, textAlign: 'center' }}>

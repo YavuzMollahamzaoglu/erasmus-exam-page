@@ -398,23 +398,19 @@ export default function WordHuntGame() {
           </Box>
         )}
 
-        <Box sx={{ display: "flex", flexDirection: { xs: 'column', sm: 'row' }, gap: 2, justifyContent: "center", alignItems: 'center', mt: 3 }}>
+        <Box sx={{ display: "flex", flexDirection: 'column', gap: 2, justifyContent: "center", alignItems: 'center', mt: 3 }}>
           {currentOptions.map((option, i) => (
             <Box
               key={option}
               sx={{
-                width: { xs: '100%', sm: 200 },
-                minWidth: 160,
-                maxWidth: 240,
+                width: '100%',
+                maxWidth: 300,
                 minHeight: 60,
                 borderRadius: 2,
                 bgcolor: "#fff",
                 background: gradients[i % gradients.length],
                 color: "#fff",
-                fontSize: {
-                  xs: option.length > 18 ? 15 : 18,
-                  sm: option.length > 18 ? 16 : 20
-                },
+                fontSize: option.length > 18 ? 16 : 20,
                 fontWeight: 700,
                 display: "flex",
                 alignItems: "center",
@@ -422,7 +418,6 @@ export default function WordHuntGame() {
                 cursor: "pointer",
                 position: "relative",
                 transition: "all 0.4s cubic-bezier(.4,2,.3,1)",
-                mb: { xs: 2, sm: 0 },
                 border: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '4px solid #43ea7c' : selected === option && status === "wrong" ? '4px solid #e74c3c' : '4px solid transparent',
                 boxShadow: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '0 0 12px #43ea7c88' : selected === option && status === "wrong" ? '0 0 12px #e74c3c88' : '0 2px 8px #0001',
                 transform: (selected === option && (status === "correct" || status === "wrong")) || savedCorrect[index]?.selected === option ? 'scale(1.05)' : undefined,

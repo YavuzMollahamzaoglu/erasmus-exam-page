@@ -24,6 +24,19 @@ const searchItems: Array<{ label: string; url: string; keywords?: string[] }> = 
   { label: 'Hakkımızda', url: '/about', keywords: ['about', 'hakkimizda', 'bilgi'] },
   { label: 'Giriş', url: '/login', keywords: ['login', 'giris'] },
   { label: 'Kayıt Ol', url: '/register', keywords: ['register', 'kayit'] },
+  // Test Seviyeleri
+  { label: 'A1 Hazırlık', url: '/test-level/a1-hazirlik', keywords: ['a1 hazirlik', 'a1 ingilizce', 'a1 sinavi', 'a1 testleri'] },
+  { label: 'A1 Üniversite Geçiş', url: '/test-level/a1-universite-gecis', keywords: ['a1 universite gecis', 'a1 giris sinavi', 'a1 universite'] },
+  { label: 'A2 Hazırlık', url: '/test-level/a2-hazirlik', keywords: ['a2 hazirlik', 'a2 ingilizce', 'a2 sinavi', 'a2 testleri'] },
+  { label: 'A2 Üniversite Geçiş', url: '/test-level/a2-universite-gecis', keywords: ['a2 universite gecis', 'a2 giris sinavi'] },
+  { label: 'B1 Hazırlık', url: '/test-level/b1-hazirlik', keywords: ['b1 hazirlik', 'b1 ingilizce', 'b1 sinavi'] },
+  { label: 'B1 Üniversite Geçiş', url: '/test-level/b1-universite-gecis', keywords: ['b1 universite gecis', 'b1 giris'] },
+  { label: 'B2 Hazırlık', url: '/test-level/b2-hazirlik', keywords: ['b2 hazirlik', 'b2 ingilizce'] },
+  { label: 'B2 Üniversite Geçiş', url: '/test-level/b2-universite-gecis', keywords: ['b2 universite gecis'] },
+  { label: 'Erasmus A1', url: '/test-level/erasmus-a1', keywords: ['erasmus a1', 'erasmus ingilizce', 'erasmus sinavi'] },
+  { label: 'Erasmus A2', url: '/test-level/erasmus-a2', keywords: ['erasmus a2', 'erasmus testleri'] },
+  { label: 'Erasmus B1', url: '/test-level/erasmus-b1', keywords: ['erasmus b1', 'erasmus burs'] },
+  { label: 'Erasmus B2', url: '/test-level/erasmus-b2', keywords: ['erasmus b2', 'erasmus yurtdisi'] },
   { label: 'Erasmus Hazırlık', url: '/categories', keywords: ['erasmus', 'hazirlik'] },
   { label: 'Genel İngilizce', url: '/categories', keywords: ['genel', 'ingilizce'] },
   { label: 'Üniversite Hazırlık', url: '/categories', keywords: ['universite', 'hazirlik'] },
@@ -361,6 +374,93 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Chip label="Zorluk: Orta" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
                 <Chip label="~10 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
+            </Box>
+          </Box>
+
+          {/* Test Seviyeleri Bölümü */}
+          <Box sx={{ mt: { xs: 3, md: 4 } }}>
+            <Typography variant="h4" sx={{
+              fontWeight: 700,
+              mb: 2,
+              color: '#00b894',
+              fontSize: { xs: '1.3rem', md: '1.8rem' }
+            }}>
+              Sınav Seviyeleri
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3, color: '#666' }}>
+              Seviyenize uygun İngilizce sınav testlerini seçin ve hazırlanmaya başlayın.
+            </Typography>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' }, gap: 2 }}>
+              {[
+                { label: 'A1 Hazırlık', url: '/test-level/a1-hazirlik' },
+                { label: 'A1 Üniversite', url: '/test-level/a1-universite-gecis' },
+                { label: 'A2 Hazırlık', url: '/test-level/a2-hazirlik' },
+                { label: 'A2 Üniversite', url: '/test-level/a2-universite-gecis' },
+                { label: 'B1 Hazırlık', url: '/test-level/b1-hazirlik' },
+                { label: 'B1 Üniversite', url: '/test-level/b1-universite-gecis' },
+                { label: 'B2 Hazırlık', url: '/test-level/b2-hazirlik' },
+                { label: 'B2 Üniversite', url: '/test-level/b2-universite-gecis' },
+              ].map((item) => (
+                <Button
+                  key={item.url}
+                  onClick={() => (window.location.href = item.url)}
+                  sx={{
+                    background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    py: 1.5,
+                    fontSize: '0.95rem',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 6px 16px rgba(0,184,148,0.3)'
+                    }
+                  }}
+                >
+                  {item.label}
+                </Button>
+              ))}
+            </Box>
+          </Box>
+
+          {/* Erasmus Testleri */}
+          <Box sx={{ mt: { xs: 3, md: 4 } }}>
+            <Typography variant="h4" sx={{
+              fontWeight: 700,
+              mb: 2,
+              color: '#00b894',
+              fontSize: { xs: '1.3rem', md: '1.8rem' }
+            }}>
+              Erasmus Sınav Hazırlığı
+            </Typography>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' }, gap: 2 }}>
+              {[
+                { label: 'Erasmus A1', url: '/test-level/erasmus-a1' },
+                { label: 'Erasmus A2', url: '/test-level/erasmus-a2' },
+                { label: 'Erasmus B1', url: '/test-level/erasmus-b1' },
+                { label: 'Erasmus B2', url: '/test-level/erasmus-b2' },
+              ].map((item) => (
+                <Button
+                  key={item.url}
+                  onClick={() => (window.location.href = item.url)}
+                  sx={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    py: 1.5,
+                    fontSize: '0.95rem',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 6px 16px rgba(102,126,234,0.3)'
+                    }
+                  }}
+                >
+                  {item.label}
+                </Button>
+              ))}
             </Box>
           </Box>
 
