@@ -489,35 +489,6 @@ const Exam: React.FC = () => {
       pt: { xs: 2, md: 4, lg: 6 },
       pb: { xs: 12, md: 16 }
     }}>
-      {/* Fixed top-left Finish button (aligned with fixed timer) for tablet/desktop */}
-      <Box
-        sx={{
-          display: { xs: 'none', md: 'flex' },
-          position: 'fixed',
-          top: { md: 84, lg: 96 },
-          left: { md: 20, lg: 28 },
-          zIndex: 1200,
-        }}
-      >
-        <Button
-          onClick={handleFinish}
-          sx={{
-            textTransform: 'none',
-            fontWeight: 800,
-            borderRadius: 3,
-            px: { md: 2, lg: 2.5 },
-            py: { md: 0.75, lg: 1 },
-            boxShadow: '0 10px 24px rgba(0,0,0,0.12)',
-            background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-            color: '#fff',
-            border: '1px solid rgba(255,255,255,0.25)',
-            backdropFilter: 'blur(8px)',
-            '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' },
-          }}
-        >
-          Testi Bitir
-        </Button>
-      </Box>
       {/* Fixed timer for tablet/desktop (sticky at top-right) */}
     <Box
         sx={{
@@ -850,24 +821,6 @@ const Exam: React.FC = () => {
                 Önceki
               </Button>
               <Button
-                variant="contained"
-                onClick={handleFinish}
-                sx={{
-                  textTransform: 'none',
-                  fontWeight: 800,
-                  borderRadius: 3,
-                  px: 3,
-                  py: 1.2,
-                  boxShadow: 2,
-                  background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                  color: '#fff',
-                  '&:hover': { background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)' },
-                  display: { xs: 'inline-flex', md: 'none' },
-                }}
-              >
-                Testi Bitir
-              </Button>
-              <Button
                 variant="outlined"
                 onClick={nextQuestion}
                 disabled={current === questions.length - 1}
@@ -930,11 +883,12 @@ const Exam: React.FC = () => {
                     key={idx}
                     variant="outlined"
                     sx={{
-                      minWidth: 48,
-                      height: 48,
+                      minWidth: 50,
+                      width: 50,
+                      height: 50,
                       fontWeight: 700,
                       fontSize: 18,
-                      borderRadius: 3,
+                      borderRadius: '50%',
                       border: 'none',
                       color: '#ffffff',
                       background: !answers[idx] 
