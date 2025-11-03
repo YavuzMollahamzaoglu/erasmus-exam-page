@@ -93,7 +93,7 @@ const Words: React.FC = () => {
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
               {words.map(w => (
                 <Paper key={w.id} sx={{ p: 2.5, borderRadius: 3, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0,184,148,0.18)' }}>
-                  <Typography fontWeight={800} fontSize={20} color="#00b894">{w.english}</Typography>
+                  <Typography fontWeight={800} fontSize={20} color="#00b894">{w.english.charAt(0).toUpperCase() + w.english.slice(1)}</Typography>
                   <Typography fontWeight={600} color="#2c3e50" mb={0.5}>{w.turkish}</Typography>
                   {w.example && (
                     <Typography variant="body2" color="text.secondary">Örnek: {w.example}</Typography>
