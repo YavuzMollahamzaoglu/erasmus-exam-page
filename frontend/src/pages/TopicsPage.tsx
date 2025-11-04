@@ -73,4 +73,5 @@ const TopicsPage: React.FC = () => {
   );
 }
 
+export default TopicsPage;
 
