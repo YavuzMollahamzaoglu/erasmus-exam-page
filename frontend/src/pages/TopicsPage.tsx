@@ -1,122 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import setMetaTags from '../utils/seo';
-import { Paper, Tabs, Tab, Box, Typography, TextField, Chip, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grid from '@mui/material/Grid';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
 
 type Topic = { title: string; summary: string; example: string; tip?: string };
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
 const topicsData: Partial<Record<LevelKey, Topic[]>> = {
-  // A1 dizisi sadece aşağıda, yeni ve boş başlıklarla olacak
-  B1: [
-    {
-      title: 'Present Perfect Tense',
-      summary: `**Tanım:**\nPresent Perfect Tense, geçmişte başlamış ve etkisi/sonucu şu an devam eden olayları anlatır. Türkçede tam karşılığı yoktur, genellikle "-di, -miş, -dım" gibi çevrilir.\n\n**Kullanım Kuralları:**\n- have/has + fiilin üçüncü hali (V3)\n- I/You/We/They → have + V3\n- He/She/It → has + V3\n- Zaman zarfları: just (az önce), already (zaten), yet (henüz), ever (hiç), never (asla/hiç), for (süredir), since (den beri)\n\n**Olumlu Cümle (Positive):**\n- I have finished my homework. (Ödevimi bitirdim.)\n- She has just arrived. (O az önce geldi.)\n- We have lived here for 5 years. (5 yıldır burada yaşıyoruz.)\n\n**Olumsuz Cümle (Negative):**\n- I haven’t seen him. (Onu görmedim.)\n- He hasn’t called yet. (O henüz aramadı.)\n- They haven’t eaten breakfast. (Onlar kahvaltı yapmadı.)\n\n**Soru Cümlesi (Question):**\n- Have you ever been to London? (Hiç Londra’ya gittin mi?)\n- Has she finished her work? (O işini bitirdi mi?)\n- Have they done their homework? (Onlar ödevlerini yaptılar mı?)\n\n**Sık Yapılan Hatalar:**\n- I have saw ❌ (Yanlış) → I have seen ✔️ (Doğru)\n- He have done ❌ (Yanlış) → He has done ✔️ (Doğru)\n- I didn’t have seen ❌ (Yanlış) → I haven’t seen ✔️ (Doğru)\n\n**Not:**\n- Present Perfect ile geçmişteki zamanı (yesterday, last year) kullanma!\n- "For" (süredir) ve "since" (den beri) ile süre belirt.\n\n**Pratik İpucu:**\nKendi hayatından yeni biten veya etkisi süren olayları "have/has + V3" ile anlat. "I have just...", "I have never..." gibi kalıpları pratik et.\n`,
-      example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nI have lost my keys. (Anahtarlarımı kaybettim.)\nShe has already eaten. (O zaten yedi.)\nWe haven’t finished yet. (Henüz bitirmedik.)\nHave you ever seen snow? (Hiç kar gördün mü?)\nHe has lived here for 5 years. (5 yıldır burada yaşıyor.)\nI have just woken up. (Az önce uyandım.)\nThey have never visited Paris. (Onlar hiç Paris’i ziyaret etmedi.)\nHas he called you yet? (O seni aradı mı?)\n-----------------------------`,
-      tip: 'İpucu: Present Perfect ile zaman belirtirken for (süredir) ve since (den beri) kullanılır. "I have just...", "I have never..." gibi kalıpları pratik et. Geçmişte zamanı (yesterday, last year) ile kullanma!'
-    },
-    // ...existing code...
-  ],
-  A1: [
-    { title: 'To Be Fiili: "am", "is", "are" çekimleri ve olumlu, olumsuz, soru cümleleri', summary: '', example: '', tip: '' },
-    // ...existing code...
-    { title: 'Diğer Önemli Konular', summary: '', example: '', tip: '' }
-    ]
-  };
-
-const TopicsPage: React.FC = () => {
-  // ...buraya sayfa içeriği ve JSX gelecek...
-  return (
-    <Box p={2}>
-      <Typography variant="h4">Konular Sayfası</Typography>
-      {/* Buraya gerçek sayfa içeriği ve bileşenler eklenmeli */}
-      <pre style={{fontSize:12, whiteSpace:'pre-wrap'}}>{JSON.stringify(topicsData, null, 2)}</pre>
-    </Box>
-  );
-};
-
-export default TopicsPage;
-// ...existing code...
-export default TopicsPage;
-import React, { useState, useEffect } from 'react';
-import setMetaTags from '../utils/seo';
-import { Paper, Tabs, Tab, Box, Typography, TextField, Chip, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grid from '@mui/material/Grid';
-
-
-type Topic = { title: string; summary: string; example: string; tip?: string };
-type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
-const topicsData: Partial<Record<LevelKey, Topic[]>> = {
-  // A1 dizisi sadece aşağıda, yeni ve boş başlıklarla olacak
-  B1: [
-    {
-      title: 'Present Perfect Tense',
-      summary: `**Tanım:**\nPresent Perfect Tense, geçmişte başlamış ve etkisi/sonucu şu an devam eden olayları anlatır. Türkçede tam karşılığı yoktur, genellikle "-di, -miş, -dım" gibi çevrilir.\n\n**Kullanım Kuralları:**\n- have/has + fiilin üçüncü hali (V3)\n- I/You/We/They → have + V3\n- He/She/It → has + V3\n- Zaman zarfları: just (az önce), already (zaten), yet (henüz), ever (hiç), never (asla/hiç), for (süredir), since (den beri)\n\n**Olumlu Cümle (Positive):**\n- I have finished my homework. (Ödevimi bitirdim.)\n- She has just arrived. (O az önce geldi.)\n- We have lived here for 5 years. (5 yıldır burada yaşıyoruz.)\n\n**Olumsuz Cümle (Negative):**\n- I haven’t seen him. (Onu görmedim.)\n- He hasn’t called yet. (O henüz aramadı.)\n- They haven’t eaten breakfast. (Onlar kahvaltı yapmadı.)\n\n**Soru Cümlesi (Question):**\n- Have you ever been to London? (Hiç Londra’ya gittin mi?)\n- Has she finished her work? (O işini bitirdi mi?)\n- Have they done their homework? (Onlar ödevlerini yaptılar mı?)\n\n**Sık Yapılan Hatalar:**\n- I have saw ❌ (Yanlış) → I have seen ✔️ (Doğru)\n- He have done ❌ (Yanlış) → He has done ✔️ (Doğru)\n- I didn’t have seen ❌ (Yanlış) → I haven’t seen ✔️ (Doğru)\n\n**Not:**\n- Present Perfect ile geçmişteki zamanı (yesterday, last year) kullanma!\n- "For" (süredir) ve "since" (den beri) ile süre belirt.\n\n**Pratik İpucu:**\nKendi hayatından yeni biten veya etkisi süren olayları "have/has + V3" ile anlat. "I have just...", "I have never..." gibi kalıpları pratik et.\n`,
-      example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nI have lost my keys. (Anahtarlarımı kaybettim.)\nShe has already eaten. (O zaten yedi.)\nWe haven’t finished yet. (Henüz bitirmedik.)\nHave you ever seen snow? (Hiç kar gördün mü?)\nHe has lived here for 5 years. (5 yıldır burada yaşıyor.)\nI have just woken up. (Az önce uyandım.)\nThey have never visited Paris. (Onlar hiç Paris’i ziyaret etmedi.)\nHas he called you yet? (O seni aradı mı?)\n-----------------------------`,
-      tip: 'İpucu: Present Perfect ile zaman belirtirken for (süredir) ve since (den beri) kullanılır. "I have just...", "I have never..." gibi kalıpları pratik et. Geçmişte zamanı (yesterday, last year) ile kullanma!'
-    },
-    {
-      title: 'Zaman zarfları (Adverbs of frequency)',
-      summary: `**Tanım:**\nZaman zarfları (adverbs of frequency), bir eylemin ne sıklıkta yapıldığını belirtir.\n\n**En Sık Kullanılanlar:**\n- always (her zaman)\n- usually (genellikle)\n- often (sık sık)\n- sometimes (bazen)\n- rarely (nadiren)\n- never (asla)\n\n**Kullanım Kuralları:**\n- Zaman zarfı, özne ile fiil arasına gelir: I always get up early.\n- "To be" fiili ile: Zarf, "to be"den sonra gelir: She is always happy.\n\n**Olumlu Cümle:**\n- I usually eat breakfast. (Genellikle kahvaltı yaparım.)\n- She always helps me. (O her zaman bana yardım eder.)\n\n**Olumsuz Cümle:**\n- He never eats meat. (O asla et yemez.)\n- They rarely watch TV. (Onlar nadiren TV izler.)\n\n**Soru Cümlesi:**\n- Do you often play football? (Sık sık futbol oynar mısın?)\n- Is she always happy? (O her zaman mutlu mu?)\n\n**Sık Yapılan Hatalar:**\n- I get up always early ❌ (Yanlış)\n- I always get up early ✔️ (Doğru)\n- She always is happy ❌ (Yanlış)\n- She is always happy ✔️ (Doğru)\n\n**Pratik İpucu:**\n- "Never" ile cümle zaten olumsuz olur, bir daha "not" ekleme.\n- Zaman zarflarını cümlede doğru yere koymak için örnekleri incele.\n`,
-      example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nI always drink tea. (Her zaman çay içerim.)\nHe never eats meat. (O asla et yemez.)\nWe usually go to school by bus. (Genellikle okula otobüsle gideriz.)\nShe is often late. (O sık sık geç kalır.)\nThey sometimes play tennis. (Bazen tenis oynarlar.)\nYou rarely eat chocolate. (Sen nadiren çikolata yersin.)\nDo you often read books? (Sık sık kitap okur musun?)\nIs he always tired? (O her zaman yorgun mu?)\n-----------------------------`,
-      tip: 'İpucu: "Never" ile cümle zaten olumsuz olur, bir daha "not" ekleme. Zaman zarflarını cümlede doğru yere koymak için örnekleri incele.'
-  },
-    {
-      title: 'Infinitives',
-      summary: `**Tanım:**\nInfinitive, "to" + fiil (yalın hali) şeklinde kullanılır ve Türkçede "-mek/-mak" anlamı verir.\n\n**Nerede Kullanılır?**\n- Bazı fiillerden sonra: want, decide, plan, hope, need, learn, promise\n- Amaç belirtirken\n\n**Kullanım Kuralları:**\n- want/decide/plan/hope/need/learn/promise + to + fiil\n\n**Olumlu Cümle (Positive):**\n- I want to learn English. (İngilizce öğrenmek istiyorum.)\n- She decided to go. (Gitmeye karar verdi.)\n\n**Olumsuz Cümle (Negative):**\n- I don’t want to eat. (Yemek istemiyorum.)\n- He doesn’t plan to travel. (O, seyahat etmeyi planlamıyor.)\n\n**Soru Cümlesi (Question):**\n- Do you want to play? (Oynamak ister misin?)\n- Does she hope to win? (O, kazanmayı umuyor mu?)\n\n**Sık Yapılan Hatalar:**\n- I want learning. ❌ (Yanlış)\n- I want to learn. ✔️ (Doğru)\n- She decided go. ❌ (Yanlış)\n- She decided to go. ✔️ (Doğru)\n\n**Not:**\n- "to" + fiil kullanılır, fiil -ing almaz.\n\n**Pratik İpucu:**\nHedeflerinizi ve yapmak istediklerinizi "to" + fiil ile İngilizce yazın.\n`,
-      example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nI want to learn English. (İngilizce öğrenmek istiyorum.)\nShe decided to go. (Gitmeye karar verdi.)\nWe plan to visit London. (Londra’yı ziyaret etmeyi planlıyoruz.)\nHe promised to help me. (Bana yardım etmeye söz verdi.)\nI don’t want to eat. (Yemek istemiyorum.)\nDo you want to play? (Oynamak ister misin?)\n-----------------------------`,
-      tip: 'İpucu: "to" + fiil ile gelecek planlarını, isteklerini ve amaçlarını İngilizce yaz. Her cümlede "to" kullanmayı unutma!'
-    },
-    {
-      title: 'Yön bildiren edatlar (Prepositions of direction)',
-      summary: `**Tanım:**\nBir yerin yönünü veya hareketini anlatmak için kullanılır.\n\n**Kullanım:**\n- to: -e, -a doğru (go to school)\n- from: -den, -dan (come from home)\n- into: içine (go into the room)\n- out of: dışına (get out of the car)\n- across: karşıya (walk across the street)\n- through: içinden (go through the tunnel)\n- along: boyunca (walk along the river)\n- around: etrafında (walk around the park)\n- over: üzerinden (jump over the fence)\n- under: altından (go under the bridge)\n- up: yukarı (go up the stairs)\n- down: aşağı (go down the hill)\n\n**Olumlu Cümleler:**\nGo to the park. (Parka git.)\nWalk across the street. (Caddeden karşıya yürü.)\nShe came from school. (O, okuldan geldi.)\nThe cat jumped over the wall. (Kedi duvarın üzerinden atladı.)`,
-      example: `// Örnekler\n-----------------------------\nGo to the park. (Parka git.)\nWalk across the street. (Caddeden karşıya yürü.)\nShe came from school. (O, okuldan geldi.)\nThe cat jumped over the wall. (Kedi duvarın üzerinden atladı.)\n-----------------------------`,
-      tip: 'İpucu: Yön bildiren edatları gerçek harita veya çizim üzerinde kullanarak pratik yap. Günlük yol tariflerini bu yapılarla anlat.'
-    },
-    {
-      title: "Possessive 's & of",
-      summary: `**Tanım:**\nBir şeyin kime veya neye ait olduğunu göstermek için kullanılır.\n\n**Kullanım Kuralları:**\n- 's: İnsanlar ve hayvanlar için kullanılır. (Ali's book = Ali'nin kitabı)\n- of: Nesneler ve uzun isim tamlamalarında kullanılır. (the color of the sky = gökyüzünün rengi)\n\n**Olumlu Cümle (Positive):**\n- This is my friend’s car. (Bu, arkadaşımın arabası.)\n- The color of the sky is blue. (Gökyüzünün rengi mavidir.)\n\n**Olumsuz Cümle (Negative):**\n- This isn’t my sister’s bag. (Bu, kız kardeşimin çantası değil.)\n- The legs of the table aren’t broken. (Masasının ayakları kırık değil.)\n\n**Soru Cümlesi (Question):**\n- Is this your brother’s phone? (Bu, senin erkek kardeşinin telefonu mu?)\n- What is the name of your school? (Okulunun adı ne?)\n\n**Sık Yapılan Hatalar:**\n- The color's sky ❌ (Yanlış)\n- The color of the sky ✔️ (Doğru)\n- The car of my friend ✔️ (Doğru ama günlük konuşmada my friend’s car daha yaygın)\n\n**Not:**\n- İnsanlar ve hayvanlar için genellikle 's, nesneler için of kullanılır.\n\n**Pratik İpucu:**\nAile fotoğrafı veya sınıf eşyaları üzerinde sahiplik cümleleri kurarak pratik yap.\n`,
-      example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nThis is my friend’s car. (Bu, arkadaşımın arabası.)\nThe color of the sky is blue. (Gökyüzünün rengi mavidir.)\nMy sister’s name is Ayşe. (Kız kardeşimin adı Ayşe.)\nThe legs of the table are broken. (Masasının ayakları kırık.)\nThis isn’t my brother’s book. (Bu, erkek kardeşimin kitabı değil.)\nIs this your teacher’s pen? (Bu, öğretmeninin kalemi mi?)\nWhat is the name of the city? (Şehrin adı ne?)\n-----------------------------`,
-      tip: "İpucu: İnsanlar ve hayvanlar için 's, nesneler için of kullan. Sahiplik ilişkilerini aile fotoğrafı veya sınıf eşyaları üzerinde göstererek cümle kur."
-    },
-    { title: 'Karşılaştırma Sıfatları (Comparatives)', summary: '', example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nMy car is faster than yours. (Benim arabam seninkinden daha hızlı.)\nThis book is more interesting than that one. (Bu kitap onunkinden daha ilginç.)\nHe is taller than his brother. (O, kardeşinden daha uzun.)\nApples are cheaper than oranges. (Elmalar portakallardan daha ucuz.)\nThis exam isn’t easier than the last one. (Bu sınav, sonuncusundan daha kolay değil.)\nIs your house bigger than mine? (Senin evin benimkinden daha mı büyük?)\nAre apples cheaper than oranges? (Elmalar portakallardan daha mı ucuz?)\nMy bag is heavier than yours. (Benim çantam seninkinden daha ağır.)\n-----------------------------`, tip: 'İpucu: Karşılaştırma yaparken "than" kullanılır. Eşyaları veya insanları yan yana koyup karşılaştırma cümleleri kur.' },
-    { title: 'Superlatives', summary: 'Tanım:\nSuperlatives (üstünlük dereceleri), bir grup içinde en üstün, en iyi, en uzun, en pahalı vb. olanı belirtmek için kullanılır.\n\nKullanım Kuralları:\n- Kısa sıfatlar: the + sıfat-est (the tallest)\n- Uzun sıfatlar: the most/the least + sıfat (the most beautiful)\n- Düzensizler: good → the best, bad → the worst\n\nOlumlu Cümle:\n- He is the tallest in the class. (O, sınıftaki en uzun kişidir.)\n- This is the most expensive phone. (Bu, en pahalı telefon.)\n\nOlumsuz Cümle:\n- She isn’t the best student. (O, en iyi öğrenci değil.)\n- Winter isn’t the warmest season. (Kış en sıcak mevsim değildir.)\n\nSoru Cümlesi:\n- Who is the oldest in your family? (Ailende en yaşlı kim?)\n- What is the most popular sport in Turkey? (Türkiye’de en popüler spor nedir?)\n\nSık Yapılan Hatalar:\n- the most fastest (Yanlış)\n- the fastest (Doğru)\n- She is tallest (Yanlış)\n- She is the tallest (Doğru)\n\nNotlar:\n- "The" mutlaka kullanılır.\n- Kısa sıfatlarda -est, uzun sıfatlarda most/least kullanılır.\n\nPratik İpucu:\nBir grup içindeki en üstün olanı belirtirken "the" ile başla. Sınıftaki en uzun, en iyi, en hızlı kişiyi bulup cümle kurarak pratik yap.', example: '', tip: '' },
-    { title: 'Sayılabilen ve sayılamayan isimler', summary: '', example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nI have three apples. (Üç elmam var.)\nI need some water. (Biraz suya ihtiyacım var.)\nThere are many students in the class. (Sınıfta çok öğrenci var.)\nShe doesn’t eat much bread. (O, çok ekmek yemez.)\nAre there any books on the table? (Masada hiç kitap var mı?)\nIs there any milk in the glass? (Bardakta hiç süt var mı?)\nWe don’t have any information. (Hiç bilgimiz yok.)\nHow much money do you have? (Ne kadar paran var?)\n-----------------------------`, tip: 'İpucu: Sayılabilen ve sayılamayan nesneleri mutfakta veya sınıfta gerçek nesnelerle ayırt ederek çalış. "Many/much/some/any" farkını örneklerle pekiştir.' },
-    { title: 'Simple past tense', summary: 'Tanım:\nSimple past tense (geçmiş zaman), geçmişte olmuş ve bitmiş olayları anlatmak için kullanılır.\n\nKullanım Kuralları:\n- Olumlu: özne + fiilin 2. hali (V2)\n- Olumsuz: did not (didn’t) + fiil (yalın)\n- Soru: Did + özne + fiil (yalın)\n\nDüzensiz fiiller:\n- go → went, eat → ate, see → saw\n\nOlumlu Cümle:\n- She visited Paris last year. (Geçen yıl Paris’i ziyaret etti.)\n- I watched a movie yesterday. (Dün bir film izledim.)\n\nOlumsuz Cümle:\n- He didn’t eat breakfast. (O, kahvaltı yapmadı.)\n- I didn’t see your message. (Mesajını görmedim.)\n\nSoru Cümlesi:\n- Did you call me? (Beni aradın mı?)\n- Did they go to school? (Onlar okula gittiler mi?)\n\nSık Yapılan Hatalar:\n- I didn’t went (Yanlış)\n- I didn’t go (Doğru)\n- Did you saw? (Yanlış)\n- Did you see? (Doğru)\n\nNot:\n- Olumsuz ve soru cümlelerinde fiil yalın halde kullanılır.\n- Düzensiz fiillerin ikinci halini ezberle.\n\nPratik İpucu:\nGeçmişte yaptıklarını fotoğraf albümüyle veya takvimle anlat. Düzensiz fiiller için renkli kartlar kullanarak pratik yap.', example: '', tip: '' },
-    { title: 'Have got – has got', summary: 'Tanım:\n"Have got / has got" yapısı, bir şeye sahip olduğumuzu anlatmak için kullanılır.\n\nKullanım Kuralları:\n- I/You/We/They have got\n- He/She/It has got\n- Olumsuz: haven’t got / hasn’t got\n- Soru: Have/Has ... got?\n\nOlumlu Cümle:\n- I have got a car. (Bir arabam var.)\n- She has got two sisters. (Onun iki kız kardeşi var.)\n\nOlumsuz Cümle:\n- We haven’t got a dog. (Bizim köpeğimiz yok.)\n- He hasn’t got any money. (Onun hiç parası yok.)\n\nSoru Cümlesi:\n- Have you got any money? (Hiç paran var mı?)\n- Has she got a bike? (Onun bisikleti var mı?)\n\nSık Yapılan Hatalar:\n- She have got (Yanlış)\n- She has got (Doğru)\n- I hasn’t got (Yanlış)\n- I haven’t got (Doğru)\n\nNot:\n- "Have got" ve "has got" sahiplik anlatır.\n- Olumsuz ve soru cümlelerinde "got" kalır, sadece "have/has" değişir.\n\nPratik İpucu:\nSahip olduğun şeyleri resimlerle göstererek cümle kur. "Have got" ve "has got" farkını tabloyla çalış.', example: '', tip: '' },
-  { title: 'Sıfatlar (Adjectives)', summary: '', example: '', tip: '' },
-    {
-      title: 'Edilgen yapı (Passive voice)',
-      summary: `Eylemin kim tarafından yapıldığının önemli olmadığı durumlarda kullanılır.\n\n**Kullanım Kuralları:**\n- be + fiilin 3. hali (V3)\n- Tüm zamanlarda kullanılabilir.\n\n**Sık Yapılan Hatalar:**\n- ~~The cake eaten~~ (yanlış), **The cake was eaten** (doğru)\n- ~~The window broke by Ali~~ (yanlış), **The window was broken by Ali** (doğru)\n\n**Örnekler:**\n1. The cake was eaten.\n   - (Kek yendi.)\n2. The house will be built next year.\n   - (Ev gelecek yıl inşa edilecek.)\n3. The letter has been written.\n   - (Mektup yazıldı.)\n4. The window was broken by Ali.\n   - (Pencere Ali tarafından kırıldı.)`,
-      example: `The cake was eaten. (Kek yendi.)\nThe house will be built next year. (Ev gelecek yıl inşa edilecek.)\nThe letter has been written. (Mektup yazıldı.)\nThe window was broken by Ali. (Pencere Ali tarafından kırıldı.)`,
-      tip: 'İpucu: Passive voice cümlelerini olaylarla veya resimlerle anlat. "by" ile yapanı eklemeyi unutma.'
-    },
-    {
-      title: 'Future perfect tense',
-      summary: `Gelecekte belirli bir zamana kadar tamamlanmış olacak eylemleri anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- will have + fiilin 3. hali (V3)\n\n**Sık Yapılan Hatalar:**\n- ~~I will have finish~~ (yanlış), **I will have finished** (doğru)\n\n**Örnekler:**\n1. I will have finished my homework by 8.\n   - (Saat 8’e kadar ödevimi bitirmiş olacağım.)\n2. She will have left when you arrive.\n   - (Sen geldiğinde o gitmiş olacak.)\n3. They will have built the bridge by next year.\n   - (Köprüyü gelecek yıla kadar inşa etmiş olacaklar.)\n4. We will have eaten dinner by then.\n   - (O zamana kadar akşam yemeğini yemiş olacağız.)`,
-      example: `I will have finished my homework by 8. (Saat 8’e kadar ödevimi bitirmiş olacağım.)\nShe will have left when you arrive. (Sen geldiğinde o gitmiş olacak.)\nThey will have built the bridge by next year. (Köprüyü gelecek yıla kadar inşa etmiş olacaklar.)\nWe will have eaten dinner by then. (O zamana kadar akşam yemeğini yemiş olacağız.)`,
-      tip: 'İpucu: Gelecekte tamamlanacak işleri takvimle veya zaman çizelgesiyle anlat.'
-    },
-    {
-      title: 'Future perfect continuous tense',
-      summary: `Gelecekte belirli bir ana kadar devam etmekte olan eylemleri anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- will have been + fiil-ing\n\n**Sık Yapılan Hatalar:**\n- ~~I will have been study~~ (yanlış), **I will have been studying** (doğru)\n\n**Örnekler:**\n1. By next year, I will have been working here for five years.\n   - (Gelecek yıl, burada beş yıldır çalışıyor olacağım.)\n2. She will have been living in London for a decade.\n   - (O, Londra’da on yıldır yaşıyor olacak.)\n3. They will have been waiting for an hour when the bus arrives.\n   - (Otobüs geldiğinde bir saattir bekliyor olacaklar.)\n4. We will have been studying all night.\n   - (Bütün gece ders çalışıyor olacağız.)`,
-      example: `By next year, I will have been working here for five years. (Gelecek yıl, burada beş yıldır çalışıyor olacağım.)\nShe will have been living in London for a decade. (O, Londra’da on yıldır yaşıyor olacak.)\nThey will have been waiting for an hour when the bus arrives. (Otobüs geldiğinde bir saattir bekliyor olacaklar.)\nWe will have been studying all night. (Bütün gece ders çalışıyor olacağız.)`,
-      tip: 'İpucu: Uzun süredir devam eden eylemleri zaman çizelgesiyle göstererek "will have been + fiil-ing" ile cümle kur.'
-    },
-    {
-      title: 'Past perfect continuous tense',
-      summary: `Geçmişte bir ana kadar devam eden eylemleri anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- had been + fiil-ing\n\n**Sık Yapılan Hatalar:**\n- ~~I had been study~~ (yanlış), **I had been studying** (doğru)\n\n**Örnekler:**\n1. I had been waiting for an hour when he arrived.\n   - (O geldiğinde bir saattir bekliyordum.)\n2. She had been living in Paris before she moved.\n   - (Taşınmadan önce Paris’te yaşıyordu.)\n3. They had been playing football before it started to rain.\n   - (Yağmur başlamadan önce futbol oynuyorlardı.)\n4. We had been studying all night.\n   - (Bütün gece ders çalışıyorduk.)`,
-      example: `I had been waiting for an hour when he arrived. (O geldiğinde bir saattir bekliyordum.)\nShe had been living in Paris before she moved. (Taşınmadan önce Paris’te yaşıyordu.)\nThey had been playing football before it started to rain. (Yağmur başlamadan önce futbol oynuyorlardı.)\nWe had been studying all night. (Bütün gece ders çalışıyorduk.)`,
-      tip: 'İpucu: Geçmişte uzun süren eylemleri zaman çizelgesiyle anlat. "had been + fiil-ing" ile örnekler kur.'
-    },
-    {
-      title: 'Ettirgen çatı (Causative)',
-      summary: `Bir işi başkasına yaptırdığımızı anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- have/get + nesne + fiil 3. hali (V3)\n\n**Sık Yapılan Hatalar:**\n- ~~I have my car wash~~ (yanlış), **I have my car washed** (doğru)\n- ~~She got her hair cutted~~ (yanlış), **She got her hair cut** (doğru)\n\n**Örnekler:**\n1. I had my car washed.\n   - (Arabamı yıkattım.)\n2. She got her hair cut.\n   - (Saçını kestirdi.)\n3. We will have the house painted.\n   - (Evi boyatacağız.)\n4. He had his bike repaired.\n   - (Bisikletini tamir ettirdi.)`,
-      example: `I had my car washed. (Arabamı yıkattım.)\nShe got her hair cut. (Saçını kestirdi.)\nWe will have the house painted. (Evi boyatacağız.)\nHe had his bike repaired. (Bisikletini tamir ettirdi.)`,
-      tip: 'İpucu: Başkasına yaptırdığın işleri resimlerle veya hikaye ile anlat. "have/get + nesne + V3" yapısını pekiştir.'
-    },
-  ],
   A1: [
     { title: 'To Be Fiili: "am", "is", "are" çekimleri ve olumlu, olumsuz, soru cümleleri', summary: '', example: '', tip: '' },
     { title: 'Simple Present Tense: Günlük rutinler, "do/does" kullanımı ve geniş zamanı anlatan diğer yapılar', summary: 'Tanım:\nSimple Present Tense, İngilizcede geniş zaman olarak bilinir ve alışkanlıklar, genel gerçekler, tekrarlanan eylemler ve rutinler için kullanılır.\n\nKullanım:\nOlumlu cümlelerde özne + fiil (he/she/it ile fiile -s takısı eklenir).\nOlumsuz cümlelerde don’t/doesn’t yardımcı fiili kullanılır, fiil yalın kalır.\nSoru cümlelerinde do/does başa gelir, fiil yine yalın olur.\n\nÖnemli Noktalar:\n- He/she/it ile olumlu cümlede fiile -s takısı gelir.\n- Olumsuz ve soru cümlelerinde -s takısı kullanılmaz.\n- Sıklık zarfları (always, usually, often, sometimes, never) geniş zamanda sıkça kullanılır.\n- Genel doğrular, alışkanlıklar ve tekrar eden olaylar için uygundur.\n\nZaman İfadeleri:\n- every day, always, usually, often, sometimes, never, on Sundays, in the morning gibi ifadeler geniş zamanla kullanılır.', example: 'Olumlu:\n- I walk to school every morning.\n- She drinks tea at breakfast.\n- The shop opens at 9 o’clock.\n- He plays football on weekends.\n- They study English on Mondays.\n\nOlumsuz:\n- I do not (don’t) eat meat.\n- He does not (doesn’t) like coffee.\n- We do not watch TV at night.\n- She does not go to the gym.\n- It does not rain much here.\n\nSoru:\n- Do you play chess?\n- Does he live in this city?\n- Do they come to school by bus?\n- Does your mother cook well?\n- Do we have class today?', tip: '' },
@@ -151,6 +38,53 @@ const topicsData: Partial<Record<LevelKey, Topic[]>> = {
     { title: 'Karşılaştırmalar: Kısa sıfatların karşılaştırma hali ("taller than")', summary: '', example: '', tip: '' },
     { title: 'Emir Cümleleri (Imperatives): "Sit down" veya "Don\'t talk" gibi emir ifadeleri', summary: '', example: '', tip: '' },
     { title: 'Diğer Önemli Konular', summary: '', example: '', tip: '' }
-    ]
-  };
+  ]
+};
+
+const TopicsPage: React.FC = () => {
+  return (
+    <Box p={2}>
+      <Typography variant="h4">Konular Sayfası</Typography>
+      {/* Buraya gerçek sayfa içeriği ve bileşenler eklenmeli */}
+      <pre style={{fontSize:12, whiteSpace:'pre-wrap'}}>{JSON.stringify(topicsData, null, 2)}</pre>
+    </Box>
+  );
+};
+
+ [
+    { title: 'To Be Fiili: "am", "is", "are" çekimleri ve olumlu, olumsuz, soru cümleleri', summary: '', example: '', tip: '' },
+    { title: 'Simple Present Tense: Günlük rutinler, "do/does" kullanımı ve geniş zamanı anlatan diğer yapılar', summary: 'Tanım:\nSimple Present Tense, İngilizcede geniş zaman olarak bilinir ve alışkanlıklar, genel gerçekler, tekrarlanan eylemler ve rutinler için kullanılır.\n\nKullanım:\nOlumlu cümlelerde özne + fiil (he/she/it ile fiile -s takısı eklenir).\nOlumsuz cümlelerde don’t/doesn’t yardımcı fiili kullanılır, fiil yalın kalır.\nSoru cümlelerinde do/does başa gelir, fiil yine yalın olur.\n\nÖnemli Noktalar:\n- He/she/it ile olumlu cümlede fiile -s takısı gelir.\n- Olumsuz ve soru cümlelerinde -s takısı kullanılmaz.\n- Sıklık zarfları (always, usually, often, sometimes, never) geniş zamanda sıkça kullanılır.\n- Genel doğrular, alışkanlıklar ve tekrar eden olaylar için uygundur.\n\nZaman İfadeleri:\n- every day, always, usually, often, sometimes, never, on Sundays, in the morning gibi ifadeler geniş zamanla kullanılır.', example: 'Olumlu:\n- I walk to school every morning.\n- She drinks tea at breakfast.\n- The shop opens at 9 o’clock.\n- He plays football on weekends.\n- They study English on Mondays.\n\nOlumsuz:\n- I do not (don’t) eat meat.\n- He does not (doesn’t) like coffee.\n- We do not watch TV at night.\n- She does not go to the gym.\n- It does not rain much here.\n\nSoru:\n- Do you play chess?\n- Does he live in this city?\n- Do they come to school by bus?\n- Does your mother cook well?\n- Do we have class today?', tip: '' },
+    {
+      title: 'Present Continuous Tense: Şimdiki zamanı ve devam eden eylemleri ifade etmek için kullanılır',
+      summary: 'Tanım:\nPresent Continuous Tense, İngilizcede şimdiki zamanı anlatır. Konuşma anında yapılan işleri, geçici durumları ve yakın gelecekte planlanan olayları ifade etmek için kullanılır.\n\nKullanım:\nCümle yapısı: özne + am/is/are + fiil-ing\nOlumlu: I am reading. / She is playing. / We are watching TV.\nOlumsuz: I am not reading. / He is not playing. / They are not coming.\nSoru: Are you listening? / Is he sleeping? / Am I late?\n\nÖnemli Noktalar:\n- Şu anda olan veya geçici olarak devam eden eylemler için kullanılır.\n- "Now, at the moment, today, this week" gibi zaman ifadeleriyle sıkça kullanılır.\n- "Always, constantly, forever" gibi kelimelerle şikayet belirtmek için de kullanılabilir.\n- State verbs (love, know, understand, have, want, need, like, belong, see, hear, taste, smell, believe, prefer, own, seem, appear, contain, consist, include) genellikle -ing ile kullanılmaz.\n- Fiil + -ing ekinde yazım kurallarına dikkat edilir: run-running, swim-swimming, write-writing, make-making.\n\nZaman İfadeleri:\n- now, at the moment, right now, today, this week, currently, look!, listen!\n\n',
+      example: 'Olumlu:\n- I am eating breakfast now.\n- She is studying in her room.\n- We are playing football at the park.\n- They are watching a movie.\n- The baby is sleeping.\n\nOlumsuz:\n- I am not going to the party.\n- He is not listening to music.\n- We are not working today.\n- She is not wearing a jacket.\n- It is not raining.\n\nSoru:\n- Are you coming with us?\n- Is he reading a book?\n- Are they waiting for the bus?\n- Is it snowing?\n- Am I speaking too fast?\n\nŞikayet/Alışkanlık:\n- She is always losing her keys.\n- He is constantly talking during class.\n- You are forever forgetting your homework.',
+      tip: ''
+    },
+    {
+      title: 'Temel Soru Kalıpları: "What, Where, When, Who, Why, How" gibi soru kelimeleri',
+      summary: 'Tanım:\nİngilizcede iki ana soru tipi vardır: Yes/No Questions (evet/hayır ile cevaplanan) ve WH Questions (soru kelimeleriyle başlayan). WH Questions, bilgi almak için kullanılır ve cevabı evet/hayır değildir.\n\nKullanım:\nSoru kelimesi (What, Where, When, Who, Why, How, Which, Whose, How many, How much, How long, How far, How often) + yardımcı fiil + özne + fiil\n\nÖnemli Noktalar:\n- Soru kelimesinden sonra genellikle yardımcı fiil gelir.\n- "Who" ve "What" bazen özne olarak kullanılır, bu durumda yardımcı fiil gelmez.\n- "How" ile farklı sorular türetilebilir: how many, how much, how long, how far, how often, how old, how tall, how fast, how heavy.\n\nSık Kullanılan Soru Kelimeleri ve Örnekler:\nWhat: What is your name?\nWhere: Where do you live?\nWhen: When do you get up?\nWho: Who plays the piano?\nWhose: Whose bag is this?\nWhich: Which book do you want?\nWhy: Why are you sad?\nHow: How are you today?\nHow many: How many students are there?\nHow much: How much water do you drink?\nHow long: How long is the lesson?\nHow far: How far is your school?\nHow often: How often do you play tennis?',
+      example: 'Olumlu/Soru Örnekleri:\n- What do you do after school?\n- Where is your brother?\n- When does the lesson start?\n- Who helps you with homework?\n- Whose pencil is this?\n- Which color do you like?\n- Why are you laughing?\n- How do you go to school?\n- How many apples are there?\n- How much money do you have?\n- How long does it take to get home?\n- How far is the park from here?\n- How often do you visit your grandparents?',
+      tip: ''
+    },
+    {
+      title: 'Modal Fiiller: "Can", "Could", "Be able to" (yetenek bildiren fiiller)',
+      summary: 'Tanım:\n"Can" fiili, bir kişinin veya nesnenin bir işi yapabilme yeteneğini, imkânını veya olasılığını belirtir. Türkçede "-ebilmek/-abilmek" anlamına gelir. "Could" geçmiş zaman hali, "be able to" ise tüm zamanlarda yetenek veya imkân anlatmak için kullanılır.\n\nKullanım:\nOlumlu: özne + can/could/be able to + fiil\nOlumsuz: özne + cannot (can’t)/could not (couldn’t)/be not able to + fiil\nSoru: Can/Could/Be able to + özne + fiil\n\nÖnemli Noktalar:\n- "Can" şimdiki zaman, "could" geçmiş zaman, "be able to" ise tüm zamanlarda kullanılır.\n- "Can" gelecek zaman için kullanılmaz, onun yerine "will be able to" kullanılır.\n- "Could" ve "be able to" geçmişte genel yetenekler için kullanılabilir.\n- "Be able to" bir kereye mahsus başarılan eylemler için zorunludur.\n- Duyu fiillerinde (see, hear, feel) geçmişte hem "could" hem "was/were able to" kullanılabilir.\n\n',
+      example: 'Olumlu:\n- I can swim.\n- She can speak Spanish.\n- We can solve this problem.\n- My friend could play the piano when he was a child.\n- The woman was able to lift the box.\n- You will be able to travel next year.\n\nOlumsuz:\n- I can’t drive.\n- He cannot play chess.\n- They couldn’t finish the project.\n- She wasn’t able to come yesterday.\n- I won’t be able to join the meeting.\n\nSoru:\n- Can you help me?\n- Could you open the window?\n- Were you able to find your keys?\n- Will she be able to pass the exam?\n\nOlasılık/İzin:\n- You can see the doctor at 3 o’clock.\n- You can’t buy bread at the pharmacy.\n- Sue can come to the party tonight.',
+      tip: ''
+    },
+    {
+      title: 'Zamirler: Kişi zamirleri, iyelik sıfatları ve zamirleri',
+      summary: 'Tanım:\nZamirler, isimlerin yerine geçerek cümlede tekrarları önler. İngilizcede zamirler, özne, nesne, iyelik ve dönüşlülük gibi farklı görevlerde kullanılır.\n\nKişi Zamirleri (Subject Pronouns):\nI, you, he, she, it, we, you, they\n\nNesne Zamirleri (Object Pronouns):\nme, you, him, her, it, us, you, them\n\nİyelik Sıfatları (Possessive Adjectives):\nmy, your, his, her, its, our, your, their\n\nİyelik Zamirleri (Possessive Pronouns):\nmine, yours, his, hers, its, ours, yours, theirs\n\nDönüşlülük/Vurgu Zamirleri (Reflexive/Emphatic Pronouns):\nmyself, yourself, himself, herself, itself, ourselves, yourselves, themselves\n\nÖnemli Noktalar:\n- "He, she, it" üçüncü tekil şahıslar için cinsiyet ayrımı yapar.\n- "You" hem tekil hem çoğul için aynıdır.\n- Dönüşlülük zamirleri özneyle aynı kişiyi gösterir.\n- İyelik sıfatı bir ismin önüne gelir, iyelik zamiri ise ismin yerine geçer.',
+      example: 'Özne Zamiri:\n- I am ready.\n- She is my friend.\n- They are here.\n\nNesne Zamiri:\n- Give it to me.\n- We saw them at the park.\n- Can you help us?\n\nİyelik Sıfatı:\n- My bag is blue.\n- Their house is big.\n- His car is new.\n\nİyelik Zamiri:\n- This book is mine.\n- Is that yours?\n- The red one is hers.\n\nDönüşlülük/Vurgu Zamiri:\n- I made this myself.\n- She herself cleaned the room.\n- The children can dress themselves.',
+      tip: ''
+    },
+    { title: 'There is / There are: Bir varlığı ifade etmek için kullanılır', summary: '', example: '', tip: '' },
+    { title: 'Edatlar (Prepositions): Yer (in, on, under) ve zaman (in, on, at) edatları', summary: '', example: '', tip: '' },
+    { title: 'İsimler: Sayılabilen ve sayılamayan isimler ile "a, an, some, any" kullanımı', summary: '', example: '', tip: '' },
+    { title: 'Sıfatlar: Renkler, boyutlar ve kişilik gibi temel sıfatlar', summary: '', example: '', tip: '' },
+    { title: 'Karşılaştırmalar: Kısa sıfatların karşılaştırma hali ("taller than")', summary: '', example: '', tip: '' },
+    { title: 'Emir Cümleleri (Imperatives): "Sit down" veya "Don\'t talk" gibi emir ifadeleri', summary: '', example: '', tip: '' },
+    { title: 'Diğer Önemli Konular', summary: '', example: '', tip: '' }
+  ]
+;
 
