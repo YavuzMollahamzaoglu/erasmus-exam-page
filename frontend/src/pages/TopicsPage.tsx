@@ -1,3 +1,5 @@
+// ...existing code...
+export default TopicsPage;
 import React, { useState, useEffect } from 'react';
 import setMetaTags from '../utils/seo';
 import { Paper, Tabs, Tab, Box, Typography, TextField, Chip, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
