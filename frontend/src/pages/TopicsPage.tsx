@@ -1,3 +1,41 @@
+import React, { useState, useEffect } from 'react';
+import setMetaTags from '../utils/seo';
+import { Paper, Tabs, Tab, Box, Typography, TextField, Chip, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Grid from '@mui/material/Grid';
+
+type Topic = { title: string; summary: string; example: string; tip?: string };
+type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
+const topicsData: Partial<Record<LevelKey, Topic[]>> = {
+  // A1 dizisi sadece aşağıda, yeni ve boş başlıklarla olacak
+  B1: [
+    {
+      title: 'Present Perfect Tense',
+      summary: `**Tanım:**\nPresent Perfect Tense, geçmişte başlamış ve etkisi/sonucu şu an devam eden olayları anlatır. Türkçede tam karşılığı yoktur, genellikle "-di, -miş, -dım" gibi çevrilir.\n\n**Kullanım Kuralları:**\n- have/has + fiilin üçüncü hali (V3)\n- I/You/We/They → have + V3\n- He/She/It → has + V3\n- Zaman zarfları: just (az önce), already (zaten), yet (henüz), ever (hiç), never (asla/hiç), for (süredir), since (den beri)\n\n**Olumlu Cümle (Positive):**\n- I have finished my homework. (Ödevimi bitirdim.)\n- She has just arrived. (O az önce geldi.)\n- We have lived here for 5 years. (5 yıldır burada yaşıyoruz.)\n\n**Olumsuz Cümle (Negative):**\n- I haven’t seen him. (Onu görmedim.)\n- He hasn’t called yet. (O henüz aramadı.)\n- They haven’t eaten breakfast. (Onlar kahvaltı yapmadı.)\n\n**Soru Cümlesi (Question):**\n- Have you ever been to London? (Hiç Londra’ya gittin mi?)\n- Has she finished her work? (O işini bitirdi mi?)\n- Have they done their homework? (Onlar ödevlerini yaptılar mı?)\n\n**Sık Yapılan Hatalar:**\n- I have saw ❌ (Yanlış) → I have seen ✔️ (Doğru)\n- He have done ❌ (Yanlış) → He has done ✔️ (Doğru)\n- I didn’t have seen ❌ (Yanlış) → I haven’t seen ✔️ (Doğru)\n\n**Not:**\n- Present Perfect ile geçmişteki zamanı (yesterday, last year) kullanma!\n- "For" (süredir) ve "since" (den beri) ile süre belirt.\n\n**Pratik İpucu:**\nKendi hayatından yeni biten veya etkisi süren olayları "have/has + V3" ile anlat. "I have just...", "I have never..." gibi kalıpları pratik et.\n`,
+      example: `// Detaylı ve Çevirili Örnekler\n-----------------------------\nI have lost my keys. (Anahtarlarımı kaybettim.)\nShe has already eaten. (O zaten yedi.)\nWe haven’t finished yet. (Henüz bitirmedik.)\nHave you ever seen snow? (Hiç kar gördün mü?)\nHe has lived here for 5 years. (5 yıldır burada yaşıyor.)\nI have just woken up. (Az önce uyandım.)\nThey have never visited Paris. (Onlar hiç Paris’i ziyaret etmedi.)\nHas he called you yet? (O seni aradı mı?)\n-----------------------------`,
+      tip: 'İpucu: Present Perfect ile zaman belirtirken for (süredir) ve since (den beri) kullanılır. "I have just...", "I have never..." gibi kalıpları pratik et. Geçmişte zamanı (yesterday, last year) ile kullanma!'
+    },
+    // ...existing code...
+  ],
+  A1: [
+    { title: 'To Be Fiili: "am", "is", "are" çekimleri ve olumlu, olumsuz, soru cümleleri', summary: '', example: '', tip: '' },
+    // ...existing code...
+    { title: 'Diğer Önemli Konular', summary: '', example: '', tip: '' }
+    ]
+  };
+
+const TopicsPage: React.FC = () => {
+  // ...buraya sayfa içeriği ve JSX gelecek...
+  return (
+    <Box p={2}>
+      <Typography variant="h4">Konular Sayfası</Typography>
+      {/* Buraya gerçek sayfa içeriği ve bileşenler eklenmeli */}
+      <pre style={{fontSize:12, whiteSpace:'pre-wrap'}}>{JSON.stringify(topicsData, null, 2)}</pre>
+    </Box>
+  );
+};
+
+export default TopicsPage;
 // ...existing code...
 export default TopicsPage;
 import React, { useState, useEffect } from 'react';
