@@ -1,4 +1,5 @@
 import React from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import AppRouter from './AppRouter';
 import Footer from './components/Footer';
 
@@ -8,6 +9,7 @@ function App() {
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppRouter />
       <Footer />
+      <Analytics />
     </div>
   );
 }
