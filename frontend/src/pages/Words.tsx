@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
-import { Box, Paper, Typography, Select, MenuItem, Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, Alert } from '@mui/material';
+import { Box, Paper, Typography, Select, MenuItem, Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, Alert, Divider, Chip } from '@mui/material';
+import TranslateIcon from '@mui/icons-material/Translate';
 
 interface Word { id: string; english: string; turkish: string; example?: string | null; level: string; }
 
@@ -86,8 +87,8 @@ const Words: React.FC = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', px: 2, pt: 0, pb: { xs: 12, md: 16 }, display: 'flex', justifyContent: 'center' }}>
   <Paper elevation={6} sx={{ width: '100%', maxWidth: 900, borderRadius: 4, p: 0, mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit', textAlign: 'center' }}>
-          <Typography variant="h3" fontWeight={700} mb={1} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: { xs: '2rem', md: '2.5rem' } }}>Kelimeler</Typography>
-          <Typography variant="h6" sx={{ opacity: 0.95, mb: 2 }}>{level} seviyesindeki kelimeler</Typography>
+          <Typography component="h1" variant="h3" fontWeight={700} mb={1} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: { xs: '2rem', md: '2.5rem' } }}>Kelimeler</Typography>
+          <Typography component="h2" variant="h6" sx={{ opacity: 0.95, mb: 2 }}>{level} seviyesindeki kelimeler</Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
             <Select value={level} onChange={(e) => setLevel(e.target.value)} sx={{ bgcolor: 'transparent', color: '#fff', minWidth: 120, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.5)' }, '& .MuiSvgIcon-root': { color: '#fff' } }}>
               {levels.map(l => <MenuItem key={l} value={l}>{l}</MenuItem>)}
@@ -103,11 +104,44 @@ const Words: React.FC = () => {
           ) : (
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
               {words.map(w => (
-                <Paper key={w.id} sx={{ p: 2.5, borderRadius: 3, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0,184,148,0.18)' }}>
-                  <Typography fontWeight={800} fontSize={20} color="#00b894">{w.english ? w.english[0].toUpperCase() + w.english.slice(1) : ''}</Typography>
-                  <Typography fontWeight={600} color="#2c3e50" mb={0.5}>{capFirstTr(w.turkish)}</Typography>
+                <Paper
+                  key={w.id}
+                  role="article"
+                  aria-label={`${w.english} kelimesi kartı`}
+                  sx={{
+                    p: 2.5,
+                    borderRadius: 3,
+                    background: 'rgba(255,255,255,0.95)',
+                    border: '1px solid rgba(0,184,148,0.18)',
+                    transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
+                    boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
+                    outline: 'none',
+                    '&:hover': {
+                      transform: 'translateY(-3px)',
+                      boxShadow: '0 12px 28px rgba(0,0,0,0.12)',
+                      borderColor: 'rgba(0,184,148,0.35)'
+                    },
+                    '&:focus-visible': {
+                      outline: '2px solid #00b894',
+                      outlineOffset: '2px',
+                    }
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography fontWeight={800} fontSize={20} color="#00b894">
+                      {w.english ? w.english[0].toUpperCase() + w.english.slice(1) : ''}
+                    </Typography>
+                    <Chip label={w.level} size="small" sx={{ bgcolor: 'rgba(0,184,148,0.08)', color: '#00b894', fontWeight: 700 }} />
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <TranslateIcon fontSize="small" sx={{ color: '#2c3e50', opacity: 0.8 }} />
+                    <Typography fontWeight={600} color="#2c3e50">{capFirstTr(w.turkish)}</Typography>
+                  </Box>
                   {w.example && (
-                    <Typography variant="body2" color="text.secondary">Örnek: {w.example}</Typography>
+                    <>
+                      <Divider sx={{ my: 1.2, borderColor: 'rgba(0,0,0,0.06)' }} />
+                      <Typography variant="body2" color="text.secondary">Örnek: {w.example}</Typography>
+                    </>
                   )}
                   {/* Daha fazla cümle butonu kaldırıldı */}
                 </Paper>

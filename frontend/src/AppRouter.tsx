@@ -28,6 +28,7 @@ const Words = lazy(() => import('./pages/Words'));
 const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame'));
 const WordMatchingGame = lazy(() => import('./pages/WordMatchingGame'));
 const ReadingGame = lazy(() => import('./pages/games/ReadingGame'));
+const NotFound = lazy(() => import('./pages/NotFound'));
  
 
 
@@ -97,6 +98,11 @@ const AppRouter: React.FC = () => {
       try {
   // pass the full path so analytics records correct page
   pageview({ path: location.pathname + location.search });
+        // Google Analytics 4 (optional)
+        const gaId = process.env.REACT_APP_GA_MEASUREMENT_ID;
+        if (gaId && (window as any).gtag) {
+          (window as any).gtag('config', gaId, { page_path: location.pathname + location.search });
+        }
       } catch (e) {
         // ignore analytics errors
       }
@@ -110,6 +116,21 @@ const AppRouter: React.FC = () => {
     <Router>
       <SkipLink />
   <NavbarWithNavigate userAvatar={userAvatar} userInitial={userInitial} />
+      {/* Google Analytics bootstrap (if REACT_APP_GA_MEASUREMENT_ID is set) */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+          (function(){
+            var id = '${process.env.REACT_APP_GA_MEASUREMENT_ID || ''}';
+            if(!id) return;
+            if (!window.dataLayer) window.dataLayer = [];
+            function gtag(){window.dataLayer.push(arguments);} 
+            window.gtag = gtag; gtag('js', new Date()); gtag('config', id);
+            var s1=document.createElement('script'); s1.async=true; s1.src='https://www.googletagmanager.com/gtag/js?id='+id; document.head.appendChild(s1);
+          })();
+        `,
+        }}
+      />
       {/* Track SPA route changes for Vercel Analytics */}
       <RouteTracker />
       {/* Fixed AppBar spacer to avoid content jump under navbar */}
@@ -138,7 +159,7 @@ const AppRouter: React.FC = () => {
           <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
           <Route path="/history" element={token ? <Box component="main" id="main-content"><History token={token} /></Box> : <Navigate to="/login" replace />} />
           <Route path="/exam/:testId" element={<Box component="main" id="main-content"><Exam /></Box>} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </Router>

@@ -53,7 +53,14 @@
     }</script>
   <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/logo-192.png" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!-- Performance: preconnect to Google Fonts to reduce render-blocking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preload Google Fonts stylesheet to minimize render-blocking -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap&subset=latin-ext" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap&subset=latin-ext" rel="stylesheet" />
+  </noscript>
     <title>İngilizce Hazırlık</title>
   </head>
   <body>

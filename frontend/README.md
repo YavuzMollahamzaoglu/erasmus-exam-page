@@ -1,6 +1,31 @@
-# Getting Started with Create React App
+# Frontend (Create React App)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app is bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## GA4 activation (optional)
+
+Google Analytics 4 is supported out of the box. The router initializes GA and sends pageviews on SPA route changes when a measurement ID is present.
+
+1) On Vercel, open Project Settings → Environment Variables and add:
+
+- Key: `REACT_APP_GA_MEASUREMENT_ID`
+- Value: your GA4 measurement ID (e.g. `G-XXXXXXXXXX`)
+- Target: Production (and Preview if you want)
+
+2) Redeploy. GA will load automatically on the client and pageviews will be tracked.
+
+Local development: copy `.env.example` to `.env.local` and fill in `REACT_APP_GA_MEASUREMENT_ID` to test.
+
+Notes:
+- GA is free at the standard tier in GA4.
+- The site also uses Vercel Analytics; GA complements it for marketing/reporting.
+
+## Image optimization quick guide
+
+- Prefer modern formats (AVIF/WebP) alongside PNG/JPG. Name them with the same basename (e.g. `hero.png`, `hero.webp`, `hero.avif`).
+- Use the `ResponsiveImage` component (`src/components/ResponsiveImage.tsx`) to automatically try AVIF/WebP and fall back to the original.
+- Always set explicit `width` and `height` to reduce layout shift.
+- Use SVG for logos/icons when possible.
 
 ## Available Scripts
 
