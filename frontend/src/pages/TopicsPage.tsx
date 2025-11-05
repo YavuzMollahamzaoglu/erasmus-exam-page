@@ -353,37 +353,7 @@ const frostedPaper = {
   backdropFilter: 'blur(10px)',
   border: '1px solid rgba(255, 255, 255, 0.2)',
   boxShadow: { xs: '0 8px 18px rgba(0,0,0,0.08)', md: '0 20px 40px rgba(0,0,0,0.1)' },
-} as const;
-
-const TopicsPage: React.FC = () => {
-  useEffect(() => {
-    setMetaTags({
-      title: 'Konular — Dilbilgisi Konuları ve Örnekler',
-      description: 'A1-B2 seviyeleri için temel dilbilgisi konuları, örnekler ve ipuçları. Sınav hazırlığına uygun açıklamalar.',
-      keywords: 'dilbilgisi konuları, grammar konuları, a1 a2 b1 b2',
-      canonical: '/topics',
-      ogImage: '/social-preview.svg'
-    });
-  }, []);
-  const [selectedLevel, setSelectedLevel] = useState('A1');
-  const [search, setSearch] = useState('');
-  const [expanded, setExpanded] = useState<string | false>(false);
-
-  const handleAccordionChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
-  // Türkçe karakter ve büyük/küçük harf uyumlu arama
-  const normalizeTR = (s: string) =>
-    s
-      .toLowerCase()
-      .replace(/ı/g, 'i')
-      .replace(/İ/g, 'i')
-      .replace(/ğ/g, 'g')
-      .replace(/Ğ/g, 'g')
-      .replace(/ş/g, 's')
-      .replace(/Ş/g, 's')
-      .replace(/ç/g, 'c')
+  A2: [
       .replace(/Ç/g, 'c')
       .replace(/ö/g, 'o')
       .replace(/Ö/g, 'o')
