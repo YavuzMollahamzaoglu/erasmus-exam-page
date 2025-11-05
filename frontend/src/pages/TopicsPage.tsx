@@ -46,7 +46,7 @@ const topicsData: Record<LevelKey, Topic[]> = {
       tip: 'İpucu: Öğrenciler eşleştirici oyunla soru-cevap çalışsın.'
     }
   ],
-    {
+  A2: [
       title: 'Have/Has',
       summary: `Sahip olunan şeyleri anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- I/You/We/They have\n- He/She/It has\n- Olumsuz: don’t/doesn’t have\n- Soru: Do/Does ... have\n\n**Sık Yapılan Hatalar:**\n- ~~He have a bike~~ (yanlış), **He has a bike** (doğru)\n- ~~I has a book~~ (yanlış), **I have a book** (doğru)\n\n**Örnekler:**\n1. He has a bike.\n   - (Onun bir bisikleti var.)\n2. I have a book.\n   - (Bir kitabım var.)\n3. Do you have a pet?\n   - (Evcil hayvanın var mı?)\n4. We don’t have a car.\n   - (Bizim arabamız yok.)`,
       example: `He has a bike. (Onun bir bisikleti var.)\nI have a book. (Bir kitabım var.)\nDo you have a pet? (Evcil hayvanın var mı?)\nWe don’t have a car. (Bizim arabamız yok.)`,
@@ -180,39 +180,8 @@ const topicsData: Record<LevelKey, Topic[]> = {
       summary: `Bir olayın olma ihtimalini anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- may, might, could: düşük ihtimal\n- must: yüksek ihtimal\n- can’t: imkansızlık\n\n**Sık Yapılan Hatalar:**\n- ~~He may comes~~ (yanlış), **He may come** (doğru)\n- ~~She could to be at home~~ (yanlış), **She could be at home** (doğru)\n\n**Örnekler:**\n1. She may come tomorrow.\n   - (O, yarın gelebilir.)\n2. He might be busy.\n   - (O, meşgul olabilir.)\n3. It could rain today.\n   - (Bugün yağmur yağabilir.)\n4. You must be tired.\n   - (Kesin yorgunsundur.)`,
       example: `She may come tomorrow. (O, yarın gelebilir.)\nHe might be busy. (O, meşgul olabilir.)\nIt could rain today. (Bugün yağmur yağabilir.)\nYou must be tired. (Kesin yorgunsundur.)`,
       tip: 'İpucu: Olasılık anlatan kelimeleri günlük olaylarla ilişkilendirerek cümle kur.'
-    },
-    {
-      title: 'Phrasal verbs',
-      summary: `Fiil + edat veya zarf ile oluşan ve anlamı değişen deyimsel fiiller.\n\n**Kullanım Kuralları:**\n- look after: ilgilenmek\n- turn on: açmak\n- give up: bırakmak\n- get up: kalkmak\n\n**Sık Yapılan Hatalar:**\n- ~~I look the children~~ (yanlış), **I look after the children** (doğru)\n- ~~Turn the TV~~ (yanlış), **Turn on the TV** (doğru)\n\n**Örnekler:**\n1. I look after my little brother.\n   - (Küçük kardeşimle ilgilenirim.)\n2. Please turn on the lights.\n   - (Lütfen ışıkları aç.)\n3. He gave up smoking.\n   - (O, sigarayı bıraktı.)\n4. We get up early every day.\n   - (Her gün erken kalkarız.)`,
-      example: `I look after my little brother. (Küçük kardeşimle ilgilenirim.)\nPlease turn on the lights. (Lütfen ışıkları aç.)\nHe gave up smoking. (O, sigarayı bıraktı.)\nWe get up early every day. (Her gün erken kalkarız.)`,
-      tip: 'İpucu: Phrasal verbs listesini ezberle, resimlerle veya hikaye ile pekiştir.'
-    },
-    {
-      title: 'Type 1 (First Conditional)',
-      summary: `Gerçekleşme ihtimali yüksek olan koşullu cümleler için kullanılır.\n\n**Kullanım Kuralları:**\n- If + present simple, will + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~If it will rain, I will stay home~~ (yanlış), **If it rains, I will stay home** (doğru)\n\n**Örnekler:**\n1. If it rains, I will stay home.\n   - (Yağmur yağarsa evde kalacağım.)\n2. If you study, you will pass the exam.\n   - (Çalışırsan sınavı geçersin.)\n3. If she calls, I will answer.\n   - (O ararsa cevap vereceğim.)\n4. If we hurry, we will catch the bus.\n   - (Acele edersek otobüsü yakalarız.)`,
-      example: `If it rains, I will stay home. (Yağmur yağarsa evde kalacağım.)\nIf you study, you will pass the exam. (Çalışırsan sınavı geçersin.)\nIf she calls, I will answer. (O ararsa cevap vereceğim.)\nIf we hurry, we will catch the bus. (Acele edersek otobüsü yakalarız.)`,
-      tip: 'İpucu: Koşullu cümleleri gerçek hayat örnekleriyle kur. "If" ile başlayan cümleler yaz.'
-    },
-    {
-      title: 'Type 2 (Second Conditional)',
-      summary: `Gerçekleşmesi düşük veya hayali olan koşullu cümleler için kullanılır.\n\n**Kullanım Kuralları:**\n- If + past simple, would + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~If I will have money, I would travel~~ (yanlış), **If I had money, I would travel** (doğru)\n\n**Örnekler:**\n1. If I had money, I would travel the world.\n   - (Param olsaydı dünyayı gezerdim.)\n2. If she were here, we would be happy.\n   - (O burada olsaydı mutlu olurduk.)\n3. If it snowed, we would make a snowman.\n   - (Kar yağsaydı kardan adam yapardık.)\n4. If I knew his number, I would call him.\n   - (Numarasını bilseydim onu arardım.)`,
-      example: `If I had money, I would travel the world. (Param olsaydı dünyayı gezerdim.)\nIf she were here, we would be happy. (O burada olsaydı mutlu olurduk.)\nIf it snowed, we would make a snowman. (Kar yağsaydı kardan adam yapardık.)\nIf I knew his number, I would call him. (Numarasını bilseydim onu arardım.)`,
-      tip: 'İpucu: Hayali durumları "If" ile kur. Hayalindeki şeyleri yazıp cümle oluştur.'
-    },
-    {
-      title: 'Intensifiers (pekiştiriciler)',
-      summary: `Sıfatları veya zarfları güçlendirmek için kullanılır.\n\n**Kullanım Kuralları:**\n- very, really, so, too, quite, absolutely, extremely\n\n**Sık Yapılan Hatalar:**\n- ~~I am very much happy~~ (yanlış), **I am very happy** (doğru)\n- ~~She is so much tired~~ (yanlış), **She is so tired** (doğru)\n\n**Örnekler:**\n1. The movie was really interesting.\n   - (Film gerçekten ilginçti.)\n2. I am so tired today.\n   - (Bugün çok yorgunum.)\n3. She is extremely smart.\n   - (O son derece zeki.)\n4. The exam was quite difficult.\n   - (Sınav oldukça zordu.)`,
-      example: `The movie was really interesting. (Film gerçekten ilginçti.)\nI am so tired today. (Bugün çok yorgunum.)\nShe is extremely smart. (O son derece zeki.)\nThe exam was quite difficult. (Sınav oldukça zordu.)`,
-      tip: 'İpucu: Pekiştirici kelimeleri cümlelerde vurgulayarak kullan. Duygularını ve durumunu anlatırken çeşitlendir.'
-    },
-    {
-      title: 'İhtimal anlatan kelimeler',
-      summary: `Bir olayın olma ihtimalini anlatan kelimeler: probably, possibly, perhaps, maybe.\n\n**Kullanım Kuralları:**\n- probably: büyük ihtimalle\n- possibly: muhtemelen\n- perhaps/maybe: belki\n\n**Sık Yapılan Hatalar:**\n- ~~He probably will comes~~ (yanlış), **He will probably come** (doğru)\n\n**Örnekler:**\n1. He will probably come.\n   - (Büyük ihtimalle gelecek.)\n2. Maybe she is at home.\n   - (Belki evdedir.)\n3. Perhaps it will rain.\n   - (Belki yağmur yağacak.)\n4. They will possibly join us.\n   - (Muhtemelen bize katılacaklar.)`,
-      example: `He will probably come. (Büyük ihtimalle gelecek.)\nMaybe she is at home. (Belki evdedir.)\nPerhaps it will rain. (Belki yağmur yağacak.)\nThey will possibly join us. (Muhtemelen bize katılacaklar.)`,
-      tip: 'İpucu: İhtimal anlatan kelimeleri günlük planlarında kullan. Tahmin cümleleri kur.'
-    },
-    {
-      title: 'Kıyaslama ifadeleri',
+    ],
+    A2: [
       summary: `İki veya daha fazla şeyi karşılaştırmak için kullanılır.\n\n**Kullanım Kuralları:**\n- more/less + sıfat + than\n- as ... as\n\n**Sık Yapılan Hatalar:**\n- ~~She is more tall than me~~ (yanlış), **She is taller than me** (doğru)\n- ~~He is as fast than me~~ (yanlış), **He is as fast as me** (doğru)\n\n**Örnekler:**\n1. This car is more expensive than that one.\n   - (Bu araba onunkinden daha pahalı.)\n2. She is as smart as her sister.\n   - (O, kız kardeşi kadar zeki.)\n3. My house is less big than yours.\n   - (Benim evim seninkinden daha küçük.)\n4. He is taller than me.\n   - (O benden daha uzun.)`,
       example: `This car is more expensive than that one. (Bu araba onunkinden daha pahalı.)\nShe is as smart as her sister. (O, kız kardeşi kadar zeki.)\nMy house is less big than yours. (Benim evim seninkinden daha küçük.)\nHe is taller than me. (O benden daha uzun.)`,
       tip: 'İpucu: Eşyaları veya kişileri karşılaştırırken cümleler kur. "as ... as" ve "more/less ... than" yapılarını tabloyla çalış.'
