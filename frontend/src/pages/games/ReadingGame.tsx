@@ -162,6 +162,7 @@ const ReadingGame: React.FC = () => {
                   // Doğru/yanlış sadece submitted true ise gösterilsin
                   const isCorrect = submitted && selected !== null && selected === q.correctIndex;
                   const isWrong = submitted && selected !== null && selected !== q.correctIndex;
+                  const explanation = getExplanation(q);
                   return (
                     <Paper key={q.id} elevation={0} sx={{ p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: isCorrect ? '#e6ffe6' : isWrong ? '#ffe6e6' : '#fff' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -172,6 +173,13 @@ const ReadingGame: React.FC = () => {
                           <FormControlLabel key={i} value={i} control={<Radio disabled={submitted} />} label={opt} />
                         ))}
                       </RadioGroup>
+                      {/* Show explanation only for wrong answers after submission */}
+                      {isWrong && explanation && (
+                        <Box sx={{ mt: 2, p: 2, bgcolor: '#fff3cd', borderRadius: 2, borderLeft: '4px solid #ff9800' }}>
+                          <Typography variant="body2" fontWeight={600} color="#856404" sx={{ mb: 0.5 }}>Açıklama:</Typography>
+                          <Typography variant="body2" color="#856404">{explanation}</Typography>
+                        </Box>
+                      )}
                     </Paper>
                   );
                 })}

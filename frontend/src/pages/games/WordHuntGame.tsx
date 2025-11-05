@@ -88,7 +88,8 @@ export default function WordHuntGame() {
   // Initialize options for current question and restore saved correct state if exists
   useEffect(() => {
     if (words[index]) {
-      setCurrentOptions([...words[index].en]);
+      // Shuffle options so correct answer isn't always in the same position
+      setCurrentOptions(shuffleArray([...words[index].en]));
       setWrongAttempts(0);
       const saved = savedCorrect[index];
       if (saved) {
