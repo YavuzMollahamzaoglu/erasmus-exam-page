@@ -10,35 +10,42 @@ type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
 const topicsData: Record<LevelKey, Topic[]> = {
   A1: [
     {
-      title: 'Simple Present Tense',
-  summary: `Örnek: I go to school every day.\n\nGeniş zaman, alışkanlıklar, genel doğrular ve rutinler için kullanılır.\n\n**Kullanım Kuralları:**\n- Olumlu: özne + fiil (he/she/it için -s takısı)\n- Olumsuz: özne + do/does not + fiil\n- Soru: Do/Does + özne + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~He go to school~~ (yanlış), **He goes to school** (doğru)\n- ~~I goes~~ (yanlış), **I go** (doğru)\n\n**Örnekler:**\n1. I go to school every day.\n   - (Her gün okula giderim.)\n2. She plays tennis.\n   - (O tenis oynar.)\n3. We don’t eat meat.\n   - (Biz et yemeyiz.)\n4. Does he like music?\n   - (O müzik sever mi?)`,
-      example: `I go to school every day. (Her gün okula giderim.)\nShe plays tennis. (O tenis oynar.)\nWe don’t eat meat. (Biz et yemeyiz.)\nDoes he like music? (O müzik sever mi?)`,
-      tip: 'İpucu: Günlük rutinlerini çizelgeyle göster, -s takısını renkli kalemle vurgula.'
+      title: 'To Be Fiili (am, is, are)',
+      summary: 'Kimlik, durum veya yer belirtmek için kullanılır. Kısa örnek: I am a student.',
+      example: 'I am a student. (Ben bir öğrenciyim.)',
+      tip: 'İpucu: Am/is/are ile kendi durumlarını sınıfta söyleyerek pratik yapın.'
     },
     {
-      title: 'To Be (am/is/are)',
-      summary: `Kişi veya nesnenin durumunu, kimliğini veya yerini belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- I am, You/We/They are, He/She/It is\n- Olumsuz: am/is/are + not\n- Soru: Am/Is/Are + özne\n\n**Sık Yapılan Hatalar:**\n- ~~He are happy~~ (yanlış), **He is happy** (doğru)\n- ~~I is a student~~ (yanlış), **I am a student** (doğru)\n\n**Örnekler:**\n1. She is a student.\n   - (O bir öğrenci.)\n2. I am tired.\n   - (Yorgunum.)\n3. Are you ready?\n   - (Hazır mısın?)\n4. We are at home.\n   - (Biz evdeyiz.)`,
-      example: `She is a student. (O bir öğrenci.)\nI am tired. (Yorgunum.)\nAre you ready? (Hazır mısın?)\nWe are at home. (Biz evdeyiz.)`,
-      tip: 'İpucu: Sınıfta herkesin durumunu yazıp am/is/are ile cümle kur.'
+      title: 'Simple Present Tense (Geniş Zaman)',
+      summary: 'Alışkanlıklar ve genel doğrular için kullanılır. Kısa örnek: She works in a bank.',
+      example: 'She works in a bank. (O bir bankada çalışır.)',
+      tip: 'İpucu: Günlük rutinlerinizi yazarak geniş zamanı kullanın.'
+    },
+    {
+      title: 'This, That, These, Those',
+      summary: 'Yakın/uzak nesneleri belirtmek için kullanılır. Kısa örnek: This is my book.',
+      example: 'This is my book. (Bu benim kitabım.)',
+      tip: 'İpucu: Nesneleri gösterip this/that/these/those ile eşleştirin.'
     },
     {
       title: 'There is / There are',
-      summary: `Bir yerde bir şeyin varlığını anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- There is: tekil nesneler için\n- There are: çoğul nesneler için\n\n**Sık Yapılan Hatalar:**\n- ~~There are a book~~ (yanlış), **There is a book** (doğru)\n- ~~There is apples~~ (yanlış), **There are apples** (doğru)\n\n**Örnekler:**\n1. There is a book on the table.\n   - (Masada bir kitap var.)\n2. There are three chairs.\n   - (Üç sandalye var.)\n3. Is there a problem?\n   - (Bir sorun var mı?)\n4. There aren’t any students.\n   - (Hiç öğrenci yok.)`,
-      example: `There is a book on the table. (Masada bir kitap var.)\nThere are three chairs. (Üç sandalye var.)\nIs there a problem? (Bir sorun var mı?)\nThere aren’t any students. (Hiç öğrenci yok.)`,
-      tip: 'İpucu: Sınıfta nesneleri sayarak "there is/are" ile cümle kur.'
+      summary: 'Bir yerde bir şeyin varlığını anlatmak için kullanılır. Kısa örnek: There is a cat in the garden.',
+      example: 'There is a cat in the garden. (Bahçede bir kedi var.)',
+      tip: 'İpucu: Sınıfta nesneleri sayıp there is/are ile cümle kurun.'
     },
     {
-      title: 'This/That/These/Those',
-      summary: `Yakın ve uzak nesneleri belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- This/These: yakın\n- That/Those: uzak\n\n**Sık Yapılan Hatalar:**\n- ~~This books~~ (yanlış), **These books** (doğru)\n- ~~Those is my friends~~ (yanlış), **Those are my friends** (doğru)\n\n**Örnekler:**\n1. This is my bag.\n   - (Bu benim çantam.)\n2. Those are my friends.\n   - (Şunlar benim arkadaşlarım.)\n3. That is a cat.\n   - (Şu bir kedi.)\n4. These are apples.\n   - (Bunlar elma.)`,
-      example: `This is my bag. (Bu benim çantam.)\nThose are my friends. (Şunlar benim arkadaşlarım.)\nThat is a cat. (Şu bir kedi.)\nThese are apples. (Bunlar elma.)`,
-      tip: 'İpucu: Nesneleri göstererek "this/that/these/those" ile cümle kur.'
+      title: 'Can / Can’t (Yetenek Bildiren Cümleler)',
+      summary: 'Yetenek veya izin belirtmek için can/can’t kullanılır. Kısa örnek: I can swim.',
+      example: 'I can swim. (Yüzebilirim.)',
+      tip: 'İpucu: Sınıfta kim hangi yeteneğe sahip, can/can’t ile yazın.'
     },
     {
-      title: 'Can',
-      summary: `Yetenek, izin veya olasılık belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- can + fiil (yalın)\n- Olumsuz: cannot (can’t) + fiil\n- Soru: Can + özne + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~He cans swim~~ (yanlış), **He can swim** (doğru)\n- ~~Can you to help me?~~ (yanlış), **Can you help me?** (doğru)\n\n**Örnekler:**\n1. I can swim.\n   - (Yüzebilirim.)\n2. Can I open the window?\n   - (Pencereyi açabilir miyim?)\n3. She can’t drive.\n   - (O araba süremez.)\n4. Can you help me?\n   - (Bana yardım edebilir misin?)`,
-      example: `I can swim. (Yüzebilirim.)\nCan I open the window? (Pencereyi açabilir miyim?)\nShe can’t drive. (O araba süremez.)\nCan you help me? (Bana yardım edebilir misin?)`,
-      tip: 'İpucu: Sınıfta kim neyi yapabiliyor, "can/can’t" ile cümle kur.'
-    },
+      title: 'Basic Question Forms (Temel Soru Kalıpları)',
+      summary: 'Temel soru cümleleri: Do/Does, Wh- soruları vb. Kısa örnek: Do you like tea?',
+      example: 'Do you like tea? (Çayı sever misin?)',
+      tip: 'İpucu: Öğrenciler eşleştirici oyunla soru-cevap çalışsın.'
+    }
+  ],
     {
       title: 'Have/Has',
       summary: `Sahip olunan şeyleri anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- I/You/We/They have\n- He/She/It has\n- Olumsuz: don’t/doesn’t have\n- Soru: Do/Does ... have\n\n**Sık Yapılan Hatalar:**\n- ~~He have a bike~~ (yanlış), **He has a bike** (doğru)\n- ~~I has a book~~ (yanlış), **I have a book** (doğru)\n\n**Örnekler:**\n1. He has a bike.\n   - (Onun bir bisikleti var.)\n2. I have a book.\n   - (Bir kitabım var.)\n3. Do you have a pet?\n   - (Evcil hayvanın var mı?)\n4. We don’t have a car.\n   - (Bizim arabamız yok.)`,
@@ -445,11 +452,10 @@ const TopicsPage: React.FC = () => {
       .replace(/ü/g, 'u')
       .replace(/Ü/g, 'u');
 
-  const filteredTopics = topicsData[selectedLevel as LevelKey].filter(
-    (topic: Topic) =>
-      normalizeTR(topic.title).includes(normalizeTR(search)) ||
-      normalizeTR(topic.summary).includes(normalizeTR(search))
-  );
+  // For now keep accordion structure but show only 1-2 dummy topics per level
+  // (content will be filled later by the editor). This prevents large blocks
+  // of content showing while we prepare the final material.
+  const displayTopics = topicsData[selectedLevel as LevelKey].slice(0, 2);
 
   return (
     <Box sx={{ minHeight: '100vh', background: '#b2dfdb', px: { xs: 1.5, sm: 2 }, display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 0, pb: { xs: 12, md: 16 }, overflowX: 'hidden' }}>
@@ -483,7 +489,7 @@ const TopicsPage: React.FC = () => {
           
           {/* Topics as Accordions */}
           <Box sx={{ mb: 3 }}>
-            {filteredTopics.map((topic: Topic, idx: number) => (
+            {displayTopics.map((topic: Topic, idx: number) => (
               <Accordion 
                 key={idx}
                 expanded={expanded === `panel${idx}`}
@@ -545,11 +551,15 @@ const TopicsPage: React.FC = () => {
                 </AccordionDetails>
               </Accordion>
             ))}
-            {filteredTopics.length === 0 && (
+            {displayTopics.length === 0 && (
               <Typography color="text.secondary" sx={{ mt: 2, textAlign: 'center' }}>
                 Bu seviyede aradığınız konu bulunamadı.
               </Typography>
             )}
+            {/* Informational note for editors */}
+            <Box sx={{ mt: 2, p: 2, bgcolor: 'transparent', textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">Gelecekte konu başlıklarını ve içeriklerini göndereceğim, şu an sadece yapı ve iyileştirmeleri yap.</Typography>
+            </Box>
           </Box>
         </Box>
       </Paper>
