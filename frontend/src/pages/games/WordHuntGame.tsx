@@ -142,7 +142,7 @@ export default function WordHuntGame() {
     return () => window.removeEventListener('keydown', onKeyDown, { capture: true } as any);
   }, [showResult]);
 
-  const handleSelect = (option: string) => {
+  const handleSelect = (option: string, optionIndex: number) => {
     if (status !== "idle") return;
     setSelected(option);
     if (option === words[index].correct) {
@@ -174,17 +174,15 @@ export default function WordHuntGame() {
         
         // Change the wrong option to give user a better chance
         const wrongOption = option;
-        const correctOption = words[index].correct;
         const newWrongOption = getAlternativeOption(words[index], wrongOption);
-        
-        // Update current options with new wrong option WITHOUT changing button positions
+
+        // Update current options by replacing the option at the exact index the user clicked.
+        // This preserves button positions and their associated colors.
         setCurrentOptions((prev) => {
           if (!prev || prev.length === 0) return prev;
-          const wrongIdx = prev.findIndex((o) => o === wrongOption);
           const next = [...prev];
-          // replace only the wrong option at its index; keep the correct option where it is
-          if (wrongIdx !== -1) {
-            next[wrongIdx] = newWrongOption;
+          if (optionIndex >= 0 && optionIndex < next.length) {
+            next[optionIndex] = newWrongOption;
           }
           return next;
         });
@@ -417,7 +415,7 @@ export default function WordHuntGame() {
             
             return (
               <Box
-                key={option}
+                key={`${option}-${i}`}
                 sx={{
                   width: '100%',
                   maxWidth: 300,
@@ -443,7 +441,7 @@ export default function WordHuntGame() {
                   px: 2,
                   py: 1.5,
                 }}
-                onClick={() => (status === "idle" ? handleSelect(option) : undefined)}
+                onClick={() => (status === "idle" ? handleSelect(option, i) : undefined)}
                 style={{ 
                   pointerEvents: (status === "correct" || savedCorrect[index]) ? 'none' : 'auto',
                   opacity: status === "wrong" && selected === option ? 0.7 : 1
