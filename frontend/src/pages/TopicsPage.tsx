@@ -89,39 +89,8 @@ const topicsData: Record<LevelKey, Topic[]> = {
     summary: `Gerund, fiilin sonuna -ing eklenerek yapılan ve isim gibi kullanılan yapıdır.\n\n**Kullanım Kuralları:**\n- Bazı fiillerden sonra fiil -ing alır: enjoy, like, love, hate, finish, avoid, suggest, recommend\n- Cümlenin başında özne olarak kullanılabilir.\n\n**Sık Yapılan Hatalar:**\n- ~~I enjoy to swim~~ (yanlış), **I enjoy swimming** (doğru)\n- ~~She suggested to go~~ (yanlış), **She suggested going** (doğru)\n\n**Örnekler:**\n1. I enjoy swimming.\n   - (Yüzmekten hoşlanırım.)\n2. Reading is fun.\n   - (Okumak eğlencelidir.)\n3. She avoids eating fast food.\n   - (O, fast food yemekten kaçınır.)\n4. Playing football is my hobby.\n   - (Futbol oynamak benim hobimdir.)`,
       example: `I enjoy swimming. (Yüzmekten hoşlanırım.)\nReading is fun. (Okumak eğlencelidir.)\nShe avoids eating fast food. (O, fast food yemekten kaçınır.)\nPlaying football is my hobby. (Futbol oynamak benim hobimdir.)`,
   tip: 'İpucu: Sevdiğin aktiviteleri -ing ile söyle. "I love dancing", "I hate waiting" gibi cümleler kur.',
-    },
-    {
-      title: 'Infinitives',
-    summary: `Infinitive, "to" + fiil (yalın hali) şeklinde kullanılır.\n\n**Kullanım Kuralları:**\n- Bazı fiillerden sonra "to" + fiil gelir: want, decide, plan, hope, need, learn, promise\n- Amaç belirtirken kullanılır.\n\n**Sık Yapılan Hatalar:**\n- ~~I want learning~~ (yanlış), **I want to learn** (doğru)\n- ~~She decided go~~ (yanlış), **She decided to go** (doğru)\n\n**Örnekler:**\n1. I want to learn English.\n   - (İngilizce öğrenmek istiyorum.)\n2. She decided to go.\n   - (Gitmeye karar verdi.)\n3. We plan to visit London.\n   - (Londra’yı ziyaret etmeyi planlıyoruz.)\n4. He promised to help me.\n   - (Bana yardım etmeye söz verdi.)`,
-      example: `I want to learn English. (İngilizce öğrenmek istiyorum.)\nShe decided to go. (Gitmeye karar verdi.)\nWe plan to visit London. (Londra’yı ziyaret etmeyi planlıyoruz.)\nHe promised to help me. (Bana yardım etmeye söz verdi.)`,
-      tip: 'Dikkat: "to" + fiil ile amaç ve planlarını anlatabilirsin. Hedeflerini renkli post-itlere yazıp tekrar et.'
-    },
-    {
-      title: 'Yön bildiren edatlar (Prepositions of direction)',
-  summary: `Örnek: Go to the park.\n\nBir yerin yönünü veya hareketini anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- to: -e, -a doğru (go to school)\n- from: -den, -dan (come from home)\n- into: içine (go into the room)\n- out of: dışına (get out of the car)\n- across: karşıya (walk across the street)\n- through: içinden (go through the tunnel)\n- along: boyunca (walk along the river)\n- around: etrafında (walk around the park)\n- over: üzerinden (jump over the fence)\n- under: altından (go under the bridge)\n- up: yukarı (go up the stairs)\n- down: aşağı (go down the hill)\n\n**Sık Yapılan Hatalar:**\n- ~~Go at home~~ (yanlış), ~~Go to home~~ (yanlış), **Go home** (doğru)\n- ~~Go to inside~~ (yanlış), **Go inside** (doğru)\n\n**Örnekler:**\n1. Go to the park.\n   - (Parka git.)\n2. Walk across the street.\n   - (Caddeden karşıya yürü.)\n3. She came from school.\n   - (O, okuldan geldi.)\n4. The cat jumped over the wall.\n   - (Kedi duvarın üzerinden atladı.)`,
-      example: `Go to the park. (Parka git.)\nWalk across the street. (Caddeden karşıya yürü.)\nShe came from school. (O, okuldan geldi.)\nThe cat jumped over the wall. (Kedi duvarın üzerinden atladı.)`,
-      tip: 'İpucu: Yön bildiren edatları harita üzerinde veya çizimlerle çalışmak öğrenmeyi kolaylaştırır.'
-    },
-    {
-      title: 'Possessive ‘s & of',
-      summary: `Bir şeyin kime veya neye ait olduğunu göstermek için kullanılır.\n\n**Kullanım Kuralları:**\n- 's: İnsanlar ve hayvanlar için kullanılır.\n- of: Nesneler ve uzun isim tamlamalarında kullanılır.\n\n**Sık Yapılan Hatalar:**\n- ~~The color's sky~~ (yanlış), **The color of the sky** (doğru)\n- **The car of my friend** (doğru ama günlük konuşmada **my friend’s car** daha yaygın)\n\n**Örnekler:**\n1. This is my friend’s car.\n   - (Bu, arkadaşımın arabası.)\n2. The color of the sky is blue.\n   - (Gökyüzünün rengi mavidir.)\n3. My sister’s name is Ayşe.\n   - (Kız kardeşimin adı Ayşe.)\n4. The legs of the table are broken.\n   - (Masasının ayakları kırık.)`,
-      example: `This is my friend’s car. (Bu, arkadaşımın arabası.)\nThe color of the sky is blue. (Gökyüzünün rengi mavidir.)\nMy sister’s name is Ayşe. (Kız kardeşimin adı Ayşe.)\nThe legs of the table are broken. (Masasının ayakları kırık.)`,
-      tip: 'Dikkat: İnsanlar için genellikle "’s", nesneler için "of" kullanılır. Sahiplik ilişkilerini aile fotoğrafı üzerinde göster.'
-    },
-    {
-      title: 'Type 0 (Zero Conditional)',
-      summary: `Genel doğruları, bilimsel gerçekleri ve her zaman doğru olan durumları anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- If + present simple, present simple\n- İki tarafta da geniş zaman kullanılır.\n\n**Sık Yapılan Hatalar:**\n- "If you will heat water, it boils" (yanlış), "If you heat water, it boils" (doğru)\n\n**Örnekler:**\n1. If you heat water, it boils.\n   - (Suyu ısıtırsan kaynar.)\n2. If you touch fire, you get burned.\n   - (Ateşe dokunursan yanarsın.)\n3. If it rains, the grass gets wet.\n   - (Yağmur yağarsa çimenler ıslanır.)\n4. If you mix red and blue, you get purple.\n   - (Kırmızı ve maviyi karıştırırsan mor olur.)`,
-      example: `If you heat water, it boils. (Suyu ısıtırsan kaynar.)\nIf you touch fire, you get burned. (Ateşe dokunursan yanarsın.)\nIf it rains, the grass gets wet. (Yağmur yağarsa çimenler ıslanır.)\nIf you mix red and blue, you get purple. (Kırmızı ve maviyi karıştırırsan mor olur.)`,
-      tip: 'İpucu: Bilimsel gerçekleri ve genel doğruları "if" ile anlat. Deney yaparak örnekler bul.'
-    },
-    {
-      title: 'Comparatives',
-      summary: `İki şeyi karşılaştırmak için kullanılır.\n\n**Kullanım Kuralları:**\n- Kısa sıfatlar: sıfat + -er + than\n- Uzun sıfatlar: more/less + sıfat + than\n- Düzensizler: good → better, bad → worse\n\n**Sık Yapılan Hatalar:**\n- "more faster" (yanlış), "faster" (doğru)\n- "She is more tall than me" (yanlış), "She is taller than me" (doğru)\n\n**Örnekler:**\n1. My car is faster than yours.\n   - (Benim arabam seninkinden daha hızlı.)\n2. This book is more interesting than that one.\n   - (Bu kitap onunkinden daha ilginç.)\n3. He is taller than his brother.\n   - (O, kardeşinden daha uzun.)\n4. Apples are cheaper than oranges.\n   - (Elmalar portakallardan daha ucuz.)`,
-      example: `My car is faster than yours. (Benim arabam seninkinden daha hızlı.)\nThis book is more interesting than that one. (Bu kitap onunkinden daha ilginç.)\nHe is taller than his brother. (O, kardeşinden daha uzun.)\nApples are cheaper than oranges. (Elmalar portakallardan daha ucuz.)`,
-      tip: 'Dikkat: Karşılaştırma yaparken "than" kullanılır. Eşyaları yan yana koyup karşılaştırma cümleleri kur.'
-    },
-    {
-      title: 'Superlatives',
+    ],
+    A2: [
       summary: `Bir grup içinde en üstün (en iyi, en uzun, en pahalı vb.) olanı belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- Kısa sıfatlar: the + sıfat-est\n- Uzun sıfatlar: the most/the least + sıfat\n- Düzensizler: good → the best, bad → the worst\n\n**Sık Yapılan Hatalar:**\n- "the most fastest" (yanlış), "the fastest" (doğru)\n- "She is tallest" (yanlış), "She is the tallest" (doğru)\n\n**Örnekler:**\n1. He is the tallest in the class.\n   - (O, sınıftaki en uzun kişidir.)\n2. This is the most expensive phone.\n   - (Bu, en pahalı telefon.)\n3. She is the best student.\n   - (O, en iyi öğrenci.)\n4. Winter is the coldest season.\n   - (Kış en soğuk mevsimdir.)`,
       example: `He is the tallest in the class. (O, sınıftaki en uzun kişidir.)\nThis is the most expensive phone. (Bu, en pahalı telefon.)\nShe is the best student. (O, en iyi öğrenci.)\nWinter is the coldest season. (Kış en soğuk mevsimdir.)`,
       tip: 'İpucu: Bir grup içindeki en üstün olanı belirtirken "the" ile başla. Sınıftaki en uzun, en iyi, en hızlı kişiyi bul ve cümle kur.'
