@@ -529,58 +529,19 @@ const TopicsPage: React.FC = () => {
                     backgroundColor: '#fff',
                   }}
                 >
-                  {/* Açıklama paragrafı */}
-                  <Box sx={{ mb: 2, fontSize: { xs: 14, md: 15 }, color: '#19376D', lineHeight: 1.7 }}>
-                    {topic.summary.split(/\n\n|\n/).map((p, i) => (
-                      <Box key={i} component="p" sx={{ mb: 1.2 }}>
-                        {p}
-                      </Box>
-                    ))}
+                  {/* İçerikler geçici olarak kaldırıldı - sadece yapı kalsın */}
+                  <Box sx={{
+                    mb: 1,
+                    p: 2,
+                    borderRadius: 2,
+                    bgcolor: 'rgba(0,184,148,0.05)',
+                    border: '1px dashed rgba(0,184,148,0.25)',
+                    color: '#00695c',
+                    fontWeight: 600,
+                    textAlign: 'center'
+                  }}>
+                    Bu konu içerikleri güncelleniyor. Yakında eklenecek.
                   </Box>
-                  
-                  {/* Örnekler kutusu */}
-                  {topic.example && (
-                    <Box sx={{
-                      bgcolor: 'rgba(116, 185, 255, 0.10)',
-                      borderLeft: '4px solid #5CC9F5',
-                      borderRadius: 2,
-                      px: { xs: 1.5, md: 2.5 },
-                      py: { xs: 1.2, md: 1.8 },
-                      my: 2,
-                      fontSize: { xs: 13, md: 15 },
-                      color: '#1976d2',
-                      fontStyle: 'italic',
-                      boxShadow: '0 2px 8px rgba(25,55,109,0.04)'
-                    }}>
-                      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1, color: '#0d47a1' }}>
-                        📝 Örnekler:
-                      </Typography>
-                      {topic.example.split(/\n/).map((ex, i) => (
-                        <Box key={i} sx={{ mb: 0.5, pl: 1 }}>
-                          {ex}
-                        </Box>
-                      ))}
-                    </Box>
-                  )}
-                  
-                  {/* İpucu kutusu */}
-                  {topic.tip && (
-                    <Box sx={{
-                      bgcolor: 'rgba(255, 193, 7, 0.1)',
-                      borderLeft: '4px solid #ffc107',
-                      borderRadius: 2,
-                      px: { xs: 1.5, md: 2.5 },
-                      py: { xs: 1.2, md: 1.5 },
-                      mt: 2,
-                      fontSize: { xs: 13, md: 14 },
-                      color: '#856404',
-                      boxShadow: '0 2px 8px rgba(133,100,4,0.04)'
-                    }}>
-                      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 0.5, color: '#f57f17' }}>
-                        💡 {topic.tip}
-                      </Typography>
-                    </Box>
-                  )}
                 </AccordionDetails>
               </Accordion>
             ))}

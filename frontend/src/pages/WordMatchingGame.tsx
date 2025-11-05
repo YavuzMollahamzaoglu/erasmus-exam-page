@@ -49,6 +49,18 @@ const shuffle = <T,>(arr: T[]): T[] => {
   return a;
 };
 
+// Capitalize helpers (English and Turkish-aware first-letter only)
+const capFirstEn = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+const capFirstTr = (s: string) => {
+  if (!s) return s;
+  const first = s[0];
+  let up = first;
+  if (first === 'i') up = 'İ';
+  else if (first === 'ı') up = 'I';
+  else up = first.toUpperCase();
+  return up + s.slice(1);
+};
+
 export default function WordMatchingGame() {
   useEffect(() => {
     setMetaTags({
@@ -366,7 +378,10 @@ export default function WordMatchingGame() {
               <>
                 {rows.map((row, idx) => (
                   <Box key={idx} sx={{ display: 'grid', gridAutoFlow: 'column', gridAutoColumns: '1fr', gap: 1.5, overflowX: { xs: 'auto', md: 'visible' }, pb: 1 }}>
-                    {row.map((w) => (
+                    {row.map((w, wordIdx) => {
+                      const colorPalette = ['#42a5f5','#ffca28','#ab47bc','#26a69a','#ef5350','#8d6e63','#66bb6a'];
+                      const colorIndex = (w.id + wordIdx) % colorPalette.length;
+                      return (
                       <Box
                         key={w.id}
                         draggable={!w.used && playing}
@@ -386,15 +401,16 @@ export default function WordMatchingGame() {
                           fontSize: { xs: 12, sm: 14 },
                           boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
                           outline: selectedWordId === w.id ? '3px solid rgba(0, 184, 148, 0.9)' : 'none',
-                          background: `linear-gradient(135deg, ${['#42a5f5','#ffca28','#ab47bc','#26a69a','#ef5350','#8d6e63','#66bb6a'][Math.floor(Math.random() * 7)]} 0%, rgba(255,255,255,0.15) 100%)`,
+                          background: `linear-gradient(135deg, ${colorPalette[colorIndex]} 0%, rgba(255,255,255,0.15) 100%)`,
                           transition: 'transform .15s ease',
                           '&:active': { transform: 'scale(0.98)' },
                           minWidth: 88,
                         }}
                       >
-                        {w.text.replace(/İ/g, 'I').replace(/ı/g, 'i')}
+                        {capFirstEn(w.text)}
                       </Box>
-                    ))}
+                      );
+                    })}
                   </Box>
                 ))}
               </>
@@ -430,10 +446,10 @@ export default function WordMatchingGame() {
                   letterSpacing: 0.4,
                   transition: 'all .15s ease',
                 }}>
-                  {t.matched ? t.english.replace(/İ/g, 'I').replace(/ı/g, 'i') : ''}
+                  {t.matched ? capFirstEn(t.english) : ''}
                 </Box>
                 <Typography variant="body2" sx={{ fontWeight: 700, color: '#37474F', textAlign: 'center' }}>
-                  {t.turkish}
+                  {capFirstTr(t.turkish)}
                 </Typography>
               </Box>
             ))}

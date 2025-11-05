@@ -42,6 +42,17 @@ const Words: React.FC = () => {
     // setTimeout(() => setIsSeeding(false), 5000); // Örnek: 5 saniye sonra kapat
   }, [level]);
 
+  // Capitalize Turkish first letter correctly
+  const capFirstTr = (s: string) => {
+    if (!s) return s;
+    const first = s[0];
+    let up = first;
+    if (first === 'i') up = 'İ';
+    else if (first === 'ı') up = 'I';
+    else up = first.toUpperCase();
+    return up + s.slice(1);
+  };
+
   const handleMoreSentences = async (wordId: string, wordText: string) => {
     setCurrentWord(wordText);
     if (!token) {
@@ -93,8 +104,8 @@ const Words: React.FC = () => {
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
               {words.map(w => (
                 <Paper key={w.id} sx={{ p: 2.5, borderRadius: 3, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(0,184,148,0.18)' }}>
-                  <Typography fontWeight={800} fontSize={20} color="#00b894">{w.english.charAt(0).toUpperCase() + w.english.slice(1)}</Typography>
-                  <Typography fontWeight={600} color="#2c3e50" mb={0.5}>{w.turkish}</Typography>
+                  <Typography fontWeight={800} fontSize={20} color="#00b894">{w.english ? w.english[0].toUpperCase() + w.english.slice(1) : ''}</Typography>
+                  <Typography fontWeight={600} color="#2c3e50" mb={0.5}>{capFirstTr(w.turkish)}</Typography>
                   {w.example && (
                     <Typography variant="body2" color="text.secondary">Örnek: {w.example}</Typography>
                   )}

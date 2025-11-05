@@ -35,7 +35,7 @@ const ReadingGame: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load list of passages for the selected level
+  // Load list of passages for the selected level (dedupe by id/title)
   useEffect(() => {
     (async () => {
       try {
@@ -44,7 +44,14 @@ const ReadingGame: React.FC = () => {
         const res = await fetch(`${API}/passages?level=${encodeURIComponent(levelParam)}`);
         if (!res.ok) throw new Error('failed');
         const data = await res.json();
-        const list: Passage[] = (data.passages || []).map((p: any) => ({ id: p.id, title: p.title, text: '', level: p.level }));
+        const raw: Passage[] = (data.passages || []).map((p: any) => ({ id: p.id, title: p.title, text: '', level: p.level }));
+        // Deduplicate
+        const seen = new Set<string>();
+        const list: Passage[] = [];
+        for (const p of raw) {
+          const key = (p.id || p.title).toString();
+          if (!seen.has(key)) { seen.add(key); list.push(p); }
+        }
         setPassages(list);
         setCurrentIdx(0);
       } catch (e) {

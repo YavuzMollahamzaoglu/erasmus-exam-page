@@ -177,8 +177,17 @@ export default function WordHuntGame() {
         const correctOption = words[index].correct;
         const newWrongOption = getAlternativeOption(words[index], wrongOption);
         
-        // Update current options with new wrong option
-        setCurrentOptions([correctOption, newWrongOption]);
+        // Update current options with new wrong option WITHOUT changing button positions
+        setCurrentOptions((prev) => {
+          if (!prev || prev.length === 0) return prev;
+          const wrongIdx = prev.findIndex((o) => o === wrongOption);
+          const next = [...prev];
+          // replace only the wrong option at its index; keep the correct option where it is
+          if (wrongIdx !== -1) {
+            next[wrongIdx] = newWrongOption;
+          }
+          return next;
+        });
       }, 1500);
     }
   };

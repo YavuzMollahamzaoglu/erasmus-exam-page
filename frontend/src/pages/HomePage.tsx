@@ -234,8 +234,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
           <Paper elevation={0} sx={{ mb: 4, p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: '#fff' }}>
             <Typography variant="h6" fontWeight={800} mb={1} sx={{ color: '#00695c' }}>Nasıl çalışmalı?</Typography>
             <Typography fontSize={14} color="#455a64" mb={1.5}>
-              Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap. <br/>
-              <b>Küçük not:</b> Konu sayfasında genel konuları öğrenebilir, her konuya özel küçük notlar alarak soruları nasıl çözeceğini görebilirsin.
+              Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap.
             </Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gridTemplateRows: { xs: 'repeat(6, 1fr)', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
               {/* 1. Satır */}
@@ -245,11 +244,11 @@ const HomePage: React.FC<Props> = ({ token }) => {
               </Box>
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>2) Konu Sayfasında Çalış</Typography>
-                <Typography fontSize={13} color="#607d8b">Konu sayfasında genel konuları öğren, üzerine çalış ve küçük notlar alarak soruları nasıl çözeceğini öğren.</Typography>
+                <Typography fontSize={13} color="#607d8b">Konu sayfasında genel konuları öğren ve İngilizce gramerini pekiştir.</Typography>
               </Box>
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>3) Klasik Sorularla Pekiştir</Typography>
-                <Typography fontSize={13} color="#607d8b">Testler bölümünde dilbilgisi (grammar) ve kelime (vocabulary) odaklı sorularla pratik yap.</Typography>
+                <Typography fontSize={13} color="#607d8b">Yazı yazma (Essay) ve boşluk doldurma gibi alıştırmalarla pratik yap.</Typography>
               </Box>
               {/* 2. Satır */}
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
