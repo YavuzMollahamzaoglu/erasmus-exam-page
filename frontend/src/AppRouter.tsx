@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { pageview } from '@vercel/analytics';
 import ModernLoader from './components/ModernLoader';
 import Box from '@mui/material/Box';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import SkipLink from './components/SkipLink';
 import { installAuthFetchInterceptor } from './utils/installAuthFetchInterceptor';
@@ -89,12 +90,28 @@ const AppRouter: React.FC = () => {
   return <Navbar onNavigate={handleNavigate} token={token} onLogout={handleLogoutNav} userAvatar={userAvatar} userInitial={userInitial} />;
   };
 
+  // RouteTracker must be inside Router to use useLocation; defined here so it can access pageview
+  const RouteTracker: React.FC = () => {
+    const location = useLocation();
+    useEffect(() => {
+      try {
+  // pass the full path so analytics records correct page
+  pageview({ path: location.pathname + location.search });
+      } catch (e) {
+        // ignore analytics errors
+      }
+    }, [location]);
+    return null;
+  };
+
 
 
   return (
     <Router>
       <SkipLink />
   <NavbarWithNavigate userAvatar={userAvatar} userInitial={userInitial} />
+      {/* Track SPA route changes for Vercel Analytics */}
+      <RouteTracker />
       {/* Fixed AppBar spacer to avoid content jump under navbar */}
       <Box sx={{ height: { xs: 56, md: 64 } }} />
   <Suspense fallback={<ModernLoader text="Yükleniyor..." />}> 
