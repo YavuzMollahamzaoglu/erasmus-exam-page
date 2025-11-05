@@ -400,43 +400,50 @@ export default function WordHuntGame() {
         )}
 
         <Box sx={{ display: "flex", flexDirection: 'column', gap: 2, justifyContent: "center", alignItems: 'center', mt: 3 }}>
-          {currentOptions.map((option, i) => (
-            <Box
-              key={option}
-              sx={{
-                width: '100%',
-                maxWidth: 300,
-                minHeight: 60,
-                borderRadius: 2,
-                bgcolor: "#fff",
-                background: gradients[i % gradients.length],
-                color: "#fff",
-                fontSize: option.length > 18 ? 16 : 20,
-                fontWeight: 700,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                position: "relative",
-                transition: "all 0.4s cubic-bezier(.4,2,.3,1)",
-                border: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '4px solid #43ea7c' : selected === option && status === "wrong" ? '4px solid #e74c3c' : '4px solid transparent',
-                boxShadow: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '0 0 12px #43ea7c88' : selected === option && status === "wrong" ? '0 0 12px #e74c3c88' : '0 2px 8px #0001',
-                transform: (selected === option && (status === "correct" || status === "wrong")) || savedCorrect[index]?.selected === option ? 'scale(1.05)' : undefined,
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
-                textAlign: 'center',
-                px: 2,
-                py: 1.5,
-              }}
-              onClick={() => (status === "idle" ? handleSelect(option) : undefined)}
-              style={{ 
-                pointerEvents: (status === "correct" || savedCorrect[index]) ? 'none' : 'auto',
-                opacity: status === "wrong" && selected === option ? 0.7 : 1
-              }}
-            >
-              {option}
-            </Box>
-          ))}
+          {currentOptions.map((option, i) => {
+            // Sabit renkler: Yeşil her zaman üstte (index 0), Mavi her zaman altta (index 1)
+            const buttonGradient = i === 0 
+              ? "linear-gradient(135deg, #00b894 0%, #00cec9 100%)"  // Yeşil - üstte
+              : "linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)"; // Mavi - altta
+            
+            return (
+              <Box
+                key={option}
+                sx={{
+                  width: '100%',
+                  maxWidth: 300,
+                  minHeight: 60,
+                  borderRadius: 2,
+                  bgcolor: "#fff",
+                  background: buttonGradient,
+                  color: "#fff",
+                  fontSize: option.length > 18 ? 16 : 20,
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  position: "relative",
+                  transition: "all 0.4s cubic-bezier(.4,2,.3,1)",
+                  border: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '4px solid #43ea7c' : selected === option && status === "wrong" ? '4px solid #e74c3c' : '4px solid transparent',
+                  boxShadow: (selected === option && status === "correct") || savedCorrect[index]?.selected === option ? '0 0 12px #43ea7c88' : selected === option && status === "wrong" ? '0 0 12px #e74c3c88' : '0 2px 8px #0001',
+                  transform: (selected === option && (status === "correct" || status === "wrong")) || savedCorrect[index]?.selected === option ? 'scale(1.05)' : undefined,
+                  whiteSpace: 'normal',
+                  wordBreak: 'break-word',
+                  textAlign: 'center',
+                  px: 2,
+                  py: 1.5,
+                }}
+                onClick={() => (status === "idle" ? handleSelect(option) : undefined)}
+                style={{ 
+                  pointerEvents: (status === "correct" || savedCorrect[index]) ? 'none' : 'auto',
+                  opacity: status === "wrong" && selected === option ? 0.7 : 1
+                }}
+              >
+                {option}
+              </Box>
+            );
+          })}
         </Box>
         {/* Navigation buttons - only hide during short celebration after a fresh correct */}
         {!showResult && !celebrating && (
