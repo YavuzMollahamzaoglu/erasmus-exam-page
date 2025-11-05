@@ -386,13 +386,13 @@ export default function WordMatchingGame() {
                           fontSize: { xs: 12, sm: 14 },
                           boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
                           outline: selectedWordId === w.id ? '3px solid rgba(0, 184, 148, 0.9)' : 'none',
-                          background: `linear-gradient(135deg, ${['#42a5f5','#ffca28','#ab47bc','#26a69a','#ef5350','#8d6e63','#66bb6a'][w.id % 7]} 0%, rgba(255,255,255,0.15) 100%)`,
+                          background: `linear-gradient(135deg, ${['#42a5f5','#ffca28','#ab47bc','#26a69a','#ef5350','#8d6e63','#66bb6a'][Math.floor(Math.random() * 7)]} 0%, rgba(255,255,255,0.15) 100%)`,
                           transition: 'transform .15s ease',
                           '&:active': { transform: 'scale(0.98)' },
                           minWidth: 88,
                         }}
                       >
-                        {w.text}
+                        {w.text.replace(/İ/g, 'I').replace(/ı/g, 'i')}
                       </Box>
                     ))}
                   </Box>
@@ -426,11 +426,11 @@ export default function WordMatchingGame() {
                   justifyContent: 'center',
                   color: t.matched ? '#fff' : 'inherit',
                   fontWeight: 700,
-                  textTransform: 'uppercase',
+                  textTransform: 'capitalize',
                   letterSpacing: 0.4,
                   transition: 'all .15s ease',
                 }}>
-                  {t.matched ? t.english : ''}
+                  {t.matched ? t.english.replace(/İ/g, 'I').replace(/ı/g, 'i') : ''}
                 </Box>
                 <Typography variant="body2" sx={{ fontWeight: 700, color: '#37474F', textAlign: 'center' }}>
                   {t.turkish}

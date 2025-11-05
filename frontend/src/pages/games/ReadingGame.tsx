@@ -67,7 +67,16 @@ const ReadingGame: React.FC = () => {
         if (!res.ok) throw new Error('not ok');
         const data = await res.json();
         setCurrent(data.passage);
-        setQuestions(data.questions || []);
+        const rawQuestions: ReadingQuestion[] = data.questions || [];
+        // Shuffle options for each question to randomize correct answer position
+        const shuffledQuestions = rawQuestions.map(q => {
+          const correctAnswer = q.options[q.correctIndex];
+          const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+          const newCorrectIndex = shuffledOptions.indexOf(correctAnswer);
+          return { ...q, options: shuffledOptions, correctIndex: newCorrectIndex };
+        });
+        // Also shuffle question order
+        setQuestions(shuffledQuestions.sort(() => Math.random() - 0.5));
         setAnswers({});
         setSubmitted(false);
       } catch (e) {
