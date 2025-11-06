@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#00b894" />
+      <stop offset="100%" stop-color="#00cec9" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)" />
+  <!-- subtle pattern -->
+  <rect x="40" y="40" width="1120" height="550" rx="20" fill="rgba(255,255,255,0.06)" />
+  <!-- logo area: try to reference existing logo.png as a small badge on left if available -->
+  <image href="/logo.png" x="70" y="110" width="120" height="120" preserveAspectRatio="xMidYMid meet" />
+  <!-- Title -->
+  <g transform="translate(220,170)">
+    <text x="0" y="0" fill="#ffffff" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="56">İngilizce Hazırlık</text>
+    <text x="0" y="72" fill="#e6fff7" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="28">Ücretsiz İngilizce pratik — Sınavlara hazır ol</text>
+  </g>
+  <!-- CTA box -->
+  <g transform="translate(220,300)">
+    <rect x="0" y="0" rx="10" ry="10" width="720" height="120" fill="#ffffff" opacity="0.07" />
+    <text x="24" y="46" fill="#ffffff" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="22">Kelime çalışmaları • Okuma • Yazma</text>
+    <text x="24" y="86" fill="#e6fff7" font-family="Poppins, Arial, sans-serif" font-weight="500" font-size="18">Erasmus & Üniversite sınavlarına yönelik pratik</text>
+  </g>
+  <!-- small footer -->
+  <text x="60" y="585" fill="#ffffff" font-family="Poppins, Arial, sans-serif" font-weight="500" font-size="14">ingilizceprep.com</text>
+</svg>

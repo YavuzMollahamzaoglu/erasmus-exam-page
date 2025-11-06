@@ -10,50 +10,107 @@ type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
 const topicsData: Record<LevelKey, Topic[]> = {
   A1: [
     {
-      title: '"To Be" Fiili (am, is, are) – "I am a student."',
-      summary: 'Temel "to be" kullanımı: durum, kimlik ve yer belirtme.',
-      example: 'I am a student. (Ben bir öğrenciyim.)'
-    },
-    {
-      title: 'Simple Present Tense (Geniş Zaman) – "She works in a bank."',
-      summary: 'Günlük rutinler ve genel doğrular için kullanılır.',
-      example: 'She works in a bank. (O bir bankada çalışır.)'
-    },
-    {
-      title: 'This, That, These, Those – "This is my book."',
-      summary: 'Yakın/uzak işaret zamirleri.',
+      title: 'This, That, These, Those',
+      summary: 'İşaret zamirleri ve işaret sıfatlarının kullanımı; yakın/uzak ayrımı.',
       example: 'This is my book. (Bu benim kitabım.)'
     },
     {
-      title: 'There is / There are – "There is a cat in the garden."',
-      summary: 'Bir yerde bir şeyin varlığını ifade eder.',
+      title: 'There is / There are',
+      summary: 'Bir yerde bir şeyin varlığını veya yokluğunu ifade etme yapıları.',
       example: 'There is a cat in the garden. (Bahçede bir kedi var.)'
     },
     {
-      title: 'Can / Can’t (Yetenek Bildiren Cümleler) – "I can swim."',
-      summary: 'Yetenek, izin veya olasılık için kullanılır.',
+      title: 'Can / Can’t (Yetenek Bildiren Cümleler)',
+      summary: 'Yetenek, izin veya basit olasılık ifade ederken kullanılan yapı.',
       example: 'I can swim. (Yüzebilirim.)'
     },
     {
-      title: 'Basic Question Forms (Temel Soru Kalıpları) – "Do you like music?"',
-      summary: 'Yes/No ve Wh- soruları için temel kalıplar.',
+      title: 'Basic Question Forms (Temel Soru Kalıpları)',
+      summary: 'Yes/No ve Wh- soru kalıpları ile temel soru oluşturma.',
       example: 'Do you like music? (Müziği sever misin?)'
     }
   ],
   A2: [
     {
-      title: 'İhtimal anlatan ifadeler – "She may come tomorrow."',
-      summary: 'may, might, could, must, can’t ile olasılık ve kesinlik.',
-      example: 'She may come tomorrow. (Yarın gelebilir.)'
+      title: 'Simple Past Tense (Geçmiş Zaman)',
+      summary: 'Geçmişte belirli bir zamanda tamamlanmış eylemler ve zaman ifadeleri.',
+      example: 'I visited London last year. (Geçen yıl Londra’yı ziyaret ettim.)'
     },
     {
-      title: 'Phrasal Verbs – "Please turn on the lights."',
-      summary: 'Fiil + edat/zarf ile anlam değiştiren yapılar.',
-      example: 'Please turn on the lights. (Lütfen ışıkları aç.)'
+      title: 'Present Continuous Tense (Şimdiki Zaman)',
+      summary: 'Şu anda devam eden veya geçici durumları anlatmak için kullanılır.',
+      example: 'She is studying now. (O şimdi ders çalışıyor.)'
+    },
+    {
+      title: 'Countable & Uncountable Nouns',
+      summary: 'Sayılabilen ve sayılamayan isimlerin ayrımı ve miktar ifadeleriyle kullanımı.',
+      example: 'Many apples (countable), much water (uncountable).'
+    },
+    {
+      title: 'Adjectives & Adverbs (Sıfatlar ve Zarflar)',
+      summary: 'Sıfatların ve zarfların kullanımı, sıfat-zarf dönüşümleri ve yerleri.',
+      example: 'He is a fast runner. / He runs quickly.'
+    },
+    {
+      title: 'Have to / Need to (Zorunluluk Bildiren Yapılar)',
+      summary: 'Zorunluluk, gereklilik ve izin ifadelerinde have to / need to kullanımı.',
+      example: 'I have to go to work. (İşe gitmem gerekiyor.)'
     }
   ],
-  B1: [],
-  B2: []
+  B1: [
+    {
+      title: 'Present Perfect Tense',
+      summary: 'Geçmişte başlayıp şu ana etkisi veya bağlantısı olan eylemler.',
+      example: 'I have lived here for three years. (Üç yıldır burada yaşıyorum.)'
+    },
+    {
+      title: 'Past Perfect Tense',
+      summary: 'Geçmişteki iki olaydan önce gerçekleşmiş eylemi anlatmak için kullanılır.',
+      example: 'She had left before I arrived. (Ben gelmeden önce o gitmişti.)'
+    },
+    {
+      title: 'First Conditional (1. Tip Koşul Cümleleri)',
+      summary: 'Gerçekleşme ihtimali yüksek olan koşullar için if + present → will + fiil yapısı.',
+      example: 'If it rains, I will stay home. (Yağmur yağarsa evde kalırım.)'
+    },
+    {
+      title: 'Modals of Probability (İhtimal Bildiren Modal Yapılar)',
+      summary: 'may, might, must gibi modal fiillerle olasılık derecelerini ifade etme.',
+      example: 'He might come later. (Belki sonra gelir.)'
+    },
+    {
+      title: 'Reflexive Pronouns (Dönüşlülük Zamirleri)',
+      summary: 'myself, yourself, himself ... gibi zamirlerin doğru kullanımı.',
+      example: 'She did it herself. (Bunu kendisi yaptı.)'
+    }
+  ],
+  B2: [
+    {
+      title: 'Passive Voice (Edilgen Yapı)',
+      summary: 'Eylemin failinin önemsiz olduğu veya bilinmediği durumlarda kullanılır.',
+      example: 'The cake was eaten. (Kek yendi.)'
+    },
+    {
+      title: 'Reported Speech (Dolaylı Anlatım)',
+      summary: 'Başkasının sözünü dolaylı biçimde aktarma ve zaman uyumu kuralları.',
+      example: 'She said that she was tired. (Yorgun olduğunu söyledi.)'
+    },
+    {
+      title: 'Relative Clauses (İlgi Cümlecikleri)',
+      summary: 'Noun phrase’i niteleyen who/which/that ile başlayan yan cümleler.',
+      example: 'The man who called is my uncle. (Arayan adam benim amcamdır.)'
+    },
+    {
+      title: 'Third Conditional (3. Tip Koşul Cümleleri)',
+      summary: 'Geçmişte gerçekleşmemiş durumların hayali sonuçlarını ifade eder.',
+      example: 'If I had known, I would have helped. (Bilseydim yardım ederdim.)'
+    },
+    {
+      title: 'Causative (Ettirgen Yapılar)',
+      summary: 'Have/get something done yapısıyla bir işi başkasına yaptırma.',
+      example: 'I had my car cleaned. (Arabamı temizlettim.)'
+    }
+  ]
 };
 
 const levels = ['A1', 'A2', 'B1', 'B2'];

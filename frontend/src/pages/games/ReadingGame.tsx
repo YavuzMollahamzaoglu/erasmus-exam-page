@@ -183,7 +183,7 @@ const ReadingGame: React.FC = () => {
                       {/* Show explanation only for wrong answers after submission */}
                       {isWrong && explanation && (
                         <Box sx={{ mt: 2, p: 2, bgcolor: '#fff3cd', borderRadius: 2, borderLeft: '4px solid #ff9800' }}>
-                          <Typography variant="body2" fontWeight={600} color="#856404" sx={{ mb: 0.5 }}>Açıklama:</Typography>
+                          <Typography variant="body2" fontWeight={600} color="#856404" sx={{ mb: 0.5 }}>Paragraftan yola çıkarak açıklama:</Typography>
                           <Typography variant="body2" color="#856404">{explanation}</Typography>
                         </Box>
                       )}

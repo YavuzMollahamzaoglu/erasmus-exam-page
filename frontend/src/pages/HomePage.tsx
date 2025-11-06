@@ -236,6 +236,9 @@ const HomePage: React.FC<Props> = ({ token }) => {
             <Typography fontSize={14} color="#455a64" mb={1.5}>
               Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap.
             </Typography>
+            <Typography fontSize={13} color="#455a64" mb={2} fontWeight={600}>
+              Kelime Öğrenme Sayfaları — Notlar alarak İngilizce grammar’ı pekiştir.
+            </Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gridTemplateRows: { xs: 'repeat(6, 1fr)', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
               {/* 1. Satır */}
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
@@ -248,7 +251,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
               </Box>
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>
                 <Typography fontWeight={700} color="#19376D" mb={0.5}>3) Klasik Sorularla Pekiştir</Typography>
-                <Typography fontSize={13} color="#607d8b">Yazı yazma (Essay) ve boşluk doldurma gibi alıştırmalarla pratik yap.</Typography>
+                <Typography fontSize={13} color="#607d8b">Essay yazma oyunu ile yazma becerini geliştir; boşluk doldurma ve kelime testleri ile grammar ve vocabulary pratiği yap.</Typography>
               </Box>
               {/* 2. Satır */}
               <Box sx={{ minHeight: 90, display: 'flex', flexDirection: 'column', justifyContent: 'center', bgcolor: 'rgba(0,184,148,0.04)', borderRadius: 2, p: 1.2 }}>

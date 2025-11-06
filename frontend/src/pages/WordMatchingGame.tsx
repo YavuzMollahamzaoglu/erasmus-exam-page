@@ -24,6 +24,7 @@ type Target = {
   id: number; // pair id
   turkish: string;
   english: string; // reveal when matched
+  example?: string;
   matched: boolean;
   wrongFlash: boolean;
 };
@@ -87,6 +88,7 @@ export default function WordMatchingGame() {
   const [playing, setPlaying] = useState(true);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [wrongMsg, setWrongMsg] = useState(false);
+  const [wrongExplanation, setWrongExplanation] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState(false);
 
   // Prepare game by fetching: if setId is provided, use that set; otherwise choose 15 random from words API
@@ -115,6 +117,7 @@ export default function WordMatchingGame() {
         id: p.id,
         turkish: p.turkish,
         english: p.english,
+        example: (p as any).example || (p as any).sentence || '',
         matched: false,
         wrongFlash: false,
       }));
@@ -154,6 +157,7 @@ export default function WordMatchingGame() {
         id: p.id,
         turkish: p.turkish,
         english: p.english,
+        example: (p as any).example || (p as any).sentence || '',
         matched: false,
         wrongFlash: false,
       }));
@@ -217,7 +221,8 @@ export default function WordMatchingGame() {
     if (targets.find((t) => t.id === targetId)?.matched) return;
     if (pool.find((p) => p.id === wordId)?.used) return;
 
-    if (targetId === wordId) {
+  const target = targets.find((t) => t.id === targetId);
+  if (targetId === wordId) {
       // success
       setTargets((prev) =>
         prev.map((t) => (t.id === targetId ? { ...t, matched: true } : t))
@@ -234,9 +239,17 @@ export default function WordMatchingGame() {
           t.id === targetId ? { ...t, wrongFlash: true } : t
         )
       );
+      // set explanation from example sentence if available, otherwise fallback
+      const expl = target?.example && target.example.trim().length > 0
+        ? target.example
+        : target
+        ? `Bu kelime "${capFirstEn(String(target.english).toLowerCase())}" Türkçe'de "${capFirstTr(String(target.turkish).toLocaleLowerCase('tr'))}" anlamına gelir.`
+        : 'Açıklama bulunamadı.';
+      setWrongExplanation(expl as string);
       setWrongMsg(true);
       setTimeout(() => {
         setWrongMsg(false);
+        setWrongExplanation(null);
         setTargets((prev) => prev.map((t) => ({ ...t, wrongFlash: false })));
       }, 650);
     }
@@ -303,6 +316,13 @@ export default function WordMatchingGame() {
             <Typography variant="caption" sx={{ mt: 0.25, color: '#fff', fontWeight: 700 }}>Geri</Typography>
           </Box>
 
+          {/* Desktop back button - restore left-side back button */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1, minWidth: 56 }}>
+            <IconButton onClick={() => navigate('/kelime-eslestirme')} sx={{ color: '#fff' }} aria-label="Geri">
+              <ArrowBackIcon sx={{ fontSize: 26 }} />
+            </IconButton>
+          </Box>
+
           {/* Title - centered on mobile using absolute positioning to avoid shift from side buttons */}
           <Box sx={{ textAlign: 'center', flex: 1, position: { xs: 'absolute', md: 'static' }, left: { xs: '50%', md: 'auto' }, transform: { xs: 'translateX(-50%)', md: 'none' }, zIndex: 1 }}>
             <Typography variant="h5" fontWeight={700} mb={1} sx={{ fontSize: { xs: '1.1rem', md: '1.25rem' } }}>
@@ -351,7 +371,15 @@ export default function WordMatchingGame() {
           {wrongMsg && (
             <Fade in={wrongMsg}>
               <Alert severity="error" icon={<ErrorIcon />} sx={{ mb: 2, borderRadius: 2 }}>
-                Yanlış eşleşme! Tekrar deneyin.
+                <div>
+                  <div>Yanlış eşleşme! Tekrar deneyin.</div>
+                  {wrongExplanation && (
+                    <Box sx={{ mt: 1, p: 1.25, bgcolor: '#fff3cd', borderRadius: 1, borderLeft: '4px solid #ff9800' }}>
+                      <Typography variant="body2" fontWeight={700} color="#856404" sx={{ mb: 0.5 }}>Açıklama:</Typography>
+                      <Typography variant="body2" color="#856404">{wrongExplanation}</Typography>
+                    </Box>
+                  )}
+                </div>
               </Alert>
             </Fade>
           )}
@@ -407,7 +435,7 @@ export default function WordMatchingGame() {
                           minWidth: 88,
                         }}
                       >
-                        {capFirstEn(w.text)}
+                        {capFirstEn(String(w.text).toLowerCase())}
                       </Box>
                       );
                     })}
@@ -446,10 +474,10 @@ export default function WordMatchingGame() {
                   letterSpacing: 0.4,
                   transition: 'all .15s ease',
                 }}>
-                  {t.matched ? capFirstEn(t.english) : ''}
+                  {t.matched ? capFirstEn(String(t.english).toLowerCase()) : ''}
                 </Box>
                 <Typography variant="body2" sx={{ fontWeight: 700, color: '#37474F', textAlign: 'center' }}>
-                  {capFirstTr(t.turkish)}
+                  {capFirstTr(String(t.turkish).toLocaleLowerCase('tr'))}
                 </Typography>
               </Box>
             ))}
