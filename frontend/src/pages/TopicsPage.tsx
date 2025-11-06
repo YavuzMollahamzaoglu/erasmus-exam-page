@@ -129,9 +129,9 @@ To be a piece of cake: Çok kolay olmak.
     },
     {
       title: 'Simple Present Tense (Geniş Zaman)',
-      summary: `Simple Present Tense, Türkçedeki geniş zamanın karşılığıdır ve İngilizcede en yaygın kullanılan zaman kiplerinden biridir. Temel olarak alışkanlıkları, değişmeyen durumları, genel gerçekleri ve planlanmış eylemleri ifade etmek için kullanılır.
+  summary: `Simple Present Tense, Türkçedeki geniş zamanın karşılığıdır ve İngilizcede en yaygın kullanılan zaman kiplerinden biridir. Temel olarak alışkanlıkları, değişmeyen durumları, genel gerçekleri ve planlanmış eylemleri ifade etmek için kullanılır.
 
-## 📌 Simple Present Tense Ne Zaman Kullanılır?
+📌 Simple Present Tense Ne Zaman Kullanılır?
 Geniş zamanın kullanıldığı başlıca durumlar şunlardır:
 
 Rutinler, Alışkanlıklar ve Tekrarlanan Eylemler
@@ -147,7 +147,6 @@ Cats like milk. (Kediler süt sever.)
 
 Değişmeyen Durumlar, Duygular ve Arzular
 Uzun süreli devam eden durumları, hisleri, düşünceleri veya tercihleri belirtir.
-She works in London. (O, Londra'da çalışır.)
 I like chocolate. (Çikolata severim.)
 I don’t believe you. (Sana inanmıyorum.)
 
@@ -166,10 +165,10 @@ Hikaye Anlatımı
 Özellikle masal, fıkra veya kitap özetlerinde hikaye anlatırken olayları daha canlı aktarmak için kullanılır.
 The giant attacks the city. (Dev şehre saldırır.)
 
-## ⚙️ Simple Present Tense Cümle Yapısı
+⚙️ Simple Present Tense Cümle Yapısı
 Geniş zamanda cümle kurmak için "do" ve "does" yardımcı fiilleri kullanılır. Ancak bu yardımcı fiiller çoğunlukla olumsuz ve soru cümlelerinde ortaya çıkar.
 
-### 1. Olumlu Cümleler (Affirmative)
+1. Olumlu Cümleler (Affirmative)
 Formül oldukça basittir. Özneden sonra fiilin 1. hali (V1) getirilir.
 Kural: Subject + Verb (V1) + Object
 Buradaki en önemli kural, üçüncü tekil şahıslarda (He, She, It) fiilin sonuna "-s" takısı almasıdır.
@@ -183,7 +182,7 @@ My dad goes to work every day. (Babam her gün işe gider.)
 DİKKAT: Özneye dikkat edin. "Bizim arkadaşımız" gibi ifadeler tekil sayılır.
 Our friend lives in London. (Bizim arkadaşımız Londra'da yaşar.)(Burada özne "biz" değil, "bizim arkadaşımız"dır, yani "he" veya "she"dir.)
 
-### 2. Olumsuz Cümleler (Negative)
+2. Olumsuz Cümleler (Negative)
 Olumsuz cümle yapmak için don't (do not) veya doesn't (does not) yardımcı fiilleri kullanılır.
 Kural: Subject + do/does + not + Verb (V1) + Object
 I / You / We / They + don't + Verb (V1)
@@ -195,7 +194,7 @@ We don’t speak Turkish. (Türkçe konuşmayız.)
 She doesn’t like football. (O, futbolu sevmez.)
 He doesn’t want ice cream. (O, dondurma istemez.)
 
-### 3. Soru Cümleleri (Interrogative)
+3. Soru Cümleleri (Interrogative)
 Soru yapmak için Do veya Does yardımcı fiilleri cümlenin başına getirilir.
 Kural: Do/Does + Subject + Verb (V1) + Object?
 Do + I / You / We / They + Verb (V1)?
@@ -207,20 +206,20 @@ Do they play football? (Onlar futbol oynar mı?)
 Does it eat dried cat food? (O, kuru kedi maması yer mi?)
 Does she want ice cream? (O, dondurma istiyor mu?)
 
-### 💡 "-s Takısı" İçin Hatırlatıcı Senaryo
+💡 "-s Takısı" İçin Hatırlatıcı Senaryo
 Geniş zamanı bir şirket gibi düşünün. Does ve doesn’t şirketin patronları, -s takısı ise sekreterdir.
 Olumlu Durum: Şirkette her şey yolundayken (cümle olumlu), tüm işlere sekreter (-s) bakar. ( She works. )
 Olumsuz Durum / Sorun: Şirkette bir sorun (olumsuz cümle) veya bir soru (soru cümlesi) olduğunda, patronlar (doesn’t / Does) devreye girer. Patronlar gelince sekreter (-s) doğal olarak aradan çekilir.
 She doesn’t work. (Patron geldi, -s gitti.)
 Does she work? (Patron geldi, -s gitti.)
 
-## 📖 Özet Tablo: Fiil Çekimleri
+📖 Özet Tablo: Fiil Çekimleri
 Olumlu (Affirmative)Olumsuz (Negative)Soru (Interrogative)I sleep (Uyurum)I don't sleep (Uyumam)Do I sleep? (Uyur muyum?)You sleep (Uyursun)You don't sleep (Uyumazsın)Do you sleep? (Uyur musun?)He/She/It sleeps (O uyur)He/She/It doesn't sleep (O uyumaz)Does he/she/it sleep? (O uyur mu?)We sleep (Uyuruz)We don't sleep (Uyumayız)Do we sleep? (Uyur muyuz?)You sleep (Uyursunuz)You don't sleep (Uyumazsınız)Do you sleep? (Uyur musunuz?)They sleep (Uyurlar)They don't sleep (Uyumazlar)Do they sleep? (Uyurlar mı?)
 
-## ✍️ Üçüncü Tekil Şahıs (-s, -es, -ies) Kuralları
+✍️ Üçüncü Tekil Şahıs (-s, -es, -ies) Kuralları
 "He, She, It" özneleriyle olumlu cümle kurarken fiillere eklenen "-s" takısının özel kuralları vardır:Genel Kural: Çoğu fiil sadece -s alır.think → thinksgive → giveswant → wantsplay → plays (Sessiz harf + y kuralının istisnasıdır, vowel+y olduğu için sadece -s alır.)-ss, -x, -ch, -sh ile Bitenler: Fiilin sonu bu harflerle bitiyorsa -es takısı alır.pass → passesfix → fixescatch → catchespush → pushesgo → goes (Bu kurala uyar)do → does (Bu kurala uyar)Sessiz Harf + y ile Bitenler: Fiilin sonu sessiz bir harf ve ardından -y ile bitiyorsa, -y harfi düşer ve yerine -ies gelir.fly → fliescry → criesmarry → marriesstudy → studies
 
-## 🕒 Simple Present Tense Zaman Zarfları (Sıklık Zarfları)
+🕒 Simple Present Tense Zaman Zarfları (Sıklık Zarfları)
 Geniş zaman cümleleri, eylemin ne sıklıkla yapıldığını belirten zarflarla kullanılır.
 Zarf (Adverb)TürkçesiÖrnek Cümlealwaysdaima, her zamanI always love you. (Seni her zaman severim.)usuallygenellikleI usually listen to classical music. (Genellikle klasik müzik dinlerim.)oftensık sıkI often visit him. (Onu sık sık ziyaret ederim.)sometimesbazen, ara sıraI sometimes go to the cinema. (Bazen sinemaya giderim.)rarelynadirenI rarely smoke. (Nadiren sigara içerim.)neverasla, hiçI never smoke. (Asla sigara içmem.)every...her...I go fishing every Monday. (Her pazar balık tutmaya giderim.)
 
@@ -238,7 +237,7 @@ That: Şu / O
 These: Bunlar / Bu
 Those: Şunlar / Şu / O
 
-## Temel Kural: Yakınlık ve Sayı Matrisi
+Temel Kural: Yakınlık ve Sayı Matrisi
 İngilizcede hangi işaret kelimesini kullanacağımıza karar verirken iki temel unsura dikkat ederiz:
 Yakınlık (Proximity): İşaret ettiğimiz şey konuşmacıya yakın mı, yoksa uzak mı?
 Sayı (Number): İşaret ettiğimiz şey tekil mi (bir tane), yoksa çoğul mu (birden fazla)?
@@ -248,10 +247,10 @@ Yakın (Here)\tUzak (There)
 Tekil (Singular)\tThis (Bu)\tThat (Şu / O)
 Çoğul (Plural)\tThese (Bunlar)\tThose (Şunlar / Onlar)
 
-## En Önemli Fark: İşaret Zamiri (Pronoun) vs. İşaret Sıfatı (Adjective)
+En Önemli Fark: İşaret Zamiri (Pronoun) vs. İşaret Sıfatı (Adjective)
 Bu dört kelime (this, that, these, those) cümlede iki farklı görevde kullanılabilir. Bu ayrımı anlamak, konunun temelini oluşturur.
 
-### 1. İşaret Zamiri (Demonstrative Pronoun)
+1. İşaret Zamiri (Demonstrative Pronoun)
 Görevi: İsmin yerine geçer.
 Kullanımı: Cümlede tek başına kullanılabilir. Kendisinden sonra bir isim gelmesine gerek yoktur, çünkü zaten o ismin yerini tutar.
 Örnekler:
@@ -261,7 +260,7 @@ That is our house. (O bizim evimiz.)
 I’d like to buy these. (Bunları satın almak istiyorum.)
 Did you do that? (Bunu sen mi yaptın?)
 
-### 2. İşaret Sıfatı (Demonstrative Adjective)
+2. İşaret Sıfatı (Demonstrative Adjective)
 Görevi: İsmi niteler (belirtir). Hangi isimden bahsettiğimizi gösterir.
 Kullanımı: Tek başına kullanılamaz. Mutlaka kendisinden sonra bir isim gelmesi gerekir.
 Örnekler:
@@ -270,9 +269,9 @@ These pens are blue. (Bu kalemler mavidir.)
 That city is crowded. (O şehir kalabalıktır.)
 Those flowers are beautiful. (Şu çiçekler güzeldir.)
 
-## Kullanım Alanları ve İpuçları
+Kullanım Alanları ve İpuçları
 
-### 1. "Here" ve "There" İpucu
+1. "Here" ve "There" İpucu
 Cümlelerde yakınlık veya uzaklığı pekiştirmek için here (burada) ve there / over there (orada, şurada) ifadeleri sıkça kullanılır. Bu ifadeler, doğru kelimeyi seçmeniz için size bir ipucu verir:
 Yakın (here) → This / These
 Look at this newspaper here. (Buradaki bu gazeteye bak.)
@@ -282,7 +281,7 @@ Uzak (there / over there) → That / Those
 That building over there is the Chrysler Building. (Oradaki şu bina Chrysler Binası'dır.)
 Those people over there are my parents. (Şuradaki o insanlar benim ebeveynlerim.)
 
-### 2. Fiziksel ve Psikolojik Mesafe (This/That)
+2. Fiziksel ve Psikolojik Mesafe (This/That)
 Yakınlık ve uzaklık her zaman fiziksel olmak zorunda değildir. Bazen duygusal, psikolojik veya zamansal bir mesafeyi de ifade edebilir:
 
 Fiziksel Mesafe:Who owns that house? (Şu evin sahibi kim?) (Fiziksel olarak uzakta)
@@ -296,27 +295,27 @@ Psikolojik / Duygusal Uzaklık (Olumsuz/Nötr):
 That's nothing to do with me. (Bunun benimle hiçbir alakası yok.)
 I don’t like that idea. (O fikri sevmedim / O fikir bana uymuyor.)
 
-### 3. Zaman İfadeleri
+3. Zaman İfadeleri
 This (Şu an veya yakın gelecek):
 I’m going on vacation this month. (Bu ay tatile gidiyorum.)
 That (Geçmiş zaman):
 That summer was unforgettable. (O yaz unutulmazdı.)
 
-### 4. Özel Kullanım Durumları
+4. Özel Kullanım Durumları
 Kişileri Tanıtma:Hello, this is my friend, Mark. (Merhaba, bu benim arkadaşım Mark.)
 These are my friends. (Bunlar benim arkadaşlarım.)
 Is that your colleague? (Şu senin meslektaşın mı?)
 Telefon Görüşmeleri:Hello, this is Joanna speaking. (Merhaba, ben Joanna konuşuyorum.)
 Is that John? (Sen John musun? / Oradaki John mu?)
 
-## Dil Bilgisi Notları ve "One" Kullanımı
+Dil Bilgisi Notları ve "One" Kullanımı
 Bu yapıların dil bilgisi açısından kullanımını özetlersek:
 İsimden Önce (Sıfat):Do you remember that great day in London? (Londra'daki o mükemmel günü hatırlıyor musun?)
 Tek Başına (Zamir):I will never forget this. (Bunu asla unutmayacağım.)
 "One" Kelimesinden Önce:İsmi tekrar etmemek için "one" (tekiller için) veya "ones" (çoğullar için) kelimesiyle birlikte sıfat gibi kullanılabilirler.
 This car looks cleaner than that one. (Bu araba, şundan [o diğer arabadan] daha temiz görünüyor.)
 
-## Sık Kullanılan Kalıplar ve Deyimler
+Sık Kullanılan Kalıplar ve Deyimler
 That’s it! (İşte bu! / Tamamdır! / Aradığım şey bu!)
 That’s all. (Hepsi bu kadar.)
 That’s right. (Doğru.)
@@ -331,7 +330,131 @@ In this case... (Bu durumda...)`,
     },
     {
       title: 'There is / There are',
-      summary: 'Bir yerde bir şeyin varlığını veya yokluğunu ifade etme yapıları.',
+      summary: `Merhaba! Bugünkü konumuz İngilizcedeki en temel ve en çok kullanılan yapılardan biri olan "There is / There are". Bu yapıyı Türkçedeki "var" ifadesinin karşılığı olarak düşünebilirsiniz. Bir şeyin varlığını, bulunduğunu veya bir şeyin yerini bildirmek için bu kalıbı kullanırız.
+
+Temel kural çok basit:
+
+Varlığını bildirdiğimiz şey tekil (bir tane) ise "There is" kullanırız.
+
+Varlığını bildirdiğimiz şey çoğul (birden fazla) ise "There are" kullanırız.
+
+Şimdi bu yapıyı cümle türlerine göre detaylıca inceleyelim.
+
+## 1. Olumlu Cümleler (Affirmative)
+Olumlu cümlelerde "var" demek için cümlenin başına "There is" veya "There are" getiririz.
+
+Formül: There is + Tekil İsim
+Formül: There are + Çoğul İsim
+
+Örnekler:
+
+There is a big tree in the garden. (Bahçede büyük bir ağaç var.)
+
+There is a cat under the bed. (Yatağın altında bir kedi var.)
+
+There is a beautiful dress in the wardrobe. (Gardıropta güzel bir elbise var.)
+
+There are some students in the classroom. (Sınıfta birkaç tane öğrenci var.)
+
+There are two chairs in the room. (Odada iki sandalye var.)
+
+There are five water bottles in the fridge. (Buzdolabında 5 tane su şişesi var.)
+
+### Sayılabilen ve Sayılamayan İsimler (Countable & Uncountable)
+Burada çok önemli bir detaya dikkat etmeliyiz. İngilizcede "su, süt, para, şeker, makarna" (water, milk, money, sugar, pasta) gibi bazı isimler sayılamayan (uncountable) kabul edilir.
+
+Sayılamayan isimler çoğul eki (-s) alamazlar ve her zaman tekil kabul edilirler. Bu yüzden sayılamayan bir isimden bahsederken her zaman "There is" kullanırız.
+
+There is some milk in the fridge. (Buzdolabında biraz süt var.)
+
+There isn't any money in the bag. (Çantada hiç para yok.)
+
+There is some honey in the tea. (Çayda biraz bal var.)
+
+## 2. Olumsuz Cümleler (Negative)
+Bu yapıyı olumsuz yapmak, yani Türkçedeki "yok" ifadesini vermek için is veya are yardımcı fiillerinden sonra "not" ekleriz.
+
+Formül: There is not (isn't) + Tekil İsim
+Formül: There are not (aren't) + Çoğul İsim
+
+Örnekler:
+
+There isn't a problem between us. (Aramızda bir problem yok.)
+
+There isn't a poster on the wall. (Duvarda bir poster yok.)
+
+There aren't any students in the classroom. (Sınıfta hiç öğrenci yok.)
+
+There aren't any books on the shelf. (Rafta hiç kitap yok.)
+
+There aren't five people in that room. (O odada beş kişi yok.)
+
+## 3. Soru Cümleleri (Interrogative)
+Soru sormak istediğimizde, diğer İngilizce yapılarından alışkın olduğumuz gibi, yardımcı fiili (is / are) cümlenin başına alırız.
+
+### A. Evet/Hayır Soru Cı̈mleleri
+Formül: Is there + Tekil İsim?
+Formül: Are there + Çoğul İsim?
+
+Örnekler:
+
+Is there a good hotel near here? (Afedersiniz, buralarda güzel bir otel var mı?)
+
+Is there a cat under the table? (Masanın altında bir kedi var mı?)
+
+Is there a university in your city? (Şehrinde bir üniversite var mı?)
+
+Are there two books on the table? (Masanın üzerinde iki kitap var mı?)
+
+Are there six plates on the counter? (Tezgahın üstünde altı tabak mı var?)
+
+### B. Olumsuz Soru Cümleleri
+"Yok mu?" diye sormak istediğimizde olumsuz soru kalıbını kullanırız.
+
+Örnekler:
+
+Isn't there a dog in the garden? (Bahçede bir köpek yok mudur?)
+
+Aren't there two balls in the box? (Kutunun içinde iki top yok mudur?)
+
+Is there not a book on the table? (Masanın üzerinde bir kitap yok mudur?)
+
+## 4. "Some," "Any" ve "No" ile Kullanım
+"There is / There are" yapısıyla birlikte "biraz", "birkaç" veya "hiç" demek için bu kelimeleri sıkça kullanırız.
+
+Some (Biraz / Birkaç): Genellikle olumlu cümlelerde kullanılır. Hem sayılamayan isimlerle ("biraz") hem de sayılabilen çoğul isimlerle ("birkaç") kullanılabilir.
+
+There is some honey in the tea. (Çayda biraz bal var.)
+
+There are some birds outside. (Dışarıda birkaç kuş var.)
+
+Any (Hiç): Genellikle olumsuz cümlelerde ve soru cümlelerinde kullanılır. "Hiç" anlamı katar.
+
+There aren't any limits! (Hiçbir sınır yok!)
+
+Is there any pasta left? (Hiç makarna kaldı mı?)
+
+There isn't any money in the bag. (Çantada hiç para yok.)
+
+No (Hiç / Yok): "Any" ile aynı anlamı verir ("hiç") ama çok önemli bir farkı vardır: No, yapısı olumlu olan cümlelerde kullanılır ve cümleyi kendi başına olumsuz yapar. "No" kullanılan bir cümlede "not" (isn't/aren't) kullanılmaz.
+
+There is no way it’s true! (Bunun doğru olmasının hiçbir yolu yok!)
+
+There are no eggs in the basket. (Sepette hiç yumurta yok.) (There aren't any eggs... ile aynı anlamda)
+
+There is no teacher in the classroom. (Sınıfta öğretmen yok.)
+
+## 5. Önemli Fark: "There is" mi, "It is" mi?
+Bu iki yapı sıkça karıştırılır ama aralarındaki fark çok nettir:
+
+There is: Bir şeyin varlığından ilk kez bahsederken, bir şeyi ortama tanıtırken kullanılır. ("Var" anlamındadır.)
+
+There is a vase on the table. (Masanın üzerinde bir vazo var.) (Yanlış kullanım: It's a vase on the table.)
+
+It is: Daha önce bahsedilen, ne olduğu zaten bilinen bir nesneyi veya durumu tanımlarken, nitelerken kullanılır. ("O ...-dır" anlamındadır.)
+
+I like this vase. It is very expensive. (Bu vazoyu seviyorum. O çok pahalı.) (Yanlış kullanım: There is very expensive.)
+`,
       example: 'There is a cat in the garden. (Bahçede bir kedi var.)'
     },
     {
@@ -494,6 +617,7 @@ const TopicsPage: React.FC = () => {
       .split(/\n{2,}/)
       .map((block, i) => {
         const trimmed = block.trim();
+        // Heading markers (## / ###) from pasted content
         if (/^##\s*/.test(trimmed)) {
           return (
             <Typography key={i} variant="h6" sx={{ mt: 2, mb: 1, fontWeight: 700, fontSize: { xs: 15, md: 16 } }}>
@@ -505,6 +629,17 @@ const TopicsPage: React.FC = () => {
           return (
             <Typography key={i} variant="subtitle1" sx={{ mt: 1, mb: 1, fontWeight: 700, fontSize: { xs: 14, md: 15 } }}>
               {trimmed.replace(/^###\s*/, '')}
+            </Typography>
+          );
+        }
+        // Fallback: treat short single-line blocks that start with an uppercase letter as headings
+        const firstLine = trimmed.split('\n')[0] || '';
+        const isShort = firstLine.length > 0 && firstLine.length < 80 && trimmed.split('\n').length === 1;
+        const startsWithUpper = /^[A-ZÇĞİÖŞÜ]/.test(firstLine);
+        if (isShort && startsWithUpper) {
+          return (
+            <Typography key={i} variant="h6" sx={{ mt: 2, mb: 1, fontWeight: 700, fontSize: { xs: 15, md: 16 } }}>
+              {trimmed}
             </Typography>
           );
         }
