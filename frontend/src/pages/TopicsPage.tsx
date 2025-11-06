@@ -10,43 +10,36 @@ type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
 const topicsData: Record<LevelKey, Topic[]> = {
   A1: [
     {
-      title: 'To Be Fiili (am, is, are)',
-      summary: 'Kimlik, durum veya yer belirtmek için kullanılır. Kısa örnek: I am a student.',
-      example: 'I am a student. (Ben bir öğrenciyim.)',
-      tip: 'İpucu: Am/is/are ile kendi durumlarını sınıfta söyleyerek pratik yapın.'
+      title: 'Simple Present Tense',
+  summary: `Örnek: I go to school every day.\n\nGeniş zaman, alışkanlıklar, genel doğrular ve rutinler için kullanılır.\n\n**Kullanım Kuralları:**\n- Olumlu: özne + fiil (he/she/it için -s takısı)\n- Olumsuz: özne + do/does not + fiil\n- Soru: Do/Does + özne + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~He go to school~~ (yanlış), **He goes to school** (doğru)\n- ~~I goes~~ (yanlış), **I go** (doğru)\n\n**Örnekler:**\n1. I go to school every day.\n   - (Her gün okula giderim.)\n2. She plays tennis.\n   - (O tenis oynar.)\n3. We don’t eat meat.\n   - (Biz et yemeyiz.)\n4. Does he like music?\n   - (O müzik sever mi?)`,
+      example: `I go to school every day. (Her gün okula giderim.)\nShe plays tennis. (O tenis oynar.)\nWe don’t eat meat. (Biz et yemeyiz.)\nDoes he like music? (O müzik sever mi?)`,
+      tip: 'İpucu: Günlük rutinlerini çizelgeyle göster, -s takısını renkli kalemle vurgula.'
     },
     {
-      title: 'Simple Present Tense (Geniş Zaman)',
-      summary: 'Alışkanlıklar ve genel doğrular için kullanılır. Kısa örnek: She works in a bank.',
-      example: 'She works in a bank. (O bir bankada çalışır.)',
-      tip: 'İpucu: Günlük rutinlerinizi yazarak geniş zamanı kullanın.'
-    },
-    {
-      title: 'This, That, These, Those',
-      summary: 'Yakın/uzak nesneleri belirtmek için kullanılır. Kısa örnek: This is my book.',
-      example: 'This is my book. (Bu benim kitabım.)',
-      tip: 'İpucu: Nesneleri gösterip this/that/these/those ile eşleştirin.'
+      title: 'To Be (am/is/are)',
+      summary: `Kişi veya nesnenin durumunu, kimliğini veya yerini belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- I am, You/We/They are, He/She/It is\n- Olumsuz: am/is/are + not\n- Soru: Am/Is/Are + özne\n\n**Sık Yapılan Hatalar:**\n- ~~He are happy~~ (yanlış), **He is happy** (doğru)\n- ~~I is a student~~ (yanlış), **I am a student** (doğru)\n\n**Örnekler:**\n1. She is a student.\n   - (O bir öğrenci.)\n2. I am tired.\n   - (Yorgunum.)\n3. Are you ready?\n   - (Hazır mısın?)\n4. We are at home.\n   - (Biz evdeyiz.)`,
+      example: `She is a student. (O bir öğrenci.)\nI am tired. (Yorgunum.)\nAre you ready? (Hazır mısın?)\nWe are at home. (Biz evdeyiz.)`,
+      tip: 'İpucu: Sınıfta herkesin durumunu yazıp am/is/are ile cümle kur.'
     },
     {
       title: 'There is / There are',
-      summary: 'Bir yerde bir şeyin varlığını anlatmak için kullanılır. Kısa örnek: There is a cat in the garden.',
-      example: 'There is a cat in the garden. (Bahçede bir kedi var.)',
-      tip: 'İpucu: Sınıfta nesneleri sayıp there is/are ile cümle kurun.'
+      summary: `Bir yerde bir şeyin varlığını anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- There is: tekil nesneler için\n- There are: çoğul nesneler için\n\n**Sık Yapılan Hatalar:**\n- ~~There are a book~~ (yanlış), **There is a book** (doğru)\n- ~~There is apples~~ (yanlış), **There are apples** (doğru)\n\n**Örnekler:**\n1. There is a book on the table.\n   - (Masada bir kitap var.)\n2. There are three chairs.\n   - (Üç sandalye var.)\n3. Is there a problem?\n   - (Bir sorun var mı?)\n4. There aren’t any students.\n   - (Hiç öğrenci yok.)`,
+      example: `There is a book on the table. (Masada bir kitap var.)\nThere are three chairs. (Üç sandalye var.)\nIs there a problem? (Bir sorun var mı?)\nThere aren’t any students. (Hiç öğrenci yok.)`,
+      tip: 'İpucu: Sınıfta nesneleri sayarak "there is/are" ile cümle kur.'
     },
     {
-      title: 'Can / Can’t (Yetenek Bildiren Cümleler)',
-      summary: 'Yetenek veya izin belirtmek için can/can’t kullanılır. Kısa örnek: I can swim.',
-      example: 'I can swim. (Yüzebilirim.)',
-      tip: 'İpucu: Sınıfta kim hangi yeteneğe sahip, can/can’t ile yazın.'
+      title: 'This/That/These/Those',
+      summary: `Yakın ve uzak nesneleri belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- This/These: yakın\n- That/Those: uzak\n\n**Sık Yapılan Hatalar:**\n- ~~This books~~ (yanlış), **These books** (doğru)\n- ~~Those is my friends~~ (yanlış), **Those are my friends** (doğru)\n\n**Örnekler:**\n1. This is my bag.\n   - (Bu benim çantam.)\n2. Those are my friends.\n   - (Şunlar benim arkadaşlarım.)\n3. That is a cat.\n   - (Şu bir kedi.)\n4. These are apples.\n   - (Bunlar elma.)`,
+      example: `This is my bag. (Bu benim çantam.)\nThose are my friends. (Şunlar benim arkadaşlarım.)\nThat is a cat. (Şu bir kedi.)\nThese are apples. (Bunlar elma.)`,
+      tip: 'İpucu: Nesneleri göstererek "this/that/these/those" ile cümle kur.'
     },
     {
-      title: 'Basic Question Forms (Temel Soru Kalıpları)',
-      summary: 'Temel soru cümleleri: Do/Does, Wh- soruları vb. Kısa örnek: Do you like tea?',
-      example: 'Do you like tea? (Çayı sever misin?)',
-      tip: 'İpucu: Öğrenciler eşleştirici oyunla soru-cevap çalışsın.'
-    }
-  ],
-  A2: [
+      title: 'Can',
+      summary: `Yetenek, izin veya olasılık belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- can + fiil (yalın)\n- Olumsuz: cannot (can’t) + fiil\n- Soru: Can + özne + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~He cans swim~~ (yanlış), **He can swim** (doğru)\n- ~~Can you to help me?~~ (yanlış), **Can you help me?** (doğru)\n\n**Örnekler:**\n1. I can swim.\n   - (Yüzebilirim.)\n2. Can I open the window?\n   - (Pencereyi açabilir miyim?)\n3. She can’t drive.\n   - (O araba süremez.)\n4. Can you help me?\n   - (Bana yardım edebilir misin?)`,
+      example: `I can swim. (Yüzebilirim.)\nCan I open the window? (Pencereyi açabilir miyim?)\nShe can’t drive. (O araba süremez.)\nCan you help me? (Bana yardım edebilir misin?)`,
+      tip: 'İpucu: Sınıfta kim neyi yapabiliyor, "can/can’t" ile cümle kur.'
+    },
+    {
       title: 'Have/Has',
       summary: `Sahip olunan şeyleri anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- I/You/We/They have\n- He/She/It has\n- Olumsuz: don’t/doesn’t have\n- Soru: Do/Does ... have\n\n**Sık Yapılan Hatalar:**\n- ~~He have a bike~~ (yanlış), **He has a bike** (doğru)\n- ~~I has a book~~ (yanlış), **I have a book** (doğru)\n\n**Örnekler:**\n1. He has a bike.\n   - (Onun bir bisikleti var.)\n2. I have a book.\n   - (Bir kitabım var.)\n3. Do you have a pet?\n   - (Evcil hayvanın var mı?)\n4. We don’t have a car.\n   - (Bizim arabamız yok.)`,
       example: `He has a bike. (Onun bir bisikleti var.)\nI have a book. (Bir kitabım var.)\nDo you have a pet? (Evcil hayvanın var mı?)\nWe don’t have a car. (Bizim arabamız yok.)`,
@@ -89,8 +82,39 @@ const topicsData: Record<LevelKey, Topic[]> = {
     summary: `Gerund, fiilin sonuna -ing eklenerek yapılan ve isim gibi kullanılan yapıdır.\n\n**Kullanım Kuralları:**\n- Bazı fiillerden sonra fiil -ing alır: enjoy, like, love, hate, finish, avoid, suggest, recommend\n- Cümlenin başında özne olarak kullanılabilir.\n\n**Sık Yapılan Hatalar:**\n- ~~I enjoy to swim~~ (yanlış), **I enjoy swimming** (doğru)\n- ~~She suggested to go~~ (yanlış), **She suggested going** (doğru)\n\n**Örnekler:**\n1. I enjoy swimming.\n   - (Yüzmekten hoşlanırım.)\n2. Reading is fun.\n   - (Okumak eğlencelidir.)\n3. She avoids eating fast food.\n   - (O, fast food yemekten kaçınır.)\n4. Playing football is my hobby.\n   - (Futbol oynamak benim hobimdir.)`,
       example: `I enjoy swimming. (Yüzmekten hoşlanırım.)\nReading is fun. (Okumak eğlencelidir.)\nShe avoids eating fast food. (O, fast food yemekten kaçınır.)\nPlaying football is my hobby. (Futbol oynamak benim hobimdir.)`,
   tip: 'İpucu: Sevdiğin aktiviteleri -ing ile söyle. "I love dancing", "I hate waiting" gibi cümleler kur.',
-    ],
-    A2: [
+    },
+    {
+      title: 'Infinitives',
+    summary: `Infinitive, "to" + fiil (yalın hali) şeklinde kullanılır.\n\n**Kullanım Kuralları:**\n- Bazı fiillerden sonra "to" + fiil gelir: want, decide, plan, hope, need, learn, promise\n- Amaç belirtirken kullanılır.\n\n**Sık Yapılan Hatalar:**\n- ~~I want learning~~ (yanlış), **I want to learn** (doğru)\n- ~~She decided go~~ (yanlış), **She decided to go** (doğru)\n\n**Örnekler:**\n1. I want to learn English.\n   - (İngilizce öğrenmek istiyorum.)\n2. She decided to go.\n   - (Gitmeye karar verdi.)\n3. We plan to visit London.\n   - (Londra’yı ziyaret etmeyi planlıyoruz.)\n4. He promised to help me.\n   - (Bana yardım etmeye söz verdi.)`,
+      example: `I want to learn English. (İngilizce öğrenmek istiyorum.)\nShe decided to go. (Gitmeye karar verdi.)\nWe plan to visit London. (Londra’yı ziyaret etmeyi planlıyoruz.)\nHe promised to help me. (Bana yardım etmeye söz verdi.)`,
+      tip: 'Dikkat: "to" + fiil ile amaç ve planlarını anlatabilirsin. Hedeflerini renkli post-itlere yazıp tekrar et.'
+    },
+    {
+      title: 'Yön bildiren edatlar (Prepositions of direction)',
+  summary: `Örnek: Go to the park.\n\nBir yerin yönünü veya hareketini anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- to: -e, -a doğru (go to school)\n- from: -den, -dan (come from home)\n- into: içine (go into the room)\n- out of: dışına (get out of the car)\n- across: karşıya (walk across the street)\n- through: içinden (go through the tunnel)\n- along: boyunca (walk along the river)\n- around: etrafında (walk around the park)\n- over: üzerinden (jump over the fence)\n- under: altından (go under the bridge)\n- up: yukarı (go up the stairs)\n- down: aşağı (go down the hill)\n\n**Sık Yapılan Hatalar:**\n- ~~Go at home~~ (yanlış), ~~Go to home~~ (yanlış), **Go home** (doğru)\n- ~~Go to inside~~ (yanlış), **Go inside** (doğru)\n\n**Örnekler:**\n1. Go to the park.\n   - (Parka git.)\n2. Walk across the street.\n   - (Caddeden karşıya yürü.)\n3. She came from school.\n   - (O, okuldan geldi.)\n4. The cat jumped over the wall.\n   - (Kedi duvarın üzerinden atladı.)`,
+      example: `Go to the park. (Parka git.)\nWalk across the street. (Caddeden karşıya yürü.)\nShe came from school. (O, okuldan geldi.)\nThe cat jumped over the wall. (Kedi duvarın üzerinden atladı.)`,
+      tip: 'İpucu: Yön bildiren edatları harita üzerinde veya çizimlerle çalışmak öğrenmeyi kolaylaştırır.'
+    },
+    {
+      title: 'Possessive ‘s & of',
+      summary: `Bir şeyin kime veya neye ait olduğunu göstermek için kullanılır.\n\n**Kullanım Kuralları:**\n- 's: İnsanlar ve hayvanlar için kullanılır.\n- of: Nesneler ve uzun isim tamlamalarında kullanılır.\n\n**Sık Yapılan Hatalar:**\n- ~~The color's sky~~ (yanlış), **The color of the sky** (doğru)\n- **The car of my friend** (doğru ama günlük konuşmada **my friend’s car** daha yaygın)\n\n**Örnekler:**\n1. This is my friend’s car.\n   - (Bu, arkadaşımın arabası.)\n2. The color of the sky is blue.\n   - (Gökyüzünün rengi mavidir.)\n3. My sister’s name is Ayşe.\n   - (Kız kardeşimin adı Ayşe.)\n4. The legs of the table are broken.\n   - (Masasının ayakları kırık.)`,
+      example: `This is my friend’s car. (Bu, arkadaşımın arabası.)\nThe color of the sky is blue. (Gökyüzünün rengi mavidir.)\nMy sister’s name is Ayşe. (Kız kardeşimin adı Ayşe.)\nThe legs of the table are broken. (Masasının ayakları kırık.)`,
+      tip: 'Dikkat: İnsanlar için genellikle "’s", nesneler için "of" kullanılır. Sahiplik ilişkilerini aile fotoğrafı üzerinde göster.'
+    },
+    {
+      title: 'Type 0 (Zero Conditional)',
+      summary: `Genel doğruları, bilimsel gerçekleri ve her zaman doğru olan durumları anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- If + present simple, present simple\n- İki tarafta da geniş zaman kullanılır.\n\n**Sık Yapılan Hatalar:**\n- "If you will heat water, it boils" (yanlış), "If you heat water, it boils" (doğru)\n\n**Örnekler:**\n1. If you heat water, it boils.\n   - (Suyu ısıtırsan kaynar.)\n2. If you touch fire, you get burned.\n   - (Ateşe dokunursan yanarsın.)\n3. If it rains, the grass gets wet.\n   - (Yağmur yağarsa çimenler ıslanır.)\n4. If you mix red and blue, you get purple.\n   - (Kırmızı ve maviyi karıştırırsan mor olur.)`,
+      example: `If you heat water, it boils. (Suyu ısıtırsan kaynar.)\nIf you touch fire, you get burned. (Ateşe dokunursan yanarsın.)\nIf it rains, the grass gets wet. (Yağmur yağarsa çimenler ıslanır.)\nIf you mix red and blue, you get purple. (Kırmızı ve maviyi karıştırırsan mor olur.)`,
+      tip: 'İpucu: Bilimsel gerçekleri ve genel doğruları "if" ile anlat. Deney yaparak örnekler bul.'
+    },
+    {
+      title: 'Comparatives',
+      summary: `İki şeyi karşılaştırmak için kullanılır.\n\n**Kullanım Kuralları:**\n- Kısa sıfatlar: sıfat + -er + than\n- Uzun sıfatlar: more/less + sıfat + than\n- Düzensizler: good → better, bad → worse\n\n**Sık Yapılan Hatalar:**\n- "more faster" (yanlış), "faster" (doğru)\n- "She is more tall than me" (yanlış), "She is taller than me" (doğru)\n\n**Örnekler:**\n1. My car is faster than yours.\n   - (Benim arabam seninkinden daha hızlı.)\n2. This book is more interesting than that one.\n   - (Bu kitap onunkinden daha ilginç.)\n3. He is taller than his brother.\n   - (O, kardeşinden daha uzun.)\n4. Apples are cheaper than oranges.\n   - (Elmalar portakallardan daha ucuz.)`,
+      example: `My car is faster than yours. (Benim arabam seninkinden daha hızlı.)\nThis book is more interesting than that one. (Bu kitap onunkinden daha ilginç.)\nHe is taller than his brother. (O, kardeşinden daha uzun.)\nApples are cheaper than oranges. (Elmalar portakallardan daha ucuz.)`,
+      tip: 'Dikkat: Karşılaştırma yaparken "than" kullanılır. Eşyaları yan yana koyup karşılaştırma cümleleri kur.'
+    },
+    {
+      title: 'Superlatives',
       summary: `Bir grup içinde en üstün (en iyi, en uzun, en pahalı vb.) olanı belirtmek için kullanılır.\n\n**Kullanım Kuralları:**\n- Kısa sıfatlar: the + sıfat-est\n- Uzun sıfatlar: the most/the least + sıfat\n- Düzensizler: good → the best, bad → the worst\n\n**Sık Yapılan Hatalar:**\n- "the most fastest" (yanlış), "the fastest" (doğru)\n- "She is tallest" (yanlış), "She is the tallest" (doğru)\n\n**Örnekler:**\n1. He is the tallest in the class.\n   - (O, sınıftaki en uzun kişidir.)\n2. This is the most expensive phone.\n   - (Bu, en pahalı telefon.)\n3. She is the best student.\n   - (O, en iyi öğrenci.)\n4. Winter is the coldest season.\n   - (Kış en soğuk mevsimdir.)`,
       example: `He is the tallest in the class. (O, sınıftaki en uzun kişidir.)\nThis is the most expensive phone. (Bu, en pahalı telefon.)\nShe is the best student. (O, en iyi öğrenci.)\nWinter is the coldest season. (Kış en soğuk mevsimdir.)`,
       tip: 'İpucu: Bir grup içindeki en üstün olanı belirtirken "the" ile başla. Sınıftaki en uzun, en iyi, en hızlı kişiyi bul ve cümle kur.'
@@ -168,20 +192,46 @@ const topicsData: Record<LevelKey, Topic[]> = {
       tip: 'İpucu: Emir cümlelerini resimlerle veya hareketlerle anlat. "Please" ile kibarca rica etmeyi unutma.'
     }
   ],
-  B1: [
+  A2: [
     {
-      title: 'Sohbet ifadeleri',
-      summary: `Günlük konuşmalarda sıkça kullanılan selamlaşma, vedalaşma ve sohbet başlatma ifadeleri.\n\n**Kullanım Kuralları:**\n- Selamlaşma: Hi! / Hello! / Good morning!\n- Vedalaşma: Bye! / See you! / Take care!\n- Sohbet başlatma: How are you? / What’s up? / How’s it going?\n\n**Sık Yapılan Hatalar:**\n- ~~How are you doing? Fine, thanks.~~ (doğru)\n- ~~What’s up? Nothing much.~~ (doğru)\n\n**Örnekler:**\n1. Hi! How are you?\n   - (Merhaba! Nasılsın?)\n2. I’m fine, thanks.\n   - (İyiyim, teşekkürler.)\n3. See you later!\n   - (Görüşürüz!)\n4. What’s up?\n   - (Naber?)`,
-      example: `Hi! How are you? (Merhaba! Nasılsın?)\nI’m fine, thanks. (İyiyim, teşekkürler.)\nSee you later! (Görüşürüz!)\nWhat’s up? (Naber?)`,
-      tip: 'İpucu: Günlük sohbetlerde bu ifadeleri kullanarak pratik yap. Arkadaşlarınla diyaloglar oluştur.'
-    },
     {
       title: 'İhtimal anlatan ifadeler',
       summary: `Bir olayın olma ihtimalini anlatmak için kullanılır.\n\n**Kullanım Kuralları:**\n- may, might, could: düşük ihtimal\n- must: yüksek ihtimal\n- can’t: imkansızlık\n\n**Sık Yapılan Hatalar:**\n- ~~He may comes~~ (yanlış), **He may come** (doğru)\n- ~~She could to be at home~~ (yanlış), **She could be at home** (doğru)\n\n**Örnekler:**\n1. She may come tomorrow.\n   - (O, yarın gelebilir.)\n2. He might be busy.\n   - (O, meşgul olabilir.)\n3. It could rain today.\n   - (Bugün yağmur yağabilir.)\n4. You must be tired.\n   - (Kesin yorgunsundur.)`,
       example: `She may come tomorrow. (O, yarın gelebilir.)\nHe might be busy. (O, meşgul olabilir.)\nIt could rain today. (Bugün yağmur yağabilir.)\nYou must be tired. (Kesin yorgunsundur.)`,
       tip: 'İpucu: Olasılık anlatan kelimeleri günlük olaylarla ilişkilendirerek cümle kur.'
-    ],
-    A2: [
+    },
+    {
+      title: 'Phrasal verbs',
+      summary: `Fiil + edat veya zarf ile oluşan ve anlamı değişen deyimsel fiiller.\n\n**Kullanım Kuralları:**\n- look after: ilgilenmek\n- turn on: açmak\n- give up: bırakmak\n- get up: kalkmak\n\n**Sık Yapılan Hatalar:**\n- ~~I look the children~~ (yanlış), **I look after the children** (doğru)\n- ~~Turn the TV~~ (yanlış), **Turn on the TV** (doğru)\n\n**Örnekler:**\n1. I look after my little brother.\n   - (Küçük kardeşimle ilgilenirim.)\n2. Please turn on the lights.\n   - (Lütfen ışıkları aç.)\n3. He gave up smoking.\n   - (O, sigarayı bıraktı.)\n4. We get up early every day.\n   - (Her gün erken kalkarız.)`,
+      example: `I look after my little brother. (Küçük kardeşimle ilgilenirim.)\nPlease turn on the lights. (Lütfen ışıkları aç.)\nHe gave up smoking. (O, sigarayı bıraktı.)\nWe get up early every day. (Her gün erken kalkarız.)`,
+      tip: 'İpucu: Phrasal verbs listesini ezberle, resimlerle veya hikaye ile pekiştir.'
+    },
+    {
+      title: 'Type 1 (First Conditional)',
+      summary: `Gerçekleşme ihtimali yüksek olan koşullu cümleler için kullanılır.\n\n**Kullanım Kuralları:**\n- If + present simple, will + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~If it will rain, I will stay home~~ (yanlış), **If it rains, I will stay home** (doğru)\n\n**Örnekler:**\n1. If it rains, I will stay home.\n   - (Yağmur yağarsa evde kalacağım.)\n2. If you study, you will pass the exam.\n   - (Çalışırsan sınavı geçersin.)\n3. If she calls, I will answer.\n   - (O ararsa cevap vereceğim.)\n4. If we hurry, we will catch the bus.\n   - (Acele edersek otobüsü yakalarız.)`,
+      example: `If it rains, I will stay home. (Yağmur yağarsa evde kalacağım.)\nIf you study, you will pass the exam. (Çalışırsan sınavı geçersin.)\nIf she calls, I will answer. (O ararsa cevap vereceğim.)\nIf we hurry, we will catch the bus. (Acele edersek otobüsü yakalarız.)`,
+      tip: 'İpucu: Koşullu cümleleri gerçek hayat örnekleriyle kur. "If" ile başlayan cümleler yaz.'
+    },
+    {
+      title: 'Type 2 (Second Conditional)',
+      summary: `Gerçekleşmesi düşük veya hayali olan koşullu cümleler için kullanılır.\n\n**Kullanım Kuralları:**\n- If + past simple, would + fiil\n\n**Sık Yapılan Hatalar:**\n- ~~If I will have money, I would travel~~ (yanlış), **If I had money, I would travel** (doğru)\n\n**Örnekler:**\n1. If I had money, I would travel the world.\n   - (Param olsaydı dünyayı gezerdim.)\n2. If she were here, we would be happy.\n   - (O burada olsaydı mutlu olurduk.)\n3. If it snowed, we would make a snowman.\n   - (Kar yağsaydı kardan adam yapardık.)\n4. If I knew his number, I would call him.\n   - (Numarasını bilseydim onu arardım.)`,
+      example: `If I had money, I would travel the world. (Param olsaydı dünyayı gezerdim.)\nIf she were here, we would be happy. (O burada olsaydı mutlu olurduk.)\nIf it snowed, we would make a snowman. (Kar yağsaydı kardan adam yapardık.)\nIf I knew his number, I would call him. (Numarasını bilseydim onu arardım.)`,
+      tip: 'İpucu: Hayali durumları "If" ile kur. Hayalindeki şeyleri yazıp cümle oluştur.'
+    },
+    {
+      title: 'Intensifiers (pekiştiriciler)',
+      summary: `Sıfatları veya zarfları güçlendirmek için kullanılır.\n\n**Kullanım Kuralları:**\n- very, really, so, too, quite, absolutely, extremely\n\n**Sık Yapılan Hatalar:**\n- ~~I am very much happy~~ (yanlış), **I am very happy** (doğru)\n- ~~She is so much tired~~ (yanlış), **She is so tired** (doğru)\n\n**Örnekler:**\n1. The movie was really interesting.\n   - (Film gerçekten ilginçti.)\n2. I am so tired today.\n   - (Bugün çok yorgunum.)\n3. She is extremely smart.\n   - (O son derece zeki.)\n4. The exam was quite difficult.\n   - (Sınav oldukça zordu.)`,
+      example: `The movie was really interesting. (Film gerçekten ilginçti.)\nI am so tired today. (Bugün çok yorgunum.)\nShe is extremely smart. (O son derece zeki.)\nThe exam was quite difficult. (Sınav oldukça zordu.)`,
+      tip: 'İpucu: Pekiştirici kelimeleri cümlelerde vurgulayarak kullan. Duygularını ve durumunu anlatırken çeşitlendir.'
+    },
+    {
+      title: 'İhtimal anlatan kelimeler',
+      summary: `Bir olayın olma ihtimalini anlatan kelimeler: probably, possibly, perhaps, maybe.\n\n**Kullanım Kuralları:**\n- probably: büyük ihtimalle\n- possibly: muhtemelen\n- perhaps/maybe: belki\n\n**Sık Yapılan Hatalar:**\n- ~~He probably will comes~~ (yanlış), **He will probably come** (doğru)\n\n**Örnekler:**\n1. He will probably come.\n   - (Büyük ihtimalle gelecek.)\n2. Maybe she is at home.\n   - (Belki evdedir.)\n3. Perhaps it will rain.\n   - (Belki yağmur yağacak.)\n4. They will possibly join us.\n   - (Muhtemelen bize katılacaklar.)`,
+      example: `He will probably come. (Büyük ihtimalle gelecek.)\nMaybe she is at home. (Belki evdedir.)\nPerhaps it will rain. (Belki yağmur yağacak.)\nThey will possibly join us. (Muhtemelen bize katılacaklar.)`,
+      tip: 'İpucu: İhtimal anlatan kelimeleri günlük planlarında kullan. Tahmin cümleleri kur.'
+    },
+    {
+      title: 'Kıyaslama ifadeleri',
       summary: `İki veya daha fazla şeyi karşılaştırmak için kullanılır.\n\n**Kullanım Kuralları:**\n- more/less + sıfat + than\n- as ... as\n\n**Sık Yapılan Hatalar:**\n- ~~She is more tall than me~~ (yanlış), **She is taller than me** (doğru)\n- ~~He is as fast than me~~ (yanlış), **He is as fast as me** (doğru)\n\n**Örnekler:**\n1. This car is more expensive than that one.\n   - (Bu araba onunkinden daha pahalı.)\n2. She is as smart as her sister.\n   - (O, kız kardeşi kadar zeki.)\n3. My house is less big than yours.\n   - (Benim evim seninkinden daha küçük.)\n4. He is taller than me.\n   - (O benden daha uzun.)`,
       example: `This car is more expensive than that one. (Bu araba onunkinden daha pahalı.)\nShe is as smart as her sister. (O, kız kardeşi kadar zeki.)\nMy house is less big than yours. (Benim evim seninkinden daha küçük.)\nHe is taller than me. (O benden daha uzun.)`,
       tip: 'İpucu: Eşyaları veya kişileri karşılaştırırken cümleler kur. "as ... as" ve "more/less ... than" yapılarını tabloyla çalış.'
@@ -353,7 +403,37 @@ const frostedPaper = {
   backdropFilter: 'blur(10px)',
   border: '1px solid rgba(255, 255, 255, 0.2)',
   boxShadow: { xs: '0 8px 18px rgba(0,0,0,0.08)', md: '0 20px 40px rgba(0,0,0,0.1)' },
-  A2: [
+} as const;
+
+const TopicsPage: React.FC = () => {
+  useEffect(() => {
+    setMetaTags({
+      title: 'Konular — Dilbilgisi Konuları ve Örnekler',
+      description: 'A1-B2 seviyeleri için temel dilbilgisi konuları, örnekler ve ipuçları. Sınav hazırlığına uygun açıklamalar.',
+      keywords: 'dilbilgisi konuları, grammar konuları, a1 a2 b1 b2',
+      canonical: '/topics',
+      ogImage: '/social-preview.svg'
+    });
+  }, []);
+  const [selectedLevel, setSelectedLevel] = useState('A1');
+  const [search, setSearch] = useState('');
+  const [expanded, setExpanded] = useState<string | false>(false);
+
+  const handleAccordionChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  // Türkçe karakter ve büyük/küçük harf uyumlu arama
+  const normalizeTR = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/ı/g, 'i')
+      .replace(/İ/g, 'i')
+      .replace(/ğ/g, 'g')
+      .replace(/Ğ/g, 'g')
+      .replace(/ş/g, 's')
+      .replace(/Ş/g, 's')
+      .replace(/ç/g, 'c')
       .replace(/Ç/g, 'c')
       .replace(/ö/g, 'o')
       .replace(/Ö/g, 'o')
