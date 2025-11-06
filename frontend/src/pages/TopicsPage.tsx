@@ -11,7 +11,120 @@ const topicsData: Record<LevelKey, Topic[]> = {
   A1: [
     {
       title: '"To Be" Fiili (am, is, are)',
-      summary: "Temel 'to be' kullanımı: durum, kimlik ve yer belirtme.",
+  summary: `İngilizce öğrenirken karşınıza çıkacak ilk ve en önemli fiil "to be" (olmak) fiilidir. Bu fiil, bir cümlenin temel taşıdır ve etrafımızdaki nesneleri, kişileri ve durumları nitelemek, özelliklerini, yerlerini ve kimliklerini belirtmek için kullanılır. Türkçedeki "dır/dir, -ım/im, -sın/sin" gibi eklerin İngilizcedeki karşılığıdır.
+
+"To Be" Neden Bu Kadar Önemli?
+Türkçede "Jane güzeldir" veya "Mary bir öğretmendir" dediğimizde, bu cümleler isim veya sıfat cümlesi olarak kabul edilir. Ancak İngilizcede her cümlenin mutlaka bir yüklemi (fiili) olmak zorundadır. İşte "to be" fiili, içinde "gitmek, koşmak, yapmak" gibi bir eylem (hareket) barındırmayan bu tür durum, kimlik ve sıfat cümlelerini kurmamızı sağlayan temel fiildir.
+
+"To Be" Fiilinin Temel Kullanım Alanları
+"To be" fiili kesinlikle bir eylem (koşmak, gitmek, gelmek) anlatmaz. Bir durumu veya özelliği belirtir.
+
+To be + İsim (Kimlik/Meslek Belirtme)
+Mary is a teacher. (Mary bir öğretmendir.)
+She is my sister. (O benim kız kardeşim.)
+It is Linda's bag. (O Linda'nın çantası.)
+
+To be + Sıfat (Nitelik/Özellik Belirtme)
+John is handsome. (John yakışıklıdır.)
+His shoes are dirty. (Onun ayakkabıları kirli.)
+The movie is wonderful. (Film harika.)
+Tom is tired. (Tom yorgun.)
+
+To be + Yer (Konum Belirtme)
+Jane is at home. (Jane evde.)
+They are in the kitchen. (Onlar mutfaktalar.)
+
+Önemli Kural: "To be" fiilinden sonra asla yalın halde başka bir eylem fiili gelmez.
+Yanlış: I am go.
+Yanlış: She is study.
+
+"To Be" Fiilinin Zamanlara Göre Çekimleri
+"To be" fiili, kullanıldığı zamana ve özneye göre şekil değiştirir.
+1. Geniş Zaman (Present Tense): AM / IS / ARE
+Bu form, günümüzdeki durumları, genel geçer doğruları ve özellikleri anlatır.
+
+Normal Yazılış    Kısaltma   Türkçe Anlamı
+I am              I'm         Ben ...-ım/im
+You are           You're      Sen ...-sın/sin
+He is             He's        O (erkek) ...-dır/dir
+She is            She's       O (kız) ...-dır/dir
+It is             It's        O (cansız/hayvan) ...-dır/dir
+We are            We're       Biz ...-ız/iz
+They are          They're     Onlar ...-dırlar/dirler
+
+Kullanım 1: Durum Bildirme (Simple Present)
+I am a lawyer. (Ben bir avukatım.)
+We are students. (Biz öğrenciyiz.)
+
+Kullanım 2: Şimdiki Zaman (Present Continuous)
+Burada "to be" bir yardımcı fiildir ve asıl fiile -ing eki gelerek eylemin şu anda yapıldığını gösterir.
+They are walking on the beach. (Onlar sahilde yürüyorlar.)
+He is studying right now. (O şu anda ders çalışıyor.)
+
+2. Geçmiş Zaman (Past Tense): WAS / WERE
+Geçmişteki durumları, özellikleri veya konumları belirtmek için kullanılır.
+I / He / She / It ile WAS
+You / We / They ile WERE
+
+Kullanım 1: Durum Bildirme (Past Simple)
+The dog was very hungry. (Köpek çok açtı.)
+They were tired. (Onlar yorgundu.)
+
+Kullanım 2: Geçmişte Süreklilik (Past Continuous)
+I was playing guitar. (Gitar çalıyordum.)
+You were driving. (Araba sürüyordun.)
+
+3. Diğer "To Be" Formları
+Been (Perfect Hali): have/has/had gibi yardımcı fiillerden sonra (Perfect Tense) kullanılır.
+I have been a mother for 10 years. (10 yıldır anneyim.)
+She has been a great host. (Çok iyi bir ev sahibi oldu.)
+
+Being (Gerund Hali): Cümlede özne olarak veya edatlardan sonra kullanılır.
+Being healthy is the most important thing. (Sağlıklı olmak en önemli şeydir.)
+He is scared of being left alone. (Yalnız kalmaktan korkuyor.)
+
+To be (Infinitive / Mastar Hali): will, should, could, want gibi yapılardan sonra kullanılır.
+I will be in Ankara tomorrow. (Yarın Ankara'da olacağım.)
+She could be a great doctor. (Harika bir doktor olabilirdi.)
+
+Olumsuz ve Soru Cümleleri (Am / Is / Are)
+"To be" fiili ile cümle kurmanın en kolay yanlarından biri, soru ve olumsuz yapılarının basitliğidir.
+
+1. Olumsuz Cümleler (Negatives)
+Olumsuz yapmak için am / is / are yardımcı fiilinden sonra "not" kelimesi getirilir.
+Normal Yazılış   Kısaltma
+I am not (Kısalmaz)
+You are not / You aren't
+He is not / He isn't
+She is not / She isn't
+It is not / It isn't
+We are not / We aren't
+They are not / They aren't
+
+Örnekler:
+Tom isn't tired. (Tom yorgun değildir.)
+Shops aren't closed. (Dükkanlar kapalı değildir.)
+Beyza isn't playing basketball. (Beyza basketbol oynamıyor.)
+
+2. Soru Cümleleri (Questions)
+Soru yapmak için am / is / are yardımcı fiili cümlenin başına getirilir.
+Is Tom tired? (Tom yorgun mu?)
+Are shops closed? (Mağazalar kapalı mı?)
+Is Jane at home? (Jane evde mi?)
+
+"To Be" ile Sık Kullanılan Sıfatlar
+Kişilik Sıfatları: Patient, Honest, Talkative, Shy, Hardworking, Lazy, Angry
+Dış Görünüş Sıfatları: Beautiful, Handsome, Tall, Short, Thin, Overweight, Curly
+Diğer Genel Sıfatlar: Good/Bad, New/Old, Big/Little, Important, Correct/Wrong
+
+"To Be" İçeren Yaygın Deyimler
+To be in hot water: Başı belada olmak.
+To be over the moon: Çok mutlu olmak.
+To be in the same boat: Aynı durumda olmak.
+To be on the fence: Kararsız olmak.
+To be under the weather: Keyifsiz hissetmek.
+To be a piece of cake: Çok kolay olmak.
+`,
       example: 'I am a student. (Ben bir öğrenciyim.)'
     },
     {
