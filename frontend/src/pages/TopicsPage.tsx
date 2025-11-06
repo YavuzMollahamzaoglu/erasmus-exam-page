@@ -11,7 +11,7 @@ const topicsData: Record<LevelKey, Topic[]> = {
   A1: [
     {
       title: '"To Be" Fiili (am, is, are)',
-  summary: `İngilizce öğrenirken karşınıza çıkacak ilk ve en önemli fiil "to be" (olmak) fiilidir. Bu fiil, bir cümlenin temel taşıdır ve etrafımızdaki nesneleri, kişileri ve durumları nitelemek, özelliklerini, yerlerini ve kimliklerini belirtmek için kullanılır. Türkçedeki "dır/dir, -ım/im, -sın/sin" gibi eklerin İngilizcedeki karşılığıdır.
+      summary: `İngilizce öğrenirken karşınıza çıkacak ilk ve en önemli fiil "to be" (olmak) fiilidir. Bu fiil, bir cümlenin temel taşıdır ve etrafımızdaki nesneleri, kişileri ve durumları nitelemek, özelliklerini, yerlerini ve kimliklerini belirtmek için kullanılır. Türkçedeki "dır/dir, -ım/im, -sın/sin" gibi eklerin İngilizcedeki karşılığıdır.
 
 "To Be" Neden Bu Kadar Önemli?
 Türkçede "Jane güzeldir" veya "Mary bir öğretmendir" dediğimizde, bu cümleler isim veya sıfat cümlesi olarak kabul edilir. Ancak İngilizcede her cümlenin mutlaka bir yüklemi (fiili) olmak zorundadır. İşte "to be" fiili, içinde "gitmek, koşmak, yapmak" gibi bir eylem (hareket) barındırmayan bu tür durum, kimlik ve sıfat cümlelerini kurmamızı sağlayan temel fiildir.
@@ -125,7 +125,7 @@ To be on the fence: Kararsız olmak.
 To be under the weather: Keyifsiz hissetmek.
 To be a piece of cake: Çok kolay olmak.
 `,
-      example: 'I am a student. (Ben bir öğrenciyim.)'
+      example: ''
     },
     {
       title: 'Simple Present Tense (Geniş Zaman)',
@@ -373,21 +373,23 @@ const TopicsPage: React.FC = () => {
                     backgroundColor: '#fff',
                   }}
                 >
-                  {/* Show the real topic summary and example (preserve line breaks) */}
-                  <Box sx={{ mb: 1 }}>
-                    <Typography
-                      component="div"
-                      variant="body1"
-                      sx={{ whiteSpace: 'pre-line', color: 'text.primary', mb: 1 }}
-                    >
-                      {topic.summary}
-                    </Typography>
-                    {topic.example && (
-                      <Typography component="div" variant="body2" sx={{ whiteSpace: 'pre-line', color: 'text.secondary' }}>
+                  {/* Summary with improved readability */}
+                  <Typography
+                    component="div"
+                    variant="body1"
+                    sx={{ whiteSpace: 'pre-line', color: 'text.primary', mb: 1.5, lineHeight: 1.75, fontSize: { xs: 15, md: 15.5 } }}
+                  >
+                    {topic.summary}
+                  </Typography>
+
+                  {/* Example shown in a subtle card for better scannability */}
+                  {topic.example && (
+                    <Paper elevation={0} sx={{ backgroundColor: 'rgba(0,0,0,0.03)', p: 2, borderRadius: 2, mt: 1 }}>
+                      <Typography component="div" variant="body2" sx={{ whiteSpace: 'pre-line', color: 'text.secondary', fontStyle: 'italic', fontSize: { xs: 13, md: 14 } }}>
                         {topic.example}
                       </Typography>
-                    )}
-                  </Box>
+                    </Paper>
+                  )}
                 </AccordionDetails>
               </Accordion>
             ))}
