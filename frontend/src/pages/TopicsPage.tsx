@@ -129,7 +129,103 @@ To be a piece of cake: Çok kolay olmak.
     },
     {
       title: 'Simple Present Tense (Geniş Zaman)',
-      summary: 'Günlük rutinler ve genel doğrular için kullanılır; he/she/it -s takısı.',
+      summary: `Simple Present Tense, Türkçedeki geniş zamanın karşılığıdır ve İngilizcede en yaygın kullanılan zaman kiplerinden biridir. Temel olarak alışkanlıkları, değişmeyen durumları, genel gerçekleri ve planlanmış eylemleri ifade etmek için kullanılır.
+
+## 📌 Simple Present Tense Ne Zaman Kullanılır?
+Geniş zamanın kullanıldığı başlıca durumlar şunlardır:
+
+Rutinler, Alışkanlıklar ve Tekrarlanan Eylemler
+Belli bir süre zarfında veya düzenli olarak tekrarlanan eylemleri anlatır.
+I drink two cups of coffee every morning. (Her sabah iki fincan kahve içerim.)
+He goes to the theater once a week. (O, haftada bir kez tiyatroya gider.)
+
+Genel Geçer Gerçekler ve Doğrular
+Herkes tarafından bilinen, bilimsel veya değişmez gerçekleri ifade ederken kullanılır.
+The sun sets in the west. (Güneş batıdan batar.)
+Water boils at 100°C. (Su, 100 derecede kaynar.)
+Cats like milk. (Kediler süt sever.)
+
+Değişmeyen Durumlar, Duygular ve Arzular
+Uzun süreli devam eden durumları, hisleri, düşünceleri veya tercihleri belirtir.
+She works in London. (O, Londra'da çalışır.)
+I like chocolate. (Çikolata severim.)
+I don’t believe you. (Sana inanmıyorum.)
+
+Planlanmış Eylemler ve Zaman Çizelgeleri
+Gelecek zamanda gerçekleşmesi kesin olan, bir takvime veya programa (otobüs, tren, sınav, ders) bağlanmış olayları anlatırken kullanılır. Cümle gelecek zaman anlamı taşısa da yapı olarak geniş zamandır.
+The exam starts at 10 o’clock tomorrow. (Sınav yarın saat 10'da başlıyor.)
+My family come to us on Monday. (Ailem pazartesi günü bize geliyor.)
+The train leaves every morning at 8 am. (Tren her sabah saat 8'de kalkar.)
+
+Talimatlar ve Yön Bildirme
+Birine talimat verirken veya yol tarifi yaparken kullanılır (Emir cümleleri).
+You take the No:12 bus to Kadıköy. (Kadıköy'e gitmek için 12 No'lu otobüse binersiniz.)
+Follow the rules! (Kurallara uy!)
+
+Hikaye Anlatımı
+Özellikle masal, fıkra veya kitap özetlerinde hikaye anlatırken olayları daha canlı aktarmak için kullanılır.
+The giant attacks the city. (Dev şehre saldırır.)
+
+## ⚙️ Simple Present Tense Cümle Yapısı
+Geniş zamanda cümle kurmak için "do" ve "does" yardımcı fiilleri kullanılır. Ancak bu yardımcı fiiller çoğunlukla olumsuz ve soru cümlelerinde ortaya çıkar.
+
+### 1. Olumlu Cümleler (Affirmative)
+Formül oldukça basittir. Özneden sonra fiilin 1. hali (V1) getirilir.
+Kural: Subject + Verb (V1) + Object
+Buradaki en önemli kural, üçüncü tekil şahıslarda (He, She, It) fiilin sonuna "-s" takısı almasıdır.
+I / You / We / They + Verb (V1)
+He / She / It + Verb (V1) + s
+Örnekler:
+You work at the weekends. (Hafta sonları çalışırsın.)
+She gets up early. (O, erken kalkar.)
+My dad goes to work every day. (Babam her gün işe gider.)
+
+DİKKAT: Özneye dikkat edin. "Bizim arkadaşımız" gibi ifadeler tekil sayılır.
+Our friend lives in London. (Bizim arkadaşımız Londra'da yaşar.)(Burada özne "biz" değil, "bizim arkadaşımız"dır, yani "he" veya "she"dir.)
+
+### 2. Olumsuz Cümleler (Negative)
+Olumsuz cümle yapmak için don't (do not) veya doesn't (does not) yardımcı fiilleri kullanılır.
+Kural: Subject + do/does + not + Verb (V1) + Object
+I / You / We / They + don't + Verb (V1)
+He / She / It + doesn't + Verb (V1)
+Önemli Kural: Üçüncü tekil şahıslarda (He, She, It) olumsuz cümle kurarken doesn't kullanıldığı için, asıl fiil "-s" takısı almaz ve mastar (yalın) halde kalır.
+Örnekler:
+I don’t drink milk. (Süt içmem.)
+We don’t speak Turkish. (Türkçe konuşmayız.)
+She doesn’t like football. (O, futbolu sevmez.)
+He doesn’t want ice cream. (O, dondurma istemez.)
+
+### 3. Soru Cümleleri (Interrogative)
+Soru yapmak için Do veya Does yardımcı fiilleri cümlenin başına getirilir.
+Kural: Do/Does + Subject + Verb (V1) + Object?
+Do + I / You / We / They + Verb (V1)?
+Does + He / She / It + Verb (V1)?
+Önemli Kural: Tıpkı olumsuz cümlede olduğu gibi, soru cümlesinde de Does kullanıldığı için asıl fiil "-s" takısı almaz ve mastar (yalın) halde kalır.
+Örnekler:
+Do I like Maths? (Matematiği sever miyim?)
+Do they play football? (Onlar futbol oynar mı?)
+Does it eat dried cat food? (O, kuru kedi maması yer mi?)
+Does she want ice cream? (O, dondurma istiyor mu?)
+
+### 💡 "-s Takısı" İçin Hatırlatıcı Senaryo
+Geniş zamanı bir şirket gibi düşünün. Does ve doesn’t şirketin patronları, -s takısı ise sekreterdir.
+Olumlu Durum: Şirkette her şey yolundayken (cümle olumlu), tüm işlere sekreter (-s) bakar. ( She works. )
+Olumsuz Durum / Sorun: Şirkette bir sorun (olumsuz cümle) veya bir soru (soru cümlesi) olduğunda, patronlar (doesn’t / Does) devreye girer. Patronlar gelince sekreter (-s) doğal olarak aradan çekilir.
+She doesn’t work. (Patron geldi, -s gitti.)
+Does she work? (Patron geldi, -s gitti.)
+
+## 📖 Özet Tablo: Fiil Çekimleri
+Olumlu (Affirmative)Olumsuz (Negative)Soru (Interrogative)I sleep (Uyurum)I don't sleep (Uyumam)Do I sleep? (Uyur muyum?)You sleep (Uyursun)You don't sleep (Uyumazsın)Do you sleep? (Uyur musun?)He/She/It sleeps (O uyur)He/She/It doesn't sleep (O uyumaz)Does he/she/it sleep? (O uyur mu?)We sleep (Uyuruz)We don't sleep (Uyumayız)Do we sleep? (Uyur muyuz?)You sleep (Uyursunuz)You don't sleep (Uyumazsınız)Do you sleep? (Uyur musunuz?)They sleep (Uyurlar)They don't sleep (Uyumazlar)Do they sleep? (Uyurlar mı?)
+
+## ✍️ Üçüncü Tekil Şahıs (-s, -es, -ies) Kuralları
+"He, She, It" özneleriyle olumlu cümle kurarken fiillere eklenen "-s" takısının özel kuralları vardır:Genel Kural: Çoğu fiil sadece -s alır.think → thinksgive → giveswant → wantsplay → plays (Sessiz harf + y kuralının istisnasıdır, vowel+y olduğu için sadece -s alır.)-ss, -x, -ch, -sh ile Bitenler: Fiilin sonu bu harflerle bitiyorsa -es takısı alır.pass → passesfix → fixescatch → catchespush → pushesgo → goes (Bu kurala uyar)do → does (Bu kurala uyar)Sessiz Harf + y ile Bitenler: Fiilin sonu sessiz bir harf ve ardından -y ile bitiyorsa, -y harfi düşer ve yerine -ies gelir.fly → fliescry → criesmarry → marriesstudy → studies
+
+## 🕒 Simple Present Tense Zaman Zarfları (Sıklık Zarfları)
+Geniş zaman cümleleri, eylemin ne sıklıkla yapıldığını belirten zarflarla kullanılır.
+Zarf (Adverb)TürkçesiÖrnek Cümlealwaysdaima, her zamanI always love you. (Seni her zaman severim.)usuallygenellikleI usually listen to classical music. (Genellikle klasik müzik dinlerim.)oftensık sıkI often visit him. (Onu sık sık ziyaret ederim.)sometimesbazen, ara sıraI sometimes go to the cinema. (Bazen sinemaya giderim.)rarelynadirenI rarely smoke. (Nadiren sigara içerim.)neverasla, hiçI never smoke. (Asla sigara içmem.)every...her...I go fishing every Monday. (Her pazar balık tutmaya giderim.)
+
+Önemli Not: "Never" (asla) kelimesi cümleye zaten olumsuz bir anlam katar. Bu nedenle "never" kullanılan cümlelerde ayrıca don't veya doesn't gibi olumsuz bir yardımcı fiil kullanılmaz.
+He never eats broccoli. (O asla brokoli yemez.)`,
       example: 'She works in a bank. (O bir bankada çalışır.)'
     },
     {
@@ -295,6 +391,35 @@ const TopicsPage: React.FC = () => {
       })
     : allTopics;
 
+  // Render simple markdown-like headings in topic summaries:
+  const renderRichText = (text?: string) => {
+    if (!text) return null;
+    return text
+      .split(/\n{2,}/)
+      .map((block, i) => {
+        const trimmed = block.trim();
+        if (/^##\s*/.test(trimmed)) {
+          return (
+            <Typography key={i} variant="h6" sx={{ mt: 2, mb: 1, fontWeight: 700, fontSize: { xs: 15, md: 16 } }}>
+              {trimmed.replace(/^##\s*/, '')}
+            </Typography>
+          );
+        }
+        if (/^###\s*/.test(trimmed)) {
+          return (
+            <Typography key={i} variant="subtitle1" sx={{ mt: 1, mb: 1, fontWeight: 700, fontSize: { xs: 14, md: 15 } }}>
+              {trimmed.replace(/^###\s*/, '')}
+            </Typography>
+          );
+        }
+        return (
+          <Typography key={i} component="div" variant="body1" sx={{ whiteSpace: 'pre-line', color: 'text.primary', mb: 1.5, lineHeight: 1.7 }}>
+            {trimmed}
+          </Typography>
+        );
+      });
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', background: '#b2dfdb', px: { xs: 1.5, sm: 2 }, display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 0, pb: { xs: 12, md: 16 }, overflowX: 'hidden' }}>
       <Paper elevation={6} sx={frostedPaper}>
@@ -373,14 +498,8 @@ const TopicsPage: React.FC = () => {
                     backgroundColor: '#fff',
                   }}
                 >
-                  {/* Summary with improved readability */}
-                  <Typography
-                    component="div"
-                    variant="body1"
-                    sx={{ whiteSpace: 'pre-line', color: 'text.primary', mb: 1.5, lineHeight: 1.75, fontSize: { xs: 15, md: 15.5 } }}
-                  >
-                    {topic.summary}
-                  </Typography>
+                  {/* Summary with improved readability (supports simple markdown-like headings) */}
+                  {renderRichText(topic.summary)}
 
                   {/* Example shown in a subtle card for better scannability */}
                   {topic.example && (
