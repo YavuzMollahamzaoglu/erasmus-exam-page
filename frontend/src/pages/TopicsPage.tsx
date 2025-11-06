@@ -10,6 +10,16 @@ type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
 const topicsData: Record<LevelKey, Topic[]> = {
   A1: [
     {
+      title: '"To Be" Fiili (am, is, are)',
+      summary: "Temel 'to be' kullanımı: durum, kimlik ve yer belirtme.",
+      example: 'I am a student. (Ben bir öğrenciyim.)'
+    },
+    {
+      title: 'Simple Present Tense (Geniş Zaman)',
+      summary: 'Günlük rutinler ve genel doğrular için kullanılır; he/she/it -s takısı.',
+      example: 'She works in a bank. (O bir bankada çalışır.)'
+    },
+    {
       title: 'This, That, These, Those',
       summary: 'İşaret zamirleri ve işaret sıfatlarının kullanımı; yakın/uzak ayrımı.',
       example: 'This is my book. (Bu benim kitabım.)'
