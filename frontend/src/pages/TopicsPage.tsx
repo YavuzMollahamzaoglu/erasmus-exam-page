@@ -226,11 +226,107 @@ Zarf (Adverb)TürkçesiÖrnek Cümlealwaysdaima, her zamanI always love you. (Se
 
 Önemli Not: "Never" (asla) kelimesi cümleye zaten olumsuz bir anlam katar. Bu nedenle "never" kullanılan cümlelerde ayrıca don't veya doesn't gibi olumsuz bir yardımcı fiil kullanılmaz.
 He never eats broccoli. (O asla brokoli yemez.)`,
-      example: 'She works in a bank. (O bir bankada çalışır.)'
+      example: ''
     },
     {
       title: 'This, That, These, Those',
-      summary: 'İşaret zamirleri ve işaret sıfatlarının kullanımı; yakın/uzak ayrımı.',
+      summary: `Bu rehberde, İngilizcedeki İşaret Zamirleri (Demonstrative Pronouns) ve İşaret Sıfatları (Demonstrative Adjectives) konusunu detaylıca ele alacağız. Bu yapılar, bizimle aynı yerde veya uzakta bulunan kişileri veya nesneleri işaret etmek, onları göstermek için kullanılır.
+
+Temel olarak bu dört kelime şu anlamlara gelir:
+This: Bu
+That: Şu / O
+These: Bunlar / Bu
+Those: Şunlar / Şu / O
+
+## Temel Kural: Yakınlık ve Sayı Matrisi
+İngilizcede hangi işaret kelimesini kullanacağımıza karar verirken iki temel unsura dikkat ederiz:
+Yakınlık (Proximity): İşaret ettiğimiz şey konuşmacıya yakın mı, yoksa uzak mı?
+Sayı (Number): İşaret ettiğimiz şey tekil mi (bir tane), yoksa çoğul mu (birden fazla)?
+
+Bu kuralı aşağıdaki tablo mükemmel bir şekilde özetlemektedir:
+Yakın (Here)\tUzak (There)
+Tekil (Singular)\tThis (Bu)\tThat (Şu / O)
+Çoğul (Plural)\tThese (Bunlar)\tThose (Şunlar / Onlar)
+
+## En Önemli Fark: İşaret Zamiri (Pronoun) vs. İşaret Sıfatı (Adjective)
+Bu dört kelime (this, that, these, those) cümlede iki farklı görevde kullanılabilir. Bu ayrımı anlamak, konunun temelini oluşturur.
+
+### 1. İşaret Zamiri (Demonstrative Pronoun)
+Görevi: İsmin yerine geçer.
+Kullanımı: Cümlede tek başına kullanılabilir. Kendisinden sonra bir isim gelmesine gerek yoktur, çünkü zaten o ismin yerini tutar.
+Örnekler:
+This is a red pen. (Bu bir kırmızı kalemdir.)
+These are blue pens. (Bunlar mavi kalemlerdir.)
+That is our house. (O bizim evimiz.)
+I’d like to buy these. (Bunları satın almak istiyorum.)
+Did you do that? (Bunu sen mi yaptın?)
+
+### 2. İşaret Sıfatı (Demonstrative Adjective)
+Görevi: İsmi niteler (belirtir). Hangi isimden bahsettiğimizi gösterir.
+Kullanımı: Tek başına kullanılamaz. Mutlaka kendisinden sonra bir isim gelmesi gerekir.
+Örnekler:
+This pen is red. (Bu kalem kırmızıdır.)
+These pens are blue. (Bu kalemler mavidir.)
+That city is crowded. (O şehir kalabalıktır.)
+Those flowers are beautiful. (Şu çiçekler güzeldir.)
+
+## Kullanım Alanları ve İpuçları
+
+### 1. "Here" ve "There" İpucu
+Cümlelerde yakınlık veya uzaklığı pekiştirmek için here (burada) ve there / over there (orada, şurada) ifadeleri sıkça kullanılır. Bu ifadeler, doğru kelimeyi seçmeniz için size bir ipucu verir:
+Yakın (here) → This / These
+Look at this newspaper here. (Buradaki bu gazeteye bak.)
+These photos here are much better... (Buradaki bu fotoğraflar çok daha iyi...)
+
+Uzak (there / over there) → That / Those
+That building over there is the Chrysler Building. (Oradaki şu bina Chrysler Binası'dır.)
+Those people over there are my parents. (Şuradaki o insanlar benim ebeveynlerim.)
+
+### 2. Fiziksel ve Psikolojik Mesafe (This/That)
+Yakınlık ve uzaklık her zaman fiziksel olmak zorunda değildir. Bazen duygusal, psikolojik veya zamansal bir mesafeyi de ifade edebilir:
+
+Fiziksel Mesafe:Who owns that house? (Şu evin sahibi kim?) (Fiziksel olarak uzakta)
+Is this John's house? (Bu John'un evi mi?) (Fiziksel olarak yakında)
+
+Psikolojik / Duygusal Yakınlık (Olumlu):
+This is a nice surprise! (Bu ne güzel bir sürpriz!)
+I love this song! (Bu şarkıyı seviyorum!)
+
+Psikolojik / Duygusal Uzaklık (Olumsuz/Nötr):
+That's nothing to do with me. (Bunun benimle hiçbir alakası yok.)
+I don’t like that idea. (O fikri sevmedim / O fikir bana uymuyor.)
+
+### 3. Zaman İfadeleri
+This (Şu an veya yakın gelecek):
+I’m going on vacation this month. (Bu ay tatile gidiyorum.)
+That (Geçmiş zaman):
+That summer was unforgettable. (O yaz unutulmazdı.)
+
+### 4. Özel Kullanım Durumları
+Kişileri Tanıtma:Hello, this is my friend, Mark. (Merhaba, bu benim arkadaşım Mark.)
+These are my friends. (Bunlar benim arkadaşlarım.)
+Is that your colleague? (Şu senin meslektaşın mı?)
+Telefon Görüşmeleri:Hello, this is Joanna speaking. (Merhaba, ben Joanna konuşuyorum.)
+Is that John? (Sen John musun? / Oradaki John mu?)
+
+## Dil Bilgisi Notları ve "One" Kullanımı
+Bu yapıların dil bilgisi açısından kullanımını özetlersek:
+İsimden Önce (Sıfat):Do you remember that great day in London? (Londra'daki o mükemmel günü hatırlıyor musun?)
+Tek Başına (Zamir):I will never forget this. (Bunu asla unutmayacağım.)
+"One" Kelimesinden Önce:İsmi tekrar etmemek için "one" (tekiller için) veya "ones" (çoğullar için) kelimesiyle birlikte sıfat gibi kullanılabilirler.
+This car looks cleaner than that one. (Bu araba, şundan [o diğer arabadan] daha temiz görünüyor.)
+
+## Sık Kullanılan Kalıplar ve Deyimler
+That’s it! (İşte bu! / Tamamdır! / Aradığım şey bu!)
+That’s all. (Hepsi bu kadar.)
+That’s right. (Doğru.)
+That’s great! (Bu harika!)
+That’s all right. (Sorun değil / Tamamdır.)
+Forget that! (Unut bunu!)
+At this rate... (Bu gidişle... / Bu hızla...)
+This way, please. (Bu taraftan, lütfen.)
+Those were the days! (Ah, ne günlerdi!)
+In this case... (Bu durumda...)`,
       example: 'This is my book. (Bu benim kitabım.)'
     },
     {
