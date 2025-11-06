@@ -281,10 +281,7 @@ const TopicsPage: React.FC = () => {
                 Bu seviyede aradığınız konu bulunamadı.
               </Typography>
             )}
-            {/* Informational note for editors */}
-            <Box sx={{ mt: 2, p: 2, bgcolor: 'transparent', textAlign: 'center' }}>
-              <Typography variant="body2" color="text.secondary">Gelecekte konu başlıklarını ve içeriklerini göndereceğim, şu an sadece yapı ve iyileştirmeleri yap.</Typography>
-            </Box>
+            {/* Editor note removed as requested */}
           </Box>
         </Box>
       </Paper>
