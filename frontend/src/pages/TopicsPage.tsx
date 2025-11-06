@@ -373,18 +373,20 @@ const TopicsPage: React.FC = () => {
                     backgroundColor: '#fff',
                   }}
                 >
-                  {/* İçerikler geçici olarak kaldırıldı - sadece yapı kalsın */}
-                  <Box sx={{
-                    mb: 1,
-                    p: 2,
-                    borderRadius: 2,
-                    bgcolor: 'rgba(0,184,148,0.05)',
-                    border: '1px dashed rgba(0,184,148,0.25)',
-                    color: '#00695c',
-                    fontWeight: 600,
-                    textAlign: 'center'
-                  }}>
-                    Bu konu içerikleri güncelleniyor. Yakında eklenecek.
+                  {/* Show the real topic summary and example (preserve line breaks) */}
+                  <Box sx={{ mb: 1 }}>
+                    <Typography
+                      component="div"
+                      variant="body1"
+                      sx={{ whiteSpace: 'pre-line', color: 'text.primary', mb: 1 }}
+                    >
+                      {topic.summary}
+                    </Typography>
+                    {topic.example && (
+                      <Typography component="div" variant="body2" sx={{ whiteSpace: 'pre-line', color: 'text.secondary' }}>
+                        {topic.example}
+                      </Typography>
+                    )}
                   </Box>
                 </AccordionDetails>
               </Accordion>
