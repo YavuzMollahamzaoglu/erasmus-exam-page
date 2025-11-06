@@ -172,10 +172,15 @@ const TopicsPage: React.FC = () => {
       .replace(/ü/g, 'u')
       .replace(/Ü/g, 'u');
 
-  // For now keep accordion structure but show only 1-2 dummy topics per level
-  // (content will be filled later by the editor). This prevents large blocks
-  // of content showing while we prepare the final material.
-  const displayTopics = topicsData[selectedLevel as LevelKey].slice(0, 2);
+  // Tüm konuları göster; arama varsa başlık/özet içinde filtrele (Türkçe uyumlu)
+  const allTopics = topicsData[selectedLevel as LevelKey];
+  const query = search.trim();
+  const displayTopics = query
+    ? allTopics.filter(t => {
+        const haystack = `${t.title} ${t.summary}`;
+        return normalizeTR(haystack).includes(normalizeTR(query));
+      })
+    : allTopics;
 
   return (
     <Box sx={{ minHeight: '100vh', background: '#b2dfdb', px: { xs: 1.5, sm: 2 }, display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 0, pb: { xs: 12, md: 16 }, overflowX: 'hidden' }}>
