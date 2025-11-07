@@ -1449,7 +1449,19 @@ const TopicsPage: React.FC = () => {
           <Typography component="h2" variant="h6" sx={{ opacity: 0.95 }}>A1–B2 seviyelerinde özet ve örneklerle İngilizce konuları</Typography>
         </Box>
         <Box sx={{ p: { xs: 2, md: 4 } }}>
-          <Tabs value={selectedLevel} onChange={(_, val) => setSelectedLevel(val)} sx={{ mb: 2 }}>
+          <Tabs
+            value={selectedLevel}
+            onChange={(_, val) => setSelectedLevel(val)}
+            sx={{
+              mb: 2,
+              display: 'flex',
+              justifyContent: 'center',
+              '& .MuiTabs-flexContainer': { justifyContent: 'center' },
+              '& .MuiTab-root': { minWidth: 72, px: 2, textTransform: 'none', color: 'rgba(0,0,0,0.48)', fontWeight: 700 },
+              '& .MuiTab-root.Mui-selected': { color: '#0b3b66' }
+            }}
+            TabIndicatorProps={{ sx: { bgcolor: '#0b3b66', height: 3, borderRadius: 2 } }}
+          >
             {levels.map(level => (
               <Tab key={level} value={level} label={level} />
             ))}
