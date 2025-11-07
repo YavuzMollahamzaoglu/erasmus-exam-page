@@ -1442,13 +1442,13 @@ const TopicsPage: React.FC = () => {
   const handleAccordionChange = (panel: string) => (_: any, isExpanded: boolean) => setExpanded(isExpanded ? panel : false);
 
   return (
-    <Box sx={{ minHeight: '100vh', px: { xs: 1.5, md: 3 }, display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 0, pb: { xs: 12, md: 16 } }}>
-      <Paper elevation={6} sx={{ maxWidth: 1200, width: '100%', borderRadius: 4, p: 0, overflow: 'hidden', mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', px: 2, pt: 0, pb: { xs: 12, md: 16 }, display: 'flex', justifyContent: 'center' }}>
+      <Paper elevation={6} sx={{ width: '100%', maxWidth: 900, borderRadius: 4, p: 0, mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit', textAlign: 'center' }}>
-          <Typography component="h1" variant="h4" fontWeight={700} mb={2}>Konular</Typography>
+          <Typography component="h1" variant="h3" fontWeight={700} mb={1} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: { xs: '2rem', md: '2.5rem' } }}>Konular</Typography>
           <Typography component="h2" variant="h6" sx={{ opacity: 0.95 }}>A1–B2 seviyelerinde özet ve örneklerle İngilizce konuları</Typography>
         </Box>
-        <Box sx={{ p: { xs: 3, md: 5 } }}>
+        <Box sx={{ p: { xs: 2, md: 4 } }}>
           <Tabs value={selectedLevel} onChange={(_, val) => setSelectedLevel(val)} sx={{ mb: 2 }}>
             {levels.map(level => (
               <Tab key={level} value={level} label={level} />
