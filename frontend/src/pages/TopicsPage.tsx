@@ -8,12 +8,964 @@ type LevelKey = 'A1' | 'A2' | 'B1' | 'B2';
 
 const topicsData: Record<LevelKey, Topic[]> = {
   A1: [
-    { title: '"To Be" Fiili (am, is, are)', summary: 'Temel tanımlama ve kimlik cümlelerinde kullanılan en önemli fiildir; örnekler ve basit kullanım.', example: '' },
-    { title: 'Simple Present Tense', summary: 'Geniş zaman: alışkanlıklar, genel doğrular ve tekrarlayan eylemler için kullanılır.', example: 'I work every day. (Her gün çalışırım.)' },
-    { title: 'This, That, These, Those', summary: 'Yakınlık ve sayı farkına göre nesne ve kişileri işaret etmek için kullanılır.', example: 'This is a book. (Bu bir kitaptır.)' },
-    { title: 'There is / There are', summary: 'Bir şeyin varlığını veya yokluğunu belirtmek için kullanılır; tekil/çoğul ayrımı önemlidir.', example: 'There is a cat in the garden. (Bahçede bir kedi var.)' },
-    { title: 'Can / Can\'t (Yetenek Bildiren Cümleler)', summary: 'Yetenek, izin, olasılık ve rica gibi anlamları olan modal yapıdır; özne ne olursa olsun "can" sabittir ve fiilden sonra V1 gelir.', example: 'I can swim. (Yüzebilirim.)' },
-    { title: 'Basic Question Forms (Temel Soru Kalıpları)', summary: 'Yes/No ve WH- soruları: yardımcı fiili başa alıp soru kurarız. Örnek: Is he a teacher? Where did she go?', example: 'Do you like music? (Müziği sever misin?)' }
+    {
+      title: '"To Be" Fiili (am, is, are)',
+      summary: `İngilizce öğrenirken karşınıza çıkacak ilk ve en önemli fiil "to be" (olmak) fiilidir. Bu fiil, bir cümlenin temel taşıdır ve etrafımızdaki nesneleri, kişileri ve durumları nitelemek, özelliklerini, yerlerini ve kimliklerini belirtmek için kullanılır.
+
+Türkçedeki "dır/dir, -ım/im, -sın/sin" gibi eklerin İngilizcedeki karşılığıdır.
+
+## "To Be" Neden Bu Kadar Önemli?
+Türkçede "Jane güzeldir" veya "Mary bir öğretmendir" dediğimizde, bu cümleler isim veya sıfat cümlesi olarak kabul edilir. Ancak İngilizcede her cümlenin mutlaka bir yüklemi (fiili) olmak zorundadır.
+
+İşte "to be" fiili, içinde "gitmek, koşmak, yapmak" gibi bir eylem (hareket) barındırmayan bu tür durum, kimlik ve sıfat cümlelerini kurmamızı sağlayan temel fiildir.
+
+## "To Be" Fiilinin Temel Kullanım Alanları
+"To be" fiili kesinlikle bir eylem (koşmak, gitmek, gelmek) anlatmaz. Bir durumu veya özelliği belirtir.
+
+To be + İsim (Kimlik/Meslek Belirtme)
+
+Mary is a teacher. (Mary bir öğretmendir.)
+
+She is my sister. (O benim kız kardeşim.)
+
+It is Linda's bag. (O Linda'nın çantası.)
+
+To be + Sıfat (Nitelik/Özellik Belirtme)
+
+John is handsome. (John yakışıklıdır.)
+
+His shoes are dirty. (Onun ayakkabıları kirli.)
+
+The movie is wonderful. (Film harika.)
+
+Tom is tired. (Tom yorgun.)
+
+To be + Yer (Konum Belirtme)
+
+Jane is at home. (Jane evde.)
+
+They are in the kitchen. (Onlar mutfaktalar.)
+
+## Önemli Kural: "To be" fiilinden sonra asla yalın halde başka bir eylem fiili gelmez.
+
+Yanlış: I am go.
+
+Yanlış: She is study.
+
+## "To Be" Fiilinin Zamanlara Göre Çekimleri
+"To be" fiili, kullanıldığı zamana ve özneye göre şekil değiştirir.
+
+### 1. Geniş Zaman (Present Tense): AM / IS / ARE
+Bu form, günümüzdeki durumları, genel geçer doğruları ve özellikleri anlatır.
+
+Normal Yazılış	Kısaltma	Türkçe Anlamı
+I am	I'm	Ben ...-ım/im
+You are	You're	Sen ...-sın/sin
+He is	He's	O (erkek) ...-dır/dir
+She is	She's	O (kız) ...-dır/dir
+It is	It's	O (cansız/hayvan) ...-dır/dir
+We are	We're	Biz ...-ız/iz
+They are	They're	Onlar ...-dırlar/dirler
+
+Kullanım 1: Durum Bildirme (Simple Present) "Olmak" anlamında asıl fiil olarak kullanılır.
+
+I am a lawyer. (Ben bir avukatım.)
+
+We are students. (Biz öğrenciyiz.)
+
+Kullanım 2: Şimdiki Zaman (Present Continuous) Burada "to be" bir yardımcı fiildir ve asıl fiile -ing eki gelerek eylemin şu anda yapıldığını gösterir.
+
+They are walking on the beach. (Onlar sahilde yürüyorlar.)
+
+He is studying right now. (O şu anda ders çalışıyor.)
+
+### 2. Geçmiş Zaman (Past Tense): WAS / WERE
+Geçmişteki durumları, özellikleri veya konumları belirtmek için kullanılır.
+
+I / He / She / It ile WAS
+
+You / We / They ile WERE
+
+Kullanım 1: Durum Bildirme (Past Simple) Geçmişte "olmak" anlamında asıl fiildir.
+
+The dog was very hungry. (Köpek çok açtı.)
+
+They were tired. (Onlar yorgundu.)
+
+Kullanım 2: Geçmişte Süreklilik (Past Continuous) Geçmişte bir süre devam etmiş eylemleri anlatırken yardımcı fiil olarak kullanılır.
+
+I was playing guitar. (Gitar çalıyordum.)
+
+You were driving. (Araba sürüyordun.)
+
+### 3. Diğer "To Be" Formları
+Been (Perfect Hali): have/has/had gibi yardımcı fiillerden sonra (Perfect Tense) kullanılır.
+
+I have been a mother for 10 years. (10 yıldır anneyim.)
+
+She has been a great host. (Çok iyi bir ev sahibi oldu.)
+
+Being (Gerund Hali): Cümlede özne olarak veya edatlardan sonra kullanılır.
+
+Being healthy is the most important thing. (Sağlıklı olmak en önemli şeydir.)
+
+He is scared of being left alone. (Yalnız kalmaktan korkuyor.)
+
+To be (Infinitive / Mastar Hali): will, should, could, want gibi yapılardan sonra kullanılır.
+
+I will be in Ankara tomorrow. (Yarın Ankara'da olacağım.)
+
+She could be a great doctor. (Harika bir doktor olabilirdi.)
+
+## Olumsuz ve Soru Cümleleri (Am / Is / Are)
+"To be" fiili ile cümle kurmanın en kolay yanlarından biri, soru ve olumsuz yapılarının basitliğidir.
+
+### 1. Olumsuz Cümleler (Negatives)
+Olumsuz yapmak için am / is / are yardımcı fiilinden sonra "not" kelimesi getirilir.
+
+Normal Yazılış	Kısaltma
+I am not	(Kısalmaz)
+You are not	You aren't
+He is not	He isn't
+She is not	She isn't
+It is not	It isn't
+We are not	We aren't
+They are not	They aren't
+
+Örnekler:
+
+Tom isn't tired. (Tom yorgun değildir.)
+
+Shops aren't closed. (Dükkanlar kapalı değildir.)
+
+Beyza isn't playing basketball. (Beyza basketbol oynamıyor.)
+
+### 2. Soru Cümleleri (Questions)
+Soru yapmak için am / is / are yardımcı fiili cümlenin başına getirilir.
+
+Olumlu Cümle	Soru Cümlesi
+Tom is tired.	Is Tom tired? (Tom yorgun mu?)
+Shops are closed.	Are shops closed? (Mağazalar kapalı mı?)
+Jane is at home.	Is Jane at home? (Jane evde mi?)
+Orhun is studying.	Is Orhun studying? (Orhun ders mi çalışıyor?)
+
+"To Be" ile Sık Kullanılan Sıfatlar
+"To be" fiili en çok sıfatlarla birlikte kullanılarak kişileri ve nesneleri tanımlar.
+
+Kişilik Sıfatları:
+
+Patient: Sabırlı
+
+Honest: Dürüst
+
+Talkative: Konuşkan
+
+Shy: Utangaç
+
+Hardworking: Çalışkan
+
+Lazy: Tembel
+
+Angry: Sinirli
+
+Dış Görünüş Sıfatları:
+
+Beautiful: Güzel
+
+Handsome: Yakışıklı
+
+Tall: Uzun
+
+Short: Kısa
+
+Thin: Zayıf
+
+Overweight: Kilolu
+
+Curly: Kıvırcık (Saç)
+
+Diğer Genel Sıfatlar:
+
+Good / Bad: İyi / Kötü
+
+New / Old: Yeni / Eski
+
+Big / Little: Büyük / Küçük
+
+Important: Önemli
+
+Correct / Wrong: Doğru / Yanlış
+
+Örnek Cümleler:
+
+Hülya is very patient. (Hülya çok sabırlıdır.)
+
+This topic isn't so important. (Bu konu çok önemli değil.)
+
+Ahmet is a tall guy but his hair isn't long. (Ahmet uzun boylu bir çocuk ama saçı uzun değil.)
+
+"To Be" İçeren Yaygın Deyimler
+"To be" fiili, İngilizcede birçok kalıplaşmış deyimde yer alır.
+
+To be in hot water: Başı belada olmak.
+
+I haven’t done my homework, I’m in hot water! (Ödevimi yapmadım, başım belada!)
+
+To be over the moon: Çok mutlu olmak, sevinçten havalara uçmak.
+
+I’m over the moon right now! (Şu an çok mutluyum!)
+
+To be in the same boat: Aynı durumda/gemide olmak (genellikle zor bir durumda).
+
+We are all in the same boat, we should work together. (Hepimiz aynı gemideyiz, birlikte çalışmalıyız.)
+
+To be on the fence: Kararsız olmak.
+
+I’m on the fence. I don’t know who I will vote for. (Kararsızım. Kime oy vereceğimi bilmiyorum.)
+
+To be under the weather: Keyifsiz veya hasta hissetmek.
+
+I’m a little under the weather today. (Bugün biraz keyifsizim/hastayım.)
+
+To be a piece of cake: Çok kolay olmak (Çocuk oyuncağı).
+
+You can solve this problem! It’s a piece of cake! (Bu problemi çözebilirsin! Çok kolay!)
+`,
+      example: 'I am a student. (Ben bir öğrenciyim.)'
+    },
+    {
+      title: 'Simple Present Tense',
+      summary: `Simple Present Tense, Türkçedeki geniş zamanın karşılığıdır ve İngilizcede en yaygın kullanılan zaman kiplerinden biridir. Temel olarak alışkanlıkları, değişmeyen durumları, genel gerçekleri ve planlanmış eylemleri ifade etmek için kullanılır.
+
+## 📌 Simple Present Tense Ne Zaman Kullanılır?
+Geniş zamanın kullanıldığı başlıca durumlar şunlardır:
+
+Rutinler, Alışkanlıklar ve Tekrarlanan Eylemler
+Belli bir süre zarfında veya düzenli olarak tekrarlanan eylemleri anlatır.
+I drink two cups of coffee every morning. (Her sabah iki fincan kahve içerim.)
+He goes to the theater once a week. (O, haftada bir kez tiyatroya gider.)
+
+Genel Geçer Gerçekler ve Doğrular
+Herkes tarafından bilinen, bilimsel veya değişmez gerçekleri ifade ederken kullanılır.
+The sun sets in the west. (Güneş batıdan batar.)
+Water boils at 100°C. (Su, 100 derecede kaynar.)
+Cats like milk. (Kediler süt sever.)
+
+Değişmeyen Durumlar, Duygular ve Arzular
+Uzun süreli devam eden durumları, hisleri, düşünceleri veya tercihleri belirtir.
+She works in London. (O, Londra'da çalışır.)
+I like chocolate. (Çikolata severim.)
+I don’t believe you. (Sana inanmıyorum.)
+
+Planlanmış Eylemler ve Zaman Çizelgeleri
+Gelecek zamanda gerçekleşmesi kesin olan, bir takvime veya programa (otobüs, tren, sınav, ders) bağlanmış olayları anlatırken kullanılır. Cümle gelecek zaman anlamı taşısa da yapı olarak geniş zamandır.
+The exam starts at 10 o’clock tomorrow. (Sınav yarın saat 10'da başlıyor.)
+My family come to us on Monday. (Ailem pazartesi günü bize geliyor.)
+The train leaves every morning at 8 am. (Tren her sabah saat 8'de kalkar.)
+
+Talimatlar ve Yön Bildirme
+Birine talimat verirken veya yol tarifi yaparken kullanılır (Emir cümleleri).
+You take the No:12 bus to Kadıköy. (Kadıköy'e gitmek için 12 No'lu otobüse binersiniz.)
+Follow the rules! (Kurallara uy!)
+
+Hikaye Anlatımı
+Özellikle masal, fıkra veya kitap özetlerinde hikaye anlatırken olayları daha canlı aktarmak için kullanılır.
+The giant attacks the city. (Dev şehre saldırır.)
+
+## ⚙️ Simple Present Tense Cümle Yapısı
+Geniş zamanda cümle kurmak için "do" ve "does" yardımcı fiilleri kullanılır. Ancak bu yardımcı fiiller çoğunlukla olumsuz ve soru cümlelerinde ortaya çıkar.
+
+### 1. Olumlu Cümleler (Affirmative)
+Formül oldukça basittir. Özneden sonra fiilin 1. hali (V1) getirilir.
+Kural: Subject + Verb (V1) + Object
+Buradaki en önemli kural, üçüncü tekil şahıslarda (He, She, It) fiilin sonuna "-s" takısı almasıdır.
+I / You / We / They + Verb (V1)
+He / She / It + Verb (V1) + s
+Örnekler:
+You work at the weekends. (Hafta sonları çalışırsın.)
+She gets up early. (O, erken kalkar.)
+My dad goes to work every day. (Babam her gün işe gider.)
+DİKKAT: Özneye dikkat edin. "Bizim arkadaşımız" gibi ifadeler tekil sayılır.
+Our friend lives in London. (Bizim arkadaşımız Londra'da yaşar.)(Burada özne "biz" değil, "bizim arkadaşımız"dır, yani "he" veya "she"dir.)
+
+### 2. Olumsuz Cümleler (Negative)
+Olumsuz cümle yapmak için don't (do not) veya doesn't (does not) yardımcı fiilleri kullanılır.
+Kural: Subject + do/does + not + Verb (V1) + Object
+I / You / We / They + don't + Verb (V1)
+He / She / It + doesn't + Verb (V1)
+Önemli Kural: Üçüncü tekil şahıslarda (He, She, It) olumsuz cümle kurarken doesn't kullanıldığı için, asıl fiil "-s" takısı almaz ve mastar (yalın) halde kalır.
+Örnekler:
+I don’t drink milk. (Süt içmem.)
+We don’t speak Turkish. (Türkçe konuşmayız.)
+She doesn’t like football. (O, futbolu sevmez.)
+He doesn’t want ice cream. (O, dondurma istemez.)
+
+### 3. Soru Cümleleri (Interrogative)
+Soru yapmak için Do veya Does yardımcı fiilleri cümlenin başına getirilir.
+Kural: Do/Does + Subject + Verb (V1) + Object?
+Do + I / You / We / They + Verb (V1)?
+Does + He / She / It + Verb (V1)?
+Önemli Kural: Tıpkı olumsuz cümlede olduğu gibi, soru cümlesinde de Does kullanıldığı için asıl fiil "-s" takısı almaz ve mastar (yalın) halde kalır.
+Örnekler:
+Do I like Maths? (Matematiği sever miyim?)
+Do they play football? (Onlar futbol oynar mı?)
+Does it eat dried cat food? (O, kuru kedi maması yer mi?)
+Does she want ice cream? (O, dondurma istiyor mu?)
+
+### 💡 "-s Takısı" İçin Hatırlatıcı Senaryo
+Geniş zamanı bir şirket gibi düşünün. Does ve doesn’t şirketin patronları, -s takısı ise sekreterdir.
+Olumlu Durum: Şirkette her şey yolundayken (cümle olumlu), tüm işlere sekreter (-s) bakar. ( She works. )
+Olumsuz Durum / Sorun: Şirkette bir sorun (olumsuz cümle) veya bir soru (soru cümlesi) olduğunda, patronlar (doesn’t / Does) devreye girer. Patronlar gelince sekreter (-s) doğal olarak aradan çekilir.
+She doesn’t work. (Patron geldi, -s gitti.)
+Does she work? (Patron geldi, -s gitti.)
+
+## 📖 Özet Tablo: Fiil Çekimleri
+Olumlu (Affirmative)Olumsuz (Negative)Soru (Interrogative)I sleep (Uyurum)I don't sleep (Uyumam)Do I sleep? (Uyur muyum?)You sleep (Uyursun)You don't sleep (Uyumazsın)Do you sleep? (Uyur musun?)He/She/It sleeps (O uyur)He/She/It doesn't sleep (O uyumaz)Does he/she/it sleep? (O uyur mu?)We sleep (Uyuruz)We don't sleep (Uyumayız)Do we sleep? (Uyur muyuz?)You sleep (Uyursunuz)You don't sleep (Uyumazsınız)Do you sleep? (Uyur musunuz?)They sleep (Uyurlar)They don't sleep (Uyumazlar)Do they sleep? (Uyurlar mı?)
+
+## ✍️ Üçüncü Tekil Şahıs (-s, -es, -ies) Kuralları
+"He, She, It" özneleriyle olumlu cümle kurarken fiillere eklenen "-s" takısının özel kuralları vardır:
+Genel Kural: Çoğu fiil sadece -s alır.
+think → thinksgive → giveswant → wantsplay → plays (Sessiz harf + y kuralının istisnasıdır, vowel+y olduğu için sadece -s alır.)
+-ss, -x, -ch, -sh ile Bitenler: Fiilin sonu bu harflerle bitiyorsa -es takısı alır.
+pass → passesfix → fixescatch → catchespush → pushesgo → goes (Bu kurala uyar)do → does (Bu kurala uyar)Sessiz Harf + y ile Bitenler: Fiilin sonu sessiz bir harf ve ardından -y ile bitiyorsa, -y harfi düşer ve yerine -ies gelir.
+fly → fliescry → criesmarry → marriesstudy → studies
+
+## 🕒 Simple Present Tense Zaman Zarfları (Sıklık Zarfları)
+Geniş zaman cümleleri, eylemin ne sıklıkla yapıldığını belirten zarflarla kullanılır.
+Zarf (Adverb)TürkçesiÖrnek Cümlealwaysdaima, her zamanI always love you. (Seni her zaman severim.)usuallygenellikleI usually listen to classical music. (Genellikle klasik müzik dinlerim.)oftensık sıkI often visit him. (Onu sık sık ziyaret ederim.)sometimesbazen, ara sıraI sometimes go to the cinema. (Bazen sinemaya giderim.)rarelynadirenI rarely smoke. (Nadiren sigara içerim.)neverasla, hiçI never smoke. (Asla sigara içmem.)every...her...I go fishing every Monday. (Her pazar balık tutmaya giderim.)
+Önemli Not: "Never" (asla) kelimesi cümleye zaten olumsuz bir anlam katar. Bu nedenle "never" kullanılan cümlelerde ayrıca don't veya doesn't gibi olumsuz bir yardımcı fiil kullanılmaz.
+He never eats broccoli. (O asla brokoli yemez.)
+`,
+      example: 'I work every day. (Her gün çalışırım.)'
+    },
+    {
+      title: 'This, That, These, Those',
+      summary: `Bu rehberde, İngilizcedeki İşaret Zamirleri (Demonstrative Pronouns) ve İşaret Sıfatları (Demonstrative Adjectives) konusunu detaylıca ele alacağız. Bu yapılar, bizimle aynı yerde veya uzakta bulunan kişileri veya nesneleri işaret etmek, onları göstermek için kullanılır.
+
+Temel olarak bu dört kelime şu anlamlara gelir:
+
+This: Bu
+
+That: Şu / O
+
+These: Bunlar / Bu
+
+Those: Şunlar / Şu / O
+
+## Temel Kural: Yakınlık ve Sayı Matrisi
+İngilizcede hangi işaret kelimesini kullanacağımıza karar verirken iki temel unsura dikkat ederiz:
+
+Yakınlık (Proximity): İşaret ettiğimiz şey konuşmacıya yakın mı, yoksa uzak mı?
+
+Sayı (Number): İşaret ettiğimiz şey tekil mi (bir tane), yoksa çoğul mu (birden fazla)?
+
+Bu kuralı aşağıdaki tablo mükemmel bir şekilde özetlemektedir:
+
+Yakın (Here)	Uzak (There)
+Tekil (Singular)	This (Bu)	That (Şu / O)
+Çoğul (Plural)	These (Bunlar)	Those (Şunlar / Onlar)
+
+## En Önemli Fark: İşaret Zamiri (Pronoun) vs. İşaret Sıfatı (Adjective)
+Bu dört kelime (this, that, these, those) cümlede iki farklı görevde kullanılabilir. Bu ayrımı anlamak, konunun temelini oluşturur.
+
+### 1. İşaret Zamiri (Demonstrative Pronoun)
+Görevi: İsmin yerine geçer.
+
+Kullanımı: Cümlede tek başına kullanılabilir. Kendisinden sonra bir isim gelmesine gerek yoktur, çünkü zaten o ismin yerini tutar.
+
+Örnekler:
+
+This is a red pen. (Bu bir kırmızı kalemdir.)
+
+These are blue pens. (Bunlar mavi kalemlerdir.)
+
+That is our house. (O bizim evimiz.)
+
+I’d like to buy these. (Bunları satın almak istiyorum.)
+
+Did you do that? (Bunu sen mi yaptın?)
+
+### 2. İşaret Sıfatı (Demonstrative Adjective)
+Görevi: İsmi niteler (belirtir). Hangi isimden bahsettiğimizi gösterir.
+
+Kullanımı: Tek başına kullanılamaz. Mutlaka kendisinden sonra bir isim gelmesi gerekir.
+
+Örnekler:
+
+This pen is red. (Bu kalem kırmızıdır.)
+
+These pens are blue. (Bu kalemler mavidir.)
+
+That city is crowded. (O şehir kalabalıktır.)
+
+Those flowers are beautiful. (Şu çiçekler güzeldir.)
+
+## Kullanım Alanları ve İpuçları
+### 1. "Here" ve "There" İpucu
+Cümlelerde yakınlık veya uzaklığı pekiştirmek için here (burada) ve there / over there (orada, şurada) ifadeleri sıkça kullanılır. Bu ifadeler, doğru kelimeyi seçmeniz için size bir ipucu verir:
+
+Yakın (here) → This / These
+
+Look at this newspaper here. (Buradaki bu gazeteye bak.)
+
+These photos here are much better... (Buradaki bu fotoğraflar çok daha iyi...)
+
+Uzak (there / over there) → That / Those
+
+That building over there is the Chrysler Building. (Oradaki şu bina Chrysler Binası'dır.)
+
+Those people over there are my parents. (Şuradaki o insanlar benim ebeveynlerim.)
+
+### 2. Fiziksel ve Psikolojik Mesafe (This/That)
+Yakınlık ve uzaklık her zaman fiziksel olmak zorunda değildir. Bazen duygusal, psikolojik veya zamansal bir mesafeyi de ifade edebilir:
+
+Fiziksel Mesafe:
+
+Who owns that house? (Şu evin sahibi kim?) (Fiziksel olarak uzakta)
+
+Is this John's house? (Bu John'un evi mi?) (Fiziksel olarak yakında)
+
+Psikolojik / Duygusal Yakınlık (Olumlu):
+
+This is a nice surprise! (Bu ne güzel bir sürpriz!)
+
+I love this song! (Bu şarkıyı seviyorum!)
+
+Psikolojik / Duygusal Uzaklık (Olumsuz/Nötr):
+
+That's nothing to do with me. (Bunun benimle hiçbir alakası yok.)
+
+I don’t like that idea. (O fikri sevmedim / O fikir bana uymuyor.)
+
+### 3. Zaman İfadeleri
+This (Şu an veya yakın gelecek):
+
+I’m going on vacation this month. (Bu ay tatile gidiyorum.)
+
+That (Geçmiş zaman):
+
+That summer was unforgettable. (O yaz unutulmazdı.)
+
+### 4. Özel Kullanım Durumları
+Kişileri Tanıtma:
+
+Hello, this is my friend, Mark. (Merhaba, bu benim arkadaşım Mark.)
+
+These are my friends. (Bunlar benim arkadaşlarım.)
+
+Is that your colleague? (Şu senin meslektaşın mı?)
+
+Telefon Görüşmeleri:
+
+Hello, this is Joanna speaking. (Merhaba, ben Joanna konuşuyorum.)
+
+Is that John? (Sen John musun? / Oradaki John mu?)
+
+## Dil Bilgisi Notları ve "One" Kullanımı
+Bu yapıların dil bilgisi açısından kullanımını özetlersek:
+
+İsimden Önce (Sıfat):
+
+Do you remember that great day in London? (Londra'daki o mükemmel günü hatırlıyor musun?)
+
+Tek Başına (Zamir):
+
+I will never forget this. (Bunu asla unutmayacağım.)
+
+"One" Kelimesinden Önce: İsmi tekrar etmemek için "one" (tekiller için) veya "ones" (çoğullar için) kelimesiyle birlikte sıfat gibi kullanılabilirler.
+
+This car looks cleaner than that one. (Bu araba, şundan [o diğer arabadan] daha temiz görünüyor.)
+
+## Sık Kullanılan Kalıplar ve Deyimler
+Bu kelimeler, günlük dilde sıkça kullanılan birçok popüler ifadenin temelini oluşturur:
+
+That’s it! (İşte bu! / Tamamdır! / Aradığım şey bu!)
+
+That’s all. (Hepsi bu kadar.)
+
+That’s right. (Doğru.)
+
+That’s great! (Bu harika!)
+
+That’s all right. (Sorun değil / Tamamdır.)
+
+Forget that! (Unut bunu!)
+
+At this rate... (Bu gidişle... / Bu hızla...)
+
+This way, please. (Bu taraftan, lütfen.)
+
+Those were the days! (Ah, ne günlerdi!)
+
+In this case... (Bu durumda...)
+`,
+      example: 'This is a book. (Bu bir kitaptır.)'
+    },
+    {
+      title: 'There is / There are',
+      summary: `Merhaba! Bugünkü konumuz İngilizcedeki en temel ve en çok kullanılan yapılardan biri olan "There is / There are". Bu yapıyı Türkçedeki "var" ifadesinin karşılığı olarak düşünebilirsiniz. Bir şeyin varlığını, bulunduğunu veya bir şeyin yerini bildirmek için bu kalıbı kullanırız.
+
+Temel kural çok basit:
+
+Varlığını bildirdiğimiz şey tekil (bir tane) ise "There is" kullanırız.
+
+Varlığını bildirdiğimiz şey çoğul (birden fazla) ise "There are" kullanırız.
+
+Şimdi bu yapıyı cümle türlerine göre detaylıca inceleyelim.
+
+## 1. Olumlu Cümleler (Affirmative)
+Olumlu cümlelerde "var" demek için cümlenin başına "There is" veya "There are" getiririz.
+
+Formül: There is + Tekil İsim
+Formül: There are + Çoğul İsim
+
+Örnekler:
+
+There is a big tree in the garden. (Bahçede büyük bir ağaç var.)
+
+There is a cat under the bed. (Yatağın altında bir kedi var.)
+
+There is a beautiful dress in the wardrobe. (Gardıropta güzel bir elbise var.)
+
+There are some students in the classroom. (Sınıfta birkaç tane öğrenci var.)
+
+There are two chairs in the room. (Odada iki sandalye var.)
+
+There are five water bottles in the fridge. (Buzdolabında 5 tane su şişesi var.)
+
+### Sayılabilen ve Sayılamayan İsimler (Countable & Uncountable)
+Burada çok önemli bir detaya dikkat etmeliyiz. İngilizcede "su, süt, para, şeker, makarna" (water, milk, money, sugar, pasta) gibi bazı isimler sayılamayan (uncountable) kabul edilir.
+
+Sayılamayan isimler çoğul eki (-s) alamazlar ve her zaman tekil kabul edilirler. Bu yüzden sayılamayan bir isimden bahsederken her zaman "There is" kullanırız.
+
+There is some milk in the fridge. (Buzdolabında biraz süt var.)
+
+There isn't any money in the bag. (Çantada hiç para yok.)
+
+There is some honey in the tea. (Çayda biraz bal var.)
+
+## 2. Olumsuz Cümleler (Negative)
+Bu yapıyı olumsuz yapmak, yani Türkçedeki "yok" ifadesini vermek için is veya are yardımcı fiillerinden sonra "not" ekleriz.
+
+Formül: There is not (isn't) + Tekil İsim
+Formül: There are not (aren't) + Çoğul İsim
+
+Örnekler:
+
+There isn't a problem between us. (Aramızda bir problem yok.)
+
+There isn't a poster on the wall. (Duvarda bir poster yok.)
+
+There aren't any students in the classroom. (Sınıfta hiç öğrenci yok.)
+
+There aren't any books on the shelf. (Rafta hiç kitap yok.)
+
+There aren't five people in that room. (O odada beş kişi yok.)
+
+## 3. Soru Cümleleri (Interrogative)
+Soru sormak istediğimizde, diğer İngilizce yapılarından alışkın olduğumuz gibi, yardımcı fiili (is / are) cümlenin başına alırız.
+
+### A. Evet/Hayır Soru Cümleleri
+Formül: Is there + Tekil İsim?
+Formül: Are there + Çoğul İsim?
+
+Örnekler:
+
+Is there a good hotel near here? (Afedersiniz, buralarda güzel bir otel var mı?)
+
+Is there a cat under the table? (Masanın altında bir kedi var mı?)
+
+Is there a university in your city? (Şehrinde bir üniversite var mı?)
+
+Are there two books on the table? (Masanın üzerinde iki kitap var mı?)
+
+Are there six plates on the counter? (Tezgahın üstünde altı tabak mı var?)
+
+### B. Olumsuz Soru Cümleleri
+"Yok mu?" diye sormak istediğimizde olumsuz soru kalıbını kullanırız.
+
+Örnekler:
+
+Isn't there a dog in the garden? (Bahçede bir köpek yok mudur?)
+
+Aren't there two balls in the box? (Kutunun içinde iki top yok mudur?)
+
+Is there not a book on the table? (Masanın üzerinde bir kitap yok mudur?)
+
+## 4. "Some," "Any" ve "No" ile Kullanım
+"There is / There are" yapısıyla birlikte "biraz", "birkaç" veya "hiç" demek için bu kelimeleri sıkça kullanırız.
+
+Some (Biraz / Birkaç): Genellikle olumlu cümlelerde kullanılır. Hem sayılamayan isimlerle ("biraz") hem de sayılabilen çoğul isimlerle ("birkaç") kullanılabilir.
+
+There is some honey in the tea. (Çayda biraz bal var.)
+
+There are some birds outside. (Dışarıda birkaç kuş var.)
+
+Any (Hiç): Genellikle olumsuz cümlelerde ve soru cümlelerinde kullanılır. "Hiç" anlamı katar.
+
+There aren't any limits! (Hiçbir sınır yok!)
+
+Is there any pasta left? (Hiç makarna kaldı mı?)
+
+There isn't any money in the bag. (Çantada hiç para yok.)
+
+No (Hiç / Yok): "Any" ile aynı anlamı verir ("hiç") ama çok önemli bir farkı vardır: No, yapısı olumlu olan cümlelerde kullanılır ve cümleyi kendi başına olumsuz yapar. "No" kullanılan bir cümlede "not" (isn't/aren't) kullanılmaz.
+
+There is no way it’s true! (Bunun doğru olmasının hiçbir yolu yok!)
+
+There are no eggs in the basket. (Sepette hiç yumurta yok.) (There aren't any eggs... ile aynı anlamda)
+
+There is no teacher in the classroom. (Sınıfta öğretmen yok.)
+
+## 5. Önemli Fark: "There is" mi, "It is" mi?
+Bu iki yapı sıkça karıştırılır ama aralarındaki fark çok nettir:
+
+There is: Bir şeyin varlığından ilk kez bahsederken, bir şeyi ortama tanıtırken kullanılır. ("Var" anlamındadır.)
+
+There is a vase on the table. (Masanın üzerinde bir vazo var.) (Yanlış kullanım: It's a vase on the table.)
+
+It is: Daha önce bahsedilen, ne olduğu zaten bilinen bir nesneyi veya durumu tanımlarken, nitelerken kullanılır. ("O ...-dır" anlamındadır.)
+
+I like this vase. It is very expensive. (Bu vazoyu seviyorum. O çok pahalı.) (Yanlış kullanım: There is very expensive.)
+`,
+      example: 'There is a cat in the garden. (Bahçede bir kedi var.)'
+    },
+    {
+      title: 'Can / Can\'t (Yetenek Bildiren Cümleler)',
+      summary: `Merhaba! Bugünkü konumuz, İngilizcede en sık kullanılan "modal verb" (yardımcı fiil) olan "can". Türkçedeki "-ebilmek, -abilmek" ekinin tam karşılığıdır.
+
+Bu konunun en güzel yanı, yapısının çok kolay olmasıdır. Özne (I, you, he, she, it, we, they) ne olursa olsun "can" değişmez ve ondan sonra gelen fiil her zaman yalın (V1) halde kullanılır. Geniş zamanda gördüğümüz -s, -es, -ies takıları gibi eklemeler burada kesinlikle yoktur.
+
+Peki, "can" yapısını hangi anlamlarda kullanırız? Tıpkı Türkçedeki gibi, "can" de birden fazla anlam taşır:
+
+Yetenek (Ability): Çok güzel resim yapabilir.
+
+Olasılık (Possibility): Bugün yağmur yağabilir.
+
+İzin (Permission): Bu akşam arkadaşımda kalabilir miyim?
+
+Rica (Request): Bana yardım edebilir misin?
+
+Şimdi bu kullanım alanlarına ve cümle yapılarına detaylıca bakalım.
+
+## 📌 "Can" Kullanım Alanları
+### 1. Yetenek (Ability)
+Bir eylemi gerçekleştirebilme kabiliyetini veya yeteneğini ifade etmek için kullanılır.
+
+I can drive a car. (Ben araba sürebilirim.)
+
+She can speak German. (O, Almanca konuşabilir.)
+
+Owls can fly. (Baykuşlar uçabilir.)
+
+Eagles can see very far distances. (Kartallar çok uzak mesafeleri görebilir.)
+
+### 2. Olasılık (Possibility)
+Bir eylemin yapılmasının veya bir durumun meydana gelmesinin mümkün (muhtemel) olduğunu belirtir.
+
+It can rain tomorrow. (Yarın yağmur yağabilir.)
+
+The doctor can see you at 3:00. (Doktor sizi saat 3'te görebilir.) (Yani 3'te sizi görmesi mümkün.)
+
+You can't buy flowers at a butcher's. (Kasaptan çiçek satın alamazsınız.) (Bu mümkün değildir.)
+
+### 3. İzin (Permission)
+Bir eylemi yapmak için izin isterken veya birine izin verirken kullanılır.
+
+Can I sit here? (Buraya oturabilir miyim?)
+
+Can I go to the party, please? (Partiye gidebilir miyim, lütfen?)
+
+You can go out at 7 o’clock. (Saat 7'de dışarı çıkabilirsiniz.)
+
+He can sleep in my living room if he is so tired. (Eğer çok yorgunsa oturma odamda uyuyabilir.)
+
+### 4. Rica (Request)
+Karşımızdaki kişiden bir şey yapmasını isterken (ricada bulunurken) kullanılır.
+
+Can you help me, please? (Bana yardım edebilir misin, lütfen?)
+
+Can you bring me a cup of coffee? (Bana bir bardak kahve getirebilir misin?)
+
+Can you close the door? (Kapıyı kapatır mısın?)
+
+Önemli Not: "Can" ile yapılan ricalar genellikle samimi (gayri resmi) durumlar içindir. Arkadaşlarınız, aileniz gibi yakın çevrenizle konuşurken tercih edilir. Daha resmi durumlar için "Could" kullanmak daha uygundur.
+
+## ⚙️ "Can / Can't" Cümle Yapısı
+### 1. Olumlu Cümleler (+)
+Yapısı çok basittir. Özne ne olursa olsun "can" getirilir ve fiil yalın halde (V1) kullanılır.
+
+Formül: Özne + can + Fiil (V1) + ...
+
+I can speak English. (Ben İngilizce konuşabilirim.)
+
+She can sing very well. (O çok iyi şarkı söyleyebilir.)
+
+My students can dance. (Öğrencilerim dans edebilir.)
+
+### 2. Olumsuz Cümleler (-)
+Yapamadığımız şeyleri belirtmek için "can" yardımcı fiiline "not" olumsuzluk eki getirilir.
+
+Formül: Özne + can't + Fiil (V1) + ...
+
+I can't help you today. I’m really busy. (Sana bugün yardım edemem. Çok meşgulüm.)
+
+She can't speak French. (O, Fransızca konuşamaz.)
+
+He can't drive a car. (O, araba süremez.)
+
+Yazım Kuralı (Can't vs. Cannot):
+
+Kısa ve yaygın kullanım: can't
+
+Uzun (Resmi/Akademik) kullanım: cannot Normalde "do not" veya "does not" gibi ayrı yazılan olumsuzluk ekinin aksine, "can" fiilinin olumsuzu birleşik olarak "cannot" şeklinde yazılır. Bu, can not (ayrı) yazımından daha doğru ve yaygın bir kullanımdır.
+
+### 3. Soru Cümleleri (?)
+Soru yapmak için "can" yardımcı fiili cümlenin başına, yani öznenin önüne getirilir.
+
+Formül: Can + Özne + Fiil (V1) + ... ?
+
+Can you swim? (Yüzebilir misin?)
+
+Can he cook? (O, yemek yapabilir mi?)
+
+Can we dance? (Dans edebilir miyiz?)
+
+Can wood float on the water? (Tahta, suyun yüzeyinde batmadan durabilir mi?)
+
+Soru Cümlelerine Cevaplar:
+
+Can you ride a bike? (Bisiklet sürebiliyor musun?)
+
+Yes, I can. (Evet, sürebilirim.)
+
+No, I can't. (Hayır, süremem.)
+
+## 💡 Önemli Ek Bilgiler: "Could" ve "Be Able To"
+"Can" şimdiki zaman ve geniş zaman için kullanılır. Peki, geçmişte yapabildiğimiz veya gelecekte yapabileceğimiz şeyleri nasıl söyleriz?
+
+### 1. Geçmiş Zaman: "Could" (Genel Yetenek)
+"Can" fiilinin geçmiş zaman hali "could" (-ebilirdim, -abilirdim) şeklindedir. Geçmişteki genel yeteneklerimizden bahsederken kullanılır.
+
+I could swim when I was 4 years old. (4 yaşındayken yüzebilirdim.)
+
+My brother could play the piano. (Erkek kardeşim piyano çalabilirdi.)
+
+My brother couldn't swim when he was 10. (Kardeşim 10 yaşındayken yüzemiyordu.)
+
+### 2. Geçmiş Zaman: "Be Able To" (Spesifik Başarı)
+Eğer geçmişte bir kerelik ve zorlu bir durumun üstesinden gelerek bir şeyi yapmayı başardıysak, "could" yerine "was / were able to" kalıbı tercih edilir.
+
+The table was very heavy, but the woman was able to lift it. (Masa çok ağırdı ama kadın onu kaldırabildi.) (Burada "could lift" denmez, çünkü bu genel bir yetenek değil, o ana özel bir başarıdır.)
+
+It was very foggy yesterday. Were you able to drive to school? (Dün hava çok sisliydi. Okula arabayla gidebildin mi?)
+
+İstisna: see, hear gibi duyu fiilleriyle, bir kerelik durumlarda bile "could" kullanılabilir.
+
+I could see him through the keyhole. (Onu anahtar deliğinden görebildim.)
+
+Olumsuz Geçmiş: Olumsuz cümlelerde ise bu ayrım genellikle ortadan kalkar. "Couldn't" ve "wasn't/weren't able to" çoğu zaman birbirinin yerine kullanılabilir.
+
+My brother couldn't swim. = My brother wasn't able to swim.
+
+### 3. Gelecek Zaman: "Will Be Able To"
+"Can" fiilinin doğrudan bir gelecek zaman çekimi yoktur. Gelecekte bir şeyi yapabileceğimizi, başarabileceğimizi söylemek için "will be able to" kalıbını kullanırız.
+
+The teacher will be able to rest after school. (Öğretmen okuldan sonra dinlenebilecek.)
+
+I won't be able to read anymore. (Artık okuyamayacağım.)
+
+Will they be able to find the key? (Anahtarı bulabilecekler mi?)
+`,
+      example: 'I can swim. (Yüzebilirim.)'
+    },
+    {
+      title: 'Basic Question Forms (Temel Soru Kalıpları)',
+      summary: `Merhaba! İngilizcede soru sormanın temel olarak iki yolu vardır. Konuya başlamadan önce bu iki yapıyı net bir şekilde ayırmamız gerekiyor.
+
+## 1. Yes/No Questions (Evet/Hayır Soruları)
+Bunlar, adından da anlaşılacağı gibi, cevabı "evet" veya "hayır" olan sorulardır. Bu soru tipini oluşturmak için cümlenin yardımcı fiilini (am, is, are, do, does, did, can, will, vb.) cümlenin en başına getiririz.
+
+He is a teacher. (O bir öğretmendir.)
+
+Is he a teacher? (O bir öğretmen midir?)
+
+She went to school. (O, okula gitti.)
+
+Did she go to school? (O, okula gitti mi?)
+
+## 2. WH- Questions (Soru Kelimeleri ile Sorular)
+İkinci ve asıl konumuz olan soru şekli ise, soru kelimeleri (WH- Questions) kullanarak yapılan sorulardır. Bu sorular "evet" veya "hayır" cevabı kabul etmez; detaylı bilgi isterler (Ne, Nerede, Ne Zaman, Kiminle vb.).
+
+Bu soruları oluşturmak için, Yes/No sorusunun başına ilgili soru kelimesini getiririz.
+
+Genel Formül: Soru Kelimesi + Yardımcı Fiil + Özne + Fiil?
+
+Where + did + she + go? (O nereye gitti?)
+
+When + do + you + go to school? (Ne zaman okula gidersin?)
+
+## Temel Soru Kelimeleri ve Kullanımları
+### ► What? (Ne?)
+"Ne" anlamında, bir eylemi veya nesneyi sormak için kullanılır.
+
+What did you do yesterday? (Dün ne yaptın?)
+
+What do you want to eat? (Ne yemek istiyorsun?)
+
+What happened to her? (Ona ne oldu?)
+
+Önemli Kullanım: Eğer "what" kelimesinden hemen sonra bir isim gelirse, "ne" anlamından "hangi" anlamına dönüşür.
+
+What movie did you see last night? (Dün gece hangi filmi izledin?)
+
+What color is your car? (Araban ne renk? / Hangi renk?)
+
+What country do you want to go? (Hangi ülkeye gitmek istersin?)
+
+### ► When? (Ne Zaman?) ve What Time? (Saat Kaçta?)
+İkisi de zaman sorsa da aralarında önemli bir fark vardır:
+
+When? (Ne Zaman?) Daha genel zaman ifadelerini sorar (dün, yarın, gelecek yıl, akşamları vb.).
+
+When do you go to the cinema? (Sinemaya ne zaman gidersin?)
+
+When did you start working from home? (Evden çalışmaya ne zaman başladın?)
+
+What Time? (Saat Kaçta?) Doğrudan saati sorar (Saat 5'te, 10:30'da vb.).
+
+What time did you arrive home yesterday? (Dün eve saat kaçta vardın?)
+
+What time do you have lunch? (Öğle yemeğini saat kaçta yersin?)
+
+### ► Where? (Nerede? / Nereye?)
+Yer ve konum sormak için kullanılır.
+
+Where does Betty eat breakfast? (Betty kahvaltısını nerede yapar?)
+
+Where do Al and Jennifer live? (Al ve Jennifer nerede yaşarlar?)
+
+Where did you spend your last holiday? (Son tatilini nerede geçirdin?)
+
+### ► Who? (Kim?)
+Bu soru kelimesi çok önemlidir çünkü iki farklı şekilde kullanılır:
+
+1. "Kimi?" (Nesneyi Sorarken - Normal Kural) Eğer "kimi, kime, kiminle" gibi özne dışındaki bir kişiyi soruyorsak, normal formülü (Soru Kelimesi + Yardımcı Fiil + Özne...) kullanırız.
+
+Who do you love? (Sen kimi seviyorsun?)
+
+Who did you see at the party? (Partide kimi gördün?)
+
+Who are you going to invite? (Kimi davet edeceksin?)
+
+2. "Kim?" (Özneyi Sorarken - İstisna) Eğer eylemi yapan kişiyi, yani özneyi soruyorsak, cümleden yardımcı fiil (do/does) kalkar ve fiil, "he/she/it" çekimindeymiş gibi (geniş zamanda -s takısı alır) kullanılır.
+
+Who goes to the office every day? (Büroya her gün kim gider?) (Cevap: "Jane" gider. Jane öznedir.)
+
+Who loves you? (Seni kim seviyor?)
+
+Who likes pancakes? (Keki kim sever?)
+
+Who is the best singer? (En iyi şarkıcı kim?)
+
+### ► Whose? (Kimin?)
+Aidiyet ve sahiplik sormak için kullanılır. Genellikle ardından bir isim gelir.
+
+Whose shirt is this? (Bu kimin tişörtü?)
+
+Whose car are you driving? (Kimin arabasını kullanıyorsun?)
+
+Whose umbrella did you take? (Kimin şemsiyesini aldın?)
+
+### ► Which? (Hangi?)
+Sınırlı sayıda seçenek arasından bir tercih yapmayı sormak için kullanılır ("hangi").
+
+Which shoes did you like? (Hangi ayakkabıları beğendin?)
+
+Which country would you like to visit? (Hangi ülkeyi ziyaret etmek isterdin?)
+
+Which one is your coat? (Hangisi senin palton?)
+
+### ► Why? (Neden? / Niçin?)
+Bir eylemin sebebini sormak için kullanılır.
+
+Why are you crying? (Neden ağlıyorsun?)
+
+Why did she buy an expensive car? (O niçin pahalı bir araba aldı?)
+
+Why do you think that she hates you? (Neden senden nefret ettiğini düşünüyorsun?)
+
+### ► How? (Nasıl?)
+Bir eylemin nasıl yapıldığını, durumunu veya yöntemini sorar.
+
+How are you today? (Bugün nasılsın?)
+
+How did you find my house? (Evimi nasıl buldun?)
+
+How did you go to school? (Okula nasıl [ne ile] gittin?)
+
+## "How" ile Türetilen Diğer Soru KALIPLARI
+"How" kelimesi, yanına sıfat veya zarf alarak birçok farklı soru kalıbı oluşturur:
+
+### ► How many? / How much? (Kaç Tane? / Ne Kadar?)
+How many? (Kaç Tane?) Sayılabilen (Countable) isimlerle kullanılır.
+
+How many students are there in the classroom? (Bu sınıfta kaç tane öğrenci var?)
+
+How many books did you read last month? (Geçen ay kaç kitap okudun?)
+
+How much? (Ne Kadar?) Sayılamayan (Uncountable) isimlerle (para, su, şeker, zaman vb.) kullanılır.
+
+How much money do you want? (Ne kadar para istiyorsun?)
+
+How much sugar do we need? (Ne kadar şekere ihtiyacımız var?)
+
+### ► How long? (Ne Kadar Süre?)
+Bir eylemin zaman olarak ne kadar sürdüğünü sorar.
+
+How long did you work in that company? (O şirkette ne kadar (süre) çalıştın?)
+
+How long do you sleep a night? (Bir gecede ne kadar uyursun?)
+
+### ► How far? (Ne Kadar Uzaklıkta?)
+İki yer arasındaki mesafeyi sormak için kullanılır.
+
+How far is it from İstanbul to Ankara? (İstanbul Ankara arası ne kadar mesafedir?)
+
+How far can you walk in an hour? (Bir saatte ne kadar (uzağa) yürüyebilirsin?)
+
+### ► How often? (Ne Sıklıkla?)
+Bir eylemin ne sıklıkla yapıldığını sorar. Cevaplarda genellikle always, usually, sometimes, every day, once a week gibi sıklık zarfları kullanılır.
+
+How often does he go to the library? (O hangi sıklıkla kütüphaneye gider?)
+
+How often do you eat fruit? (Hangi sıklıkla meyve yersiniz?)
+
+### ► Diğer "How" KalıPLARI
+How fast? (Ne kadar hızlı?): How fast can a cheetah run? (Bir çita ne kadar hızlı koşabilir?)
+
+How tall? (Ne kadar uzun? - Boy): How tall are you? (Boyun kaç?)
+
+How heavy? (Ne kadar ağır?): How heavy is this luggage? (Bu valizin ağırlığı nedir?)
+
+## Özet: WH- Soru FormÜLÜ
+Unutmayın, "Who" ve "What" ile özneyi sorduğumuz istisnalar dışında, temel formülümüz her zaman aynıdır:
+
+Normal Soru Formülü: Soru Kelimesi + Yardımcı Fiil (do/does/did/is/are...) + Özne + Fiil (yalın hali)
+
+Where + do + you + work?
+
+When + does + she + leave?
+
+Why + did + you + go?
+
+İstisna (Özneyi Sorma FormÜLÜ): Soru Kelimesi (Who/What) + Fiil (-s takısı alır) + ...?
+
+Who + likes + pancakes?
+
+What + happens + next?`,
+      example: 'Do you like music? (Müziği sever misin?)'
+    }
   ],
 
   A2: [
@@ -359,7 +1311,160 @@ Bazı -ly ile biten kelimeler SIFATtır: friendly, lovely, lively, lonely, silly
 `,
       example: 'She dances happily. / She is a happy dancer.'
     },
-    { title: 'Have to / Need to (Zorunluluk Bildiren Yapılar)', summary: 'Zorunluluk, gereklilik ve izin ifadelerinde have to / need to kullanımı.', example: 'I have to go to work. (İşe gitmem gerekiyor.)' }
+    {
+      title: 'Have to / Need to (Zorunluluk Bildiren Yapılar)',
+      summary: `## "Modals" Nedir?
+İngilizce öğrenme sürecinde "Modals" konusu ilk başta karışık görünebilir, ancak bu fiiller aslında cümlelere "zorunluluk", "olasılık", "izin" veya "yetenek" gibi ekstra anlamlar katan özel yardımcı fiillerdir. Bu rehberde, "zorunluluk" ve "gereklilik" bildiren must ve have to yapılarına odaklanacağız.
+
+## 1. "Must" Kullanımı (İçsel Zorunluluk ve Güçlü Tavsiye)
+"Must", temelde bir durumun çok gerekli veya zorunlu olduğunu belirtir. Genellikle bu zorunluluk konuşmacının kendisinden, yani kişinin kendi hislerinden, kararlarından veya güçlü inançlarından kaynaklanır.
+
+Kullanım Alanları:
+
+Kişisel Zorunluluk (Konuşmacının Kararı):
+
+I must study hard if I want to pass. (Eğer geçmek istiyorsam, sıkı çalışmalıyım.) - (Bu benim kendi kararım, içsel zorunluluğum.)
+
+The windows are very dirty. I must clean them. (Pencereler çok kirli. Onları temizlemeliyim.)
+
+Güçlü Tavsiye (Strong Advice):
+
+It is a fantastic film. You must see it. (Bu harika bir film. Mutlaka görmelisin.) - (Bu benim sana güçlü tavsiyem.)
+
+Mantıksal Çıkarım (Logical Deduction): Gördüğünüz bir duruma bakarak mantıksal bir çıkarım yaparken kullanılır ("...olmalı").
+
+She must be rich, look at her car. (Zengin olmalı, arabasına bak.)
+
+Your umbrella is wet. It must be raining outside. (Şemsiyen ıslak. Dışarıda yağmur yağıyor olmalı.)
+
+### "Mustn't" Kullanımı (Yasaklama - Prohibition)
+"Must" kelimesinin olumsuzu olan "mustn't", "zorunda değil" demek değildir. "Mustn't", güçlü bir YASAKLAMA bildirir. "...yapmamalısın!", "...yasak!" anlamındadır.
+
+You mustn't smoke on a train. (Trende sigara içmek yasaktır / içmemelisin.)
+
+You mustn't touch the pictures in the museum. (Müzedeki resimlere dokunmamalısın.)
+
+You mustn't park your car here. (Buraya araba park etmen yasak.)
+
+## 2. "Have to / Has to" Kullanımı (Dışsal Zorunluluk ve Kurallar)
+"Have to" da "must" gibi zorunluluk bildirir ancak bu zorunluluk genellikle dışarıdan gelen bir etken, bir kural, bir yasa veya başka bir otoritenin (patron, doktor, devlet) getirdiği bir mecburiyettir.
+
+Yapı (Olumlu Cümleler):
+
+I / You / We / They → have to + V1
+
+He / She / It → has to + V1
+
+Kullanım Alanları:
+
+Dış Kurallar ve Yasalar:
+
+Everybody must stop when the light is red. (Trafik ışığı kırmızı yandığında herkes durmalı.) - (Bu bir kuraldır.)
+
+You have to be 18 to get a driving licence in Turkey. (Türkiye'de ehliyet almak için 18 yaşında olman gerekir.)
+
+I have to wear a suit at work. (İşyerinde takım elbise giymeliyim.) - (Şirketin kuralı.)
+
+Dış Etkenler (Başkasının İsteği):
+
+The doctor said to me "You have to stop smoking". (Doktor bana "Sigarayı bırakmak zorundasın" dedi.)
+
+I have to go the work today. (Bugün işe gitmem gerek.) - (Patron bekler, iş bekler.)
+
+### "Don't Have to / Doesn't Have to" Kullanımı (Zorunluluk Yokluğu)
+"Have to" yapısının olumsuzu "don't have to" veya "doesn't have to" şeklindedir. Anlamı "mustn't" gibi "yasak" DEĞİLDİR.
+
+Anlamı: Gerek yok / Zorunda değilsin. Yapılmasında bir sakınca yoktur, ancak yapma mecburiyeti de yoktur.
+
+You don't have to like me. (Benden hoşlanmak zorunda değilsin.)
+
+We don't have to rush. We've got a lot of time. (Acele etmek zorunda değiliz. Çok vaktimiz var.)
+
+Mike is a millionaire. He doesn't have to work. (Mike bir milyoner. Çalışmak zorunda değil.)
+
+Attendance isn’t mandatory. I don't have to come to this class every day. (Katılım zorunlu değil. Bu derse her gün gelmek zorunda değilim.)
+
+## 3. Olumlu Cümlede En Önemli Fark: Must vs. Have to
+Her ikisi de "zorunluluk" bildirse de, aradaki nüans farkı zorunluluğun kaynağıdır:
+
+Must	Have to
+İçsel Zorunluluk (Kişisel Karar)	Dışsal Zorunluluk (Kural, Yasa, Otorite)
+I must stop eating so much sugar. (Çok şeker yemeyi bırakmalıyım.)
+
+
+(Bu benim kendi kararım, sağlığım için.)
+
+I have to pay the rent tomorrow. (Yarın kirayı ödemeliyim.)
+
+
+(Ev sahibinin kuralı, bir dış etken.)
+
+I must see the manager. (Müdürü görmeliyim.)
+
+
+(Bu benim acil şahsi talebim.)
+
+I have to wear a suit at work. (İşte takım giymeliyim.)
+
+
+(Bu, şirketin genel kuralı.)
+
+E-Tablolar'a aktar
+
+## 4. Olumsuz Cümlede En Büyük Fark: Mustn't vs. Don't Have to
+Olumlu cümlede birbirine benzeyen bu iki yapı, olumsuz olduğunda tamamen farklı anlamlara gelir. Bu, konunun en kritik noktasıdır.
+
+Mustn't (Yasaklama)	Don't Have to (Gerek Yok)
+Yapman YASAK! Seçeneğin yok.	Yapmak Zorunda Değilsin. Seçeneğin var (istersen yapabilirsin).
+You mustn't park here. (Buraya park etmemelisin.)
+
+
+(Yasak, ceza yersin.)
+
+You don't have to park here. (Buraya park etmek zorunda değilsin.)
+
+
+(İstersen başka yere de park edebilirsin, gerek yok.)
+
+You mustn't touch the wet paint. (Islak boyaya dokunamazsın!)	
+You don't have to come to the party. (Partiye gelmek zorunda değilsin.)
+
+
+(Ama istersen gelebilirsin, sorun yok.)
+
+E-Tablolar'a aktar
+
+## 5. Geçmiş ve Gelecek Zaman Kullanımı
+"Must" bir modal verb olduğu için zaman çekimi yoktur. Geçmiş veya gelecekteki zorunluluklar için her zaman "have to" yapısını kullanırız.
+
+Geçmiş Zaman (Past Tense): had to "Must" yapısının geçmiş zamanı yoktur. Geçmişteki zorunluluklar için "had to" kullanılır.
+
+I had to get up early yesterday. (Dün erken kalkmak zorundaydım.)
+
+I had to leave early yesterday. (Dün erken çıkmak zorundaydım.)
+
+I didn't like the job, but I had to do it to make money. (İşi sevmiyordum ama para kazanmak için yapmak zorundaydım.)
+
+Gelecek Zaman (Future Tense): will have to
+
+I will have to study hard next year. (Gelecek sene çok çalışmak zorunda kalacağım.)
+
+## 6. "Must" ve Geçmiş Zaman (Mantıksal Çıkarım)
+"Must" kelimesini geçmiş zamanda zorunluluk için kullanamayız (had to kullanırız), ancak geçmiş zaman için mantıksal çıkarım yaparken kullanabiliriz. Bu yapının formülü farklıdır: must have + V3 (-mış olmalı).
+
+The road is still wet. It must have rained this morning. (Yol hâlâ ıslak. Bu sabah yağmur yağmış olmalı.)
+
+Hello mom! Your umbrella is wet. It must have rained outside. (Selam anne! Şemsiyen ıslak. Dışarıda yağmur yağmış olmalı.)
+
+## 7. İlgili Yapı: Needn't (Gerek Yok)
+"Needn't" kelimesi, "don't/doesn't have to" ile tamamen aynı anlama gelir: Gerek yok / Zorunda değilsin.
+
+You needn't pay to get in. The entrance is free. (Girmek için ödemene gerek yok. Giriş ücretsiz.)
+
+You needn't go to the bank today. I can lend you some money. (Bugün bankaya gitmene gerek yok. Sana biraz borç verebilirim.). 
+`,
+      example: 'I have to go to work. (İşe gitmem gerekiyor.)'
+    }
   ],
   B1: [
     {
