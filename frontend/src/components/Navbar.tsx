@@ -122,7 +122,8 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
         color: 'rgba(255,255,255,0.98)'
       }
     }}>
-      <Container maxWidth="xl">
+      <Container disableGutters sx={{ px: { xs: 1.5, md: 3 } }}>
+        <Box sx={{ maxWidth: { lg: 1240, xl: 1320 }, mx: 'auto' }}>
   <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, md: 64 }, pl: 0, pr: 1, overflow: 'visible' }}>
           {/* Mobile menu icon */}
             <Box sx={{ width: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }, display: { xs: 'flex', lg: 'none' }, alignItems: 'center', justifyContent: 'center', pr: { xs: 0.5, sm: 1 } }}>
@@ -522,6 +523,7 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
             </Box>
           )}
         </Toolbar>
+        </Box>
       </Container>
     </AppBar>
   );

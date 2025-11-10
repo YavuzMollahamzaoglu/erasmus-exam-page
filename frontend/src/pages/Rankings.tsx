@@ -1,11 +1,49 @@
 
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
-import { Box, Paper, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Paper, Typography, Select, MenuItem, FormControl, InputLabel, Button, TextField, IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 // Helper to check if a string is a single emoji
 function isSingleEmoji(str: string) {
   return typeof str === 'string' && str.length <= 3 && /^(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
+}
+
+function isSingleLetter(str?: string) {
+  if (!str) return false;
+  const t = str.trim();
+  return [...t].length === 1 && /^[A-Za-zÇĞİÖŞÜçğıöşü]$/u.test(t);
+}
+
+function isLikelyImagePath(str?: string) {
+  if (!str) return false;
+  return /^https?:\/\//.test(str) || str.startsWith('/') || /\.(png|jpe?g|gif|webp|svg)$/i.test(str);
+}
+
+function renderAvatar(avatar?: string, initial?: string) {
+  const isEmoji = avatar && isSingleEmoji(avatar);
+  return (
+    <Box
+      sx={{
+        width: 40,
+        height: 40,
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700,
+        fontSize: isEmoji ? 32 : '1.2rem',
+        bgcolor: '#26c6da',
+        boxShadow: 2,
+        border: '2px solid rgba(255,255,255,0.85)',
+        userSelect: 'none',
+        background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+        color: '#fff',
+      }}
+    >
+      {isEmoji ? avatar : (initial || '?')}
+    </Box>
+  );
 }
 
 interface Props {
@@ -29,6 +67,13 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
   const [selectedType, setSelectedType] = useState<string>('Erasmus');
   const [loading, setLoading] = useState<boolean>(false);
   const [avatarVersion, setAvatarVersion] = useState<number>(() => Date.now());
+  const [comments, setComments] = useState<any[]>([]);
+  const [commentText, setCommentText] = useState('');
+  const [commentLoading, setCommentLoading] = useState(false);
+  const [me, setMe] = useState<any>(null);
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState('');
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   useEffect(() => {
     setMetaTags({
@@ -38,7 +83,18 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
       canonical: '/rankings',
       ogImage: '/social-preview.svg'
     });
-  }, []);
+    if (!token) return;
+    (async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json();
+        setMe(data.user || null);
+        setAvatarVersion(Date.now());
+      } catch {
+        setMe(null);
+      }
+    })();
+  }, [token]);
 
   // Avatar veya baş harf değiştiğinde yorum görsellerini tazele (cache-bust)
   useEffect(() => {
@@ -69,7 +125,14 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
         setRankings([]);
         setLoading(false);
       });
-  }, [token, selectedExam, selectedType]);
+
+    fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+      .then((res) => res.json())
+      .then((data) => setComments(data.comments || []))
+      .catch(() => setComments([]));
+  }, [token, selectedExam, selectedType, avatarVersion]);
 
   // Only show top 20
   const topRankings = rankings.slice(0, 20);
@@ -291,7 +354,377 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
           )}
         </Box>
 
+        <Box sx={{ 
+          p: { xs: 3, md: 4 }, 
+          pt: 0,
+          background: 'rgba(0, 184, 148, 0.02)',
+          borderTop: '1px solid rgba(0, 184, 148, 0.1)'
+        }}>
+          <Typography 
+            variant="h5" 
+            fontWeight={700} 
+            mb={3}
+            sx={{
+              background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            💬 Yorumlar ({comments.length})
+          </Typography>
+          
+          {token && (
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              mb: 3, 
+              p: 2,
+              background: 'rgba(255, 255, 255, 0.8)',
+              borderRadius: 3,
+              border: '1px solid rgba(0, 184, 148, 0.2)',
+              backdropFilter: 'blur(5px)'
+            }}>
+              <Box sx={{ mr: 2 }}>
+                {renderAvatar(userAvatar, userInitial)}
+              </Box>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Yorumunuzu yazın..."
+                value={commentText}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCommentText(event.target.value)}
+                sx={{ 
+                  mr: 2,
+                  '& .MuiOutlinedInput-root': {
+                    background: 'rgba(255, 255, 255, 0.9)',
+                    borderRadius: 2,
+                    '& fieldset': {
+                      borderColor: 'rgba(0, 184, 148, 0.3)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'rgba(0, 184, 148, 0.5)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#00b894',
+                    },
+                  }
+                }}
+              />
+              <Button
+                variant="contained"
+                disabled={commentLoading || !commentText.trim()}
+                onClick={async () => {
+                  setCommentLoading(true);
+                  try {
+                    await fetch(`${process.env.REACT_APP_API_URL}/api/comments`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                      },
+                      body: JSON.stringify({ text: commentText.trim(), exam: selectedExam })
+                    });
+                    setCommentText('');
+                    fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
+                      headers: token ? { Authorization: `Bearer ${token}` } : {}
+                    })
+                      .then((res) => res.json())
+                      .then((data) => setComments(data.comments || []))
+                      .catch(() => setComments([]));
+                  } finally {
+                    setCommentLoading(false);
+                  }
+                }}
+                sx={{
+                  background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                  color: '#fff',
+                  fontWeight: 700,
+                  borderRadius: 2,
+                  px: 3,
+                  textTransform: 'none',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)',
+                  }
+                }}
+              >
+                Gönder
+              </Button>
+            </Box>
+          )}
+
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {comments.length === 0 ? (
+              <Box sx={{ 
+                textAlign: 'center', 
+                py: 4,
+                color: '#666'
+              }}>
+                <Typography>Henüz yorum yapılmamış.</Typography>
+              </Box>
+            ) : (
+              comments.map((c) => (
+                <Box 
+                  key={c.id} 
+                  sx={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    p: 3,
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    borderRadius: 3,
+                    border: '1px solid rgba(0, 184, 148, 0.1)',
+                    backdropFilter: 'blur(5px)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      background: 'rgba(255, 255, 255, 0.9)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 8px 25px rgba(0, 184, 148, 0.15)',
+                    }
+                  }}
+                >
+                  <Box sx={{ mr: 2 }}>
+                    {c.user?.avatar ? (
+                      isSingleEmoji(c.user.avatar) ? (
+                        <span style={{ fontSize: 32, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #00b894', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)' }}>{c.user.avatar}</span>
+                      ) : isSingleLetter(c.user.avatar) ? (
+                        <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
+                          {c.user.avatar.toUpperCase()}
+                        </Box>
+                      ) : isLikelyImagePath(c.user.avatar) ? (
+                        <img
+                          loading="lazy"
+                          src={`${String(c.user.avatar).startsWith('http') ? c.user.avatar : process.env.REACT_APP_API_URL + (String(c.user.avatar).startsWith('/') ? c.user.avatar : '/uploads/profile-photos/' + c.user.avatar)}?v=${avatarVersion}`}
+                          alt={c.user?.name ? `${c.user.name} adlı kullanıcının profili` : 'Kullanıcı profil fotoğrafı'}
+                          style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', border: '2px solid #00b894', flex: '0 0 auto' }}
+                        />
+                      ) : (
+                        <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
+                          {(c.user?.name?.[0] || '?').toUpperCase()}
+                        </Box>
+                      )
+                    ) : (
+                      <Box sx={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.2rem', border: '2px solid #00b894' }}>
+                        {(c.user?.name?.[0] || '?').toUpperCase()}
+                      </Box>
+                    )}
+                  </Box>
+                  <Box sx={{ flex: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, position: 'relative' }}>
+                      <Typography fontWeight={600} color="#00b894" sx={{
+                        display: 'block',
+                        '@media (max-width:600px)': {
+                          fontSize: '1rem',
+                        }
+                      }}>
+                        {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name : 'Anonim'}
+                      </Typography>
+                      <Box
+                        sx={{
+                          ml: 'auto',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: { xs: 'flex-end', md: 'flex-start' },
+                          width: { xs: '100%', md: 'auto' },
+                          position: { xs: 'absolute', md: 'static' },
+                          right: { xs: 16, md: 'unset' },
+                          bottom: { xs: 8, md: 'unset' },
+                          mt: { xs: 0.5, md: 0 },
+                        }}
+                      >
+                        <Typography
+                          fontSize="0.8rem"
+                          color="#666"
+                          sx={{
+                            display: 'block',
+                            '@media (max-width:600px)': {
+                              fontSize: '0.85rem',
+                            },
+                          }}
+                        >
+                          {c.createdAt ? new Date(c.createdAt).toLocaleDateString('tr-TR') : ''}
+                        </Typography>
+                      </Box>
+                      {token && me?.id === c.userId && (
+                        <Box sx={{ position: 'absolute', top: -8, right: -8 }}>
+                          <IconButton
+                            size="small"
+                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                              event.stopPropagation();
+                              setEditingCommentId(c.id);
+                            }}
+                            sx={{ color: '#00b894' }}
+                          >
+                            <SettingsIcon fontSize="small" />
+                          </IconButton>
+                          {editingCommentId === c.id && (
+                            <Box sx={{
+                              position: 'absolute',
+                              top: 32,
+                              right: 0,
+                              background: '#fff',
+                              border: '1px solid #00b894',
+                              borderRadius: 2,
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                              zIndex: 1000,
+                              minWidth: 120
+                            }}>
+                              <Button
+                                size="small"
+                                fullWidth
+                                sx={{
+                                  justifyContent: 'flex-start',
+                                  px: 2,
+                                  py: 1,
+                                  color: '#00b894',
+                                  fontSize: '0.85rem',
+                                  '&:hover': { background: 'rgba(0,184,148,0.08)' }
+                                }}
+                                onClick={() => {
+                                  setEditingText(c.text);
+                                  setEditDialogOpen(true);
+                                  setEditingCommentId(null);
+                                }}
+                              >
+                                Düzenle
+                              </Button>
+                              <Button
+                                size="small"
+                                fullWidth
+                                sx={{
+                                  justifyContent: 'flex-start',
+                                  px: 2,
+                                  py: 1,
+                                  color: '#e74c3c',
+                                  fontSize: '0.85rem',
+                                  '&:hover': { background: 'rgba(231,76,60,0.08)' }
+                                }}
+                                onClick={async () => {
+                                  if (!token) return;
+                                  try {
+                                    const deleteResp = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${c.id}`, {
+                                      method: 'DELETE',
+                                      headers: { Authorization: `Bearer ${token}` }
+                                    });
+                                    if (deleteResp.ok) {
+                                      setComments((prev) => prev.filter((cm) => cm.id !== c.id));
+                                      setEditingCommentId(null);
+                                    }
+                                  } catch (err) {
+                                    // eslint-disable-next-line no-console
+                                    console.error('Error deleting comment:', err);
+                                  }
+                                }}
+                              >
+                                Sil
+                              </Button>
+                            </Box>
+                          )}
+                        </Box>
+                      )}
+                    </Box>
+                    <Typography color="#2c3e50" lineHeight={1.5}>
+                      {c.text}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))
+            )}
+          </Box>
+
+          {!token && (
+            <Box sx={{ textAlign: 'center', mt: { xs: 2, md: 4 } }}>
+              <Button 
+                variant="contained" 
+                href="/login"
+                sx={{
+                  background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                  color: '#fff',
+                  fontWeight: 700,
+                  borderRadius: { xs: 2, md: 3 },
+                  px: { xs: 2.5, md: 4 },
+                  py: { xs: 0.9, md: 1.5 },
+                  textTransform: 'none',
+                  fontSize: { xs: '0.95rem', md: '1.1rem' },
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #00a085 0%, #00b8b3 100%)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 25px rgba(0, 184, 148, 0.3)',
+                  }
+                }}
+              >
+                Yorum yapmak için giriş yapın
+              </Button>
+            </Box>
+          )}
+        </Box>
+
       </Paper>
+
+      <Dialog 
+        open={editDialogOpen} 
+        onClose={() => setEditDialogOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle sx={{ color: '#00b894', fontWeight: 700 }}>
+          Yorum Düzenle
+        </DialogTitle>
+        <DialogContent sx={{ pt: 2 }}>
+          <TextField
+            fullWidth
+            multiline
+            minRows={3}
+            value={editingText}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEditingText(event.target.value)}
+            placeholder="Yorum metni..."
+            variant="outlined"
+          />
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button 
+            onClick={() => {
+              setEditDialogOpen(false);
+              setEditingCommentId(null);
+              setEditingText('');
+            }}
+            sx={{ color: '#666' }}
+          >
+            İptal
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+              color: '#fff'
+            }}
+            onClick={async () => {
+              if (!token || !editingCommentId || !editingText.trim()) return;
+              try {
+                const updateResp = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${editingCommentId}`, {
+                  method: 'PUT',
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ text: editingText.trim() })
+                });
+                if (updateResp.ok) {
+                  const updated = await updateResp.json();
+                  setComments((prev) => prev.map((cm) => (cm.id === editingCommentId ? updated : cm)));
+                  setEditDialogOpen(false);
+                  setEditingCommentId(null);
+                  setEditingText('');
+                }
+              } catch (err) {
+                // eslint-disable-next-line no-console
+                console.error('Error updating comment:', err);
+              }
+            }}
+          >
+            Kaydet
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

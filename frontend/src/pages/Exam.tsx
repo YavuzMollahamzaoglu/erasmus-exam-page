@@ -619,37 +619,41 @@ const Exam: React.FC = () => {
             }
           }}
         >
-      {/* Desktop top-left finish button inside the card */}
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 20,
-              left: 24,
-              zIndex: 2,
-              display: { xs: 'none', md: 'flex' }
-            }}
-          >
-            <Button
-              onClick={handleFinish}
-              sx={{
-                textTransform: 'none',
-                fontWeight: 700,
-                borderRadius: 3,
-                px: 2.5,
-                py: 0.75,
-                boxShadow: '0 12px 24px rgba(0,184,148,0.25)',
-                background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.25)',
-                '&:hover': {
-                  background: 'linear-gradient(135deg, #00a884 0%, #00bcbc 100%)',
-                  boxShadow: '0 16px 28px rgba(0,184,148,0.32)',
-                }
-              }}
-            >
-              Bitir
-            </Button>
-          </Box>
+      {/* Desktop/tablet: Bitir button fixed to top-left of viewport, not inside card */}
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 32,
+          left: 32,
+          zIndex: 1201,
+          display: { xs: 'none', md: 'flex' },
+          '@media (max-width:1200px)': { top: 16, left: 12 },
+        }}
+      >
+        <Button
+          onClick={handleFinish}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 700,
+            borderRadius: 3,
+            px: 2.5,
+            py: 0.75,
+            boxShadow: '0 12px 24px rgba(0,184,148,0.25)',
+            background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.25)',
+            minWidth: 90,
+            fontSize: 18,
+            letterSpacing: 0.5,
+            '&:hover': {
+              background: 'linear-gradient(135deg, #00a884 0%, #00bcbc 100%)',
+              boxShadow: '0 16px 28px rgba(0,184,148,0.32)',
+            }
+          }}
+        >
+          Bitir
+        </Button>
+      </Box>
       {/* Mobile top controls: Finish (left) + Timer (right) inside the card */}
           <Box
             sx={{
@@ -738,7 +742,9 @@ const Exam: React.FC = () => {
               border: '1px solid rgba(0, 184, 148, 0.2)',
             }}
           >
-            {q.text}
+            {q.text && q.text.length > 0
+              ? q.text[0].toLocaleUpperCase('tr-TR') + q.text.slice(1)
+              : q.text}
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
             {options.length > 0 ? (
