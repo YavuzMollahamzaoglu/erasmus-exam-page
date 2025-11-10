@@ -51,7 +51,8 @@ const ReadingGame: React.FC = () => {
           const key = (p.id || p.title).toString();
           if (!seen.has(key)) { seen.add(key); list.push(p); }
         }
-        setPassages(list);
+        const randomized = list.sort(() => Math.random() - 0.5);
+        setPassages(randomized);
         setCurrentIdx(0);
       } catch (e) {
         setError('Paragraflar yüklenemedi.');
@@ -127,6 +128,25 @@ const ReadingGame: React.FC = () => {
       <Paper elevation={6} sx={{ width: '100%', maxWidth: 920, borderRadius: 4, overflow: 'hidden', mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         {/* Header */}
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, textAlign: 'center', position: 'relative' }}>
+          <IconButton
+            onClick={() => navigate(-1)}
+            aria-label="Geri"
+            sx={{
+              position: 'absolute',
+              top: { xs: 12, md: 18 },
+              left: { xs: 12, md: 24 },
+              color: '#fff',
+              backgroundColor: 'rgba(255,255,255,0.16)',
+              border: '1px solid rgba(255,255,255,0.35)',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.28)',
+                transform: 'translateX(-2px)'
+              },
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Typography variant="h4" fontWeight={800}>Okuma Oyunu</Typography>
             <Typography variant="subtitle1" sx={{ opacity: 0.95, mt: 0.5 }}>Seviye: <b>{levelParam}</b></Typography>
@@ -137,9 +157,6 @@ const ReadingGame: React.FC = () => {
           {/* Nav */}
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <IconButton onClick={() => navigate(-1)} aria-label="Geri">
-                <ArrowBackIcon />
-              </IconButton>
               <Chip label={`Paragraf ${passages.length ? currentIdx + 1 : 0}/${passages.length}`} color="success" variant="outlined" />
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>

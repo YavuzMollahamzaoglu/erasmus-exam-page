@@ -88,7 +88,6 @@ export default function WordMatchingGame() {
   const [playing, setPlaying] = useState(true);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [wrongMsg, setWrongMsg] = useState(false);
-  const [wrongExplanation, setWrongExplanation] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState(false);
 
   // Prepare game by fetching: if setId is provided, use that set; otherwise choose 15 random from words API
@@ -221,7 +220,6 @@ export default function WordMatchingGame() {
     if (targets.find((t) => t.id === targetId)?.matched) return;
     if (pool.find((p) => p.id === wordId)?.used) return;
 
-  const target = targets.find((t) => t.id === targetId);
   if (targetId === wordId) {
       // success
       setTargets((prev) =>
@@ -239,17 +237,9 @@ export default function WordMatchingGame() {
           t.id === targetId ? { ...t, wrongFlash: true } : t
         )
       );
-      // set explanation from example sentence if available, otherwise fallback
-      const expl = target?.example && target.example.trim().length > 0
-        ? target.example
-        : target
-        ? `Bu kelime "${capFirstEn(String(target.english).toLowerCase())}" Türkçe'de "${capFirstTr(String(target.turkish).toLocaleLowerCase('tr'))}" anlamına gelir.`
-        : 'Açıklama bulunamadı.';
-      setWrongExplanation(expl as string);
       setWrongMsg(true);
       setTimeout(() => {
         setWrongMsg(false);
-        setWrongExplanation(null);
         setTargets((prev) => prev.map((t) => ({ ...t, wrongFlash: false })));
       }, 650);
     }
@@ -371,15 +361,7 @@ export default function WordMatchingGame() {
           {wrongMsg && (
             <Fade in={wrongMsg}>
               <Alert severity="error" icon={<ErrorIcon />} sx={{ mb: 2, borderRadius: 2 }}>
-                <div>
-                  <div>Yanlış eşleşme! Tekrar deneyin.</div>
-                  {wrongExplanation && (
-                    <Box sx={{ mt: 1, p: 1.25, bgcolor: '#fff3cd', borderRadius: 1, borderLeft: '4px solid #ff9800' }}>
-                      <Typography variant="body2" fontWeight={700} color="#856404" sx={{ mb: 0.5 }}>Açıklama:</Typography>
-                      <Typography variant="body2" color="#856404">{wrongExplanation}</Typography>
-                    </Box>
-                  )}
-                </div>
+                <div>Yanlış eşleşme! Tekrar deneyin.</div>
               </Alert>
             </Fade>
           )}

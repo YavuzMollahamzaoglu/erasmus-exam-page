@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Select, MenuItem, Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, Alert, Divider, Chip } from '@mui/material';
-import TranslateIcon from '@mui/icons-material/Translate';
 
 interface Word { id: string; english: string; turkish: string; example?: string | null; level: string; }
 
@@ -136,10 +135,9 @@ const Words: React.FC = () => {
                     </Typography>
                     <Chip label={w.level} size="small" sx={{ bgcolor: 'rgba(0,184,148,0.08)', color: '#00b894', fontWeight: 700 }} />
                   </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                    <TranslateIcon fontSize="small" sx={{ color: '#2c3e50', opacity: 0.8 }} />
-                    <Typography fontWeight={600} color="#2c3e50">{capFirstTr(w.turkish)}</Typography>
-                  </Box>
+                  <Typography fontWeight={600} color="#2c3e50" sx={{ mb: 1 }}>
+                    {capFirstTr(w.turkish)}
+                  </Typography>
                   {w.example && (
                     <>
                       <Divider sx={{ my: 1.2, borderColor: 'rgba(0,0,0,0.06)' }} />

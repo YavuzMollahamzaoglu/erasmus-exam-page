@@ -619,6 +619,37 @@ const Exam: React.FC = () => {
             }
           }}
         >
+      {/* Desktop top-left finish button inside the card */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 20,
+              left: 24,
+              zIndex: 2,
+              display: { xs: 'none', md: 'flex' }
+            }}
+          >
+            <Button
+              onClick={handleFinish}
+              sx={{
+                textTransform: 'none',
+                fontWeight: 700,
+                borderRadius: 3,
+                px: 2.5,
+                py: 0.75,
+                boxShadow: '0 12px 24px rgba(0,184,148,0.25)',
+                background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.25)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #00a884 0%, #00bcbc 100%)',
+                  boxShadow: '0 16px 28px rgba(0,184,148,0.32)',
+                }
+              }}
+            >
+              Bitir
+            </Button>
+          </Box>
       {/* Mobile top controls: Finish (left) + Timer (right) inside the card */}
           <Box
             sx={{

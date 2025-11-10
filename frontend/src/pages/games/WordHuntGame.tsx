@@ -82,8 +82,14 @@ export default function WordHuntGame() {
   // Initialize options for current question and restore saved correct state if exists
   useEffect(() => {
     if (words[index]) {
-      // Shuffle options so correct answer isn't always in the same position
-      setCurrentOptions(shuffleArray([...words[index].en]));
+      const baseOptions = Array.isArray(words[index].en)
+        ? [...words[index].en]
+        : [words[index].correct, ...words[index].alternatives];
+      // Ensure the correct answer stays put for a stable UX
+      if (!baseOptions.includes(words[index].correct)) {
+        baseOptions.unshift(words[index].correct);
+      }
+      setCurrentOptions(baseOptions);
       const saved = savedCorrect[index];
       if (saved) {
         // When revisiting, keep highlight via savedCorrect but don't enter 'correct' state
@@ -107,7 +113,7 @@ export default function WordHuntGame() {
     setMistakes(0);
     setShowResult(false);
     setTime(0);
-    setCurrentOptions([...words[0].en]);
+    setCurrentOptions(words[0]?.en ? [...words[0].en] : []);
   setSavedCorrect({});
   };
   const timerRef = useRef<NodeJS.Timeout | null>(null);
