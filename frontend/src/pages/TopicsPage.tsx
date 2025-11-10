@@ -25,7 +25,7 @@ interface Topic {
 const TopicsPage: React.FC = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, ] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string>('A1');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
