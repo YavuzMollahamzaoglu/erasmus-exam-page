@@ -623,11 +623,10 @@ const Exam: React.FC = () => {
       <Box
         sx={{
           position: 'fixed',
-          top: 32,
-          left: 32,
+          top: { md: 84, lg: 96 },
+          left: { md: 20, lg: 28 },
           zIndex: 1201,
           display: { xs: 'none', md: 'flex' },
-          '@media (max-width:1200px)': { top: 16, left: 12 },
         }}
       >
         <Button

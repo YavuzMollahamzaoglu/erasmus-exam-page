@@ -126,7 +126,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
         setLoading(false);
       });
 
-    fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/comments?exam=${selectedExam}&type=${encodeURIComponent(selectedType)}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
       .then((res) => res.json())
@@ -151,7 +151,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
       <Paper 
         elevation={6} 
         sx={{ 
-          maxWidth: 800, 
+          maxWidth: { md: 800, lg: 900, xl: 1100 }, 
           width: '100%', 
           borderRadius: 4, 
           overflow: 'hidden', 
@@ -508,77 +508,45 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                       </Box>
                     )}
                   </Box>
-                  <Box sx={{ flex: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, position: 'relative' }}>
-                      <Typography fontWeight={600} color="#00b894" sx={{
-                        display: 'block',
-                        '@media (max-width:600px)': {
-                          fontSize: '1rem',
-                        }
-                      }}>
-                        {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name : 'Anonim'}
-                      </Typography>
-                      <Box
-                        sx={{
-                          ml: 'auto',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: { xs: 'flex-end', md: 'flex-start' },
-                          width: { xs: '100%', md: 'auto' },
-                          position: { xs: 'absolute', md: 'static' },
-                          right: { xs: 16, md: 'unset' },
-                          bottom: { xs: 8, md: 'unset' },
-                          mt: { xs: 0.5, md: 0 },
-                        }}
-                      >
-                        <Typography
-                          fontSize="0.8rem"
-                          color="#666"
-                          sx={{
-                            display: 'block',
-                            '@media (max-width:600px)': {
-                              fontSize: '0.85rem',
-                            },
-                          }}
-                        >
+                  <Box sx={{ flex: 1, overflow: 'hidden' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <Typography fontWeight={600} color="#00b894">
+                          {(c.user?.name && typeof c.user.name === 'string' && c.user.name.trim().length > 0) ? c.user.name : 'Anonim'}
+                        </Typography>
+                        <Typography fontSize="0.8rem" color="#666">
                           {c.createdAt ? new Date(c.createdAt).toLocaleDateString('tr-TR') : ''}
                         </Typography>
                       </Box>
+
                       {token && me?.id === c.userId && (
-                        <Box sx={{ position: 'absolute', top: -8, right: -8 }}>
+                        <Box sx={{ position: 'relative' }}>
                           <IconButton
                             size="small"
                             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                               event.stopPropagation();
-                              setEditingCommentId(c.id);
+                              setEditingCommentId(c.id === editingCommentId ? null : c.id);
                             }}
                             sx={{ color: '#00b894' }}
                           >
                             <SettingsIcon fontSize="small" />
                           </IconButton>
                           {editingCommentId === c.id && (
-                            <Box sx={{
+                            <Paper sx={{
                               position: 'absolute',
-                              top: 32,
+                              top: '100%',
                               right: 0,
+                              mt: 0.5,
                               background: '#fff',
-                              border: '1px solid #00b894',
+                              border: '1px solid #ddd',
                               borderRadius: 2,
                               boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                               zIndex: 1000,
-                              minWidth: 120
+                              minWidth: 120,
+                              overflow: 'hidden'
                             }}>
-                              <Button
-                                size="small"
-                                fullWidth
-                                sx={{
-                                  justifyContent: 'flex-start',
-                                  px: 2,
-                                  py: 1,
-                                  color: '#00b894',
-                                  fontSize: '0.85rem',
-                                  '&:hover': { background: 'rgba(0,184,148,0.08)' }
-                                }}
+                              <MenuItem
+                                sx={{ fontSize: '0.9rem', color: '#333' }}
                                 onClick={() => {
                                   setEditingText(c.text);
                                   setEditDialogOpen(true);
@@ -586,18 +554,9 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                                 }}
                               >
                                 Düzenle
-                              </Button>
-                              <Button
-                                size="small"
-                                fullWidth
-                                sx={{
-                                  justifyContent: 'flex-start',
-                                  px: 2,
-                                  py: 1,
-                                  color: '#e74c3c',
-                                  fontSize: '0.85rem',
-                                  '&:hover': { background: 'rgba(231,76,60,0.08)' }
-                                }}
+                              </MenuItem>
+                              <MenuItem
+                                sx={{ fontSize: '0.9rem', color: '#e74c3c' }}
                                 onClick={async () => {
                                   if (!token) return;
                                   try {
@@ -616,13 +575,13 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                                 }}
                               >
                                 Sil
-                              </Button>
-                            </Box>
+                              </MenuItem>
+                            </Paper>
                           )}
                         </Box>
                       )}
                     </Box>
-                    <Typography color="#2c3e50" lineHeight={1.5}>
+                    <Typography color="#2c3e50" lineHeight={1.5} sx={{ wordBreak: 'break-word' }}>
                       {c.text}
                     </Typography>
                   </Box>

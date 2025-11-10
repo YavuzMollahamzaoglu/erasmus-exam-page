@@ -122,10 +122,10 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
         color: 'rgba(255,255,255,0.98)'
       }
     }}>
-      <Container disableGutters sx={{ px: { xs: 1.5, md: 3 } }}>
-        <Box sx={{ maxWidth: { lg: 1240, xl: 1320 }, mx: 'auto' }}>
-  <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, md: 64 }, pl: 0, pr: 1, overflow: 'visible' }}>
-          {/* Mobile menu icon */}
+      <Container maxWidth={false} disableGutters sx={{ px: { xs: 1.5, md: 3 } }}>
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, md: 64 }, pl: 0, pr: 1, overflow: 'visible' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+            {/* Mobile menu icon */}
             <Box sx={{ width: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }, display: { xs: 'flex', lg: 'none' }, alignItems: 'center', justifyContent: 'center', pr: { xs: 0.5, sm: 1 } }}>
               <IconButton
                 size="large"
@@ -140,7 +140,72 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
                 <MenuIcon />
               </IconButton>
             </Box>
-  <Menu
+            {/* Brand Logo (click to home) */}
+            <Box
+              component="span"
+              onClick={() => onNavigate('home')}
+              aria-label="Ana sayfa"
+              sx={{
+                display: { xs: 'none', lg: 'inline-flex' },
+                alignItems: 'center',
+                cursor: 'pointer',
+                position: 'relative',
+                zIndex: 3000,
+                ml: '-8px',
+                mr: '8px',
+                height: '64px',
+                overflow: 'visible',
+              }}
+            >
+              <Box
+                component="img"
+                src="/logo.png"
+                alt="İngilizce Hazırlık"
+                sx={{
+                  height: { xs: '64px', sm: '120px', md: '96px', lg: '140px' },
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                  position: 'relative',
+                  top: { xs: '-2px', sm: '-4px', md: '0px' },
+                  transition: 'height 160ms ease, top 160ms ease'
+                }}
+              />
+            </Box>
+            <Box sx={{ position: { lg: 'relative' }, left: { lg: 'auto' }, transform: { lg: 'none' }, display: { xs: 'none', sm: 'none', md: 'none', lg: 'inline-flex' }, alignItems: 'center', pointerEvents: 'none', overflow: 'visible' }}>
+              <Typography
+                component="span"
+                onClick={() => onNavigate('home')}
+                sx={{
+                  alignItems: 'center',
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 700,
+                  fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem', lg: '1.3rem' },
+                  letterSpacing: '.05rem',
+                  color: 'white',
+                  userSelect: 'none',
+                  cursor: 'pointer',
+                  lineHeight: 1,
+                  ml: { sm: '-3px', md: '-3px', lg: '-3px' },
+                  position: 'relative',
+                  left: { lg: '-3px' },
+                  pointerEvents: 'auto',
+                  flexShrink: 0,
+                  minWidth: 0,
+                  '&, & .MuiTypography-root': {
+                    marginLeft: '-3px !important'
+                  }
+                }}
+              >
+                <span style={{ color: '#fff', fontWeight: 700 }}>İngilizce</span>
+                <span style={{ color: '#fff', fontWeight: 700, marginLeft: 3 }}>Hazırlık</span>
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Mobile popup dialog and menu */}
+          <Box>
+            <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
@@ -227,7 +292,7 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
               </DialogTitle>
               <DialogContent sx={{ pt: 0, pb: 1 }}>
                 <List sx={{ py: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-      {pages.map((page) => (
+                  {pages.map((page) => (
                     <ListItemButton
                       key={page.value}
                       onClick={() => { 
@@ -252,77 +317,8 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
                 </List>
               </DialogContent>
             </Dialog>
-          {/* Small screen brand logo (left of menu icon) - compact */}
-          {/* Removed redundant small logo-only box */}
-
-          {/* Brand Logo (click to home) */}
-          <Box
-            component="span"
-            onClick={() => onNavigate('home')}
-            aria-label="Ana sayfa"
-            sx={{
-              display: { xs: 'none', lg: 'inline-flex' },
-              alignItems: 'center',
-              cursor: 'pointer',
-              position: 'relative',
-              zIndex: 3000,
-              ml: '-8px',
-              mr: '8px',
-              // constrain the wrapper height to keep the navbar size unchanged
-              height: '64px',
-              overflow: 'visible',
-            }}
-          >
-            <Box
-              component="img"
-              src="/logo.png"
-              alt="İngilizce Hazırlık"
-              sx={{
-                  // responsive visual size: larger logo on wide screens for stronger branding
-                  height: { xs: '64px', sm: '120px', md: '96px', lg: '140px' },
-                width: 'auto',
-                objectFit: 'contain',
-                display: 'block',
-                position: 'relative',
-                  top: { xs: '-2px', sm: '-4px', md: '0px' },
-                transition: 'height 160ms ease, top 160ms ease'
-              }}
-            />
           </Box>
-
-          <Box sx={{ position: { lg: 'relative' }, left: { lg: 'auto' }, transform: { lg: 'none' }, display: { xs: 'none', sm: 'none', md: 'none', lg: 'inline-flex' }, alignItems: 'center', pointerEvents: 'none', overflow: 'visible' }}>
-            <Typography
-              component="span"
-              onClick={() => onNavigate('home')}
-                sx={{
-                alignItems: 'center',
-                fontFamily: 'Poppins, sans-serif',
-                fontWeight: 700,
-                fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem', lg: '1.3rem' },
-                letterSpacing: '.05rem',
-                color: 'white',
-                userSelect: 'none',
-                cursor: 'pointer',
-                lineHeight: 1,
-                // force a hard left margin so the title doesn't get pushed; keep it from shrinking
-                // keep a small visual gap from the logo (approx 4-8px)
-                ml: { sm: '-3px', md: '-3px', lg: '-3px' },
-                position: 'relative',
-                left: { lg: '-3px' },
-                pointerEvents: 'auto',
-                flexShrink: 0,
-                minWidth: 0,
-                // use important via nested selector to ensure the computed margin wins over inline styles
-                '&, & .MuiTypography-root': {
-                  marginLeft: '-3px !important'
-                }
-              }}
-            >
-              <span style={{ color: '#fff', fontWeight: 700 }}>İngilizce</span>
-              <span style={{ color: '#fff', fontWeight: 700, marginLeft: 3 }}>Hazırlık</span>
-            </Typography>
-          </Box>
-
+          
           {/* Desktop Navigation */}
           <Box sx={{ 
             flexGrow: 1, 
@@ -523,7 +519,6 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
             </Box>
           )}
         </Toolbar>
-        </Box>
       </Container>
     </AppBar>
   );

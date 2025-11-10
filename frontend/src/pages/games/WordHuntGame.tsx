@@ -85,11 +85,8 @@ export default function WordHuntGame() {
       const baseOptions = Array.isArray(words[index].en)
         ? [...words[index].en]
         : [words[index].correct, ...words[index].alternatives];
-      // Ensure the correct answer stays put for a stable UX
-      if (!baseOptions.includes(words[index].correct)) {
-        baseOptions.unshift(words[index].correct);
-      }
-      setCurrentOptions(baseOptions);
+      
+      setCurrentOptions(shuffleArray(baseOptions));
       const saved = savedCorrect[index];
       if (saved) {
         // When revisiting, keep highlight via savedCorrect but don't enter 'correct' state
