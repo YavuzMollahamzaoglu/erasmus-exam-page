@@ -25,11 +25,6 @@ const getAlternativeOption = (wordData: WordData, originalWrongOption: string) =
   return availableAlternatives[Math.floor(Math.random() * availableAlternatives.length)] || originalWrongOption;
 };
 
-const gradients = [
-  "linear-gradient(135deg, #00b894 0%, #00cec9 100%)",
-  "linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)",
-];
-
 export default function WordHuntGame() {
   // Read level from URL (default a1)
   const levelParam = new URLSearchParams(window.location.search).get('level') || 'a1';
@@ -46,7 +41,6 @@ export default function WordHuntGame() {
   const [showResult, setShowResult] = useState(false);
   const [time, setTime] = useState(0);
   const [currentOptions, setCurrentOptions] = useState<string[]>([]);
-  const [wrongAttempts, setWrongAttempts] = useState(0);
   // Persist per-question correct state so it remains highlighted when navigating back
   const [savedCorrect, setSavedCorrect] = useState<Record<number, { selected: string }>>({});
   // Only hide nav during short correct animation
@@ -90,7 +84,6 @@ export default function WordHuntGame() {
     if (words[index]) {
       // Shuffle options so correct answer isn't always in the same position
       setCurrentOptions(shuffleArray([...words[index].en]));
-      setWrongAttempts(0);
       const saved = savedCorrect[index];
       if (saved) {
         // When revisiting, keep highlight via savedCorrect but don't enter 'correct' state
@@ -115,7 +108,6 @@ export default function WordHuntGame() {
     setShowResult(false);
     setTime(0);
     setCurrentOptions([...words[0].en]);
-    setWrongAttempts(0);
   setSavedCorrect({});
   };
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -165,7 +157,6 @@ export default function WordHuntGame() {
     } else {
       setStatus("wrong");
       setMistakes((m) => m + 1);
-      setWrongAttempts(prev => prev + 1);
       
       // Show wrong card for 1.5 seconds, then automatically change the wrong option
       setTimeout(() => {
@@ -193,7 +184,6 @@ export default function WordHuntGame() {
   const handleSkip = () => {
     setStatus("idle");
     setSelected(null);
-    setWrongAttempts(0);
     if (index < words.length - 1) {
       setIndex((i) => i + 1);
     } else {
@@ -208,23 +198,12 @@ export default function WordHuntGame() {
       setIndex((i) => i - 1);
       setStatus("idle");
       setSelected(null);
-      setWrongAttempts(0);
     }
   };
 
   const handleFinish = () => {
     setShowResult(true);
     if (timerRef.current) clearInterval(timerRef.current);
-  };
-
-  const handleCloseResult = () => {
-    setShowResult(false);
-    setIndex(0);
-    setScore(0);
-    setMistakes(0);
-    setTime(0);
-    setCurrentOptions([...words[0].en]);
-    setWrongAttempts(0);
   };
 
   // Loading state

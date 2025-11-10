@@ -359,7 +359,7 @@ const FillInTheBlanksGame: React.FC = () => {
         score,
       },
     }));
-  }, [userAnswers, availableOptions, isSubmitted, showResults, score, currentKey]);
+  }, [userAnswers, availableOptions, isSubmitted, showResults, score, currentKey, currentQuestion]);
 
   const renderTextWithBlanks = () => {
     if (!currentQuestion) return null;

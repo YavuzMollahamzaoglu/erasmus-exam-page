@@ -31,7 +31,6 @@ const ReadingGame: React.FC = () => {
   const [questions, setQuestions] = useState<ReadingQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, number | null>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [expandedExplanations, setExpandedExplanations] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

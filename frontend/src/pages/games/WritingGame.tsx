@@ -28,19 +28,15 @@ export default function WritingGame() {
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [score, setScore] = useState(0);
   const [mistakes, setMistakes] = useState(0);
-  // Number of questions skipped or left unanswered
-  const [blanks, setBlanks] = useState(0);
   const [words, setWords] = useState<WordData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [time, setTime] = useState(0);
-  const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
   // Persist per-question correct state so it remains highlighted when going back
   const [savedCorrect, setSavedCorrect] = useState<Record<number, { correct: boolean }>>({});
   // Hint system
   const [hintsUsed, setHintsUsed] = useState<Record<number, string[]>>({});
-  const [currentHint, setCurrentHint] = useState<string>("");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch questions from API
@@ -86,13 +82,10 @@ export default function WritingGame() {
     setStatus("idle");
     setScore(0);
     setMistakes(0);
-  setBlanks(0);
     setShowResult(false);
     setTime(0);
-    setShowCorrectAnswer(false);
   setSavedCorrect({});
     setHintsUsed({});
-    setCurrentHint("");
   };
 
   // Hint functions
@@ -120,10 +113,6 @@ export default function WritingGame() {
     if (nextHint) {
       const newUsedHints = [...usedHints, nextHint.type];
       setHintsUsed(prev => ({ ...prev, [index]: newUsedHints }));
-      setCurrentHint(nextHint.message);
-    } else {
-      setCurrentHint("Tüm ipuçları kullanıldı!");
-      setTimeout(() => setCurrentHint(""), 2000);
     }
   };
 
@@ -142,9 +131,6 @@ export default function WritingGame() {
   useEffect(() => {
     if (!words.length) return;
     
-    // Clear current hint when question changes
-    setCurrentHint("");
-    
     if (savedCorrect[index]?.correct) {
       setStatus("correct");
       setInput(words[index].en);
@@ -152,7 +138,7 @@ export default function WritingGame() {
       setStatus("idle");
       setInput("");
     }
-  }, [index, words]);
+  }, [index, words, savedCorrect]);
 
   useEffect(() => {
     if (showResult) return;
@@ -203,10 +189,8 @@ export default function WritingGame() {
     } else {
       setStatus("wrong");
       setMistakes((m) => m + 1);
-      setShowCorrectAnswer(true);
       setTimeout(() => {
         setStatus("idle");
-        setShowCorrectAnswer(false);
       }, 2500);
     }
   };
@@ -214,8 +198,6 @@ export default function WritingGame() {
   const handleSkip = () => {
     setStatus("idle");
     setInput("");
-  // Count this question as blank (skipped)
-  setBlanks((b) => b + 1);
     if (index < words.length - 1) {
       setIndex((i) => i + 1);
     } else {
@@ -239,27 +221,8 @@ export default function WritingGame() {
   };
 
   const handleFinish = () => {
-    // When finishing early, count remaining unseen questions as blank.
-    // Also count the current one as blank if nothing is entered and it wasn't answered correctly.
-    setBlanks((prev) => {
-      const currentIsBlank = (!savedCorrect[index]?.correct && input.trim() === "");
-      const remainingUnseen = words.length - (index + 1);
-      return prev + (currentIsBlank ? 1 : 0) + Math.max(0, remainingUnseen);
-    });
     setShowResult(true);
     if (timerRef.current) clearInterval(timerRef.current);
-  };
-
-  const handleCloseResult = () => {
-    setShowResult(false);
-    setIndex(0);
-    setScore(0);
-    setMistakes(0);
-    setTime(0);
-    setInput("");
-    setStatus("idle");
-    setHintsUsed({});
-    setCurrentHint("");
   };
 
   // Loading state
