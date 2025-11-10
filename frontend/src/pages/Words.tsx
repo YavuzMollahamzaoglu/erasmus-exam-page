@@ -18,12 +18,14 @@ const Words: React.FC = () => {
   const [level, setLevel] = useState('A1');
   const [words, setWords] = useState<Word[]>([]);
   const [open, setOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(false);
   const [sentences, setSentences] = useState<string[]>([]);
   const [currentWord, setCurrentWord] = useState<string>('');
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
   // Progress bar için state
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSeeding, setIsSeeding] = useState(false);
 
   useEffect(() => {
@@ -54,6 +56,7 @@ const Words: React.FC = () => {
     return up + s.slice(1);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleMoreSentences = async (wordId: string, wordText: string) => {
     setCurrentWord(wordText);
     if (!token) {

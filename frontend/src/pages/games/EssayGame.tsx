@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -90,7 +89,7 @@ function EssayGame() {
 
   useEffect(() => {
     if (!timerActive) setTimerActive(true);
-  }, []);
+  }, [timerActive]);
 
   useEffect(() => {
     // Soruyu değiştirdiğimizde seçenekleri karıştır

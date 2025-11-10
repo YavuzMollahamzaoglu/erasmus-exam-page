@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import setMetaTags from '../../utils/seo';
-import { Box, Typography, Button, Paper, Alert, IconButton, LinearProgress, CircularProgress, Tooltip, useMediaQuery } from '@mui/material';
+import { Box, Typography, IconButton, LinearProgress, CircularProgress, Tooltip, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-// Diziyi karıştıran yardımcı fonksiyon
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
 
 interface FillInTheBlanksQuestion {
   id: string;
@@ -77,28 +68,6 @@ const FillInTheBlanksGame: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [time, setTime] = useState(0);
   const [questionStates, setQuestionStates] = useState<Record<string, QuestionState>>({});
-  // Modern buton stili
-  const optionButtonSx = {
-    minWidth: 110,
-    minHeight: 44,
-    borderRadius: 3,
-    fontWeight: 600,
-    fontSize: 18,
-    background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-    color: '#fff',
-    boxShadow: '0 2px 8px 0 rgba(0,0,0,0.08)',
-    mb: 1,
-    mx: 1,
-    transition: 'transform 0.1s',
-    '&:hover': {
-      background: 'linear-gradient(135deg, #0984e3 0%, #00b894 100%)',
-      transform: 'scale(1.05)',
-    },
-    '&.Mui-selected': {
-      background: 'linear-gradient(135deg, #00cec9 0%, #00b894 100%)',
-      color: '#fff',
-    },
-  };
 
   // Shuffle fonksiyonu
   function shuffleArray<T>(array: T[]): T[] {
@@ -322,6 +291,7 @@ const FillInTheBlanksGame: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const restartGame = () => {
     if (questions.length === 0) return;
     // Rebuild initial states for all questions
