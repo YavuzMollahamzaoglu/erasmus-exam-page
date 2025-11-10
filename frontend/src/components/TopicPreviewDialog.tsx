@@ -109,9 +109,7 @@ const TopicPreviewDialog: React.FC<Props> = ({ open, onClose, category, series, 
       setError(null);
       try {
         const r = await fetch(`${API_URL}/api/topics/preview?${params.toString()}`);
-        const ct = r.headers.get('content-type') || '';
         if (!r.ok) {
-          const txt = await r.text().catch(() => '');
           throw new Error(`Ön izleme alınamadı (${r.status}).`);
         }
         // Parse as text first to be robust against wrong content-type
@@ -170,7 +168,7 @@ const TopicPreviewDialog: React.FC<Props> = ({ open, onClose, category, series, 
           if (seriesId) qParams.set('seriesId', String(seriesId));
           const rq = await fetch(`${API_URL}/api/questions?${qParams.toString()}`);
           if (!rq.ok) {
-            const t = await rq.text().catch(() => '');
+            await rq.text().catch(() => '');
             throw new Error(`Soru listesi alınamadı (${rq.status}).`);
           }
           const rawQ = await rq.text();
@@ -273,13 +271,13 @@ const TopicPreviewDialog: React.FC<Props> = ({ open, onClose, category, series, 
                 ))}
               </Box>
             )}
-            {topics.map((t) => {
-              const pct = t.percentage ?? Math.round((t.count / (total || 1)) * 100);
+            {topics.map((topic) => {
+              const pct = topic.percentage ?? Math.round((topic.count / (total || 1)) * 100);
               return (
-                <Box key={t.name} sx={{ mb: 1.5 }}>
+                <Box key={topic.name} sx={{ mb: 1.5 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                    <Typography fontWeight={700} color="#004d40">{t.name}</Typography>
-                    <Typography color="#004d40">{pct}% • {t.count} soru</Typography>
+                    <Typography fontWeight={700} color="#004d40">{topic.name}</Typography>
+                    <Typography color="#004d40">{pct}% • {topic.count} soru</Typography>
                   </Box>
                   <LinearProgress variant="determinate" value={pct} sx={{ height: 8, borderRadius: 6, bgcolor: 'rgba(0,0,0,0.06)', '& .MuiLinearProgress-bar': { bgcolor: '#00b894' } }} />
                 </Box>
@@ -316,9 +314,9 @@ const TopicPreviewDialog: React.FC<Props> = ({ open, onClose, category, series, 
                 {gains.tips && gains.tips.length > 0 && (
                   <Box sx={{ mt: 1 }}>
                     <Typography fontWeight={700} sx={{ color: '#00695c', mb: 1 }}>İpuçları</Typography>
-                    {gains.tips.map((t, i) => (
+                    {gains.tips.map((tip, i) => (
                       <Typography key={i} variant="body2" sx={{ display: 'flex', alignItems: 'baseline', gap: 1, color: '#37474f' }}>
-                        <span>›</span> <span>{t}</span>
+                        <span>›</span> <span>{tip}</span>
                       </Typography>
                     ))}
                   </Box>

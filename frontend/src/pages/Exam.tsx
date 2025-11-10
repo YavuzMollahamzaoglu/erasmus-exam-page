@@ -795,8 +795,8 @@ const Exam: React.FC = () => {
               <Button variant="text" onClick={() => setShowExplanation(e => !e)}>
                 {showExplanation ? 'Çözümü Gizle' : 'Çözümü Göster'}
               </Button>
-              {showExplanation && (
-                <Typography mt={2} color="text.secondary">{q.explanation}</Typography>
+              {showExplanation && explanation && (
+                <Typography mt={2} color="text.secondary">{explanation}</Typography>
               )}
             </Box>
           )}
@@ -854,29 +854,6 @@ const Exam: React.FC = () => {
                 const userAnswer = answers[idx];
                 const isUnanswered = userAnswer === null || userAnswer === undefined || userAnswer === '';
                 const isCorrect = !isUnanswered && compareAnswers(userAnswer, question.correct);
-                
-                // Determine colors based on answer status
-                let borderColor, textColor, backgroundColor, hoverColor;
-                if (isUnanswered) {
-                  // Boş bırakılan sorular - turuncu
-                  borderColor = '#f39c12';
-                  textColor = '#f39c12';
-                  backgroundColor = '#fdf6e3';
-                  hoverColor = '#f8e49a';
-                } else if (isCorrect) {
-                  // Doğru cevaplar - yeşil
-                  borderColor = '#43ea7c';
-                  textColor = '#43ea7c';
-                  backgroundColor = '#eafaf3';
-                  hoverColor = '#c6f7e2';
-                } else {
-                  // Yanlış cevaplar - kırmızı
-                  borderColor = '#e74c3c';
-                  textColor = '#e74c3c';
-                  backgroundColor = '#fff0f0';
-                  hoverColor = '#ffe3e3';
-                }
-                
                 return (
                   <Button
                     key={idx}
@@ -1097,13 +1074,13 @@ const Exam: React.FC = () => {
             )}
           </Box>
           {/* Show explanation toggle and content in review mode */}
-          {!!q.explanation && (
+          {!!explanation && (
             <Box sx={{ mb: 2 }}>
               <Button variant="text" onClick={() => setShowExplanation(e => !e)}>
                 {showExplanation ? 'Çözümü Gizle' : 'Çözümü Göster'}
               </Button>
               {showExplanation && (
-                <Typography mt={2} color="text.secondary">{q.explanation}</Typography>
+                <Typography mt={2} color="text.secondary">{explanation}</Typography>
               )}
             </Box>
           )}

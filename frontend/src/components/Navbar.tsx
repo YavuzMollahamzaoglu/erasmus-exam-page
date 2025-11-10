@@ -31,20 +31,6 @@ interface Props {
   userAvatar?: string; // emoji avatar
   userInitial?: string; // baş harf fallback
 }
-
-
-const allPages = [
-  { label: 'Profil', value: 'profile', auth: true },
-  { label: 'Sorular', value: 'questions', auth: false },
-  { label: 'Sıralamalar', value: 'rankings', auth: false },
-  { label: 'Geçmiş', value: 'history', auth: true },
-  { label: 'Kategoriler', value: 'categories', auth: false },
-  { label: 'Kelimeler', value: 'words', auth: false },
-  { label: 'Konular', value: 'topics', auth: false },
-  { label: 'Hakkımızda', value: 'about', auth: false }
-  // Login ve Register menüde gösterilmeyecek, sadece sağda buton olarak olacak
-];
-
 // Login and Register are not navigation pages, only right-side buttons
 // basit emoji tespiti (tek karakterlik emoji)
 const isSingleEmoji = (s?: string) => {

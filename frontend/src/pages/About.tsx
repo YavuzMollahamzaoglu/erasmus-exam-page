@@ -2,13 +2,6 @@ import React, { useEffect } from 'react';
 import { Paper, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
 import setMetaTags from '../utils/seo';
 
-const palette = {
-  rose: '#E7CCCC',
-  sand: '#EDE8DC',
-  leaf: '#A5B68D',
-  mint: '#C1CFA1',
-};
-
 const About: React.FC = () => {
   useEffect(() => {
     setMetaTags({

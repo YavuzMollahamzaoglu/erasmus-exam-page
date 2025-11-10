@@ -22,7 +22,6 @@ const History = lazy(() => import('./pages/History'));
 const WordHuntGame = lazy(() => import('./pages/games/WordHuntGame'));
 const WritingGame = lazy(() => import('./pages/games/WritingGame'));
 const SelectLevel = lazy(() => import('./pages/games/SelectLevel'));
-const EssayGame = lazy(() => import('./pages/games/EssayGame'));
 const EssayWriting = lazy(() => import('./pages/EssayWriting'));
 const Words = lazy(() => import('./pages/Words'));
 const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame'));

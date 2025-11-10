@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, Button } from '@mui/material';
@@ -248,6 +248,18 @@ const Categories: React.FC = () => {
   const [createdB1Genel2, setCreatedB1Genel2] = useState(false);
   const [createdB2Genel2, setCreatedB2Genel2] = useState(false);
 
+  const checkHealth = useCallback(async () => {
+    setChecking(true);
+    try {
+      const res = await fetch(`${API_URL}/health`, { cache: 'no-store' });
+      setServerOnline(res.ok);
+    } catch {
+      setServerOnline(false);
+    } finally {
+      setChecking(false);
+    }
+  }, [API_URL]);
+
   // Find a QuestionSeries by combining level (categoryKey) and test name, return its id
   const resolveSeriesId = async (categoryKey: string, testName: string): Promise<string | null> => {
     try {
@@ -277,18 +289,6 @@ const Categories: React.FC = () => {
     return contains ? contains.id : null;
   };
 
-  const checkHealth = async () => {
-    setChecking(true);
-    try {
-      const res = await fetch(`${API_URL}/health`, { cache: 'no-store' });
-      setServerOnline(res.ok);
-    } catch (e) {
-      setServerOnline(false);
-    } finally {
-      setChecking(false);
-    }
-  };
-
   useEffect(() => {
     setMetaTags({
       title: 'Kategoriler — Sınav Türlerine Göre Alıştırmalar',
@@ -298,7 +298,7 @@ const Categories: React.FC = () => {
       ogImage: '/social-preview.svg'
     });
     checkHealth();
-  }, []);
+  }, [checkHealth]);
 
   // Ensure a series exists on the backend; if missing, create and return its id
   const ensureSeriesId = async (categoryKey: string, testName: string): Promise<string | null> => {
