@@ -425,7 +425,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                 onClick={async () => {
                   setCommentLoading(true);
                   try {
-                    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/comments`, {
+                    await fetch(`${process.env.REACT_APP_API_URL}/api/comments`, {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
@@ -614,11 +614,11 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                                 onClick={async () => {
                                   if (!token) return;
                                   try {
-                                    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${c.id}`, {
+                                    const deleteResp = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${c.id}`, {
                                       method: 'DELETE',
                                       headers: { 'Authorization': `Bearer ${token}` }
                                     });
-                                    if (res.ok) {
+                                    if (deleteResp.ok) {
                                       setComments(comments.filter(cm => cm.id !== c.id));
                                       setEditingCommentId(null);
                                     }
@@ -712,7 +712,7 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
             onClick={async () => {
               if (!token || !editingCommentId || !editingText.trim()) return;
               try {
-                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${editingCommentId}`, {
+                const updateResp = await fetch(`${process.env.REACT_APP_API_URL}/api/comments/${editingCommentId}`, {
                   method: 'PUT',
                   headers: {
                     'Authorization': `Bearer ${token}`,
@@ -720,8 +720,8 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
                   },
                   body: JSON.stringify({ text: editingText.trim() })
                 });
-                if (res.ok) {
-                  const updated = await res.json();
+                if (updateResp.ok) {
+                  const updated = await updateResp.json();
                   setComments(comments.map(c => c.id === editingCommentId ? updated : c));
                   setEditDialogOpen(false);
                   setEditingCommentId(null);

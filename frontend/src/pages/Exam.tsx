@@ -366,16 +366,15 @@ const Exam: React.FC = () => {
     // Calculate final scores
     let correctCount = 0;
     let incorrectCount = 0;
-    let unansweredCount = 0;
-    
+
     questions.forEach((question, idx) => {
       const userAnswer = finalizedAnswers[idx];
-      if (userAnswer === null || userAnswer === undefined || userAnswer === '') {
-        unansweredCount++;
-      } else if (compareAnswers(userAnswer, question.correct)) {
-        correctCount++;
-      } else {
-        incorrectCount++;
+      if (userAnswer !== null && userAnswer !== undefined && userAnswer !== '') {
+        if (compareAnswers(userAnswer, question.correct)) {
+          correctCount++;
+        } else {
+          incorrectCount++;
+        }
       }
     });
     

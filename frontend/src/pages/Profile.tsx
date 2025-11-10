@@ -9,7 +9,6 @@ interface Props {
 
 const Profile: React.FC<Props> = ({ token, onInitialChange }) => {
   const [profile, setProfile] = useState<any>(null);
-  const [error, setError] = useState('');
   const [updateDialog, setUpdateDialog] = useState(false);
   const [updateData, setUpdateData] = useState({ name: '', email: '', newPassword: '', currentPassword: '' });
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -232,9 +231,7 @@ const Profile: React.FC<Props> = ({ token, onInitialChange }) => {
           >
             Profili Yenile
           </Button>
-          <Box sx={{ mt: 2 }}>
-            {error && <Typography color="error" fontSize={14} mt={1}>{error}</Typography>}
-          </Box>
+
 
           {/* Update Profile Dialog */}
           <Dialog open={updateDialog} onClose={() => setUpdateDialog(false)} maxWidth="sm" fullWidth>
