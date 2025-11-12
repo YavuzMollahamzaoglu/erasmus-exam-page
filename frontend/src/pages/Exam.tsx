@@ -619,13 +619,13 @@ const Exam: React.FC = () => {
             }
           }}
         >
-      {/* Desktop/tablet: Bitir button fixed at same level as timer */}
+      {/* Desktop/tablet: Bitir button inside card at top-left */}
       <Box
         sx={{
-          position: 'fixed',
-          top: { md: 84, lg: 96 },
-          left: { md: 20, lg: 28 },
-          zIndex: 1200,
+          position: 'absolute',
+          top: 10,
+          left: 10,
+          zIndex: 2,
           display: { xs: 'none', md: 'flex' },
         }}
       >
