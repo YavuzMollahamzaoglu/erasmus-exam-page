@@ -1,19 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
 import MoreLearningLinks from '../../components/MoreLearningLinks';
 import Breadcrumb from '../../components/Breadcrumb';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
-// Diziyi karıştıran yardımcı fonksiyon
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
 
 interface WordData {
   tr: string;
@@ -21,18 +11,14 @@ interface WordData {
 }
 
 export default function WritingGame() {
-  // Read level from URL (default a1)
-  const levelParam = new URLSearchParams(window.location.search).get('level') || 'a1';
-  const apiLevel = levelParam.toUpperCase();
-
   const [index, setIndex] = useState(0);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [score, setScore] = useState(0);
   const [mistakes, setMistakes] = useState(0);
-  const [words, setWords] = useState<WordData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [words] = useState<WordData[]>([]);
+  const [loading] = useState(true);
+  const [error] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [time, setTime] = useState(0);
   // Persist per-question correct state so it remains highlighted when going back

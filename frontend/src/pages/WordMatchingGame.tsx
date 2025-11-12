@@ -77,7 +77,6 @@ export default function WordMatchingGame() {
   const [targets, setTargets] = useState<Target[]>([]);
   const [matched, setMatched] = useState(0);
   const [selectedWordId, setSelectedWordId] = useState<number | null>(null); // tap support
-  const [error, setError] = useState<string | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [playing, setPlaying] = useState(false);
 
@@ -100,7 +99,7 @@ export default function WordMatchingGame() {
             setPool(data.words.map((w: any, i: number) => ({ id: i, en: w.word, tr: w.translation })));
           }
         } catch {
-          setError('Set yüklenemedi.');
+          console.error('Set yüklenemedi.');
         }
       } else {
         // Fetch random words by level
@@ -111,7 +110,7 @@ export default function WordMatchingGame() {
           const data = await res.json();
           setPool(data.map((w: any, i: number) => ({ id: i, en: w.word, tr: w.translation })));
         } catch {
-          setError('Kelimeler yüklenemedi.');
+          console.error('Kelimeler yüklenemedi.');
         }
       }
     })();
