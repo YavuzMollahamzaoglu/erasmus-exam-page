@@ -48,9 +48,9 @@ const Exam: React.FC = () => {
 
   useEffect(() => {
     setMetaTags({
-      title: 'Sınav — Deneme Sınavı',
-      description: 'Gerçek sınav formatında deneme sınavı. Süre ve puanlama ile pratik yapın.',
-      keywords: 'deneme sınavı, ingilizce sınav, online sınav',
+      title: 'İngilizce Hazırlık Sınavı — Online Deneme Testi',
+      description: 'İngilizce hazırlık ve Erasmus için online deneme sınavı: süre takibi, doğru/yanlış istatistikleri ve puanlama ile gerçek sınav pratiği.',
+      keywords: 'İngilizce Hazırlık sınavı, erasmus ingilizce deneme, online ingilizce test, deneme sınavı',
       canonical: `/exam${testId ? `/${testId}` : ''}`,
       ogImage: '/social-preview.svg'
     });

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Button, Alert, Fade, IconButton } from '@mui/material';
+import MoreLearningLinks from '../components/MoreLearningLinks';
+import Breadcrumb from '../components/Breadcrumb';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -63,15 +65,6 @@ const capFirstTr = (s: string) => {
 };
 
 export default function WordMatchingGame() {
-  useEffect(() => {
-    setMetaTags({
-      title: 'Kelime Eşleştirme — Kelime Oyunu',
-      description: 'Kelime eşleştirme oyunu ile kelime bilginizi eşleştirerek güçlendirin. Seviye ve set seçerek başlayın.',
-      keywords: 'kelime eşleştirme, kelime oyunu, kelime çalışması',
-      canonical: '/kelime-eslestirme',
-      ogImage: '/social-preview.svg'
-    });
-  }, []);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const level = (searchParams.get('level') || 'a1').toUpperCase();
@@ -84,9 +77,47 @@ export default function WordMatchingGame() {
   const [targets, setTargets] = useState<Target[]>([]);
   const [matched, setMatched] = useState(0);
   const [selectedWordId, setSelectedWordId] = useState<number | null>(null); // tap support
-  const [elapsed, setElapsed] = useState(0); // stopwatch seconds (hidden while playing)
-  const [playing, setPlaying] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    setMetaTags({
+      title: 'Kelime Eşleştirme Oyunu | İngilizce - Türkçe Kelime Oyunu',
+      description: 'İngilizce kelimeleri Türkçe karşılıklarıyla eşleştirin. A1-B2 seviye kelime ezberlemek ve vocabulary geliştirmek için ideal oyun.',
+      keywords: 'kelime eşleştirme, word matching game, ingilizce türkçe kelime, vocabulary game, kelime oyunu',
+      canonical: '/kelime-eslestirme'
+    });
+    (async () => {
+      if (setId) {
+        // Fetch specific set
+        try {
+          const API_URL = process.env.REACT_APP_API_URL;
+          const res = await fetch(`${API_URL}/api/games/word-matching/set/${setId}`);
+          if (!res.ok) throw new Error('Failed to fetch set');
+          const data = await res.json();
+          if (data.words) {
+            setPool(data.words.map((w: any, i: number) => ({ id: i, en: w.word, tr: w.translation })));
+          }
+        } catch {
+          setError('Set yüklenemedi.');
+        }
+      } else {
+        // Fetch random words by level
+        try {
+          const API_URL = process.env.REACT_APP_API_URL;
+          const res = await fetch(`${API_URL}/api/games/word-matching/words?level=${level}&count=30`);
+          if (!res.ok) throw new Error('Failed to fetch words');
+          const data = await res.json();
+          setPool(data.map((w: any, i: number) => ({ id: i, en: w.word, tr: w.translation })));
+        } catch {
+          setError('Kelimeler yüklenemedi.');
+        }
+      }
+    })();
+  }, [level, setId]);
+
+  const [elapsed, setElapsed] = useState(0); // stopwatch seconds (hidden while playing)
   const [wrongMsg, setWrongMsg] = useState(false);
   const [successMsg, setSuccessMsg] = useState(false);
 
@@ -295,6 +326,13 @@ export default function WordMatchingGame() {
 
   return (
     <Box sx={{ minHeight: '100vh', background: '#b2dfdb', display: 'flex', flexDirection: 'column', alignItems: 'center', pb: { xs: 12, md: 16 }, pt: 0, px: 2 }}>
+      <Box sx={{ maxWidth: 1000, width: '100%', pt: 2 }}>
+        <Breadcrumb items={[
+          { label: 'Ana Sayfa', href: '/' },
+          { label: 'Oyunlar', href: '/#games' },
+          { label: 'Kelime Eşleştirme' }
+        ]} />
+      </Box>
       <Paper elevation={6} sx={{ p: 0, borderRadius: 4, minWidth: 340, width: '100%', maxWidth: 1000, mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         {/* Header */}
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
@@ -498,6 +536,7 @@ export default function WordMatchingGame() {
             </Button>
           </Box>
       </Paper>
+      <MoreLearningLinks />
       
     </Box>
   );

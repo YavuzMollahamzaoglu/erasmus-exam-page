@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import setMetaTags from '../../utils/seo';
+import { useSearchParams } from 'react-router-dom';
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import MoreLearningLinks from '../../components/MoreLearningLinks';
+import Breadcrumb from '../../components/Breadcrumb';
 import Paper from "@mui/material/Paper";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -18,15 +21,9 @@ interface ParagraphQuestion {
 }
 
 function EssayGame() {
-  useEffect(() => {
-    setMetaTags({
-      title: 'Essay Oyunu — Yazma Pratiği',
-      description: 'Essay yazma alıştırmaları ile yazılı anlatım becerilerinizi geliştirin. Otomatik değerlendirme ve geri bildirim alın.',
-      keywords: 'essay yazma, yazma pratik, essay alıştırma',
-      canonical: '/essay-game',
-      ogImage: '/social-preview.svg'
-    });
-  }, []);
+  const [sp] = useSearchParams();
+  const level = (sp.get('level') || 'a1').toUpperCase();
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]); 
@@ -39,6 +36,31 @@ function EssayGame() {
   const [paragraphQuestions, setParagraphQuestions] = useState<ParagraphQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMetaTags({
+      title: 'Essay Oyunu | İngilizce Çoklu Boşluk Doldurma',
+      description: 'Zamana karşı paragraf tamamlama oyunu. İngilizce kelime bilgisi ve hız pratiği için çoklu boşluk doldurma oyunu.',
+      keywords: 'essay oyunu, çoklu boşluk doldurma, ingilizce paragraf oyunu, kelime hızı, timed game',
+      canonical: '/essay-game'
+    });
+    (async () => {
+      try {
+        setLoading(true);
+        const API_URL = process.env.REACT_APP_API_URL;
+        const res = await fetch(`${API_URL}/api/games/paragraph/questions?level=${level}`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        setParagraphQuestions(data || []);
+        setError(null);
+      } catch {
+        setError('Sorular yüklenemedi.');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [level]);
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch questions from API
@@ -391,7 +413,13 @@ function EssayGame() {
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#b2dfdb", display: "flex", flexDirection: "column", alignItems: "center", px: 2, pt: 0 }}>
-      
+      <Box sx={{ maxWidth: 900, width: '100%', pt: 2 }}>
+        <Breadcrumb items={[
+          { label: 'Ana Sayfa', href: '/' },
+          { label: 'Oyunlar', href: '/#games' },
+          { label: 'Essay Oyunu' }
+        ]} />
+      </Box>
       <Box sx={{ width: '100%', maxWidth: { xs: 700, md: 900 }, bgcolor: "#fff", borderRadius: 4, boxShadow: 6, p: { xs: 3, md: 4 }, mb: 2, mt: { xs: 1, md: '15px' }, position: "relative" }}>
         
         {/* Timer at top right inside card */}
@@ -566,6 +594,7 @@ function EssayGame() {
           )}
         </Box>
       </Box>
+      <MoreLearningLinks />
     </Box>
   );
 }

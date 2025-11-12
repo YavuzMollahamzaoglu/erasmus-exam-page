@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, LinearProgress, CircularProgress, Tooltip, useMediaQuery } from '@mui/material';
+import MoreLearningLinks from '../../components/MoreLearningLinks';
+import Breadcrumb from '../../components/Breadcrumb';
 import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
@@ -79,38 +81,32 @@ const FillInTheBlanksGame: React.FC = () => {
     return arr;
   }
 
+  const [sp] = useSearchParams();
+  const level = (sp.get('level') || 'a1').toUpperCase();
+
   useEffect(() => {
     setMetaTags({
-      title: 'Boşluk Doldurma — Paragraf Oyunu',
-      description: 'Boşluk doldurma oyunu ile paragraf içi kelime bilgisi ve bağlam kullanımını geliştirin.',
-      keywords: 'boşluk doldurma, paragraph oyunu, kelime bilgisi',
-      canonical: '/bosluk-doldurma',
-      ogImage: '/social-preview.svg'
+      title: 'Boşluk Doldurma Oyunu | İngilizce Paragraf Tamamlama',
+      description: 'Drag-and-drop ile paragraf boşluk doldurma oyunu. İngilizce kelime bilgisi ve cümle yapısı pratiği için etkileşimli oyun.',
+      keywords: 'boşluk doldurma oyunu, fill in the blanks, paragraf tamamlama, ingilizce kelime oyunu, drag and drop oyun',
+      canonical: '/bosluk-doldurma'
     });
-
-    // Soruları fetch et ve karıştır
-    const fetchQuestions = async () => {
+    (async () => {
       try {
         setLoading(true);
         const API_URL = process.env.REACT_APP_API_URL;
-  const response = await fetch(`${API_URL}/api/games/fill-in-the-blanks/questions`); // tüm seviyeler
-        if (!response.ok) {
-          throw new Error('Failed to fetch questions');
-        }
-        const data = await response.json();
-        setQuestions(shuffleArray(data));
+        const res = await fetch(`${API_URL}/api/games/fill-in-blanks/questions?level=${level}`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        setQuestions(data || []);
         setError(null);
-      } catch (err) {
-        setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
-        setQuestions([]);
+      } catch {
+        setError('Sorular yüklenemedi.');
       } finally {
         setLoading(false);
       }
-    };
-    fetchQuestions();
-  }, []);
-
-  // ...existing code...
+    })();
+  }, [level]);  // ...existing code...
 
   // Load current question state from store or initialize if missing
   const resetCurrentQuestion = (question: FillInTheBlanksQuestion, index: number) => {
@@ -499,6 +495,13 @@ const FillInTheBlanksGame: React.FC = () => {
       pt: 0,
       pb: { xs: 12, md: 16 }
     }}>
+      <Box sx={{ maxWidth: 900, width: '100%', pt: 2 }}>
+        <Breadcrumb items={[
+          { label: 'Ana Sayfa', href: '/' },
+          { label: 'Oyunlar', href: '/#games' },
+          { label: 'Boşluk Doldurma' }
+        ]} />
+      </Box>
       <Box sx={{ 
         width: '100%', 
         maxWidth: 800, 
@@ -874,6 +877,7 @@ const FillInTheBlanksGame: React.FC = () => {
           </Box>
         )}
       </Box>
+      <MoreLearningLinks />
     </Box>
   );
 };

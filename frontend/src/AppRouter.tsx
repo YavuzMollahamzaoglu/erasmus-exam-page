@@ -17,6 +17,7 @@ const Rankings = lazy(() => import('./pages/Rankings'));
 const Categories = lazy(() => import('./pages/Categories'));
 const About = lazy(() => import('./pages/About'));
 const TopicsPage = lazy(() => import('./pages/TopicsPage'));
+const TopicDetail = lazy(() => import('./pages/TopicDetail'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const History = lazy(() => import('./pages/History'));
 const WordHuntGame = lazy(() => import('./pages/games/WordHuntGame'));
@@ -138,6 +139,7 @@ const AppRouter: React.FC = () => {
         <Routes>
           <Route path="/" element={<Box component="main" id="main-content"><HomePage token={token} /></Box>} />
           <Route path="/topics" element={<Box component="main" id="main-content"><TopicsPage /></Box>} />
+          <Route path="/topics/:slug" element={<Box component="main" id="main-content"><TopicDetail /></Box>} />
           <Route path="/login" element={<Login onLogin={handleLogin} onShowRegister={() => {}} />} />
           <Route path="/register" element={<Register onShowLogin={() => {}} />} />
           <Route path="/profile" element={token ? <Box component="main" id="main-content"><Profile token={token} onInitialChange={setUserInitial} /></Box> : <Navigate to="/login" replace />} />

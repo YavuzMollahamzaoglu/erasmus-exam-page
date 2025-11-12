@@ -60,16 +60,60 @@ const HomePage: React.FC<Props> = ({ token }) => {
 
   useEffect(() => {
     setMetaTags({
-      title: 'İngilizce Hazırlık — Ücretsiz İngilizce Testleri ve Pratik',
-      description: 'Erasmus ve üniversite sınavlarına yönelik ücretsiz İngilizce testleri, kelime çalışmaları ve dinleme alıştırmaları. Hemen sınavına hazırlan.',
-      keywords: 'İngilizce sınav hazırlık, erasmus hazırlık, ücretsiz ingilizce testleri, kelime çalışmaları, dinleme alıştırmaları',
+      title: 'İngilizce Hazırlık | Ücretsiz Online İngilizce Testleri, Erasmus ve Hazırlık Sınavları',
+      description: 'İngilizce Hazırlık: Erasmus, hazırlık sınıfı ve B1-B2 seviye hedefleri için ücretsiz online İngilizce testleri, kelime oyunları, dilbilgisi (grammar) konu anlatımları. İngilizce hazırlık sınavına en iyi şekilde hazırlan.',
+      keywords: 'İngilizce Hazırlık, ingilizce hazırlık sınavı, erasmus ingilizce, hazırlık sınavı, online ingilizce test, ücretsiz ingilizce, grammar konu anlatımı, kelime oyunu, ingilizce pratik, üniversite hazırlık',
       ogImage: '/social-preview.svg',
       canonical: '/'
     });
+    // FAQ Schema for common questions
+    const faqSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'İngilizce Hazırlık platformu ücretsiz mi?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Evet, platformumuz tamamen ücretsizdir. Tüm testler, oyunlar ve konu anlatımlarına sınırsız erişim sağlayabilirsiniz.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Hangi seviyelerde pratik yapabilirim?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'A1, A2, B1 ve B2 seviyelerinde pratik yapabilirsiniz. Kelime oyunları ve testler seviye bazlı olarak hazırlanmıştır.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Erasmus sınavına nasıl hazırlanabilirim?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Erasmus kategorisindeki testleri çözerek, kelime oyunlarıyla vocabulary güçlendirerek ve konu anlatımlarını okuyarak hazırlanabilirsiniz.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Sonuçlarımı takip edebilir miyim?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Evet, kayıt olduğunuzda tüm test sonuçlarınız Geçmiş sayfasında saklanır ve ilerlemenizi takip edebilirsiniz.'
+          }
+        }
+      ]
+    };
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.innerHTML = JSON.stringify(faqSchema);
+    document.head.appendChild(s);
     try {
       const p = localStorage.getItem('lastVisitedPath');
       if (p) setLastVisited(p);
     } catch {}
+    return () => { try { document.head.removeChild(s); } catch {} };
   }, []);
 
   const labelForPath = (p: string) => {
@@ -174,8 +218,8 @@ const HomePage: React.FC<Props> = ({ token }) => {
           }
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography component="h1" variant="h3" fontWeight={700} mb={2} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: 'clamp(1.6rem, 3vw, 2.5rem)' }}>Hazırlığını Başlat</Typography>
-            <Typography component="h2" variant="h6" sx={{ opacity: 0.95, fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)' }}>İngilizce sınavlarına güçlü bir başlangıç yap</Typography>
+            <Typography component="h1" variant="h3" fontWeight={700} mb={2} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: 'clamp(1.6rem, 3vw, 2.5rem)' }}>İngilizce Hazırlık — Ücretsiz Online İngilizce Testleri</Typography>
+            <Typography component="h2" variant="h6" sx={{ opacity: 0.95, fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)' }}>Erasmus ve üniversite hazırlık sınavlarına güçlü bir başlangıç yap</Typography>
           </Box>
         </Box>
 
@@ -230,14 +274,30 @@ const HomePage: React.FC<Props> = ({ token }) => {
             </Paper>
           )}
 
+          {/* Popüler Konular (SEO: dahili bağlantılar) */}
+          <Box sx={{ mt: 3, mb: 1 }}>
+            <Typography variant="h6" fontWeight={800} mb={1.5} sx={{ color: '#00695c' }}>Popüler Konular</Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+              {[
+                { href: '/topics/to-be-fiili-am-is-are', label: '"To Be" (am/is/are)' },
+                { href: '/topics/this-that-these-those', label: 'This/That/These/Those' },
+                { href: '/topics/simple-present-giris', label: 'Geniş Zaman (Simple Present)' }
+              ].map((t) => (
+                <Button key={t.href} size="small" variant="outlined" color="success" onClick={() => navigate(t.href)} sx={{ textTransform: 'none', borderRadius: 2 }}>
+                  {t.label}
+                </Button>
+              ))}
+            </Box>
+          </Box>
+
           {/* Öğrenme Akışı (önerilen kullanım) */}
           <Paper elevation={0} sx={{ mb: 4, p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: '#fff' }}>
-            <Typography variant="h6" fontWeight={800} mb={1} sx={{ color: '#00695c' }}>Nasıl çalışmalı?</Typography>
+            <Typography variant="h6" fontWeight={800} mb={1} sx={{ color: '#00695c' }}>İngilizce Hazırlık Nasıl Yapılmalı?</Typography>
             <Typography fontSize={14} color="#455a64" mb={1.5}>
-              Adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki sorularla pratik yap.
+              İngilizce hazırlık sürecinde adım adım ilerlemeni öneririz: önce kelimeleri öğren, sonra klasik sorularla pekiştir, ardından gerçek sınav tarzındaki İngilizce hazırlık sorularıyla pratik yap.
             </Typography>
             <Typography fontSize={13} color="#455a64" mb={2} fontWeight={600}>
-              Kelime Öğrenme Sayfaları — Notlar alarak İngilizce grammar’ı pekiştir.
+              Kelime Öğrenme ve Grammar Konuları — Erasmus ve üniversite İngilizce hazırlık sınavlarına yönelik konu anlatımları ile İngilizce dilbilgisini pekiştir.
             </Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gridTemplateRows: { xs: 'repeat(6, 1fr)', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
               {/* 1. Satır */}
@@ -270,7 +330,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
           </Paper>
 
           {/* Oyunlarımız */}
-          <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Oyunlarımız</Typography>
+          <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>İngilizce Hazırlık Oyunları</Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: { xs: 2, md: 2.5 }, mb: 3 }}>
             <Box
               sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
@@ -282,7 +342,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
               <Typography fontSize={28} mb={1}>🔢</Typography>
               <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Kelime Avı Oyunu</Typography>
               <Typography fontSize={14} color="#455a64">
-                Her seviyede 10 kelime sorusunu hızlıca çözerek puan toplarsın. Yanlış cevapta doğru seçeneği ve açıklamasını görürsün. Oyun sonunda toplam puanını ve doğru-yanlışlarını görebilirsin. Seviyeni seçerek kelime bilginin hangi düzeyde olduğunu test edebilirsin. Hedefin, her oynayışta daha yüksek puan almak ve kelime dağarcığını geliştirmek.
+                İngilizce hazırlık için ideal: Her seviyede 10 kelime sorusunu hızlıca çözerek puan toplarsın. Yanlış cevapta doğru seçeneği ve açıklamasını görürsün. Erasmus ve üniversite hazırlık sınavlarına yönelik kelime dağarcığını geliştir.
               </Typography>
               <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Seviye: A1–B2" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
@@ -382,9 +442,9 @@ const HomePage: React.FC<Props> = ({ token }) => {
               <Typography variant="h6" fontWeight={800} mb={2} sx={{ color: '#00695c' }}>Üye Olunca Neler Kazanırsın?</Typography>
               <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: { xs: 2, md: 2.5 }, mb: 3 }}>
                 {[ 
-                  { icon: '🏆', title: 'Sıralamalar', desc: 'Puanın ve rozetlerinle listelerde yer al.', href: '/rankings' },
-                  { icon: '🕒', title: 'Çözüm Geçmişi', desc: 'Geçmiş sonuçlarını ve gelişimini takip et.', href: '/register' },
-                  { icon: '💬', title: 'Yorumlar', desc: 'Sıralama sayfasında yorum yap, iletişime geç.', href: '/register' },
+                  { icon: '🏆', title: 'İngilizce Hazırlık Sıralamaları', desc: 'Puanın ve rozetlerinle İngilizce hazırlık listelerinde yer al, gelişimini göster.', href: '/rankings' },
+                  { icon: '🕒', title: 'İngilizce Hazırlık Geçmişi', desc: 'İngilizce hazırlık test sonuçlarını ve gelişimini detaylı takip et.', href: '/register' },
+                  { icon: '💬', title: 'Topluluk İletişimi', desc: 'İngilizce hazırlık yapan diğer kullanıcılarla yorum yap, iletişime geç.', href: '/register' },
                 ].map((f) => (
                   <Box
                     key={f.title}

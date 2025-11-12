@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
+import MoreLearningLinks from '../../components/MoreLearningLinks';
+import Breadcrumb from '../../components/Breadcrumb';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 // Diziyi karıştıran yardımcı fonksiyon
@@ -39,43 +41,6 @@ export default function WritingGame() {
   const [hintsUsed, setHintsUsed] = useState<Record<number, string[]>>({});
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Fetch questions from API
-  useEffect(() => {
-    setMetaTags({
-      title: 'Yazma Oyunu — Writing Practice',
-      description: 'Yazma alıştırmaları ile cümle kurma ve essay öncesi pratikler. Seviye seçerek başlayın.',
-      keywords: 'yazma oyunu, writing practice, yazma alıştırmaları',
-      canonical: '/yazi-yazma',
-      ogImage: '/social-preview.svg'
-    });
-    const fetchQuestions = async () => {
-      try {
-        setLoading(true);
-        const API_URL = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${API_URL}/api/games/writing/questions?level=${apiLevel}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch questions');
-        }
-        const data = await response.json();
-  setWords(shuffleArray(data));
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching questions:', err);
-        setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
-        // Fallback to hard coded data
-        setWords(shuffleArray([
-          { tr: "masa", en: "table" },
-          { tr: "kitap", en: "book" }
-        ]));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuestions();
-  }, [apiLevel]);
-
-  // Restart game state
   const handleRestart = () => {
     setIndex(0);
     setInput("");
@@ -84,7 +49,7 @@ export default function WritingGame() {
     setMistakes(0);
     setShowResult(false);
     setTime(0);
-  setSavedCorrect({});
+    setSavedCorrect({});
     setHintsUsed({});
   };
 
@@ -292,7 +257,15 @@ export default function WritingGame() {
   }
 
   return (
+    <>
     <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
+      <Box sx={{ maxWidth: 900, width: '100%', px: 2, pt: 2 }}>
+        <Breadcrumb items={[
+          { label: 'Ana Sayfa', href: '/' },
+          { label: 'Oyunlar', href: '/#games' },
+          { label: 'Yazı Yazma' }
+        ]} />
+      </Box>
       <Box sx={{ width: 400, maxWidth: "95vw", background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, mb: 2, mt: { xs: 1, md: '15px' }, color: "#2c3e50", position: "relative", border: "1px solid rgba(255,255,255,0.2)" }}>
         {/* Top bar with back button, timer, and gap */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -699,6 +672,8 @@ export default function WritingGame() {
         </Box>
       )}
       
-    </Box>
+  </Box>
+  <MoreLearningLinks />
+  </>
   );
 }

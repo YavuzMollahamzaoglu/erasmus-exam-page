@@ -1,5 +1,5 @@
 // Lightweight SEO helper — updates document title and key meta/OG tags without external deps
-export function setMetaTags(opts: { title?: string; description?: string; keywords?: string; ogImage?: string; canonical?: string }) {
+export function setMetaTags(opts: { title?: string; description?: string; keywords?: string; ogImage?: string; canonical?: string; noIndex?: boolean }) {
   // Title
   if (opts.title) document.title = opts.title;
 
@@ -46,6 +46,15 @@ export function setMetaTags(opts: { title?: string; description?: string; keywor
     document.head.appendChild(link);
   }
   link.setAttribute('href', canonicalUrl);
+
+  // Optionally mark page as noindex
+  if (opts.noIndex) {
+    upsertMeta('name', 'robots', 'noindex, nofollow');
+  } else {
+    // Remove stale noindex if previously set
+    const robots = document.head.querySelector('meta[name="robots"]');
+    if (robots) robots.setAttribute('content', 'index, follow');
+  }
 }
 
 export default setMetaTags;

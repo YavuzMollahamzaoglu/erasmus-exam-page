@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import setMetaTags from '../../utils/seo';
 import { Box, Typography, Paper, Button, RadioGroup, FormControlLabel, Radio, Alert, Chip, CircularProgress, IconButton, Tooltip } from '@mui/material';
+import MoreLearningLinks from '../../components/MoreLearningLinks';
+import Breadcrumb from '../../components/Breadcrumb';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -12,15 +14,6 @@ type ReadingQuestion = { id: string; question: string; options: string[]; correc
 const API = `${process.env.REACT_APP_API_URL}/api/games/reading`;
 
 const ReadingGame: React.FC = () => {
-  useEffect(() => {
-    setMetaTags({
-      title: 'Okuma Oyunu — Paragraf Okuma ve Anlama',
-      description: 'Paragraf okuma oyunu ile okuduğunu anlama becerilerinizi geliştirin. Seviye seçerek pratik yapın.',
-      keywords: 'okuma oyunu, paragraf okuma, okuduğunu anlama',
-      canonical: '/okuma',
-      ogImage: '/social-preview.svg'
-    });
-  }, []);
   const navigate = useNavigate();
   const [sp] = useSearchParams();
   const levelParam = (sp.get('level') || 'a1').toUpperCase();
@@ -29,10 +22,33 @@ const ReadingGame: React.FC = () => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [current, setCurrent] = useState<Passage | null>(null);
   const [questions, setQuestions] = useState<ReadingQuestion[]>([]);
-  const [answers, setAnswers] = useState<Record<string, number | null>>({});
+  const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMetaTags({
+      title: 'İngilizce Okuma Oyunu | Reading Comprehension Pratiği',
+      description: 'Paragraf okuma ve anlama soruları ile İngilizce reading comprehension pratiği yapın. A1-B2 seviye metinlerle okuduğunu anlama becerilerinizi geliştirin.',
+      keywords: 'ingilizce okuma, reading comprehension, paragraf soruları, okuduğunu anlama, ingilizce metin okuma',
+      canonical: '/okuma'
+    });
+    (async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API}/passages?level=${encodeURIComponent(levelParam)}`);
+        if (!res.ok) throw new Error('Failed to fetch passages');
+        const data = await res.json();
+        setPassages(data || []);
+        setError(null);
+      } catch {
+        setError('Paragraflar yüklenemedi.');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [levelParam]);
 
   // Load list of passages for the selected level (dedupe by id/title)
   useEffect(() => {
@@ -124,7 +140,15 @@ const ReadingGame: React.FC = () => {
   const prev = () => setCurrentIdx((i) => Math.max(0, i - 1));
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', px: 2, pb: { xs: 12, md: 16 }, pt: 0 }}>
+  <>
+  <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', px: 2, pb: { xs: 12, md: 16 }, pt: 0 }}>
+      <Box sx={{ width: '100%', maxWidth: 920, pt: 2 }}>
+        <Breadcrumb items={[
+          { label: 'Ana Sayfa', href: '/' },
+          { label: 'Oyunlar', href: '/#games' },
+          { label: 'Okuma Oyunu' }
+        ]} />
+      </Box>
       <Paper elevation={6} sx={{ width: '100%', maxWidth: 920, borderRadius: 4, overflow: 'hidden', mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         {/* Header */}
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, textAlign: 'center', position: 'relative' }}>
@@ -228,8 +252,11 @@ const ReadingGame: React.FC = () => {
           )}
         </Box>
       </Paper>
+      <MoreLearningLinks />
       
     </Box>
+    <MoreLearningLinks />
+    </>
   );
 };
 

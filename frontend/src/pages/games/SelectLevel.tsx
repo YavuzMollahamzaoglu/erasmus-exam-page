@@ -12,14 +12,26 @@ const levels = [
 
 export default function SelectLevel({ game }: { game: "kelime-avi" | "yazi-yazma" | "kelime-eslestirme" | "okuma" }) {
   useEffect(() => {
+    const titles: Record<typeof game, string> = {
+      'kelime-avi': 'İngilizce Hazırlık: Kelime Avı — Seviye Seçimi',
+      'yazi-yazma': 'İngilizce Hazırlık: Yazma Oyunu — Seviye Seçimi',
+      'kelime-eslestirme': 'İngilizce Hazırlık: Kelime Eşleştirme — Seviye Seçimi',
+      'okuma': 'İngilizce Hazırlık: Okuma Oyunu — Seviye Seçimi',
+    } as const;
+    const desc: Record<typeof game, string> = {
+      'kelime-avi': 'Kelime Avı oyunu için A1–B2 seviye seçin ve kelime pratiğine başlayın.',
+      'yazi-yazma': 'Yazma oyunu için A1–B2 seviye seçin ve cümle kurma pratiği yapın.',
+      'kelime-eslestirme': 'Kelime eşleştirme oyunu için seviye seçin ve eşleştirerek öğrenin.',
+      'okuma': 'Okuma oyunu için seviye seçin ve paragraf anlama pratiği yapın.',
+    } as const;
     setMetaTags({
-      title: 'Seviye Seçimi — Oyun Seçin ve Başlayın',
-      description: 'Oynamak istediğiniz oyun için seviye seçin: Kelime Avı, Yazma, Okuma ve daha fazlası. Hemen pratik yapın.',
-      keywords: 'seviye seçimi, oyunlar, kelime avı, yazma pratik, okuma',
-      canonical: '/select-level',
+      title: titles[game],
+      description: desc[game],
+      keywords: 'ingilizce hazırlık, ingilizce oyun, seviye seçimi, A1 A2 B1 B2',
+      canonical: `/${game}`,
       ogImage: '/social-preview.svg'
     });
-  }, []);
+  }, [game]);
   const navigate = useNavigate();
   const handleSelect = (level: string) => {
     if (game === 'kelime-avi') {

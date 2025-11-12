@@ -77,9 +77,9 @@ const Rankings: React.FC<Props> = ({ token, userAvatar, userInitial }) => {
 
   useEffect(() => {
     setMetaTags({
-      title: 'Sıralama — En Başarılı Öğrenciler',
-      description: 'Öğrencilerin sınav başarılarına göre sıralandığı tablo. Başarıları takip edin ve kendinizi karşılaştırın.',
-      keywords: 'sıralama, leaderboard, sınav puanları',
+      title: 'İngilizce Hazırlık Sıralama | En Başarılı Öğrenciler ve Puanlar',
+      description: 'İngilizce hazırlık ve Erasmus hedeflerine yönelik sınavlarda en yüksek puan alan öğrencileri inceleyin. Puan, doğru, yanlış ve süre istatistikleri.',
+      keywords: 'İngilizce hazırlık sıralama, erasmus ingilizce puanları, leaderboard ingilizce test, en yüksek ingilizce puanı',
       canonical: '/rankings',
       ogImage: '/social-preview.svg'
     });

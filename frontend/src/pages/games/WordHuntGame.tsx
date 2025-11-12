@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import setMetaTags from '../../utils/seo';
 import { Box, Typography, IconButton, LinearProgress, CircularProgress } from "@mui/material";
+import MoreLearningLinks from '../../components/MoreLearningLinks';
+import Breadcrumb from '../../components/Breadcrumb';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 // Diziyi karıştıran yardımcı fonksiyon
 function shuffleArray<T>(array: T[]): T[] {
@@ -49,12 +51,39 @@ export default function WordHuntGame() {
   // Fetch questions from API
   useEffect(() => {
     setMetaTags({
-      title: 'Kelime Avı — Kelime Oyunu',
-      description: 'Kelime avı oyunu ile kelime bilginizi eğlenceli şekilde geliştirin. Seviye seçerek pratik yapın.',
-      keywords: 'kelime oyunu, kelime avı, kelime çalışması',
+      title: 'İngilizce Hazırlık: Kelime Avı Oyunu — Kelime Öğrenme',
+      description: 'İngilizce hazırlık için kelime avı oyunu: A1–B2 seviye kelime pratiği, hızlı tekrar ve eğlenceli öğrenme.',
+      keywords: 'ingilizce hazırlık, kelime oyunu, kelime avı, A1 A2 B1 B2 kelimeler, ingilizce oyun',
       canonical: '/kelime-avi',
       ogImage: '/social-preview.svg'
     });
+    // JSON-LD (WebPage + LearningResource)
+    const webPageSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      'name': 'Kelime Avı Oyunu',
+      'description': 'İngilizce hazırlık için kelime avı oyunu ile A1–B2 seviyelerinde kelime pratiği yapın.',
+      'inLanguage': 'tr',
+      'about': 'İngilizce kelime oyunu',
+      'isPartOf': `${window.location.origin}`
+    };
+    const breadcrumbSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: `${window.location.origin}/` },
+        { '@type': 'ListItem', position: 2, name: 'Oyunlar', item: `${window.location.origin}/questions` },
+        { '@type': 'ListItem', position: 3, name: 'Kelime Avı', item: `${window.location.origin}/kelime-avi` }
+      ]
+    };
+    const s1 = document.createElement('script');
+    s1.type = 'application/ld+json';
+    s1.innerHTML = JSON.stringify(webPageSchema);
+    const s2 = document.createElement('script');
+    s2.type = 'application/ld+json';
+    s2.innerHTML = JSON.stringify(breadcrumbSchema);
+    document.head.appendChild(s1);
+    document.head.appendChild(s2);
     const fetchQuestions = async () => {
       try {
         setLoading(true);
@@ -77,6 +106,10 @@ export default function WordHuntGame() {
     };
 
     fetchQuestions();
+    return () => { 
+      try { document.head.removeChild(s1); } catch {}
+      try { document.head.removeChild(s2); } catch {}
+    };
   }, [apiLevel]);
   
   // Initialize options for current question and restore saved correct state if exists
@@ -276,9 +309,15 @@ export default function WordHuntGame() {
   }
 
   return (
-  <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", px: 2, pt: 0, pb: { xs: 12, md: 16 }, position: 'relative' }}>
-
-      <Box sx={{ width: '100%', maxWidth: 400, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, mb: 2, mt: { xs: 1, md: '15px' }, color: "#2c3e50", position: "relative", mx: 'auto', overflow: 'hidden', border: "1px solid rgba(255,255,255,0.2)" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", px: 2, pt: 0, pb: { xs: 12, md: 16 }, position: 'relative' }}>
+      <Box sx={{ width: '100%', maxWidth: 400, px: 2, mt: { xs: 1, md: '15px' } }}>
+        <Breadcrumb items={[
+          { label: 'Ana Sayfa', href: '/' },
+          { label: 'Oyunlar', href: '/questions' },
+          { label: 'Kelime Avı' }
+        ]} />
+      </Box>
+      <Box sx={{ width: '100%', maxWidth: 400, background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: 4, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", p: 4, mb: 2, color: "#2c3e50", position: "relative", mx: 'auto', overflow: 'hidden', border: "1px solid rgba(255,255,255,0.2)" }}>
         {/* Back button, fixed to top left, above content */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
           <IconButton sx={{ 
@@ -534,7 +573,8 @@ export default function WordHuntGame() {
             </button>
           </Box>
         )}
-      </Box>
+  </Box>
+  <MoreLearningLinks />
       {/* Result popup bubble */}
       {showResult && (
         <Box 
