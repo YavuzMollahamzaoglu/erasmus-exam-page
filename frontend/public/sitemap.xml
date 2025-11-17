@@ -50,9 +50,24 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/words</loc>
+    <loc>/ingilizce-kelimeler</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>/ingilizce-testleri</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>/erasmus-ingilizce-sinavi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>/universite-ingilizce-hazirlik</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>/kelime-avi</loc>

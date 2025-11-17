@@ -57,10 +57,13 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
       // Giriş yapanlar - Profil en sonda
       return [
         { label: 'Ana Sayfa', value: 'home', auth: false },
-        { label: 'Testler', value: 'categories', auth: false },
+        { label: 'İngilizce Testleri', value: 'ingilizce-testleri', auth: false },
         { label: 'Klasik Sorular', value: 'questions', auth: false },
-        { label: 'Kelimeler', value: 'words', auth: false },
+        { label: 'İngilizce Kelimeler', value: 'ingilizce-kelimeler', auth: false },
         { label: 'Konular', value: 'topics', auth: false },
+        { label: 'Erasmus Sınavı', value: 'erasmus-ingilizce-sinavi', auth: false },
+        { label: 'Üniversite Hazırlık', value: 'universite-ingilizce-hazirlik', auth: false },
+        { label: 'Testler', value: 'categories', auth: false },
         { label: 'Geçmiş', value: 'history', auth: true },
         { label: 'Sıralamalar', value: 'rankings', auth: false },
         { label: 'Hakkımızda', value: 'about', auth: false },
@@ -70,10 +73,13 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
     // Giriş yapmayanlar
     return [
       { label: 'Ana Sayfa', value: 'home', auth: false },
-      { label: 'Testler', value: 'categories', auth: false },
+      { label: 'İngilizce Testleri', value: 'ingilizce-testleri', auth: false },
       { label: 'Klasik Sorular', value: 'questions', auth: false },
-      { label: 'Kelimeler', value: 'words', auth: false },
+      { label: 'İngilizce Kelimeler', value: 'ingilizce-kelimeler', auth: false },
       { label: 'Konular', value: 'topics', auth: false },
+      { label: 'Erasmus Sınavı', value: 'erasmus-ingilizce-sinavi', auth: false },
+      { label: 'Üniversite Hazırlık', value: 'universite-ingilizce-hazirlik', auth: false },
+      { label: 'Testler', value: 'categories', auth: false },
       { label: 'Sıralamalar', value: 'rankings', auth: false },
       { label: 'Hakkımızda', value: 'about', auth: false },
     ];

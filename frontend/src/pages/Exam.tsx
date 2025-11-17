@@ -206,6 +206,29 @@ const Exam: React.FC = () => {
     };
   }, [showSummary, timerPaused]);
 
+  // Quiz JSON-LD schema (minimal) for rich results
+  useEffect(() => {
+    const id = 'quiz-schema';
+    // remove existing
+    const prev = document.getElementById(id);
+    if (prev) prev.remove();
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = id;
+    const schema: any = {
+      '@context': 'https://schema.org',
+      '@type': 'Quiz',
+      name: 'İngilizce Hazırlık Deneme Testi',
+      url: `${window.location.origin}/exam${testId ? `/${testId}` : ''}`,
+      about: 'Erasmus ve üniversite İngilizce hazırlık deneme sınavı',
+      educationalLevel: ['A1','A2','B1','B2'],
+      numberOfQuestions: questions.length || undefined
+    };
+    s.text = JSON.stringify(schema);
+    document.head.appendChild(s);
+    return () => { const el = document.getElementById(id); if (el) el.remove(); };
+  }, [questions.length, testId]);
+
   if (loading) {
     return (
       <Box sx={{ minHeight: '100vh', bgcolor: '#b2ebf2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -224,6 +247,7 @@ const Exam: React.FC = () => {
       </Box>
     );
   }
+
 
   if (error) {
     return (

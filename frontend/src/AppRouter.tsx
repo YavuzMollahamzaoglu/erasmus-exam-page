@@ -30,6 +30,8 @@ const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame
 const WordMatchingGame = lazy(() => import('./pages/WordMatchingGame'));
 const ReadingGame = lazy(() => import('./pages/games/ReadingGame'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const IngilizceTestleri = lazy(() => import('./pages/IngilizceTestleri'));
+const UniversiteHazirlikIngilizce = lazy(() => import('./pages/UniversiteHazirlikIngilizce'));
  
 
 
@@ -161,6 +163,8 @@ const AppRouter: React.FC = () => {
           <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
           <Route path="/ingilizce-kelimeler" element={<Box component="main" id="main-content"><Words /></Box>} />
           <Route path="/erasmus-ingilizce-sinavi" element={<Box component="main" id="main-content"><ErasmusExamLanding /></Box>} />
+          <Route path="/ingilizce-testleri" element={<Box component="main" id="main-content"><IngilizceTestleri /></Box>} />
+          <Route path="/universite-ingilizce-hazirlik" element={<Box component="main" id="main-content"><UniversiteHazirlikIngilizce /></Box>} />
           <Route path="/history" element={token ? <Box component="main" id="main-content"><History token={token} /></Box> : <Navigate to="/login" replace />} />
           <Route path="/exam/:testId" element={<Box component="main" id="main-content"><Exam /></Box>} />
           <Route path="*" element={<NotFound />} />

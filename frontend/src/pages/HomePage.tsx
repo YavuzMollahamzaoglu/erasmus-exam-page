@@ -225,6 +225,13 @@ const HomePage: React.FC<Props> = ({ token }) => {
 
         {/* Inner content */}
         <Box sx={{ p: { xs: 3, md: 5 } }}>
+          {/* Keyword quick links */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mb: 3 }}>
+            <Button variant="outlined" onClick={() => navigate('/ingilizce-kelimeler')} sx={{ textTransform: 'none', borderRadius: 999 }}>İngilizce Kelimeler</Button>
+            <Button variant="outlined" onClick={() => navigate('/ingilizce-testleri')} sx={{ textTransform: 'none', borderRadius: 999 }}>İngilizce Testleri</Button>
+            <Button variant="outlined" onClick={() => navigate('/erasmus-ingilizce-sinavi')} sx={{ textTransform: 'none', borderRadius: 999 }}>Erasmus İngilizce Sınavı</Button>
+            <Button variant="outlined" onClick={() => navigate('/universite-ingilizce-hazirlik')} sx={{ textTransform: 'none', borderRadius: 999 }}>Üniversite İngilizce Hazırlık</Button>
+          </Box>
           {/* Search */}
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
             <Box sx={{ width: '100%', maxWidth: 520, position: 'relative' }}>
