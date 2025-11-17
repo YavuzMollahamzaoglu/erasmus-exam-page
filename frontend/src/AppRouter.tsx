@@ -25,13 +25,12 @@ const WritingGame = lazy(() => import('./pages/games/WritingGame'));
 const SelectLevel = lazy(() => import('./pages/games/SelectLevel'));
 const EssayWriting = lazy(() => import('./pages/EssayWriting'));
 const Words = lazy(() => import('./pages/Words'));
-const ErasmusExamLanding = lazy(() => import('./pages/ErasmusExamLanding'));
 const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame'));
 const WordMatchingGame = lazy(() => import('./pages/WordMatchingGame'));
 const ReadingGame = lazy(() => import('./pages/games/ReadingGame'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const IngilizceTestleri = lazy(() => import('./pages/IngilizceTestleri'));
-const UniversiteHazirlikIngilizce = lazy(() => import('./pages/UniversiteHazirlikIngilizce'));
+// Erasmus and Üniversite landing pages removed per request; keep routes removed below
  
 
 
@@ -162,9 +161,8 @@ const AppRouter: React.FC = () => {
           <Route path="/about" element={<Box component="main" id="main-content"><About /></Box>} />
           <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
           <Route path="/ingilizce-kelimeler" element={<Box component="main" id="main-content"><Words /></Box>} />
-          <Route path="/erasmus-ingilizce-sinavi" element={<Box component="main" id="main-content"><ErasmusExamLanding /></Box>} />
           <Route path="/ingilizce-testleri" element={<Box component="main" id="main-content"><IngilizceTestleri /></Box>} />
-          <Route path="/universite-ingilizce-hazirlik" element={<Box component="main" id="main-content"><UniversiteHazirlikIngilizce /></Box>} />
+          {/* Erasmus and Üniversite landing routes removed per request */}
           <Route path="/history" element={token ? <Box component="main" id="main-content"><History token={token} /></Box> : <Navigate to="/login" replace />} />
           <Route path="/exam/:testId" element={<Box component="main" id="main-content"><Exam /></Box>} />
           <Route path="*" element={<NotFound />} />
