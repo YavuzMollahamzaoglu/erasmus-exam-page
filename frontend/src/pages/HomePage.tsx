@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, TextField, InputAdornment, List, ListItemButton, Button, Chip } from '@mui/material';
-import { topicsIndex } from '../data/topicsIndex';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface Props {
@@ -280,17 +279,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
             </Paper>
           )}
 
-          {/* Popüler Konular (SEO: dahili bağlantılar) */}
-          <Box sx={{ mt: 3, mb: 1 }}>
-            <Typography variant="h6" fontWeight={800} mb={1.5} sx={{ color: '#00695c' }}>Popüler Konular</Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-              {topicsIndex.slice(0, 6).map((topic) => (
-                <Button key={topic.slug} size="small" variant="outlined" color="success" onClick={() => navigate(`/topics/${topic.slug}`)} sx={{ textTransform: 'none', borderRadius: 2 }}>
-                  {topic.title}
-                </Button>
-              ))}
-            </Box>
-          </Box>
+          {/* Popüler Konular removed per request */}
 
           {/* Öğrenme Akışı (önerilen kullanım) */}
           <Paper elevation={0} sx={{ mb: 4, p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: '#fff' }}>

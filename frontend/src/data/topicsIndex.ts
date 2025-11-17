@@ -27,54 +27,7 @@ export function slugify(input: string): string {
 }
 
 const a1: TopicItem[] = [
-  {
-    level: 'A1',
-    slug: 'to-be-fiili-am-is-are',
-    title: '"To Be" Fiili (am, is, are)',
-    excerpt: 'To be fiili; kimlik, özellik ve konum bildirmek için kullanılan temel fiildir. Am/is/are formlarını ve kısa halleri öğrenin.',
-    content: `
-      <h2>"To Be" Fiiline Giriş</h2>
-      <p>To be fiili Türkçedeki <em>-dır/-dir</em> eklerine denktir. Durum, kimlik ve konum ifade eder.</p>
-      <h3>Temel Eşleşmeler</h3>
-      <ul>
-        <li>I <strong>am</strong></li>
-        <li>You/We/They <strong>are</strong></li>
-        <li>He/She/It <strong>is</strong></li>
-      </ul>
-      <h3>Örnekler</h3>
-      <ul>
-        <li>I am a student.</li>
-        <li>She is happy.</li>
-        <li>They are at home.</li>
-      </ul>
-    `,
-  },
-  {
-    level: 'A1',
-    slug: 'this-that-these-those',
-    title: 'This/That/These/Those (İşaret Zamirleri)',
-    excerpt: 'Yakın/uzak ve tekil/çoğul ifadeleri için this/that/these/those kullanımı.',
-    content: `
-      <p><strong>This</strong> (bu), <strong>that</strong> (şu), <strong>these</strong> (bunlar), <strong>those</strong> (şunlar).</p>
-      <ul>
-        <li>This is my bag. / These are my books.</li>
-        <li>That is your car. / Those are your keys.</li>
-      </ul>
-    `,
-  },
-  {
-    level: 'A1',
-    slug: 'simple-present-giris',
-    title: 'Geniş Zaman (Simple Present) — Giriş',
-    excerpt: 'Alışkanlıklar, genel doğrular ve rutinler için simple present. He/She/It ile -s takısı.',
-    content: `
-      <p>Genel durum ve rutinleri anlatır. <em>He/She/It</em> ile fiile <strong>-s</strong> gelir: he works.</p>
-      <ul>
-        <li>I wake up at 7.</li>
-        <li>She <strong>works</strong> in a bank.</li>
-      </ul>
-    `,
-  }
+  // A1 topics intentionally removed per request; keep array empty to avoid broken references
 ];
 
 export const topicsIndex: TopicItem[] = [
