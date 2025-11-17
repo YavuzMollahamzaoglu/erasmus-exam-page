@@ -17,7 +17,8 @@ const TopicDetail: React.FC = () => {
       description: topic.excerpt,
       keywords: `${topic.title}, ingilizce ${topic.level}, konu anlatımı, grammar, örnek cümleler`,
       canonical: `/topics/${topic.slug}`,
-      ogImage: '/social-preview.svg'
+      ogImage: '/social-preview.svg',
+      ogType: 'article'
     });
 
     // JSON-LD: Article + BreadcrumbList
