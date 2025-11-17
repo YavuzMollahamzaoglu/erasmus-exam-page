@@ -1,5 +1,6 @@
 // Lightweight SEO helper — updates document title and key meta/OG tags without external deps
-export function setMetaTags(opts: { title?: string; description?: string; keywords?: string; ogImage?: string; canonical?: string; noIndex?: boolean }) {
+// Lightweight SEO helper — updates document title and key meta/OG/Twitter tags without external deps
+export function setMetaTags(opts: { title?: string; description?: string; keywords?: string; ogImage?: string; ogImageAlt?: string; canonical?: string; noIndex?: boolean }) {
   // Title
   if (opts.title) document.title = opts.title;
 
@@ -29,6 +30,11 @@ export function setMetaTags(opts: { title?: string; description?: string; keywor
     upsertMeta('property', 'og:image', og);
     // also set twitter:image
     upsertMeta('name', 'twitter:image', og);
+    // optional alt text for accessibility in link previews
+    const ogAlt = opts.ogImageAlt || (opts.title ? `${opts.title} — İngilizce pratik` : undefined);
+    if (ogAlt) {
+      upsertMeta('property', 'og:image:alt', ogAlt);
+    }
   }
 
   // Canonical: prefer explicit value, but if omitted use current origin+pathname
@@ -46,6 +52,14 @@ export function setMetaTags(opts: { title?: string; description?: string; keywor
     document.head.appendChild(link);
   }
   link.setAttribute('href', canonicalUrl);
+
+  // Reflect canonical in og:url for accurate share previews
+  upsertMeta('property', 'og:url', canonicalUrl);
+
+  // Twitter summary large image defaults
+  upsertMeta('name', 'twitter:card', 'summary_large_image');
+  if (opts.title) upsertMeta('name', 'twitter:title', opts.title);
+  if (opts.description) upsertMeta('name', 'twitter:description', opts.description);
 
   // Optionally mark page as noindex
   if (opts.noIndex) {
