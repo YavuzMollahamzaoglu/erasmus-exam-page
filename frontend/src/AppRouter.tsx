@@ -25,6 +25,7 @@ const WritingGame = lazy(() => import('./pages/games/WritingGame'));
 const SelectLevel = lazy(() => import('./pages/games/SelectLevel'));
 const EssayWriting = lazy(() => import('./pages/EssayWriting'));
 const Words = lazy(() => import('./pages/Words'));
+const ErasmusExamLanding = lazy(() => import('./pages/ErasmusExamLanding'));
 const FillInTheBlanksGame = lazy(() => import('./pages/games/FillInTheBlanksGame'));
 const WordMatchingGame = lazy(() => import('./pages/WordMatchingGame'));
 const ReadingGame = lazy(() => import('./pages/games/ReadingGame'));
@@ -158,6 +159,8 @@ const AppRouter: React.FC = () => {
           <Route path="/categories" element={<Box component="main" id="main-content"><Categories /></Box>} />
           <Route path="/about" element={<Box component="main" id="main-content"><About /></Box>} />
           <Route path="/words" element={<Box component="main" id="main-content"><Words /></Box>} />
+          <Route path="/ingilizce-kelimeler" element={<Box component="main" id="main-content"><Words /></Box>} />
+          <Route path="/erasmus-ingilizce-sinavi" element={<Box component="main" id="main-content"><ErasmusExamLanding /></Box>} />
           <Route path="/history" element={token ? <Box component="main" id="main-content"><History token={token} /></Box> : <Navigate to="/login" replace />} />
           <Route path="/exam/:testId" element={<Box component="main" id="main-content"><Exam /></Box>} />
           <Route path="*" element={<NotFound />} />
