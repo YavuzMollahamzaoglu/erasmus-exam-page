@@ -14,7 +14,8 @@ const Register: React.FC<Props> = () => {
       description: 'Hesap oluşturun ve İngilizce pratik yapmaya hemen başlayın. Basit kayıt formu ile üye olun.',
       keywords: 'kayıt ol, üye ol, hesap oluştur',
       canonical: '/register',
-      ogImage: '/social-preview.svg'
+      ogImage: '/social-preview.svg',
+      noIndex: true
     });
   }, []);
   const navigate = useNavigate();

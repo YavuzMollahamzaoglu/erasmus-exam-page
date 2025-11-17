@@ -10,7 +10,8 @@ const NotFound: React.FC = () => {
       title: 'Sayfa Bulunamadı — 404',
       description: 'Aradığınız sayfa bulunamadı. Ana sayfaya dönebilir veya popüler sayfalarımıza gidebilirsiniz.',
       keywords: '404, sayfa bulunamadı, ingilizce hazırlık',
-      canonical: '/404'
+      canonical: '/404',
+      noIndex: true
     });
   }, []);
 

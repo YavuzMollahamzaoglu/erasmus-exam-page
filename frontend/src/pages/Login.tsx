@@ -25,7 +25,8 @@ const Login: React.FC<Props> = ({ onLogin }) => {
       description: 'Hesabınıza giriş yaparak sınavlarınızı çözün ve ilerlemenizi takip edin.',
       keywords: 'giriş, hesabım, oturum aç',
       canonical: '/login',
-      ogImage: '/social-preview.svg'
+      ogImage: '/social-preview.svg',
+      noIndex: true
     });
     const params = new URLSearchParams(location.search);
     if (params.get('session') === 'expired') {

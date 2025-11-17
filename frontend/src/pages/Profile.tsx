@@ -105,7 +105,8 @@ const Profile: React.FC<Props> = ({ token, onInitialChange }) => {
       description: 'Kişisel profil bilgilerinizi görüntüleyin ve güncelleyin. Profil fotoğrafı ve hesap ayarları.',
       keywords: 'profilim, hesap, kullanıcı bilgileri',
       canonical: '/profile',
-      ogImage: '/social-preview.svg'
+      ogImage: '/social-preview.svg',
+      noIndex: true
     });
     if (!token) return;
     fetchProfile();

@@ -1,6 +1,6 @@
 // Lightweight SEO helper — updates document title and key meta/OG tags without external deps
 // Lightweight SEO helper — updates document title and key meta/OG/Twitter tags without external deps
-export function setMetaTags(opts: { title?: string; description?: string; keywords?: string; ogImage?: string; ogImageAlt?: string; canonical?: string; noIndex?: boolean }) {
+export function setMetaTags(opts: { title?: string; description?: string; keywords?: string; ogImage?: string; ogImageAlt?: string; canonical?: string; noIndex?: boolean; ogType?: 'website' | 'article' | 'profile' | 'video.other' }) {
   // Title
   if (opts.title) document.title = opts.title;
 
@@ -23,6 +23,7 @@ export function setMetaTags(opts: { title?: string; description?: string; keywor
   // Open Graph
   if (opts.title) upsertMeta('property', 'og:title', opts.title);
   if (opts.description) upsertMeta('property', 'og:description', opts.description);
+  upsertMeta('property', 'og:type', opts.ogType || 'website');
 
   // Normalize og image to absolute URL if it starts with '/'
   if (opts.ogImage) {
@@ -60,6 +61,20 @@ export function setMetaTags(opts: { title?: string; description?: string; keywor
   upsertMeta('name', 'twitter:card', 'summary_large_image');
   if (opts.title) upsertMeta('name', 'twitter:title', opts.title);
   if (opts.description) upsertMeta('name', 'twitter:description', opts.description);
+
+  // Hreflang alternates (single-language site): tr-TR and x-default
+  function upsertLink(rel: string, attrs: Record<string, string>) {
+    const selector = `link[rel="${rel}"]` + (attrs.hreflang ? `[hreflang="${attrs.hreflang}"]` : '') + (attrs.href ? `[href]` : '');
+    let el = document.head.querySelector(selector) as HTMLLinkElement | null;
+    if (!el) {
+      el = document.createElement('link');
+      el.setAttribute('rel', rel);
+      document.head.appendChild(el);
+    }
+    Object.entries(attrs).forEach(([k, v]) => el!.setAttribute(k, v));
+  }
+  upsertLink('alternate', { hreflang: 'tr-TR', href: canonicalUrl });
+  upsertLink('alternate', { hreflang: 'x-default', href: canonicalUrl });
 
   // Optionally mark page as noindex
   if (opts.noIndex) {
