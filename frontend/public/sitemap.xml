@@ -1,97 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Use root-relative <loc> to make the sitemap portable between environments.
-       Replace with absolute URLs (https://your-domain.com/...) before submitting to search engines if required. -->
+  <!-- Absolute URLs for better clarity in search engines -->
   <url>
-    <loc>/</loc>
+    <loc>https://ingilizceprep.com/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>/practice</loc>
+    <loc>https://ingilizceprep.com/practice</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>/grammar</loc>
+    <loc>https://ingilizceprep.com/grammar</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/vocabulary</loc>
+    <loc>https://ingilizceprep.com/vocabulary</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/listening</loc>
+    <loc>https://ingilizceprep.com/listening</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/tests</loc>
+    <loc>https://ingilizceprep.com/tests</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Game pages for English prep practice -->
-  <url><loc>/kelime-avi</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>/yazi-yazma</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>/kelime-eslestirme</loc><changefreq>weekly</changefreq><priority>0.65</priority></url>
-  <url><loc>/okuma</loc><changefreq>weekly</changefreq><priority>0.65</priority></url>
-  <url><loc>/bosluk-doldurma</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>/essay-game</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://ingilizceprep.com/kelime-avi</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://ingilizceprep.com/yazi-yazma</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://ingilizceprep.com/kelime-eslestirme</loc><changefreq>weekly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://ingilizceprep.com/okuma</loc><changefreq>weekly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://ingilizceprep.com/bosluk-doldurma</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://ingilizceprep.com/essay-game</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url>
-    <loc>/rankings</loc>
+    <loc>https://ingilizceprep.com/rankings</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/topics</loc>
+    <loc>https://ingilizceprep.com/topics</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/ingilizce-kelimeler</loc>
+    <loc>https://ingilizceprep.com/ingilizce-kelimeler</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>/ingilizce-testleri</loc>
+    <loc>https://ingilizceprep.com/ingilizce-testleri</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/erasmus-ingilizce-sinavi</loc>
+    <loc>https://ingilizceprep.com/erasmus-ingilizce-sinavi</loc>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>/universite-ingilizce-hazirlik</loc>
+    <loc>https://ingilizceprep.com/universite-ingilizce-hazirlik</loc>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>/kelime-avi</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>/kelime-eslestirme</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
   </url>
   <!-- Topic detail URLs for better indexing -->
   <url>
-    <loc>/topics/to-be-fiili-am-is-are</loc>
+    <loc>https://ingilizceprep.com/topics/to-be-fiili-am-is-are</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>/topics/this-that-these-those</loc>
+    <loc>https://ingilizceprep.com/topics/this-that-these-those</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>/topics/simple-present-giris</loc>
+    <loc>https://ingilizceprep.com/topics/simple-present-giris</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
