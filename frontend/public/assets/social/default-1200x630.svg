@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00b894"/>
+      <stop offset="100%" stop-color="#00cec9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <g opacity="0.15">
+    <circle cx="150" cy="120" r="140" fill="#ffffff"/>
+    <circle cx="1050" cy="540" r="200" fill="#ffffff"/>
+  </g>
+  <g>
+    <text x="72" y="210" font-family="Inter,system-ui,-apple-system,Segoe UI,Roboto" font-weight="800" font-size="70" fill="#ffffff">İngilizce Hazırlık</text>
+    <text x="72" y="290" font-family="Inter,system-ui,-apple-system,Segoe UI,Roboto" font-weight="600" font-size="42" fill="#e8fffb">Ücretsiz testler, kelimeler ve oyunlar</text>
+  </g>
+  <g>
+    <rect x="72" y="350" rx="14" ry="14" width="480" height="90" fill="rgba(255,255,255,0.15)"/>
+    <text x="96" y="410" font-family="Inter,system-ui,-apple-system,Segoe UI,Roboto" font-weight="700" font-size="38" fill="#ffffff">ingilizceprep.com</text>
+  </g>
+</svg>

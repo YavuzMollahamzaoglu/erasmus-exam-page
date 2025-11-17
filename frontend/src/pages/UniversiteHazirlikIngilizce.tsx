@@ -10,7 +10,7 @@ const UniversiteHazirlikIngilizce: React.FC = () => {
       description: 'Üniversite İngilizce hazırlık için seviyeye göre (A1-A2-B1-B2) kelimeler, grammar konu anlatımları, okuma-yazma oyunları ve süreli deneme testleri.',
       keywords: 'üniversite ingilizce hazırlık, hazırlık ingilizce test, ingilizce hazırlık kelimeler, hazırlık atlama ingilizce',
       canonical: '/universite-ingilizce-hazirlik',
-      ogImage: '/social-preview.svg'
+      ogImage: '/assets/social/universite-ingilizce-hazirlik-1200x630.svg'
     });
 
     // FAQ + ItemList schema

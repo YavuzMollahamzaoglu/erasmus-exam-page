@@ -10,7 +10,7 @@ const ErasmusExamLanding: React.FC = () => {
       description: 'Erasmus İngilizce sınavı için seviyeye göre (A1 A2 B1 B2) ücretsiz online deneme testleri, kelime listeleri, okuma ve yazma oyunları. Gerçek süreli sınav pratiği yap.',
       keywords: 'erasmus ingilizce sınavı, erasmus deneme sınavı, erasmus ingilizce test, erasmus ingilizce hazırlık, erasmus kelimeler',
       canonical: '/erasmus-ingilizce-sinavi',
-      ogImage: '/social-preview.svg'
+      ogImage: '/assets/social/erasmus-ingilizce-sinavi-1200x630.svg'
     });
 
     // FAQ + ItemList schema injection

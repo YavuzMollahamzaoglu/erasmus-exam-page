@@ -10,7 +10,7 @@ const IngilizceTestleri: React.FC = () => {
       description: 'İngilizce testleri ve oyunları: deneme sınavları, kelime avı, kelime eşleştirme, okuma ve yazma. Erasmus ve üniversite hazırlık için pratik yap.',
       keywords: 'ingilizce testleri, online ingilizce test, ingilizce deneme, erasmus ingilizce test, üniversite hazırlık test',
       canonical: '/ingilizce-testleri',
-      ogImage: '/social-preview.svg'
+      ogImage: '/assets/social/ingilizce-testleri-1200x630.svg'
     });
 
     const list = document.createElement('script');

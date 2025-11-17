@@ -63,7 +63,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
       title: 'İngilizce Hazırlık | Ücretsiz Online İngilizce Testleri, Erasmus ve Hazırlık Sınavları',
       description: 'İngilizce Hazırlık: Erasmus, hazırlık sınıfı ve B1-B2 seviye hedefleri için ücretsiz online İngilizce testleri, kelime oyunları, dilbilgisi (grammar) konu anlatımları. İngilizce hazırlık sınavına en iyi şekilde hazırlan.',
       keywords: 'İngilizce Hazırlık, ingilizce hazırlık sınavı, erasmus ingilizce, hazırlık sınavı, online ingilizce test, ücretsiz ingilizce, grammar konu anlatımı, kelime oyunu, ingilizce pratik, üniversite hazırlık',
-      ogImage: '/social-preview.svg',
+      ogImage: '/assets/social/default-1200x630.svg',
       canonical: '/'
     });
     // FAQ Schema for common questions

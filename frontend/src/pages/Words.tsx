@@ -34,7 +34,7 @@ const Words: React.FC = () => {
       description: `${level} seviyesi İngilizce kelimeler listesi, Türkçe anlamları ve örnek cümlelerle. Erasmus ve üniversite İngilizce hazırlık sınavları için kelime dağarcığını geliştir. A1 A2 B1 B2 İngilizce kelimeler tek sayfada.`,
       keywords: 'ingilizce kelimeler, ingilizce kelimeler a1, ingilizce kelimeler a2, ingilizce kelimeler b1, ingilizce kelimeler b2, erasmus ingilizce kelimeler, üniversite hazırlık ingilizce kelimeler',
       canonical: '/ingilizce-kelimeler',
-      ogImage: '/social-preview.svg'
+      ogImage: '/assets/social/ingilizce-kelimeler-1200x630.svg'
     });
   fetch(`${process.env.REACT_APP_API_URL}/api/words?level=${level}`)
       .then(res => res.json())
