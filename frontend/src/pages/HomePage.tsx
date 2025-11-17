@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, TextField, InputAdornment, List, ListItemButton, Button, Chip } from '@mui/material';
+import { topicsIndex } from '../data/topicsIndex';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface Props {
@@ -283,13 +284,9 @@ const HomePage: React.FC<Props> = ({ token }) => {
           <Box sx={{ mt: 3, mb: 1 }}>
             <Typography variant="h6" fontWeight={800} mb={1.5} sx={{ color: '#00695c' }}>Popüler Konular</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-              {[
-                { href: '/topics/to-be-fiili-am-is-are', label: '"To Be" (am/is/are)' },
-                { href: '/topics/this-that-these-those', label: 'This/That/These/Those' },
-                { href: '/topics/simple-present-giris', label: 'Geniş Zaman (Simple Present)' }
-              ].map((t) => (
-                <Button key={t.href} size="small" variant="outlined" color="success" onClick={() => navigate(t.href)} sx={{ textTransform: 'none', borderRadius: 2 }}>
-                  {t.label}
+              {topicsIndex.slice(0, 6).map((topic) => (
+                <Button key={topic.slug} size="small" variant="outlined" color="success" onClick={() => navigate(`/topics/${topic.slug}`)} sx={{ textTransform: 'none', borderRadius: 2 }}>
+                  {topic.title}
                 </Button>
               ))}
             </Box>
