@@ -108,20 +108,30 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
   // Aktif path'i bulmak için
   const currentPath = location.pathname.replace(/^\//, '');
   return (
-    <AppBar position="fixed" color="primary" elevation={2} sx={{
-      // revert to a simple, solid navbar like the previous design
-      backgroundColor: (t) => t.palette.primary.main,
-      color: (t) => t.palette.primary.contrastText,
+    <AppBar position="fixed" elevation={0} sx={{
+      background: 'linear-gradient(90deg, rgba(13,82,166,0.92) 0%, rgba(24,110,200,0.92) 100%)',
+      backdropFilter: 'saturate(160%) blur(6px)',
+      WebkitBackdropFilter: 'saturate(160%) blur(6px)',
+      color: 'rgba(255,255,255,0.98)',
       minHeight: { xs: 56, md: 64 },
+      boxShadow: '0 8px 28px rgba(0,0,0,0.18)',
+      borderBottom: '1px solid rgba(255,255,255,0.08)',
+      fontFamily: 'Poppins, sans-serif',
       top: 0,
       zIndex: (theme) => (theme.zIndex?.appBar ?? 1100) + 10,
-      boxShadow: (t) => t.shadows[2],
+      '& .MuiButton-root': {
+        color: 'rgba(255,255,255,0.98)',
+        fontWeight: 600,
+      },
+      '& .MuiTypography-root': {
+        color: 'rgba(255,255,255,0.98)'
+      }
     }}>
-      <Container maxWidth={false} disableGutters sx={{ px: { xs: 1, md: 2 } }}>
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, md: 64 }, pl: 1, pr: 1 }}>
+      <Container maxWidth={false} disableGutters sx={{ px: { xs: 1.5, md: 3 } }}>
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between', minHeight: { xs: 56, md: 64 }, pl: 0, pr: 1, overflow: 'visible' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             {/* Mobile menu icon */}
-            <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', justifyContent: 'center', pr: 1 }}>
+            <Box sx={{ width: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }, display: { xs: 'flex', lg: 'none' }, alignItems: 'center', justifyContent: 'center', pr: { xs: 0.5, sm: 1 } }}>
               <IconButton
                 size="large"
                 aria-label="Ana menüyü aç"
@@ -136,10 +146,64 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
               </IconButton>
             </Box>
             {/* Brand Logo (click to home) */}
-            <Box onClick={() => onNavigate('home')} aria-label="Ana sayfa" sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }}>
-              <Box component="img" src="/logo.png" alt="İngilizce Hazırlık" sx={{ height: { xs: 32, md: 40 }, width: 'auto', display: 'block' }} />
-              <Typography component="span" sx={{ fontWeight: 700, letterSpacing: '.02rem', display: { xs: 'none', sm: 'inline' } }}>
-                İngilizce Hazırlık
+            <Box
+              component="span"
+              onClick={() => onNavigate('home')}
+              aria-label="Ana sayfa"
+              sx={{
+                display: { xs: 'none', lg: 'inline-flex' },
+                alignItems: 'center',
+                cursor: 'pointer',
+                position: 'relative',
+                zIndex: 3000,
+                ml: '-8px',
+                mr: '8px',
+                height: '64px',
+                overflow: 'visible',
+              }}
+            >
+              <Box
+                component="img"
+                src="/logo.png"
+                alt="İngilizce Hazırlık"
+                sx={{
+                  height: { xs: '64px', sm: '120px', md: '96px', lg: '140px' },
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                  position: 'relative',
+                  top: { xs: '-2px', sm: '-4px', md: '0px' },
+                  transition: 'height 160ms ease, top 160ms ease'
+                }}
+              />
+            </Box>
+            <Box sx={{ position: { lg: 'relative' }, left: { lg: 'auto' }, transform: { lg: 'none' }, display: { xs: 'none', sm: 'none', md: 'none', lg: 'inline-flex' }, alignItems: 'center', pointerEvents: 'none', overflow: 'visible' }}>
+              <Typography
+                component="span"
+                onClick={() => onNavigate('home')}
+                sx={{
+                  alignItems: 'center',
+                  fontFamily: 'Poppins, sans-serif',
+                  fontWeight: 700,
+                  fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem', lg: '1.3rem' },
+                  letterSpacing: '.05rem',
+                  color: 'white',
+                  userSelect: 'none',
+                  cursor: 'pointer',
+                  lineHeight: 1,
+                  ml: { sm: '-3px', md: '-3px', lg: '-3px' },
+                  position: 'relative',
+                  left: { lg: '-3px' },
+                  pointerEvents: 'auto',
+                  flexShrink: 0,
+                  minWidth: 0,
+                  '&, & .MuiTypography-root': {
+                    marginLeft: '-3px !important'
+                  }
+                }}
+              >
+                <span style={{ color: '#fff', fontWeight: 700 }}>İngilizce</span>
+                <span style={{ color: '#fff', fontWeight: 700, marginLeft: 3 }}>Hazırlık</span>
               </Typography>
             </Box>
           </Box>
@@ -203,8 +267,12 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
               maxWidth="xs"
               PaperProps={{
                 sx: {
-                  borderRadius: 2,
-                  background: '#fff'
+                  borderRadius: 3,
+                  // page card vibe: soft white with a hint of tint and gentle shadow
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.94) 100%)',
+                  backdropFilter: 'saturate(180%) blur(8px)',
+                  border: '1px solid rgba(45,91,186,0.12)',
+                  boxShadow: '0 18px 44px rgba(0,0,0,0.18)'
                 }
               }}
               TransitionComponent={Fade}
@@ -213,17 +281,19 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
               <DialogTitle
                 sx={{
                   p: 2,
-                  pb: 1.25,
-                  borderRadius: '8px 8px 0 0',
-                  color: 'inherit',
+                  pb: 1.5,
+                  borderRadius: '12px 12px 0 0',
+                  color: '#fff',
+                  fontFamily: 'Poppins, sans-serif',
                   fontWeight: 700,
-                  background: 'transparent',
+                  background: 'linear-gradient(135deg, #2D5BBA 0%, #20C4A4 100%)',
+                  boxShadow: 'inset 0 -1px 0 rgba(255,255,255,0.25)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
               >
-                <Typography sx={{ fontSize: '1.05rem', letterSpacing: '.04rem', fontWeight: 800, textAlign: 'center' }}>İngilizce Hazırlık</Typography>
+                <Typography sx={{ fontSize: '1.15rem', letterSpacing: '.06rem', fontWeight: 800, textAlign: 'center' }}>İNGİLİZCE HAZIRLIK</Typography>
               </DialogTitle>
               <DialogContent sx={{ pt: 0, pb: 1 }}>
                 <List sx={{ py: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
@@ -239,13 +309,14 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
                         borderRadius: 2,
                         px: 2,
                         minHeight: 44,
-                        '&:hover': { backgroundColor: 'rgba(0,0,0,0.04)' },
+                        '&:hover': { backgroundColor: 'rgba(45,91,186,0.06)' },
                         ...(((currentPath === page.value) || (page.value === 'home' && currentPath === '')) && {
-                          backgroundColor: 'rgba(0,0,0,0.06)'
+                          backgroundColor: 'rgba(45,91,186,0.08)',
+                          boxShadow: 'inset 0 0 0 1px rgba(45,91,186,0.18)'
                         })
                       }}
                     >
-                      <ListItemText primaryTypographyProps={{ fontWeight: 600 }} primary={page.label} />
+                      <ListItemText primaryTypographyProps={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600 }} primary={page.label} />
                     </ListItemButton>
                   ))}
                 </List>
@@ -278,12 +349,13 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
                   sx={{
                     my: 0,
                     mx: { md: 0.3, lg: 0.5, xl: 1 },
-                    color: isActive ? '#b6d4fa' : '#fff',
+                    color: isActive ? '#5CC9F5' : '#fff',
                     display: 'block',
                     fontWeight: 500,
                     textTransform: 'none',
+                    fontFamily: 'Poppins, sans-serif',
                     fontSize: { md: '0.85rem', lg: '0.9rem', xl: '1rem' },
-                    padding: { md: '6px 10px', lg: '6px 12px', xl: '8px 12px' },
+                    padding: { md: '6px 10px', lg: '6px 12px', xl: '8px 16px' },
                     borderRadius: 2,
                     minHeight: 36,
                     borderBottom: 'none',
@@ -292,11 +364,11 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
                     textDecoration: isActive ? 'underline' : 'none',
                     textUnderlineOffset: isActive ? 4 : undefined,
                     '&:hover': {
-                      color: '#b6d4fa',
-                      backgroundColor: 'rgba(255,255,255,0.06)',
+                      color: '#5CC9F5',
+                      backgroundColor: 'rgba(255,255,255,0.04)',
                       textDecoration: 'underline',
                       textUnderlineOffset: 4,
-                      boxShadow: 'none',
+                      boxShadow: '0 2px 8px 0 rgba(0,0,0,0.10)',
                     },
                   }}
                 >
@@ -312,7 +384,8 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'flex-end',
-              minWidth: { xs: 'auto', lg: 'auto' }
+              // reserve width on small/tablet screens so title can be centered visually
+              minWidth: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }
             }}>
               <Tooltip title="Kullanıcı menüsü">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -395,15 +468,57 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
             <Box sx={{ 
               flexGrow: 0, 
               display: 'flex', 
-              gap: { xs: 0.5, sm: 1 }, 
+              gap: { xs: 0.4, sm: 1 }, 
               alignItems: 'center', 
               justifyContent: 'flex-end',
-              minWidth: { xs: 'auto', lg: 'auto' }
+              // Reserve the same width on the right as the left mobile menu spacer
+              // so the absolutely-centered title stays visually centered on xs/sm/md
+              minWidth: { xs: '56px', sm: '96px', md: '120px', lg: 'auto' }
             }}>
-              <Button size="small" color="inherit" variant="outlined" sx={{ textTransform: 'none', px: 1.5, py: 0.5, borderColor: 'rgba(255,255,255,0.8)' }} onClick={() => onNavigate('login')}>
+              <Button 
+                color="inherit" 
+                sx={{ 
+                  fontFamily: 'Poppins, sans-serif', 
+                  fontWeight: 600, 
+                  fontSize: { xs: '0.72rem', sm: '0.95rem', lg: '1rem' }, 
+                  px: { xs: 1, sm: 2, lg: 2.5 }, 
+                  py: { xs: 0.5, sm: 1 }, 
+                  borderRadius: 2, 
+                  border: '1px solid rgba(255,255,255,0.7)',
+                  color: '#fff',
+                  backgroundColor: 'transparent',
+                  transition: 'all 0.2s ease',
+                  '&:hover': { 
+                    color: '#fff', 
+                    backgroundColor: 'rgba(255,255,255,0.10)', 
+                    borderColor: '#fff',
+                  } 
+                }} 
+                onClick={() => onNavigate('login')}
+              >
                 Giriş Yap
               </Button>
-              <Button size="small" color="inherit" variant="outlined" sx={{ textTransform: 'none', px: 1.5, py: 0.5, borderColor: 'rgba(255,255,255,0.8)' }} onClick={() => onNavigate('register')}>
+              <Button 
+                color="inherit" 
+                sx={{ 
+                  fontFamily: 'Poppins, sans-serif', 
+                  fontWeight: 600, 
+                  fontSize: { xs: '0.72rem', sm: '0.95rem', lg: '1rem' }, 
+                  px: { xs: 1, sm: 2, lg: 2.5 }, 
+                  py: { xs: 0.5, sm: 1 }, 
+                  borderRadius: 2, 
+                  border: '1px solid rgba(255,255,255,0.7)',
+                  color: '#fff',
+                  backgroundColor: 'transparent',
+                  transition: 'all 0.2s ease',
+                  '&:hover': { 
+                    color: '#fff', 
+                    backgroundColor: 'rgba(255,255,255,0.10)', 
+                    borderColor: '#fff',
+                  } 
+                }} 
+                onClick={() => onNavigate('register')}
+              >
                 Kayıt Ol
               </Button>
             </Box>
