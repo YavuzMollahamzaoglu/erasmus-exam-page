@@ -91,7 +91,7 @@ const Words: React.FC = () => {
   <Paper elevation={6} sx={{ width: '100%', maxWidth: 900, borderRadius: 4, p: 0, mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, borderTopLeftRadius: 'inherit', borderTopRightRadius: 'inherit', textAlign: 'center' }}>
           <Typography component="h1" variant="h3" fontWeight={700} mb={1} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: { xs: '2rem', md: '2.5rem' } }}>İngilizce Kelimeler</Typography>
-          <Typography component="h2" variant="h6" sx={{ opacity: 0.95, mb: 2 }}>Seviye: {level} — A1 A2 B1 B2 İngilizce Kelimeler</Typography>
+          <Typography component="h2" variant="h6" sx={{ opacity: 0.95, mb: 2 }}>Seviye: {level}</Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
             <Select value={level} onChange={(e) => setLevel(e.target.value)} sx={{ bgcolor: 'transparent', color: '#fff', minWidth: 120, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.5)' }, '& .MuiSvgIcon-root': { color: '#fff' } }}>
               {levels.map(l => <MenuItem key={l} value={l}>{l}</MenuItem>)}

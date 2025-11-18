@@ -201,6 +201,9 @@ const HomePage: React.FC<Props> = ({ token }) => {
           background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
           color: '#fff',
           p: { xs: 3, md: 4 },
+          // Reserve space to avoid layout shift when fonts or content load
+          minHeight: { xs: 160, md: 220 },
+          maxHeight: { xs: 300, md: 420 },
           borderTopLeftRadius: 'inherit',
           borderTopRightRadius: 'inherit',
           borderBottomLeftRadius: 0,

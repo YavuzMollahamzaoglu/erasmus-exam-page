@@ -13,15 +13,19 @@ export default function MoreLearningLinks() {
       borderRadius: 3,
       background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
       border: '1px solid rgba(0, 184, 148, 0.15)',
-      boxShadow: '0 12px 24px rgba(0,0,0,0.08)'
+      boxShadow: '0 12px 24px rgba(0,0,0,0.08)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      textAlign: 'center'
     }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: '#00695c', mb: 1.5 }}>
+      <Typography variant="h6" align="center" sx={{ fontWeight: 800, color: '#00695c', mb: 1.5 }}>
         Diğer Oyunlar ve Konu Anlatımları
       </Typography>
-      <Typography variant="body2" sx={{ color: '#47606b', mb: 2 }}>
+      <Typography variant="body2" align="center" sx={{ color: '#47606b', mb: 2 }}>
         Seviyenize uygun diğer pratiklere göz atın ve öğrenmenizi hızlandırın.
       </Typography>
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} useFlexGap sx={{ flexWrap: 'wrap' }}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} useFlexGap sx={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
         <Button component={Link} to="/kelime-avi" variant="outlined" size="small" sx={btnSx}>Kelime Avı</Button>
         <Button component={Link} to="/yazi-yazma" variant="outlined" size="small" sx={btnSx}>Yazma Oyunu</Button>
         <Button component={Link} to="/kelime-eslestirme" variant="outlined" size="small" sx={btnSx}>Kelime Eşleştirme</Button>
@@ -33,7 +37,8 @@ export default function MoreLearningLinks() {
           background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
           color: '#fff',
           border: 'none',
-          '&:hover': { filter: 'brightness(0.95)' }
+          '&:hover': { filter: 'brightness(0.95)' },
+          mx: 0.5
         }}>Konu Anlatımları</Button>
       </Stack>
     </Box>
