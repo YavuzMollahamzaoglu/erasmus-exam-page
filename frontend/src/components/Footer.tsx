@@ -1,4 +1,5 @@
 import React from 'react';
+import ShareBanner from './ShareBanner';
 
 const footerStyle: React.CSSProperties = {
   width: '100%',
@@ -41,13 +42,18 @@ const Footer: React.FC = () => {
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M2.25 6.75A2.25 2.25 0 0 1 4.5 4.5h15a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 19.5 19.5h-15A2.25 2.25 0 0 1 2.25 17.25V6.75zm1.5 0v.638l8.25 6.188 8.25-6.188V6.75a.75.75 0 0 0-.75-.75h-15a.75.75 0 0 0-.75.75zm16.5 1.974-7.728 5.797a.75.75 0 0 1-.894 0L3.75 8.724v8.526c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75V8.724z"/></svg>
         </a>
       </div>
-  <div style={{ fontSize: 13, color: '#e3eafc', marginTop: 4, textAlign: 'center', padding: '0 12px' }}>
+      <div style={{ fontSize: 13, color: '#e3eafc', marginTop: 4, textAlign: 'center', padding: '0 12px' }}>
         İletişime geçmek, şikayet ve önerileriniz için:
         <a href="https://github.com/YavuzMollahamzaoglu" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', margin: '0 8px' }}>GitHub</a>
         |
         <a href="https://www.linkedin.com/in/yavuz-mollahamzaoğlu-59a2531b9" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', margin: '0 8px' }}>LinkedIn</a>
         |
         <a href="mailto:ingilizcehazirlikdestek@gmail.com" style={{ color: '#fff', textDecoration: 'underline', margin: '0 8px' }}>Mail</a>
+      </div>
+
+      {/* Global share section, visually integrated with footer */}
+      <div style={{ width: '100%', maxWidth: 960, marginTop: 8, padding: '0 12px' }}>
+        <ShareBanner campaign="global-footer-share" path="/" />
       </div>
     </footer>
   );
