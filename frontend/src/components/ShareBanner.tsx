@@ -34,8 +34,8 @@ const ShareBanner: React.FC<Props> = ({ path, campaign = 'site-share', label = '
   };
 
   return (
-    <Box sx={{ mt: 3, p: { xs: 2, md: 2.5 }, borderRadius: 3, border: '1px solid #e3eafc', background: '#fff', textAlign: 'center' }}>
-      <Typography fontWeight={800} color="#00695c" mb={1}>{label}</Typography>
+    <Box sx={{ mt: 0, p: 0, textAlign: 'center', color: 'inherit' }}>
+      <Typography fontWeight={700} sx={{ mb: 0.5, fontSize: 14 }}>{label}</Typography>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} useFlexGap sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
         {shareTargets.map((t) => (
           <Button key={t.name} component="a" href={t.href} target="_blank" rel="noopener" variant="outlined" size="small" sx={{ textTransform: 'none', borderRadius: 999 }}>
