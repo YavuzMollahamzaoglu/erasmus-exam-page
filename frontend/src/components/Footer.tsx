@@ -51,22 +51,9 @@ const Footer: React.FC = () => {
         <a href="mailto:ingilizcehazirlikdestek@gmail.com" style={{ color: '#fff', textDecoration: 'underline', margin: '0 8px' }}>Mail</a>
       </div>
 
-      {/* Global share section: compact, footer-colored strip */}
-      <div style={{ width: '100%', maxWidth: 960, marginTop: 8, padding: '0 12px' }}>
-        <div
-          style={{
-            borderRadius: 999,
-            border: '1px solid rgba(227,234,252,0.35)',
-            padding: '6px 16px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-            background: '#12254f',
-          }}
-        >
-          <ShareBanner campaign="global-footer-share" path="/" label="Faydalı bulduysan paylaş" />
-        </div>
+      {/* Global share section: integrate without large pill */}
+      <div style={{ width: '100%', maxWidth: 960, marginTop: 12, padding: '0 12px', display: 'flex', justifyContent: 'center' }}>
+        <ShareBanner campaign="global-footer-share" path="/" label="Faydalı bulduysan paylaş" variant="footer" />
       </div>
     </footer>
   );
