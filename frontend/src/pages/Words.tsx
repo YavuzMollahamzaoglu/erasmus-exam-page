@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Select, MenuItem, Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, Alert, Divider, Chip } from '@mui/material';
+import ShareBanner from '../components/ShareBanner';
 
 interface Word { id: string; english: string; turkish: string; example?: string | null; level: string; }
 
@@ -288,6 +289,10 @@ const Words: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Share banner for Words page */}
+      <Box sx={{ width: '100%', maxWidth: 900, mt: 2 }}>
+        <ShareBanner campaign="words-share" path="/ingilizce-kelimeler" />
+      </Box>
     </Box>
   );
 };

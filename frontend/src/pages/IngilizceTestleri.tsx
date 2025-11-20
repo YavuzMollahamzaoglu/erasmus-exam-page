@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import setMetaTags from '../utils/seo';
 import { Box, Paper, Typography, Button, Divider } from '@mui/material';
+import ShareBanner from '../components/ShareBanner';
 import { Link } from 'react-router-dom';
 
 const IngilizceTestleri: React.FC = () => {
@@ -60,6 +61,7 @@ const IngilizceTestleri: React.FC = () => {
           <Typography variant="body2" color="text.secondary">Bu sayfa "ingilizce testleri", "online ingilizce test" ve benzeri aramalar için optimize edilmiştir.</Typography>
         </Box>
       </Paper>
+      <ShareBanner campaign="testler-share" path="/ingilizce-testleri" />
     </Box>
   );
 };
