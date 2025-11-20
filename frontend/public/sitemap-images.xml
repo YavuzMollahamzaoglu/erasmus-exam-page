@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Main homepage preview image -->
+  <url>
+    <loc>https://ingilizceprep.com/</loc>
+    <image:image>
+      <image:loc>https://ingilizceprep.com/social-preview-1200x630.png</image:loc>
+      <image:title>İngilizce Hazırlık — Ücretsiz İngilizce Pratik</image:title>
+      <image:caption>İngilizce Hazırlık: sınavlar, kelime oyunları ve dinleme aktiviteleriyle ücretsiz İngilizce pratik.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Logo as secondary brand image -->
+  <url>
+    <loc>https://ingilizceprep.com/</loc>
+    <image:image>
+      <image:loc>https://ingilizceprep.com/logo.png</image:loc>
+      <image:title>İngilizce Hazırlık Logosu</image:title>
+    </image:image>
+  </url>
+</urlset>
