@@ -101,7 +101,7 @@ const AppRouter: React.FC = () => {
   // pass the full path so analytics records correct page
   pageview({ path: location.pathname + location.search });
         // Google Analytics 4 (optional)
-        const gaId = process.env.REACT_APP_GA_MEASUREMENT_ID;
+        const gaId = (window as any).GA_MEASUREMENT_ID || process.env.REACT_APP_GA_MEASUREMENT_ID;
         if (gaId && (window as any).gtag) {
           (window as any).gtag('config', gaId, { page_path: location.pathname + location.search });
         }
@@ -118,21 +118,7 @@ const AppRouter: React.FC = () => {
     <Router>
       <SkipLink />
   <NavbarWithNavigate userAvatar={userAvatar} userInitial={userInitial} />
-      {/* Google Analytics bootstrap (if REACT_APP_GA_MEASUREMENT_ID is set) */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-          (function(){
-            var id = '${process.env.REACT_APP_GA_MEASUREMENT_ID || ''}';
-            if(!id) return;
-            if (!window.dataLayer) window.dataLayer = [];
-            function gtag(){window.dataLayer.push(arguments);} 
-            window.gtag = gtag; gtag('js', new Date()); gtag('config', id);
-            var s1=document.createElement('script'); s1.async=true; s1.src='https://www.googletagmanager.com/gtag/js?id='+id; document.head.appendChild(s1);
-          })();
-        `,
-        }}
-      />
+      {/* GA is initialized in public/index.html; use global id as fallback for SPA pageview */}
       {/* Track SPA route changes for Vercel Analytics */}
       <RouteTracker />
       {/* Fixed AppBar spacer to avoid content jump under navbar */}

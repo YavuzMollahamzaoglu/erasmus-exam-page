@@ -68,6 +68,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Preconnect to Google Tag Manager if GA is enabled -->
   <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <!-- Google Analytics (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K6PFXM3DTS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-K6PFXM3DTS');
+    // Expose for SPA route tracking fallback
+    window.GA_MEASUREMENT_ID = 'G-K6PFXM3DTS';
+  </script>
   <!-- Preload Google Fonts stylesheet to minimize render-blocking -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap&subset=latin-ext" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript>
