@@ -59,15 +59,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ingilizceprep.com/erasmus-ingilizce-sinavi</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://ingilizceprep.com/universite-ingilizce-hazirlik</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
+    <!-- Removed deprecated landing pages (erasmus/universite) to avoid 404s -->
   <!-- Topic detail URLs for better indexing -->
   <url>
     <loc>https://ingilizceprep.com/topics/to-be-fiili-am-is-are</loc>
