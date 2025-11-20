@@ -34,7 +34,10 @@
   <meta name="twitter:title" content="İngilizce Hazırlık — İngilizce Pratik" />
   <meta name="twitter:description" content="Ücretsiz İngilizce pratik: sınavlar, dilbilgisi alıştırmaları, kelime çalışmaları ve dinleme aktiviteleri." />
   <meta name="twitter:image" content="https://ingilizceprep.com/social-preview-1200x630.png" />
-  <link rel="canonical" href="/" />
+  <!-- Canonical should be absolute (Google daha net algılar) -->
+    <!-- Canonical: use absolute URL for clarity -->
+    <link rel="canonical" href="https://ingilizceprep.com/" />
+  
 
   <!-- Webmaster verification (fill contents with tokens from Search Console/Bing) -->
   <!-- Google Search Console: paste the token value in content="..." or use the HTML file method -->
@@ -50,7 +53,8 @@
       "alternateName": "İngilizce Hazırlık Online Platform",
       "description": "Erasmus ve üniversite hazırlık sınavları için ücretsiz online İngilizce hazırlık platformu",
     "url": "%PUBLIC_URL%",
-      "logo": "%PUBLIC_URL%/logo.png",
+      "url": "https://ingilizceprep.com/",
+      "logo": "https://ingilizceprep.com/logo.png",
       "sameAs": []
     }</script>
     <!-- WebSite structured data with search action -->
@@ -61,9 +65,10 @@
       "alternateName": "İngilizce Hazırlık Testleri",
       "description": "Erasmus ve üniversite hazırlık sınavlarına yönelik ücretsiz online İngilizce testleri ve oyunları",
   "url": "%PUBLIC_URL%",
+      "url": "https://ingilizceprep.com/",
       "potentialAction": {
         "@type": "SearchAction",
-  "target": "%PUBLIC_URL%/search?q={search_term_string}",
+        "target": "https://ingilizceprep.com/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }</script>
