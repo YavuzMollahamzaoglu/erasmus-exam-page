@@ -222,8 +222,8 @@ const HomePage: React.FC<Props> = ({ token }) => {
           }
         }}>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography component="h1" variant="h3" fontWeight={700} mb={2} sx={{ textShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', fontSize: 'clamp(1.6rem, 3vw, 2.5rem)' }}>İngilizce Hazırlık — Ücretsiz Online İngilizce Testleri</Typography>
-            <Typography component="h2" variant="h6" sx={{ opacity: 0.95, fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)' }}>Erasmus ve üniversite hazırlık sınavlarına güçlü bir başlangıç yap</Typography>
+            <Typography component="h1" variant="h3" fontWeight={700} mb={2} sx={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.15)', fontSize: 'clamp(1.6rem, 3vw, 2.5rem)' }}>İngilizce Hazırlık — Ücretsiz Online İngilizce Testleri</Typography>
+            <Typography component="h2" variant="h6" sx={{ opacity: 0.98, fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)' }}>Erasmus ve üniversite hazırlık sınavlarına güçlü bir başlangıç yap</Typography>
           </Box>
         </Box>
 
