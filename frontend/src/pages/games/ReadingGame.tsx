@@ -140,16 +140,18 @@ const ReadingGame: React.FC = () => {
   const prev = () => setCurrentIdx((i) => Math.max(0, i - 1));
 
   return (
-  <>
-  <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', px: 2, pb: { xs: 12, md: 16 }, pt: 0 }}>
-      <Box sx={{ width: '100%', maxWidth: 920, pt: 2 }}>
+  <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', display: 'flex', flexDirection: 'column', alignItems: 'center', px: 2, pb: { xs: 12, md: 16 }, pt: 2 }}>
+      {/* Breadcrumb at the top */}
+      <Box sx={{ width: '100%', maxWidth: 920, mb: 1 }}>
         <Breadcrumb items={[
           { label: 'Ana Sayfa', href: '/' },
           { label: 'Oyunlar', href: '/#games' },
           { label: 'Okuma Oyunu' }
         ]} />
       </Box>
-      <Paper elevation={6} sx={{ width: '100%', maxWidth: 920, borderRadius: 4, overflow: 'hidden', mt: { xs: 1, md: '15px' }, background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
+
+      {/* Main game card */}
+      <Paper elevation={6} sx={{ width: '100%', maxWidth: 920, borderRadius: 4, overflow: 'hidden', background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}>
         {/* Header */}
         <Box sx={{ background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)', color: '#fff', p: { xs: 3, md: 4 }, textAlign: 'center', position: 'relative' }}>
           <IconButton
@@ -252,11 +254,10 @@ const ReadingGame: React.FC = () => {
           )}
         </Box>
       </Paper>
-      <MoreLearningLinks />
       
+      {/* Other learning links - outside the main card, below it */}
+      <MoreLearningLinks />
     </Box>
-    <MoreLearningLinks />
-    </>
   );
 };
 

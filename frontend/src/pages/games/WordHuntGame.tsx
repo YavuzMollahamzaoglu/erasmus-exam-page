@@ -47,6 +47,8 @@ export default function WordHuntGame() {
   const [savedCorrect, setSavedCorrect] = useState<Record<number, { selected: string }>>({});
   // Only hide nav during short correct animation
   const [celebrating, setCelebrating] = useState(false);
+  // Track used wrong options per question
+  const [usedOptions, setUsedOptions] = useState<Record<number, Set<string>>>({});
   
   // Fetch questions from API
   useEffect(() => {
@@ -145,6 +147,7 @@ export default function WordHuntGame() {
     setTime(0);
     setCurrentOptions(words[0]?.en ? [...words[0].en] : []);
   setSavedCorrect({});
+    setUsedOptions({});
   };
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -194,26 +197,58 @@ export default function WordHuntGame() {
       setStatus("wrong");
       setMistakes((m) => m + 1);
       
-      // Show wrong card for 1.5 seconds, then automatically change the wrong option
-      setTimeout(() => {
-        setStatus("idle");
-        setSelected(null);
-        
-        // Change the wrong option to give user a better chance
-        const wrongOption = option;
-        const newWrongOption = getAlternativeOption(words[index], wrongOption);
+      // Track this used option
+      const currentUsed = usedOptions[index] || new Set<string>();
+      currentUsed.add(option);
+      setUsedOptions((prev) => ({ ...prev, [index]: currentUsed }));
+      
+      // Check if all alternatives have been used
+      const allAlternatives = words[index].alternatives.filter((alt: string) => alt !== words[index].correct);
+      const allUsed = allAlternatives.every((alt: string) => currentUsed.has(alt));
+      
+      if (allUsed) {
+        // All options exhausted - auto-select correct answer
+        setTimeout(() => {
+          setSelected(words[index].correct);
+          setStatus("correct");
+          setScore((s) => s + 1);
+          setSavedCorrect((prev) => ({ ...prev, [index]: { selected: words[index].correct } }));
+          setCelebrating(true);
+          
+          setTimeout(() => {
+            setStatus("idle");
+            setSelected(null);
+            setCelebrating(false);
+            if (index < words.length - 1) {
+              setIndex((i) => i + 1);
+            } else {
+              setShowResult(true);
+              if (timerRef.current) clearInterval(timerRef.current);
+            }
+          }, 1000);
+        }, 1500);
+      } else {
+        // Show wrong card for 1.5 seconds, then automatically change the wrong option
+        setTimeout(() => {
+          setStatus("idle");
+          setSelected(null);
+          
+          // Change the wrong option to give user a better chance
+          const wrongOption = option;
+          const newWrongOption = getAlternativeOption(words[index], wrongOption);
 
-        // Update current options by replacing the option at the exact index the user clicked.
-        // This preserves button positions and their associated colors.
-        setCurrentOptions((prev) => {
-          if (!prev || prev.length === 0) return prev;
-          const next = [...prev];
-          if (optionIndex >= 0 && optionIndex < next.length) {
-            next[optionIndex] = newWrongOption;
-          }
-          return next;
-        });
-      }, 1500);
+          // Update current options by replacing the option at the exact index the user clicked.
+          // This preserves button positions and their associated colors.
+          setCurrentOptions((prev) => {
+            if (!prev || prev.length === 0) return prev;
+            const next = [...prev];
+            if (optionIndex >= 0 && optionIndex < next.length) {
+              next[optionIndex] = newWrongOption;
+            }
+            return next;
+          });
+        }, 1500);
+      }
     }
   };
 
@@ -373,7 +408,7 @@ export default function WordHuntGame() {
           mb: 3,
           textShadow: "0 2px 4px rgba(0,0,0,0.1)"
         }}>
-          SÖZCÜK AVI
+          Kelime Avı Oyunu
         </Typography>
         
         {/* Question display - Turkish word */}

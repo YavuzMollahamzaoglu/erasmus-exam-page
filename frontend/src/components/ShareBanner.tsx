@@ -85,9 +85,13 @@ const ShareBanner: React.FC<Props> = ({ path, campaign = 'site-share', label = '
             borderRadius: 999,
             fontSize: 12,
             px: 1.6,
-            background: 'linear-gradient(135deg,#00b894 0%,#00cec9 100%)',
+            background: footerMode ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg,#00b894 0%,#00cec9 100%)',
+            color: footerMode ? '#e3eafc' : '#fff',
+            border: footerMode ? '1px solid rgba(255,255,255,0.25)' : 'none',
             boxShadow: 'none',
-            '&:hover': { background: 'linear-gradient(135deg,#00a884 0%,#00bcbc 100%)' }
+            '&:hover': { 
+              background: footerMode ? 'rgba(255,255,255,0.25)' : 'linear-gradient(135deg,#00a884 0%,#00bcbc 100%)'
+            }
           }}
         >
           <ContentCopyIcon sx={{ fontSize: 16, mr: 0.5 }} /> Kopyala

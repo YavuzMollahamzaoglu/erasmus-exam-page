@@ -16,9 +16,9 @@ export default function WritingGame() {
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [score, setScore] = useState(0);
   const [mistakes, setMistakes] = useState(0);
-  const [words] = useState<WordData[]>([]);
-  const [loading] = useState(true);
-  const [error] = useState<string | null>(null);
+  const [words, setWords] = useState<WordData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [time, setTime] = useState(0);
   // Persist per-question correct state so it remains highlighted when going back
@@ -26,6 +26,30 @@ export default function WritingGame() {
   // Hint system
   const [hintsUsed, setHintsUsed] = useState<Record<number, string[]>>({});
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Fetch questions from API
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setLoading(true);
+        const API_URL = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${API_URL}/api/games/writing/questions`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch questions');
+        }
+        const data = await response.json();
+        setWords(data || []);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching writing questions:', err);
+        setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
 
   const handleRestart = () => {
     setIndex(0);

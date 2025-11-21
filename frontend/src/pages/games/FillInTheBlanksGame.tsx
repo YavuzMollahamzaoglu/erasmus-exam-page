@@ -90,8 +90,9 @@ const FillInTheBlanksGame: React.FC = () => {
         const data = await res.json();
         setQuestions(data || []);
         setError(null);
-      } catch {
-        setError('Sorular yüklenemedi.');
+      } catch (err) {
+        console.error('Error fetching fill-in-blanks questions:', err);
+        setError('Boşluk doldurma soruları yüklenemedi. Lütfen daha sonra tekrar deneyin.');
       } finally {
         setLoading(false);
       }
