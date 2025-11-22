@@ -415,22 +415,6 @@ const HomePage: React.FC<Props> = ({ token }) => {
                 <Chip label="~10 dk" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
               </Box>
             </Box>
-            <Box
-              sx={{ ...(cardSx as any), cursor: 'pointer', userSelect: 'none' }}
-              role="button"
-              tabIndex={0}
-              // Removed navigation to /erasmus-sinav-ornekleri (page deleted)
-              onClick={() => { /* page removed */ }}
-              onKeyDown={(e) => { if (e.key === 'Enter') { /* page removed */ } }}
-            >
-              <Typography fontSize={28} mb={1}>🎯</Typography>
-              <Typography fontWeight={700} fontSize={18} color="#00695c" mb={0.5}>Erasmus Sınav Örnekleri</Typography>
-              <Typography fontSize={14} color="#455a64">Format açıklaması, örnek grammar / kelime / okuma soruları ve stratejiler. Çıkmış tarzı sorulara benzer içeriklerle nasıl hazırlanacağını öğren. İlgili oyun ve testlere hızlı yönlendirme ile düzeyini güçlendir.</Typography>
-              <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Chip label="A1–B2" variant="outlined" size="small" sx={{ borderColor: 'rgba(0, 184, 148, 0.4)', color: '#00695c' }} />
-                <Chip label="Strateji" size="small" sx={{ bgcolor: 'rgba(116, 185, 255, 0.15)', color: '#0984e3' }} />
-              </Box>
-            </Box>
           </Box>
 
           {/* Paylaşım bannerı */}
