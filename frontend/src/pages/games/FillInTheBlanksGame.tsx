@@ -82,13 +82,43 @@ const FillInTheBlanksGame: React.FC = () => {
       canonical: '/bosluk-doldurma'
     });
     (async () => {
+      const API_URL = process.env.REACT_APP_API_URL;
+      if (!API_URL) {
+        console.error('REACT_APP_API_URL tanımlı değil. .env.production veya vercel ayarlarını kontrol edin');
+        setError('Sunucu yapılandırması eksik (API URL yok).');
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
       try {
-        setLoading(true);
-        const API_URL = process.env.REACT_APP_API_URL;
-        const res = await fetch(`${API_URL}/api/games/fill-in-blanks/questions?level=${level}`);
-        if (!res.ok) throw new Error('Failed to fetch');
+        // Birincil endpoint
+        let url = `${API_URL}/api/games/fill-in-blanks/questions?level=${level}`;
+        let res = await fetch(url);
+        // 404 veya başarısız ise alternatif yol ("the" içeren versiyon)
+        if (!res.ok) {
+          console.warn('İlk endpoint başarısız, alternatif deneniyor:', url, res.status);
+          const altUrl = `${API_URL}/api/games/fill-in-the-blanks/questions?level=${level}`;
+          const altRes = await fetch(altUrl);
+          if (altRes.ok) {
+            res = altRes;
+            url = altUrl;
+          } else {
+            throw new Error(`Her iki endpoint başarısız: ${res.status} / ${altRes.status}`);
+          }
+        }
         const data = await res.json();
-        setQuestions(data || []);
+        if (Array.isArray(data) && data.length === 0) {
+          console.warn('Boşluk doldurma: Seviye için 0 kayıt döndü. Fallback olarak seviyesiz istek deneniyor.');
+          const noLevelRes = await fetch(`${API_URL}/api/games/fill-in-blanks/questions`);
+          if (noLevelRes.ok) {
+            const allData = await noLevelRes.json();
+            setQuestions(allData || []);
+          } else {
+            setQuestions([]);
+          }
+        } else {
+          setQuestions(data || []);
+        }
         setError(null);
       } catch (err) {
         console.error('Error fetching fill-in-blanks questions:', err);
@@ -197,8 +227,11 @@ const FillInTheBlanksGame: React.FC = () => {
 
   const handleDropToOptions = (e: React.DragEvent) => {
     e.preventDefault();
+    // Drop area: ensure dragged word returns to options list if not already there
     if (draggedItem && !isSubmitted) {
-      setAvailableOptions(prev => prev.includes(draggedItem) ? prev : [...prev, draggedItem]);
+      if (!availableOptions.includes(draggedItem)) {
+        setAvailableOptions(prev => [...prev, draggedItem]);
+      }
       setDraggedItem(null);
     }
   };
