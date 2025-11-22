@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
-import { Box, Paper, Typography, Button, Alert, Fade, IconButton } from '@mui/material';
+import { Box, Paper, Typography, Button, Alert, Fade, IconButton, LinearProgress } from '@mui/material';
 import MoreLearningLinks from '../components/MoreLearningLinks';
 import Breadcrumb from '../components/Breadcrumb';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -379,18 +379,41 @@ export default function WordMatchingGame() {
             </Button>
           </Box>
         </Box>
-        {/* Simple progress text (no filling bar, no live time) */}
-        <Box sx={{ p: 3, pt: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h6" color="#00695c" fontWeight={600}>
-              İlerleme: {matched}/{targets.length || GAME_WORD_COUNT}
+        {/* Progress Bar Section */}
+        <Box sx={{ px: 4, py: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography variant="h6" color="#00695c" fontWeight={700} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              İlerleme
+              <Box component="span" sx={{ 
+                bgcolor: '#e0f2f1', 
+                color: '#00897b', 
+                px: 1.5, 
+                py: 0.5, 
+                borderRadius: 2, 
+                fontSize: '0.9rem' 
+              }}>
+                {matched} / {targets.length || GAME_WORD_COUNT}
+              </Box>
             </Typography>
             {setId && sets.length > 0 && (
-              <Typography variant="body2" color="#00695c" sx={{ opacity: 0.8 }}>
+              <Typography variant="body2" color="#00695c" sx={{ opacity: 0.8, fontWeight: 500 }}>
                 Set: {sets.find((s) => s.id === setId)?.title || ''}
               </Typography>
             )}
           </Box>
+          <LinearProgress 
+            variant="determinate" 
+            value={(matched / (targets.length || GAME_WORD_COUNT)) * 100} 
+            sx={{ 
+              height: 10, 
+              borderRadius: 5,
+              bgcolor: '#e0f2f1',
+              '& .MuiLinearProgress-bar': {
+                borderRadius: 5,
+                background: 'linear-gradient(90deg, #00b894 0%, #00cec9 100%)',
+              }
+            }} 
+          />
         </Box>
 
         {/* Alerts */}
@@ -417,17 +440,34 @@ export default function WordMatchingGame() {
         </Box>
 
         {/* Top pool (English words) fixed to two rows) - polished pill UI */}
-        <Box sx={{ px: 3, pb: 1 }}>
+        <Box sx={{ px: 4, pb: 2 }}>
           {(() => {
             const half = Math.ceil(pool.length / 2);
             const rows = [pool.slice(0, half), pool.slice(half)];
             return (
-              <>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {rows.map((row, idx) => (
-                  <Box key={idx} sx={{ display: 'grid', gridAutoFlow: 'column', gridAutoColumns: '1fr', gap: 1.5, overflowX: { xs: 'auto', md: 'visible' }, pb: 1 }}>
+                  <Box key={idx} sx={{ 
+                    display: 'flex', 
+                    flexWrap: 'wrap', 
+                    justifyContent: 'center', 
+                    gap: 1.5 
+                  }}>
                     {row.map((w, wordIdx) => {
-                      const colorPalette = ['#42a5f5','#ffca28','#ab47bc','#26a69a','#ef5350','#8d6e63','#66bb6a'];
-                      const colorIndex = (w.id + wordIdx) % colorPalette.length;
+                      // More vibrant, modern palette
+                      const colorPalette = [
+                        { bg: '#FF6B6B', shadow: '#EE5253' }, // Red
+                        { bg: '#4ECDC4', shadow: '#22A6B3' }, // Teal
+                        { bg: '#45B7D1', shadow: '#2D98DA' }, // Blue
+                        { bg: '#96CEB4', shadow: '#58B19F' }, // Green
+                        { bg: '#FFEEAD', shadow: '#F7D794', text: '#555' }, // Yellow
+                        { bg: '#D4A5A5', shadow: '#B33771' }, // Pinkish
+                        { bg: '#9B59B6', shadow: '#8E44AD' }, // Purple
+                        { bg: '#34495E', shadow: '#2C3E50' }, // Dark Blue
+                      ];
+                      const theme = colorPalette[(w.id + wordIdx) % colorPalette.length];
+                      const isSelected = selectedWordId === w.id;
+                      
                       return (
                       <Box
                         key={w.id}
@@ -437,22 +477,34 @@ export default function WordMatchingGame() {
                         sx={{
                           userSelect: 'none',
                           cursor: w.used || !playing ? 'default' : 'grab',
-                          opacity: w.used ? 0.35 : 1,
-                          borderRadius: 999,
-                          px: 1.6,
-                          py: 1.1,
+                          opacity: w.used ? 0.2 : 1,
+                          transform: w.used ? 'scale(0.9)' : (isSelected ? 'scale(1.05)' : 'scale(1)'),
+                          borderRadius: 3,
+                          px: 2.5,
+                          py: 1.2,
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#fff',
-                          fontWeight: 700,
-                          fontSize: { xs: 12, sm: 14 },
-                          minWidth: 110,
-                          boxShadow: '0 3px 8px rgba(0,0,0,0.12)',
-                          outline: selectedWordId === w.id ? '3px solid rgba(0, 184, 148, 0.85)' : 'none',
-                          background: `linear-gradient(135deg, ${colorPalette[colorIndex]} 0%, ${colorPalette[colorIndex]}55 100%)`,
-                          transition: 'transform .15s ease',
-                          '&:active': { transform: 'scale(0.98)' },
+                          color: theme.text || '#fff',
+                          fontWeight: 800,
+                          fontSize: { xs: 13, sm: 15 },
+                          minWidth: 100,
+                          boxShadow: w.used 
+                            ? 'none' 
+                            : isSelected 
+                              ? `0 8px 20px ${theme.shadow}66` 
+                              : `0 4px 0 ${theme.shadow}`,
+                          border: isSelected ? `2px solid ${theme.shadow}` : 'none',
+                          background: theme.bg,
+                          transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                          '&:hover': {
+                            transform: !w.used && playing ? 'translateY(-2px)' : 'none',
+                            boxShadow: !w.used && playing ? `0 6px 0 ${theme.shadow}` : 'none',
+                          },
+                          '&:active': { 
+                            transform: !w.used && playing ? 'translateY(2px)' : 'none',
+                            boxShadow: !w.used && playing ? `0 2px 0 ${theme.shadow}` : 'none',
+                          },
                         }}
                       >
                         {capFirstEn(String(w.text).toLowerCase())}
@@ -461,42 +513,83 @@ export default function WordMatchingGame() {
                     })}
                   </Box>
                 ))}
-              </>
+              </Box>
             );
           })()}
         </Box>
 
         {/* Bottom targets (Turkish labels) - fixed 3x5 grid with clearer slots */}
-        <Box sx={{ p: 3, pt: 1 }}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(5, 1fr)' }, gap: 2 }}>
+        <Box sx={{ p: 4, pt: 2 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(5, 1fr)' }, gap: 2.5 }}>
             {targets.map((t) => (
-              <Box key={t.id} onDragOver={onDragOver} onDrop={(e) => onDrop(e, t.id)} onClick={() => handleTargetClick(t.id)} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+              <Box 
+                key={t.id} 
+                onDragOver={onDragOver} 
+                onDrop={(e) => onDrop(e, t.id)} 
+                onClick={() => handleTargetClick(t.id)} 
+                sx={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  cursor: t.matched ? 'default' : 'pointer',
+                  transition: 'transform 0.2s ease',
+                  '&:hover': {
+                    transform: !t.matched && selectedWordId ? 'scale(1.02)' : 'none'
+                  }
+                }}
+              >
                 <Box sx={{
                   width: '100%',
-                  height: 56,
-                  borderRadius: 999,
+                  height: 64,
+                  borderRadius: 3,
                   border: t.matched
-                    ? '2px solid #4CAF50'
+                    ? 'none'
                     : t.wrongFlash
                     ? '2px solid #ef5350'
                     : selectedWordId != null
                     ? '2px dashed #00b894'
-                    : '2px dashed rgba(0,0,0,0.25)',
+                    : '2px dashed #cfd8dc',
                   background: t.matched
-                    ? 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)'
-                    : 'rgba(0,0,0,0.025)',
+                    ? 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)'
+                    : t.wrongFlash
+                    ? '#ffebee'
+                    : selectedWordId != null
+                    ? 'rgba(0, 184, 148, 0.05)'
+                    : '#f8f9fa',
+                  boxShadow: t.matched 
+                    ? '0 4px 12px rgba(46, 204, 113, 0.4)' 
+                    : 'inset 0 2px 4px rgba(0,0,0,0.03)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: t.matched ? '#fff' : 'inherit',
-                  fontWeight: 700,
+                  color: t.matched ? '#fff' : '#546e7a',
+                  fontWeight: 800,
+                  fontSize: 15,
                   textTransform: 'capitalize',
                   letterSpacing: 0.4,
-                  transition: 'all .15s ease',
+                  transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}>
-                  {t.matched ? capFirstEn(String(t.english).toLowerCase()) : ''}
+                  {t.matched && (
+                    <CheckCircleIcon sx={{ 
+                      position: 'absolute', 
+                      top: 4, 
+                      right: 4, 
+                      fontSize: 16, 
+                      opacity: 0.8 
+                    }} />
+                  )}
+                  {t.matched ? capFirstEn(String(t.english).toLowerCase()) : (selectedWordId ? 'Buraya Bırak' : '')}
                 </Box>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: '#37474F', textAlign: 'center' }}>
+                <Typography variant="body2" sx={{ 
+                  fontWeight: 700, 
+                  color: t.matched ? '#2ecc71' : '#455a64', 
+                  textAlign: 'center',
+                  fontSize: '0.95rem',
+                  transition: 'color 0.3s ease'
+                }}>
                   {capFirstTr(String(t.turkish).toLocaleLowerCase('tr'))}
                 </Typography>
               </Box>
