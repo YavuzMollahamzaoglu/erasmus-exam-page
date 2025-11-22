@@ -180,12 +180,12 @@ const ReadingGame: React.FC = () => {
         </Box>
 
         <Box sx={{ p: { xs: 3, md: 4 } }}>
-          {/* Nav */}
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {/* Nav: center the paragraph chip and keep arrows on the right */}
+          <Box sx={{ position: 'relative', mb: 2, minHeight: 40 }}>
+            <Box sx={{ position: 'absolute', left: '50%', top: 0, transform: 'translateX(-50%)', display: 'flex', alignItems: 'center' }}>
               <Chip label={`Paragraf ${passages.length ? currentIdx + 1 : 0}/${passages.length}`} color="success" variant="outlined" />
             </Box>
-            <Box sx={{ display: 'flex', gap: 1 }}>
+            <Box sx={{ position: 'absolute', right: 0, top: 0, display: 'flex', gap: 1 }}>
               <Tooltip title="Önceki Paragraf"><span><IconButton disabled={currentIdx <= 0} onClick={prev}><ArrowBackIcon /></IconButton></span></Tooltip>
               <Tooltip title="Sonraki Paragraf"><span><IconButton disabled={currentIdx >= passages.length - 1} onClick={next}><ArrowForwardIcon /></IconButton></span></Tooltip>
             </Box>

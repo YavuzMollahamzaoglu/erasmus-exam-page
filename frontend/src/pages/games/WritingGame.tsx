@@ -27,19 +27,30 @@ export default function WritingGame() {
   const [hintsUsed, setHintsUsed] = useState<Record<number, string[]>>({});
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Fetch questions from API
+  // Determine level from URL and fetch questions from API
+  const levelParam = new URLSearchParams(window.location.search).get('level') || 'a1';
+  const apiLevel = levelParam.toUpperCase();
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
         const API_URL = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${API_URL}/api/games/writing/questions`);
+        const url = `${API_URL}/api/games/writing/questions?level=${encodeURIComponent(apiLevel)}`;
+        const response = await fetch(url);
         if (!response.ok) {
-          throw new Error('Failed to fetch questions');
+          throw new Error(`Failed to fetch questions: ${response.status}`);
         }
         const data = await response.json();
-        setWords(data || []);
-        setError(null);
+        // Helpful debug info when there are no questions
+        if (!data || (Array.isArray(data) && data.length === 0)) {
+          console.warn('WritingGame: API returned 0 items for', url, 'response:', data);
+          setError('Henüz yazma sorusu bulunmuyor (API 0 döndü). Lütfen Prisma Studio/DB yi kontrol edin.');
+          setWords([]);
+        } else {
+          setWords(data || []);
+          setError(null);
+        }
       } catch (err) {
         console.error('Error fetching writing questions:', err);
         setError('Sorular yüklenemedi. Lütfen daha sonra tekrar deneyin.');
@@ -49,7 +60,7 @@ export default function WritingGame() {
     };
 
     fetchQuestions();
-  }, []);
+  }, [apiLevel]);
 
   const handleRestart = () => {
     setIndex(0);
