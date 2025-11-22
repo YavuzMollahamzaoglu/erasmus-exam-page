@@ -25,6 +25,16 @@ router.post(
   GameController.createParagraphQuestion
 );
 
+// Additional alias without "the" to match existing frontend path
+router.get(
+  "/fill-in-blanks/questions",
+  GameController.getParagraphQuestions
+);
+router.post(
+  "/fill-in-blanks/questions",
+  GameController.createParagraphQuestion
+);
+
 // Word Matching Sets
 router.get("/word-matching/sets", GameController.listWordMatchingSets);
 router.get("/word-matching/sets/:id", GameController.getWordMatchingSetItems);

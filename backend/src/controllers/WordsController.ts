@@ -65,3 +65,24 @@ const WordsController = {
 };
 
 export default WordsController;
+
+// Add getExamples handler to support route GET /api/words/:id/examples
+// This was missing and caused the server to crash during startup when the route
+// referenced an undefined handler. Implementing it here returns examples for a
+// given word id.
+// NOTE: keep as separate named function to preserve existing default export shape
+export async function getExamples(req: Request, res: Response) {
+  try {
+    const { id } = req.params as { id: string };
+    if (!id) return res.status(400).json({ error: 'id is required' });
+    const examples = await prisma.wordExample.findMany({
+      where: { wordId: id },
+      orderBy: { createdAt: 'asc' },
+      select: { id: true, sentence: true, translation: true },
+    });
+    res.json({ examples });
+  } catch (error) {
+    console.error('Error fetching word examples:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}

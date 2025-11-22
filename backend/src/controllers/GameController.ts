@@ -134,10 +134,18 @@ class GameController {
         where = { level: { in: [lv, lv.toUpperCase(), lv.toLowerCase()] } };
       }
 
-      const questions = await prisma.writingQuestion.findMany({
+      let questions = await prisma.writingQuestion.findMany({
         where,
         orderBy: { createdAt: "desc" },
       });
+
+      // Fallback: if a level was requested but no rows match, return latest across all levels
+      if (level && questions.length === 0) {
+        questions = await prisma.writingQuestion.findMany({
+          orderBy: { createdAt: "desc" },
+          take: 50, // limit fallback payload
+        });
+      }
 
       const formattedQuestions = questions.map((q) => ({
         tr: q.turkish,
@@ -166,11 +174,14 @@ class GameController {
       });
 
       const formattedQuestions = questions.map((q) => ({
-        id: q.id, // Tüm id'yi kullan
-        title: q.title,
+        id: q.id,
         text: q.text,
         options: JSON.parse(q.options),
         correctAnswers: JSON.parse(q.correctAnswers),
+        // Provide explanation key (not stored) to satisfy frontend interface safely
+        explanation: null,
+        // Preserve title separately in case frontend wants it later
+        title: q.title,
       }));
 
       res.json(formattedQuestions);
