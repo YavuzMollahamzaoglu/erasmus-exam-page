@@ -41,13 +41,20 @@ export default function WritingGame() {
         if (!response.ok) {
           throw new Error(`Failed to fetch questions: ${response.status}`);
         }
-        const data = await response.json();
+  let data = await response.json();
         // Helpful debug info when there are no questions
         if (!data || (Array.isArray(data) && data.length === 0)) {
           console.warn('WritingGame: API returned 0 items for', url, 'response:', data);
           setError('Henüz yazma sorusu bulunmuyor (API 0 döndü). Lütfen Prisma Studio/DB yi kontrol edin.');
           setWords([]);
         } else {
+          // Shuffle order so users get different sequence each session
+          if (Array.isArray(data)) {
+            for (let i = data.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [data[i], data[j]] = [data[j], data[i]];
+            }
+          }
           setWords(data || []);
           setError(null);
         }

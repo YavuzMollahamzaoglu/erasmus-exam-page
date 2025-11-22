@@ -37,19 +37,23 @@ const removeOne = (arr: string[], value: string) => {
   return copy;
 };
 
-// Build display options from DB: use all provided options, ensure all correct answers included, then shuffle.
-// This removes the previous mock-like limitation (only correct + 1 distractor) so user sees full SQL data.
+// Build limited display options: show ALL correct answers (for existing blanks)
+// plus ONE random wrong distractor (total: correctAnswers.length + 1).
+// This matches earlier UX where user sees a concise choice set.
 const buildDisplayOptions = (q: FillInTheBlanksQuestion): string[] => {
-  const base = (q.options || []).slice();
-  q.correctAnswers.forEach(ans => {
-    if (!base.includes(ans)) base.push(ans);
-  });
-  // Shuffle Fisher–Yates
-  for (let i = base.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [base[i], base[j]] = [base[j], base[i]];
+  const correct = [...(q.correctAnswers || [])];
+  const wrongPool = (q.options || []).filter(opt => !correct.includes(opt));
+  let distractor: string | null = null;
+  if (wrongPool.length > 0) {
+    distractor = wrongPool[Math.floor(Math.random() * wrongPool.length)];
   }
-  return base;
+  const result = distractor ? [...correct, distractor] : [...correct];
+  // Shuffle to avoid always showing the distractor last
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
 };
 
 const FillInTheBlanksGame: React.FC = () => {
@@ -107,19 +111,25 @@ const FillInTheBlanksGame: React.FC = () => {
             throw new Error(`Her iki endpoint başarısız: ${res.status} / ${altRes.status}`);
           }
         }
-        const data = await res.json();
+        let data = await res.json();
         if (Array.isArray(data) && data.length === 0) {
           console.warn('Boşluk doldurma: Seviye için 0 kayıt döndü. Fallback olarak seviyesiz istek deneniyor.');
           const noLevelRes = await fetch(`${API_URL}/api/games/fill-in-blanks/questions`);
           if (noLevelRes.ok) {
             const allData = await noLevelRes.json();
-            setQuestions(allData || []);
+            data = allData || [];
           } else {
-            setQuestions([]);
+            data = [];
           }
-        } else {
-          setQuestions(data || []);
         }
+        // Shuffle question order so each visit is different
+        if (Array.isArray(data)) {
+          for (let i = data.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [data[i], data[j]] = [data[j], data[i]];
+          }
+        }
+        setQuestions(data || []);
         setError(null);
       } catch (err) {
         console.error('Error fetching fill-in-blanks questions:', err);

@@ -53,27 +53,27 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
 
   // Pages to show depending on login state (custom order requested)
   const pages = React.useMemo(() => {
-    // Remove long labels to prevent overflow; drop İngilizce Testleri & Erasmus Sınavı; shorten İngilizce Kelimeler -> Kelimeler
+    // Requested order: Sıralamalar, Testler, Klasik Sorular, Kelimeler, Konular (plus other items after)
     if (token) {
       return [
         { label: 'Ana Sayfa', value: 'home', auth: false },
+        { label: 'Sıralamalar', value: 'rankings', auth: false },
+        { label: 'Testler', value: 'categories', auth: false },
         { label: 'Klasik Sorular', value: 'questions', auth: false },
         { label: 'Kelimeler', value: 'ingilizce-kelimeler', auth: false },
         { label: 'Konular', value: 'topics', auth: false },
-        { label: 'Testler', value: 'categories', auth: false },
         { label: 'Geçmiş', value: 'history', auth: true },
-        { label: 'Sıralamalar', value: 'rankings', auth: false },
         { label: 'Hakkımızda', value: 'about', auth: false },
         { label: 'Profil', value: 'profile', auth: true },
       ];
     }
     return [
       { label: 'Ana Sayfa', value: 'home', auth: false },
+      { label: 'Sıralamalar', value: 'rankings', auth: false },
+      { label: 'Testler', value: 'categories', auth: false },
       { label: 'Klasik Sorular', value: 'questions', auth: false },
       { label: 'Kelimeler', value: 'ingilizce-kelimeler', auth: false },
       { label: 'Konular', value: 'topics', auth: false },
-      { label: 'Testler', value: 'categories', auth: false },
-      { label: 'Sıralamalar', value: 'rankings', auth: false },
       { label: 'Hakkımızda', value: 'about', auth: false },
     ];
   }, [token]);
