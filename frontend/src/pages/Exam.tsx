@@ -516,8 +516,8 @@ const Exam: React.FC = () => {
           aria-label="Sınavı Bitir"
           sx={{
             position: 'fixed',
-            top: { xs: 10, md: 20 },
-            left: { xs: 10, md: 24 },
+            top: { xs: 10, md: 84, lg: 96 },
+            left: { xs: 10, md: 20, lg: 28 },
             zIndex: 1300,
             textTransform: 'none',
             fontWeight: 700,
