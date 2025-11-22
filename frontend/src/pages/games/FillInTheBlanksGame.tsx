@@ -37,20 +37,19 @@ const removeOne = (arr: string[], value: string) => {
   return copy;
 };
 
-// Build display options: exactly the needed correct answers (for visible blanks)
-// plus one extra distractor if available, then shuffle
-const pickDisplayOptions = (q: FillInTheBlanksQuestion): string[] => {
-  const blanks = getBlankCount(q);
-  const size = Math.min(blanks, q.correctAnswers.length);
-  const needed = q.correctAnswers.slice(0, size);
-  const distractor = (q.options || []).find(o => !needed.includes(o));
-  const combined = distractor ? [...needed, distractor] : [...needed];
-  // Shuffle
-  for (let i = combined.length - 1; i > 0; i--) {
+// Build display options from DB: use all provided options, ensure all correct answers included, then shuffle.
+// This removes the previous mock-like limitation (only correct + 1 distractor) so user sees full SQL data.
+const buildDisplayOptions = (q: FillInTheBlanksQuestion): string[] => {
+  const base = (q.options || []).slice();
+  q.correctAnswers.forEach(ans => {
+    if (!base.includes(ans)) base.push(ans);
+  });
+  // Shuffle Fisher–Yates
+  for (let i = base.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [combined[i], combined[j]] = [combined[j], combined[i]];
+    [base[i], base[j]] = [base[j], base[i]];
   }
-  return combined;
+  return base;
 };
 
 const FillInTheBlanksGame: React.FC = () => {
@@ -145,7 +144,7 @@ const FillInTheBlanksGame: React.FC = () => {
       const size = Math.min(blanks, question.correctAnswers.length);
       const init: QuestionState = {
         userAnswers: Array(size).fill(null),
-        availableOptions: pickDisplayOptions(question),
+  availableOptions: buildDisplayOptions(question),
         isSubmitted: false,
         showResults: false,
         score: 0,
@@ -322,7 +321,7 @@ const FillInTheBlanksGame: React.FC = () => {
       const key = `${idx}:${q.id || 'noid'}`;
       initialMap[key] = {
         userAnswers: Array(size).fill(null),
-        availableOptions: pickDisplayOptions(q),
+  availableOptions: buildDisplayOptions(q),
         isSubmitted: false,
         showResults: false,
         score: 0,
