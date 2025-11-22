@@ -85,12 +85,12 @@ const Exam: React.FC = () => {
         apiUrl = `${API_URL}/api/tests/${testId}/questions`;
       }
       
-      console.log(`Fetching questions from: ${apiUrl}`);
+  // Removed verbose console logging of question fetch URL in production
       
       const load = async () => {
         try {
           const res = await fetch(apiUrl);
-          console.log('API Response status:', res.status);
+          // console.log('API Response status:', res.status); // keep minimal if needed for debugging
           if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
           const data = await res.json();
           let questionsData = data.questions || data || [];
@@ -105,7 +105,7 @@ const Exam: React.FC = () => {
               questionsData = d2.questions || d2 || [];
             }
           }
-          console.log('Questions data length:', questionsData.length);
+          // console.debug('Questions data length:', questionsData.length);
 
           const formattedQuestions = questionsData.map((q: Question) => {
             // Parse options if they're in string format
@@ -129,7 +129,7 @@ const Exam: React.FC = () => {
               );
               if (correctIndex !== -1) {
                 correctLetter = String.fromCharCode(65 + correctIndex); // A, B, C, D
-                console.log(`Converted "${q.correct}" to letter "${correctLetter}"`);
+                // Removed console leak of correct answers
               }
             }
 
@@ -139,7 +139,7 @@ const Exam: React.FC = () => {
               correct: correctLetter
             };
           });
-          console.log(`Loaded ${formattedQuestions.length} questions`);
+          // console.debug(`Loaded ${formattedQuestions.length} questions`);
           setQuestions(formattedQuestions);
           setLoading(false);
         } catch (error) {
@@ -173,7 +173,7 @@ const Exam: React.FC = () => {
           );
           if (correctIndex !== -1) {
             correctLetter = String.fromCharCode(65 + correctIndex); // A, B, C, D
-            console.log(`Converted "${q.correct}" to letter "${correctLetter}"`);
+            // Removed console leak of correct answers (state mode)
           }
         }
 
@@ -301,10 +301,7 @@ const Exam: React.FC = () => {
 
   const handleSelect = (optionIndex: number) => {
     const selectedLetter = String.fromCharCode(65 + optionIndex); // 0->A, 1->B, 2->C, 3->D
-    console.log('Selected option index:', optionIndex);
-    console.log('Selected letter:', selectedLetter);
-    console.log('Question correct answer:', q.correct);
-    console.log('Question correct answer type:', typeof q.correct);
+  // Removed console logs that exposed answer details
     
     setSelected(selectedLetter);
     setShowResult(true);
@@ -512,6 +509,34 @@ const Exam: React.FC = () => {
       pt: { xs: 2, md: 4, lg: 6 },
       pb: { xs: 12, md: 16 }
     }}>
+      {/* Global Bitir button positioned in green background (outside card) */}
+      {!showSummary && !reviewMode && (
+        <Button
+          onClick={handleFinish}
+          aria-label="Sınavı Bitir"
+          sx={{
+            position: 'fixed',
+            top: { xs: 10, md: 20 },
+            left: { xs: 10, md: 24 },
+            zIndex: 1300,
+            textTransform: 'none',
+            fontWeight: 700,
+            borderRadius: 999,
+            px: { xs: 2, md: 3 },
+            py: { xs: 0.75, md: 1 },
+            fontSize: { xs: 14, md: 16 },
+            background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+            color: '#fff',
+            boxShadow: '0 10px 24px rgba(0,184,148,0.25)',
+            border: '1px solid rgba(255,255,255,0.4)',
+            backdropFilter: 'blur(8px)',
+            '&:hover': { background: 'linear-gradient(135deg, #00a884 0%, #00bcbc 100%)', boxShadow: '0 14px 30px rgba(0,184,148,0.32)' },
+            '&:focus-visible': { outline: '3px solid rgba(0,184,148,0.5)', outlineOffset: 2 }
+          }}
+        >
+          Bitir
+        </Button>
+      )}
       {/* Fixed timer for tablet/desktop (sticky at top-right) */}
     <Box
         sx={{
@@ -643,69 +668,7 @@ const Exam: React.FC = () => {
             }
           }}
         >
-      {/* Desktop/tablet: Bitir button inside card at top-left */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 10,
-          left: 10,
-          zIndex: 2,
-          display: { xs: 'none', md: 'flex' },
-        }}
-      >
-        <Button
-          onClick={handleFinish}
-          sx={{
-            textTransform: 'none',
-            fontWeight: 700,
-            borderRadius: 3,
-            px: 2.5,
-            py: 0.75,
-            boxShadow: '0 12px 24px rgba(0,184,148,0.25)',
-            background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-            color: '#fff',
-            border: '1px solid rgba(255,255,255,0.25)',
-            minWidth: 90,
-            fontSize: 18,
-            letterSpacing: 0.5,
-            '&:hover': {
-              background: 'linear-gradient(135deg, #00a884 0%, #00bcbc 100%)',
-              boxShadow: '0 16px 28px rgba(0,184,148,0.32)',
-            }
-          }}
-        >
-          Bitir
-        </Button>
-      </Box>
-      {/* Mobile top controls: Finish (left) + Timer (right) inside the card */}
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 10,
-              left: { xs: 18, md: 10 },
-              zIndex: 2,
-              display: { xs: 'flex', md: 'none' },
-            }}
-          >
-            <Button
-              size="small"
-              onClick={handleFinish}
-              sx={{
-                textTransform: 'none',
-                fontWeight: 700,
-                borderRadius: 2,
-                px: 1.5,
-                py: 0.5,
-                boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
-                background: 'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.25)',
-                backdropFilter: 'blur(8px)'
-              }}
-            >
-              Bitir
-            </Button>
-          </Box>
+      {/* Removed in-card Bitir buttons; global button now lives in teal background */}
           {/* Inset timer at top-right inside the card (mobile only) */}
           <Box
             sx={{
