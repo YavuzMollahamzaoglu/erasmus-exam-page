@@ -69,39 +69,39 @@ const HomePage: React.FC<Props> = ({ token }) => {
     });
     // FAQ Schema for common questions
     const faqSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      'mainEntity': [
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
         {
-          '@type': 'Question',
-          'name': 'İngilizce Hazırlık platformu ücretsiz mi?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Evet, platformumuz tamamen ücretsizdir. Tüm testler, oyunlar ve konu anlatımlarına sınırsız erişim sağlayabilirsiniz.'
+          "@type": "Question",
+          "name": "İngilizce Hazırlık platformu ücretsiz mi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Evet, platformumuz tamamen ücretsizdir. Tüm testler, oyunlar ve konu anlatımlarına sınırsız erişim sağlayabilirsiniz."
           }
         },
         {
-          '@type': 'Question',
-          'name': 'Hangi seviyelerde pratik yapabilirim?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'A1, A2, B1 ve B2 seviyelerinde pratik yapabilirsiniz. Kelime oyunları ve testler seviye bazlı olarak hazırlanmıştır.'
+          "@type": "Question",
+          "name": "Hangi seviyelerde pratik yapabilirim?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A1, A2, B1 ve B2 seviyelerinde pratik yapabilirsiniz. Kelime oyunları ve testler seviye bazlı olarak hazırlanmıştır."
           }
         },
         {
-          '@type': 'Question',
-          'name': 'Erasmus sınavına nasıl hazırlanabilirim?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Erasmus kategorisindeki testleri çözerek, kelime oyunlarıyla vocabulary güçlendirerek ve konu anlatımlarını okuyarak hazırlanabilirsiniz.'
+          "@type": "Question",
+          "name": "Erasmus sınavına nasıl hazırlanabilirim?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Erasmus kategorisindeki testleri çözerek, kelime oyunlarıyla vocabulary güçlendirerek ve konu anlatımlarını okuyarak hazırlanabilirsiniz."
           }
         },
         {
-          '@type': 'Question',
-          'name': 'Sonuçlarımı takip edebilir miyim?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Evet, kayıt olduğunuzda tüm test sonuçlarınız Geçmiş sayfasında saklanır ve ilerlemenizi takip edebilirsiniz.'
+          "@type": "Question",
+          "name": "Sonuçlarımı takip edebilir miyim?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Evet, kayıt olduğunuzda tüm test sonuçlarınız Geçmiş sayfasında saklanır ve ilerlemenizi takip edebilirsiniz."
           }
         }
       ]
