@@ -165,8 +165,18 @@ class GameController {
       const { level } = req.query;
       let where: any = {};
       if (level) {
-        const lv = String(level);
-        where = { level: { in: [lv, lv.toUpperCase(), lv.toLowerCase()] } };
+        const lv = String(level).toUpperCase();
+        // Support level=ALL to fetch all paragraph questions regardless of stored level
+        // Also: when a specific level is requested include "Mixed" rows so they are not hidden.
+        if (lv !== "ALL") {
+          where = {
+            OR: [
+              { level: { in: [lv, lv.toLowerCase()] } },
+              { level: { in: ["Mixed", "MIXED", "mixed"] } },
+            ],
+          };
+        }
+        // lv === ALL -> no filtering (returns every row)
       }
       const questions = await prisma.paragraphQuestion.findMany({
         where,

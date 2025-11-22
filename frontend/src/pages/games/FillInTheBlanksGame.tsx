@@ -71,7 +71,9 @@ const FillInTheBlanksGame: React.FC = () => {
   const [questionStates, setQuestionStates] = useState<Record<string, QuestionState>>({});
 
   const [sp] = useSearchParams();
-  const level = (sp.get('level') || 'a1').toUpperCase();
+  // Allow level=ALL to show every paragraph question; default now ALL instead of A1
+  const levelParam = sp.get('level');
+  const level = (levelParam ? levelParam : 'ALL').toUpperCase();
 
   useEffect(() => {
     setMetaTags({
@@ -90,13 +92,13 @@ const FillInTheBlanksGame: React.FC = () => {
       }
       setLoading(true);
       try {
-        // Birincil endpoint
-        let url = `${API_URL}/api/games/fill-in-blanks/questions?level=${level}`;
+  // Birincil endpoint; omit level query when level=ALL for cleaner URL (backend also supports ?level=ALL)
+  let url = `${API_URL}/api/games/fill-in-blanks/questions${level === 'ALL' ? '' : `?level=${level}`}`;
         let res = await fetch(url);
         // 404 veya başarısız ise alternatif yol ("the" içeren versiyon)
         if (!res.ok) {
           console.warn('İlk endpoint başarısız, alternatif deneniyor:', url, res.status);
-          const altUrl = `${API_URL}/api/games/fill-in-the-blanks/questions?level=${level}`;
+          const altUrl = `${API_URL}/api/games/fill-in-the-blanks/questions${level === 'ALL' ? '' : `?level=${level}`}`;
           const altRes = await fetch(altUrl);
           if (altRes.ok) {
             res = altRes;
@@ -518,7 +520,7 @@ const FillInTheBlanksGame: React.FC = () => {
       pt: 0,
       pb: { xs: 12, md: 16 }
     }}>
-      <Box sx={{ maxWidth: 900, width: '100%', pt: 2 }}>
+      <Box sx={{ maxWidth: 900, width: '100%', pt: 2, display: 'flex', justifyContent: 'center' }}>
         <Breadcrumb items={[
           { label: 'Ana Sayfa', href: '/' },
           { label: 'Oyunlar', href: '/#games' },
