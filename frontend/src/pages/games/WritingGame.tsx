@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress } from "@mui/material";
+import { Box, Typography, IconButton, TextField, LinearProgress, CircularProgress, Button, Chip, Tooltip } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import MoreLearningLinks from '../../components/MoreLearningLinks';
 import Breadcrumb from '../../components/Breadcrumb';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -25,6 +26,7 @@ export default function WritingGame() {
   const [savedCorrect, setSavedCorrect] = useState<Record<number, { correct: boolean }>>({});
   // Hint system
   const [hintsUsed, setHintsUsed] = useState<Record<number, string[]>>({});
+  const [revealedAnswers, setRevealedAnswers] = useState<Record<number, boolean>>({});
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Determine level from URL and fetch questions from API
@@ -79,6 +81,7 @@ export default function WritingGame() {
     setTime(0);
     setSavedCorrect({});
     setHintsUsed({});
+    setRevealedAnswers({});
   };
 
   // Hint functions
@@ -131,7 +134,12 @@ export default function WritingGame() {
       setStatus("idle");
       setInput("");
     }
-  }, [index, words, savedCorrect]);
+    // do not auto-clear reveal history (kept per-question); ensure input is filled if revealed
+    if (!savedCorrect[index]?.correct && revealedAnswers[index]) {
+      setInput(words[index].en);
+      setStatus('idle');
+    }
+  }, [index, words, savedCorrect, revealedAnswers]);
 
   useEffect(() => {
     if (showResult) return;
@@ -157,7 +165,7 @@ export default function WritingGame() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   // If this question was already answered correctly, keep it locked
-  if (savedCorrect[index]?.correct) return;
+  if (savedCorrect[index]?.correct || revealedAnswers[index]) return;
   setInput(e.target.value);
   setStatus("idle");
   };
@@ -191,6 +199,7 @@ export default function WritingGame() {
   const handleSkip = () => {
     setStatus("idle");
     setInput("");
+    setRevealedAnswers((prev) => ({ ...prev, [index]: prev[index] || false }));
     if (index < words.length - 1) {
       setIndex((i) => i + 1);
     } else {
@@ -287,7 +296,7 @@ export default function WritingGame() {
   return (
     <>
     <Box sx={{ minHeight: "100vh", bgcolor: "#b2ebf2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", fontFamily: "Inter, Roboto, Open Sans, Arial, sans-serif", pt: 0, pb: { xs: 12, md: 16 } }}>
-      <Box sx={{ maxWidth: 900, width: '100%', px: 2, pt: 2 }}>
+      <Box sx={{ maxWidth: 900, width: '100%', px: 2, pt: 2, display: 'flex', justifyContent: 'center' }}>
         <Breadcrumb items={[
           { label: 'Ana Sayfa', href: '/' },
           { label: 'Oyunlar', href: '/#games' },
@@ -310,7 +319,7 @@ export default function WritingGame() {
             <ArrowBackIcon />
           </IconButton>
           
-          {/* Hint button */}
+          {/* Hint + Show Answer controls */}
           <IconButton 
             onClick={getHint}
             disabled={getHintCount() >= getMaxHints()}
@@ -348,6 +357,32 @@ export default function WritingGame() {
               </Box>
             )}
           </IconButton>
+
+          <Tooltip title="Cevabı göster (puanlamaya dahil edilmez)">
+            <span>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<VisibilityIcon sx={{ fontSize: 18 }} />}
+                disabled={!!revealedAnswers[index] || !!savedCorrect[index]?.correct}
+                onClick={() => {
+                  setRevealedAnswers((prev) => ({ ...prev, [index]: true }));
+                  setInput(words[index].en);
+                  setStatus('idle');
+                }}
+                sx={{
+                  ml: 1,
+                  borderColor: '#90caf9',
+                  color: '#1565c0',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  '&:disabled': { opacity: 0.5 }
+                }}
+              >
+                Cevabı Göster
+              </Button>
+            </span>
+          </Tooltip>
           
           <Box sx={{ flex: 1 }} />
           <Typography sx={{ 
@@ -497,6 +532,7 @@ export default function WritingGame() {
               placeholder="İngilizcesini yazın"
               variant="outlined"
               fullWidth
+              disabled={!!revealedAnswers[index] || !!savedCorrect[index]?.correct}
               sx={{
                 minWidth: 300,
                 maxWidth: 600,
@@ -514,11 +550,15 @@ export default function WritingGame() {
                 },
               }}
             />
+
+            {revealedAnswers[index] && !savedCorrect[index]?.correct && (
+              <Chip color="info" variant="outlined" label="Cevap gösterildi" sx={{ mt: -1, mb: 1 }} />
+            )}
             
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={!input.trim() || status !== "idle" || savedCorrect[index]?.correct}
+              disabled={!input.trim() || status !== "idle" || savedCorrect[index]?.correct || !!revealedAnswers[index]}
               style={{
                 background: (!input.trim() || status !== "idle" || savedCorrect[index]?.correct) ? '#ccc' : 'linear-gradient(90deg,#00cec9,#00b894)',
                 color: '#fff',

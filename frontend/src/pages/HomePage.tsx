@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import setMetaTags from '../utils/seo';
 import { useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, TextField, InputAdornment, List, ListItemButton, Button, Chip } from '@mui/material';
-import ShareBanner from '../components/ShareBanner';
+// Removed ShareBanner (keep sharing only in footer)
 import SearchIcon from '@mui/icons-material/Search';
 
 interface Props {
@@ -418,7 +418,7 @@ const HomePage: React.FC<Props> = ({ token }) => {
           </Box>
 
           {/* Paylaşım bannerı */}
-          <ShareBanner campaign="homepage-share" />
+          {/* Share banner removed per request */}
 
           {/* Kısa istatistikler */}
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: { xs: 1.5, md: 2 }, mb: 2 }}>

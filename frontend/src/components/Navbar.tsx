@@ -53,15 +53,15 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
 
   // Pages to show depending on login state (custom order requested)
   const pages = React.useMemo(() => {
-    // Requested order: Sıralamalar, Testler, Klasik Sorular, Kelimeler, Konular (plus other items after)
+    // Requested order update: 'Sıralamalar' should appear just before 'Hakkımızda', not first
     if (token) {
       return [
         { label: 'Ana Sayfa', value: 'home', auth: false },
-        { label: 'Sıralamalar', value: 'rankings', auth: false },
         { label: 'Testler', value: 'categories', auth: false },
         { label: 'Klasik Sorular', value: 'questions', auth: false },
         { label: 'Kelimeler', value: 'ingilizce-kelimeler', auth: false },
         { label: 'Konular', value: 'topics', auth: false },
+        { label: 'Sıralamalar', value: 'rankings', auth: false },
         { label: 'Geçmiş', value: 'history', auth: true },
         { label: 'Hakkımızda', value: 'about', auth: false },
         { label: 'Profil', value: 'profile', auth: true },
@@ -69,11 +69,11 @@ const Navbar: React.FC<Props> = ({ onNavigate, token, onLogout, userAvatar, user
     }
     return [
       { label: 'Ana Sayfa', value: 'home', auth: false },
-      { label: 'Sıralamalar', value: 'rankings', auth: false },
       { label: 'Testler', value: 'categories', auth: false },
       { label: 'Klasik Sorular', value: 'questions', auth: false },
       { label: 'Kelimeler', value: 'ingilizce-kelimeler', auth: false },
       { label: 'Konular', value: 'topics', auth: false },
+      { label: 'Sıralamalar', value: 'rankings', auth: false },
       { label: 'Hakkımızda', value: 'about', auth: false },
     ];
   }, [token]);

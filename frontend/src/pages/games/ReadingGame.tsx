@@ -142,7 +142,7 @@ const ReadingGame: React.FC = () => {
   return (
   <Box sx={{ minHeight: '100vh', bgcolor: '#b2dfdb', display: 'flex', flexDirection: 'column', alignItems: 'center', px: 2, pb: { xs: 12, md: 16 }, pt: 2 }}>
       {/* Breadcrumb at the top */}
-      <Box sx={{ width: '100%', maxWidth: 920, mb: 1 }}>
+      <Box sx={{ width: '100%', maxWidth: 920, mb: 1, display: 'flex', justifyContent: 'center' }}>
         <Breadcrumb items={[
           { label: 'Ana Sayfa', href: '/' },
           { label: 'Oyunlar', href: '/#games' },

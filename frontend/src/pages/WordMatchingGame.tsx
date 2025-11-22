@@ -325,7 +325,7 @@ export default function WordMatchingGame() {
 
   return (
     <Box sx={{ minHeight: '100vh', background: '#b2dfdb', display: 'flex', flexDirection: 'column', alignItems: 'center', pb: { xs: 12, md: 16 }, pt: 0, px: 2 }}>
-      <Box sx={{ maxWidth: 1000, width: '100%', pt: 2 }}>
+      <Box sx={{ maxWidth: 1000, width: '100%', pt: 2, display: 'flex', justifyContent: 'center' }}>
         <Breadcrumb items={[
           { label: 'Ana Sayfa', href: '/' },
           { label: 'Oyunlar', href: '/#games' },
@@ -350,8 +350,8 @@ export default function WordMatchingGame() {
             </IconButton>
           </Box>
 
-          {/* Title - centered on mobile using absolute positioning to avoid shift from side buttons */}
-          <Box sx={{ textAlign: 'center', flex: 1, position: { xs: 'absolute', md: 'static' }, left: { xs: '50%', md: 'auto' }, transform: { xs: 'translateX(-50%)', md: 'none' }, zIndex: 1 }}>
+          {/* Title - centered on all viewports using absolute positioning */}
+          <Box sx={{ textAlign: 'center', position: 'absolute', left: '50%', transform: 'translateX(-50%)', zIndex: 1 }}>
             <Typography variant="h5" fontWeight={700} mb={1} sx={{ fontSize: { xs: '1.1rem', md: '1.25rem' } }}>
               Kelime Eşleştirme
             </Typography>
@@ -416,7 +416,7 @@ export default function WordMatchingGame() {
           )}
         </Box>
 
-        {/* Top pool (English words) fixed to two rows) */}
+        {/* Top pool (English words) fixed to two rows) - polished pill UI */}
         <Box sx={{ px: 3, pb: 1 }}>
           {(() => {
             const half = Math.ceil(pool.length / 2);
@@ -438,20 +438,21 @@ export default function WordMatchingGame() {
                           userSelect: 'none',
                           cursor: w.used || !playing ? 'default' : 'grab',
                           opacity: w.used ? 0.35 : 1,
-                          borderRadius: 2,
-                          p: 1.2,
+                          borderRadius: 999,
+                          px: 1.6,
+                          py: 1.1,
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           color: '#fff',
                           fontWeight: 700,
                           fontSize: { xs: 12, sm: 14 },
-                          boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
-                          outline: selectedWordId === w.id ? '3px solid rgba(0, 184, 148, 0.9)' : 'none',
-                          background: `linear-gradient(135deg, ${colorPalette[colorIndex]} 0%, rgba(255,255,255,0.15) 100%)`,
+                          minWidth: 110,
+                          boxShadow: '0 3px 8px rgba(0,0,0,0.12)',
+                          outline: selectedWordId === w.id ? '3px solid rgba(0, 184, 148, 0.85)' : 'none',
+                          background: `linear-gradient(135deg, ${colorPalette[colorIndex]} 0%, ${colorPalette[colorIndex]}55 100%)`,
                           transition: 'transform .15s ease',
                           '&:active': { transform: 'scale(0.98)' },
-                          minWidth: 88,
                         }}
                       >
                         {capFirstEn(String(w.text).toLowerCase())}
@@ -465,15 +466,15 @@ export default function WordMatchingGame() {
           })()}
         </Box>
 
-        {/* Bottom targets (Turkish labels) - fixed 3x5 grid */}
+        {/* Bottom targets (Turkish labels) - fixed 3x5 grid with clearer slots */}
         <Box sx={{ p: 3, pt: 1 }}>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(5, 1fr)' }, gap: 2 }}>
             {targets.map((t) => (
               <Box key={t.id} onDragOver={onDragOver} onDrop={(e) => onDrop(e, t.id)} onClick={() => handleTargetClick(t.id)} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                 <Box sx={{
                   width: '100%',
-                  height: 54,
-                  borderRadius: 2,
+                  height: 56,
+                  borderRadius: 999,
                   border: t.matched
                     ? '2px solid #4CAF50'
                     : t.wrongFlash
@@ -483,7 +484,7 @@ export default function WordMatchingGame() {
                     : '2px dashed rgba(0,0,0,0.25)',
                   background: t.matched
                     ? 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)'
-                    : 'rgba(0,0,0,0.03)',
+                    : 'rgba(0,0,0,0.025)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

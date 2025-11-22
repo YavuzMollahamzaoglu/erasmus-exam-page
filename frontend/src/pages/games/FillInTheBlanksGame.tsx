@@ -561,6 +561,7 @@ const FillInTheBlanksGame: React.FC = () => {
             onClick={prevQuestion}
             className="navArrow"
             disableRipple
+            disableFocusRipple
             sx={{
               position: 'absolute',
               left: { xs: '50%', sm: -56, md: -72 },
@@ -596,6 +597,7 @@ const FillInTheBlanksGame: React.FC = () => {
             onClick={nextQuestion}
             className="navArrow"
             disableRipple
+            disableFocusRipple
             sx={{
               position: 'absolute',
               left: { xs: '50%', sm: 'auto' },
